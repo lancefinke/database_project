@@ -27,8 +27,15 @@ const ProfilePage = () => {
 
         </div>
       </div>
+      <div className="music-player-container">
+      <img
+          src="https://via.placeholder.com/150"
+          alt="music"
+          className="music-image"
+        />
+      </div>
     </div>
-    
+   
   );
 };
 
