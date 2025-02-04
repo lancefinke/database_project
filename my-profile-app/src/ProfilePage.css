@@ -1,0 +1,87 @@
+/* src/ProfilePage.css */
+
+/* Set background color for the entire page */
+body {
+    background-color: #e43c12;
+    margin: 0;
+     font-family: 'Roboto Mono', monospace;
+    height: 100%;
+  }
+  
+  /* Styling for the profile container */
+  .profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;;
+    
+    background-color: #1D1616;  /* This will apply the color to the profile page */
+    min-height: 100vh;
+  }
+  
+  /* Styling for the profile card */
+  .profile-card {
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+   
+    padding: 1.5rem;
+    width: 24rem;
+    text-align: center;
+    min-height: 100vh;
+  }
+  
+  .profile-image {
+    width: 8rem;
+    height: 8rem;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+  }
+  
+  .profile-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .profile-title {
+    color: #4a5568;
+    margin-top: 0.5rem;
+  }
+  
+  .profile-bio {
+    color: #718096;
+    margin-top: 1rem;
+    font-size: 1rem;
+  }
+  
+  .follow-button {
+    margin-top: 1.5rem;
+    background-color: #ed0000;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .follow-button:hover {
+    background-color: #2b6cb0;
+  }
+  
+  .music-container {
+    display: flex;
+    flex-direction: row; /* Ensures the buttons are in a row */
+    padding: 1rem;
+    gap: 1rem; /* Adds space between buttons */
+    flex-wrap: wrap;
+    
+  }
+  
+  .music-genre {
+    color: white;
+    font-size: 1rem;
+    background-color: #1D1616;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    
+  }
+  
