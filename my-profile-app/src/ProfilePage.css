@@ -55,7 +55,7 @@ body {
   
   .follow-button {
     margin-top: 1.5rem;
-    background-color: #ed0000;
+    background-color: #8E1616;
     color: white;
     padding: 0.75rem 1.5rem;
     border-radius: 0.5rem;
@@ -85,3 +85,25 @@ body {
     
   }
   
+
+  .music-player-container {
+    background-color: #8E1616;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    padding-top: 4rem;
+    width: calc(100% - 30rem); /* 3/4 of the page width */
+    position: fixed; /* Fixes it at the bottom */
+    bottom: 0; /* Positions it at the bottom */
+    left: 0; /* Aligns it to the left */
+    text-align: center;
+    z-index: 1000; /* Makes sure it's above other elements */
+}
+
+.music-image {
+    width: 3rem;
+    height: 3rem;
+    left: 1rem;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
