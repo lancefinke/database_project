@@ -1,0 +1,31 @@
+.music-player {
+    
+        position: fixed; /* Fixed on the screen */
+        bottom: 5px; /* Adjust this value to control the vertical position */
+        left: 35%; /* Center horizontally */
+        transform: translateX(-50%); /* Center alignment */
+        z-index: 1000; /* Ensure buttons are in front of other elements */
+        display: flex; /* Align buttons horizontally */
+        gap: 100px; /* Space between buttons */
+       /* Bring it to the front */
+  }
+button {
+    padding: 10px 20px;
+   background-color: #8E1616;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    gap: 50%;
+  }
+  
+  button:hover {
+    background-color: #751111; /* Darker Green */
+  }
+  
+  button:disabled {
+    background-color: #c1c1c1;
+    cursor: not-allowed;
+  }
+  
