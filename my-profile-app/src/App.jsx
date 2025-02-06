@@ -1,5 +1,6 @@
 import ProfilePage from "./ProfilePage/ProfilePage";
 import MusicPlayer from "./ProfilePage/Components/MusicPlayer";
+import NavBar from "./ProfilePage/Components/NavBar";
  // Ensure correct file path
 
 const playlist = [
@@ -12,8 +13,9 @@ function App() {
   return (
     <div>
       <ProfilePage />
-      <h1>My Music Library</h1>
+      
       <MusicPlayer playlist={playlist} />
+      <NavBar />
     </div>
   );
 }
