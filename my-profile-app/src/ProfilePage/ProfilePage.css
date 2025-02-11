@@ -1,125 +1,211 @@
-/* src/ProfilePage.css */
-
-/* Set background color for the entire page */
 body {
-    background-color: #e43c12;
-    margin: 0;
-     font-family: 'Roboto Mono', monospace;
-    height: 100%;
-  }
-  
-  /* Styling for the profile container */
-  .profile-container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    
-    background-color: #1D1616;  /* This will apply the color to the profile page */
-    min-height: 100vh;
-  }
-  
-  /* Styling for the profile card */
-  .profile-card {
-    background-color: rgba(255, 255, 255, 0.13);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-   
-    padding: 1.5rem;
-    width: 24rem;
-    text-align: center;
-    min-height: 100vh;
-  }
-  
-  .profile-image {
-    width: 8rem;
-    height: 8rem;
-    border-radius: 50%;
-    margin-bottom: 1rem;
-  }
-  
-  .profile-name {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #ffffff;
-  }
-  
-  .profile-title {
-    color: #ffffff;
-    margin-top: 0.5rem;
-  }
-  
-  .profile-bio {
-    color: #ffffff;
-    margin-top: 1rem;
-    font-size: 1rem;
-  }
-  
-  .follow-button {
-    margin-top: 1.5rem;
-    background-color: #8E1616;
-    color: white;
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .follow-button:hover {
-    background-color: #181010;
-  }
-  
-  .music-container {
-    display: flex;
-    flex-direction: row; /* Ensures the buttons are in a row */
-    padding: 1rem;
-    gap: 1rem; /* Adds space between buttons */
-    flex-wrap: wrap;
-    
-  }
-  
-  .music-genre {
-    color: white;
-    font-size: 1rem;
-    background-color: #1D1616;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    
-  }
-  .music-genre:hover {
-    background-color: #181010
-  }
-  
-  .music-player-container {
-    background-color: #8E1616;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 1.5rem;
-    padding-top: 1rem;
-    width: calc(100% - 30rem);
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    display: flex; /* Enables flexbox */
-    align-items: center; /* Aligns items vertically */
-    gap: 1rem; /* Adds space between image and text */
-    z-index: 1000;
+  background-color: #e43c12;
+  margin: 0;
+  font-family: 'Roboto Mono', monospace;
+  height: 100%;
 }
 
+/* Profile Layout */
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  background: linear-gradient(to bottom, #343434, #121212);
+  min-height: 100vh;
+}
+
+.profile-card {
+  background-color: #101010;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  width: 24rem;
+  text-align: center;
+  min-height: 100vh;
+}
+
+/* Profile Elements */
+.profile-image {
+  width: 8rem;
+  height: 8rem;
+  border-radius: 50%;
+  margin-bottom: 50px;
+  margin-top: 40px;
+}
+
+.profile-name {
+  color: #ffffff;
+  margin-top: 10px;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.profile-bio {
+  color: #ffffff;
+  margin-top: 20px;
+  font-size: .9rem;
+  font-weight: bold;
+}
+
+/* Stats Section */
+.stats-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.stats-container p {
+  font-size: .9rem;
+  color: #999999;
+  font-weight: bold;
+  margin-top: 50px;
+}
+
+/* Follow Button */
+.follow-button {
+  font-family: 'Roboto Mono', monospace;
+  margin-top: 1.5rem;
+  background-color: #101010;
+  color: white;
+  padding: 0.3rem 1.4rem;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border: 1px solid white;
+}
+
+.follow-button:hover {
+  background-color: #343434;
+}
+
+/* Music Genre Section */
+.music-container {
+  display: flex;
+  flex-direction: row;
+  padding: 1rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+.music-genre {
+  font-family: 'Roboto Mono', monospace;
+  color: white;
+  font-size: 1rem;
+  background-color: #8E1616;
+  padding: 0.3rem 1.4rem;
+  border-radius: 50px;
+  cursor: pointer;
+}
+
+.music-genre:hover {
+  background-color: #343434;
+}
+
+/* Playlist Section */
+.playlist-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .5rem;
+  margin-top: 5rem;
+}
+
+.playlist-button {
+  background-color: #101010;
+  border: none;
+  border-radius: 10px;
+  padding: 0.75rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: left;
+  transition: background-color 0.3s ease;
+  width: 400px;
+}
+
+.playlist-button:hover {
+  background-color: #343434;
+}
+
+.playlist-image {
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
+  margin-right: 1rem;
+}
+
+.playlist-name {
+  color: white;
+  font-family: 'Roboto Mono', monospace;
+}
+
+/* Music Player */
+.music-player-container {
+  background-color: #8E1616;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  width: calc(100% - 30rem);
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+  display: flex;
+  gap: 2rem;
+}
+
+.music-info-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-width: 200px;
+}
+
+.player-main-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.music-image {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 8px;
+}
+
+.music-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: white;
+}
+
+.music-name {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.music-artist {
+  font-size: 0.8rem;
+  color: #ddd;
+  margin: 0;
+}
+
+/* Progress Bar */
 .progress-container {
   display: flex;
   align-items: center;
-  width: 65%;
+  width: 75%;
   gap: 0.5rem;
-  padding: 0 1rem;
-  
-}
-
-.current-time, .total-duration {
-  color: white;
-  font-size: 0.9rem;
-  margin-bottom: 6px;
+  margin-left: 20px;
 }
 
 .progress-bar {
-  flex: 1; /* Makes it stretch */
+  flex: 1;
   -webkit-appearance: none;
   height: 3px;
   background: #ddd;
@@ -127,7 +213,6 @@ body {
   outline: none;
   cursor: pointer;
   transition: background 0.2s;
-  margin-bottom: 6px;
 }
 
 .progress-bar::-webkit-slider-thumb {
@@ -142,89 +227,46 @@ body {
 .progress-bar:hover {
   background: #bbb;
 }
-.music-image {
-    width: 3rem;
-    height: 3rem;
-    border-radius: 8px;
-}
 
-/* New styles for text alignment */
-.music-info {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    color: white;
-}
-
-.music-name {
-    font-size: 1.1rem;
-    font-weight: bold;
-    margin: 0;
-}
-
-.music-artist {
-    font-size: 0.8rem;
-    color: #ddd;
-    margin: 0;
-}
-
-
- /* Playlist container styling (Stacked in Column) */
-.playlist-container {
-  display: flex;
-  flex-direction: column; /* Stack buttons in a column */
-  align-items: center; /* Center align buttons */
-  gap: .5rem; /* Adds space between playlist buttons */
-  margin-top: 5rem;
-  
-}
-
-/* Playlist button styling */
-.playlist-button {
-  background-color: #1D1616; /* Dark red */
-  border: none;
-  border-radius: 10px;
-  padding: 0.75rem;
-  cursor: pointer;
-  display: flex;
-  flex-direction: row; /* Image and text side by side */
-  align-items: center;
-  text-align: left;
-  transition: background-color 0.3s ease;
-  width: 400px; /* Wider button for better layout */
-}
-
-.playlist-button:hover {
-  background-color: #181010; /* Slightly lighter red on hover */
-}
-
-/* Playlist image styling */
-.playlist-image {
-  width: 60px;
-  height: 60px;
-  border-radius: 10px;
-  margin-right: 1rem; /* Space between image and text */
-}
-
-/* Playlist name styling */
-.playlist-name {
+.current-time, .total-duration {
   color: white;
-  font-family: 'Roboto Mono', monospace;
+  font-size: 0.9rem;
 }
 
-
-
-/* Container for follower count and total listens */
-.stats-container {
+/* Player Controls */
+.controls-container {
   display: flex;
-  flex-direction: row; /* Align items horizontally */
-  justify-content: center; /* Center items */
-  gap: 2rem; /* Adds space between the items */
-  margin-top: 1rem; /* Space above */
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
 }
 
-/* Styling for each stat (follower count and total listens) */
-.stats-container p {
-  font-size: 1rem;
-  color: rgb(255, 255, 255);
+.control-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.control-button:hover {
+  transform: scale(1.1);
+}
+
+.play-button {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.play-button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
 }
