@@ -12,7 +12,7 @@ body {
   .profile-container {
     display: flex;
     flex-direction: column;
-    align-items: flex-end;;
+    align-items: flex-end;
     
     background-color: #1D1616;  /* This will apply the color to the profile page */
     min-height: 100vh;
@@ -20,7 +20,7 @@ body {
   
   /* Styling for the profile card */
   .profile-card {
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.13);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
    
     padding: 1.5rem;
@@ -39,16 +39,16 @@ body {
   .profile-name {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #333;
+    color: #ffffff;
   }
   
   .profile-title {
-    color: #4a5568;
+    color: #ffffff;
     margin-top: 0.5rem;
   }
   
   .profile-bio {
-    color: #718096;
+    color: #ffffff;
     margin-top: 1rem;
     font-size: 1rem;
   }
@@ -64,7 +64,7 @@ body {
   }
   
   .follow-button:hover {
-    background-color: #2b6cb0;
+    background-color: #181010;
   }
   
   .music-container {
@@ -84,26 +84,147 @@ body {
     cursor: pointer;
     
   }
+  .music-genre:hover {
+    background-color: #181010
+  }
   
-
   .music-player-container {
     background-color: #8E1616;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 1.5rem;
-    padding-top: 4rem;
-    width: calc(100% - 30rem); /* 3/4 of the page width */
-    position: fixed; /* Fixes it at the bottom */
-    bottom: 0; /* Positions it at the bottom */
-    left: 0; /* Aligns it to the left */
-    text-align: center;
-    z-index: 1000; /* Makes sure it's above other elements */
+    padding-top: 1rem;
+    width: calc(100% - 30rem);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    display: flex; /* Enables flexbox */
+    align-items: center; /* Aligns items vertically */
+    gap: 1rem; /* Adds space between image and text */
+    z-index: 1000;
 }
 
+.progress-container {
+  display: flex;
+  align-items: center;
+  width: 65%;
+  gap: 0.5rem;
+  padding: 0 1rem;
+  
+}
+
+.current-time, .total-duration {
+  color: white;
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+}
+
+.progress-bar {
+  flex: 1; /* Makes it stretch */
+  -webkit-appearance: none;
+  height: 3px;
+  background: #ddd;
+  border-radius: 5px;
+  outline: none;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-bottom: 6px;
+}
+
+.progress-bar::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 10px;
+  height: 12px;
+  background: #fff;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.progress-bar:hover {
+  background: #bbb;
+}
 .music-image {
     width: 3rem;
     height: 3rem;
-    left: 1rem;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-  }
+    border-radius: 8px;
+}
+
+/* New styles for text alignment */
+.music-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: white;
+}
+
+.music-name {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+.music-artist {
+    font-size: 0.8rem;
+    color: #ddd;
+    margin: 0;
+}
+
+
+ /* Playlist container styling (Stacked in Column) */
+.playlist-container {
+  display: flex;
+  flex-direction: column; /* Stack buttons in a column */
+  align-items: center; /* Center align buttons */
+  gap: .5rem; /* Adds space between playlist buttons */
+  margin-top: 5rem;
+  
+}
+
+/* Playlist button styling */
+.playlist-button {
+  background-color: #1D1616; /* Dark red */
+  border: none;
+  border-radius: 10px;
+  padding: 0.75rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row; /* Image and text side by side */
+  align-items: center;
+  text-align: left;
+  transition: background-color 0.3s ease;
+  width: 400px; /* Wider button for better layout */
+}
+
+.playlist-button:hover {
+  background-color: #181010; /* Slightly lighter red on hover */
+}
+
+/* Playlist image styling */
+.playlist-image {
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
+  margin-right: 1rem; /* Space between image and text */
+}
+
+/* Playlist name styling */
+.playlist-name {
+  color: white;
+  font-family: 'Roboto Mono', monospace;
+}
+
+
+
+/* Container for follower count and total listens */
+.stats-container {
+  display: flex;
+  flex-direction: row; /* Align items horizontally */
+  justify-content: center; /* Center items */
+  gap: 2rem; /* Adds space between the items */
+  margin-top: 1rem; /* Space above */
+}
+
+/* Styling for each stat (follower count and total listens) */
+.stats-container p {
+  font-size: 1rem;
+  color: rgb(255, 255, 255);
+}
