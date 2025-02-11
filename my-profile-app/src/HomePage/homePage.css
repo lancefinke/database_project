@@ -28,9 +28,9 @@
 
 .flags{
     display: flex;
-    gap: 10px;
     flex-direction: row;
     justify-content: space-evenly;
+    width: 10%;
 }
 .flag{
     background-color: var(--slate);
