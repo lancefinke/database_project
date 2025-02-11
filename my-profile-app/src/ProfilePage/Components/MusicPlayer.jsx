@@ -1,10 +1,8 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Play, Pause, SkipForward, SkipBack } from "lucide-react"; // Icons for UI
-import './MusicPlayer.css';
+import React, { useState, useRef } from "react";
+import { Play, Pause, SkipForward, SkipBack } from "lucide-react";
 
-const MusicPlayer = ({ playlist }) => {
-  const [currentSongIndex, setCurrentSongIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false); // State for play/pause
+const MusicPlayer = ({ song, artist }) => {
+  const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
 
   const togglePlayPause = () => {
@@ -18,36 +16,47 @@ const MusicPlayer = ({ playlist }) => {
     }
   };
 
-  const skipSong = () => {
-    setCurrentSongIndex((prev) => (prev + 1) % playlist.length);
-  };
-
-  const rewindSong = () => {
-    setCurrentSongIndex((prev) => (prev - 1 + playlist.length) % playlist.length);
-  };
-
-  // Update audio source when song index changes
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.src = playlist[currentSongIndex];
-      if (isPlaying) audioRef.current.play(); // Auto-play next song
-    }
-  }, [currentSongIndex, playlist, isPlaying]);
-
   return (
-    <div className="music-player flex flex-col items-center p-4 bg-gray-800 rounded-xl">
-      <audio ref={audioRef} />
-      <div className="flex gap-4 mt-4">
-        <button onClick={rewindSong} className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-500">
-          <SkipBack />
-        </button>
-        <button onClick={togglePlayPause} className="p-2 bg-green-600 text-white rounded-full hover:bg-green-500">
-          {isPlaying ? <Pause /> : <Play />}
-        </button>
-        <button onClick={skipSong} className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-500">
-          <SkipForward />
-        </button>
+    <div className="music-player-container">
+      <div className="music-info-section">
+        <img
+          src="https://via.placeholder.com/150"
+          alt="music"
+          className="music-image"
+        />
+        <div className="music-info">
+          <p className="music-name">{song}</p>
+          <p className="music-artist">{artist}</p>
+        </div>
       </div>
+
+      <div className="player-main-section">
+        <div className="progress-container">
+          <span className="current-time">0:00</span>
+          <input
+            type="range"
+            className="progress-bar"
+            min="0"
+            max="100"
+            value="0"
+            onChange={() => {}}
+          />
+          <span className="total-duration">3:45</span>
+        </div>
+
+        <div className="controls-container">
+          <button onClick={() => {}} className="control-button">
+            <SkipBack size={20} color="white" />
+          </button>
+          <button onClick={togglePlayPause} className="control-button play-button">
+            {isPlaying ? <Pause size={24} color="white" /> : <Play size={24} color="white" />}
+          </button>
+          <button onClick={() => {}} className="control-button">
+            <SkipForward size={20} color="white" />
+          </button>
+        </div>
+      </div>
+      <audio ref={audioRef} />
     </div>
   );
 };

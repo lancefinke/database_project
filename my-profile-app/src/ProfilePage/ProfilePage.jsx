@@ -1,6 +1,6 @@
 import React from 'react';
 import './ProfilePage.css';
-
+import MusicPlayer from "./Components/MusicPlayer";
 const ProfilePage = () => {
   return (
   
@@ -12,7 +12,7 @@ const ProfilePage = () => {
           className="profile-image"
         />
         <h1 className="profile-name">Haitham yousif</h1>{/* Profile Name  */}
-        <p className="profile-title">He/Him</p> {/*  Optinal Pronouns */}
+         {/*  Optinal Pronouns */}
         <p className="profile-bio">
           Small Creator that focuses on Rnb and Rap style of music. 
         </p>
@@ -79,7 +79,10 @@ const ProfilePage = () => {
   </button>
 </div>
 
-      
+
+<MusicPlayer song="Why Cant You" artist="Bryant Barnes" />
+ {/*   
+         
 <div className="music-player-container">
   <img
     src="https://via.placeholder.com/150"
@@ -91,7 +94,7 @@ const ProfilePage = () => {
     <p className="music-artist">Bryant Barnes</p>
   </div>
   
-  {/* Music progress bar */}
+  
   <div className="progress-container">
     <span className="current-time">0:00</span>
     <input
@@ -105,7 +108,7 @@ const ProfilePage = () => {
     <span className="total-duration">3:45</span>
   </div>
 </div>
-
+*/}
     </div>
     </div>
    
