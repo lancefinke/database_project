@@ -1,6 +1,7 @@
 import ProfilePage from "./ProfilePage/ProfilePage";
 import MusicPlayer from "./ProfilePage/Components/MusicPlayer";
 import NavBar from "./ProfilePage/Components/NavBar";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
  // Ensure correct file path
 
 const playlist = [
