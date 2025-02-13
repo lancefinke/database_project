@@ -127,6 +127,7 @@ body {
   text-align: left;
   transition: background-color 0.3s ease;
   width: 400px;
+  font-size: 24px;
 }
 
 .playlist-button:hover {
@@ -157,6 +158,9 @@ body {
   z-index: 1000;
   display: flex;
   gap: 2rem;
+  align-items: center;
+  justify-content: space-between;  /* Ensures proper spacing */
+  padding: 1rem;
 }
 
 .music-info-section {
@@ -202,9 +206,10 @@ body {
 .progress-container {
   display: flex;
   align-items: center;
-  width: 75%;
+ 
   gap: 0.5rem;
   margin-left: 20px;
+  margin-right: 140px;
 }
 
 .progress-bar {
@@ -216,6 +221,8 @@ body {
   outline: none;
   cursor: pointer;
   transition: background 0.2s;
+ 
+  
 }
 
 .progress-bar::-webkit-slider-thumb {
@@ -243,6 +250,7 @@ body {
   justify-content: center;
   gap: 1rem;
   margin-top: 0.5rem;
+  margin-right: 100px;
 }
 
 .control-button {
@@ -273,3 +281,68 @@ body {
 .play-button:hover {
   background-color: rgba(255, 255, 255, 0.2);
 }
+
+
+.music-player {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #222;
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+
+.volume-control {
+    margin-bottom: 55px;
+}
+  .volume-control input[type="range"] {
+    -webkit-appearance: none; /* Removes default styling */
+    width: 50%;
+    height: 3px;
+    background: white; /* White track */
+    border-radius: 5px;
+    outline: none;
+    opacity: 0.9;
+    transition: opacity 0.2s;
+    
+  }
+  
+  .volume-control input[type="range"]:hover {
+    opacity: 1;
+  }
+  
+  /* Customizing the slider thumb (the draggable part) */
+  .volume-control input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+  width: 10px;
+  height: 12px;
+  background: #fff;
+  border-radius: 50%;
+  cursor: pointer;
+}
+  
+  .volume-control input[type="range"]::-moz-range-thumb {
+    width: 15px;
+    height: 15px;
+    background: white;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  .control-button.pressed {
+    filter: brightness(0.7);
+    transition: filter 0.2s ease;
+  }
+  
+  /* Volume Icon Styling */
+  .volume-control {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .volume-control input[type="range"] {
+    width: 100px;
+  }
