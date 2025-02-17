@@ -6,6 +6,7 @@
 
 .song-list{
     width:60%;
+    margin: 0px auto;
 }
 .song-post-wrapper{
     border-radius: 20px;
@@ -13,12 +14,28 @@
     padding:15px;
     height: 150px;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     background-color: var(--brick);
+    margin: 5px auto;
+    min-width: 380px;
 }
+.interactables{
+    width: 10%;
+    height: 75%;
+    margin: auto 0px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+   
+}
+.other-btns{
+    display: flex;
+    gap: 0px 5px;
+}
+
 .info{
-    width:50%;
-    height: 80%;
+    width:40%;
+    height: 90%;
     color:white;
 }
 .info-item{
@@ -28,9 +45,11 @@
 
 .flags{
     display: flex;
+    margin: 5% auto;
     flex-direction: row;
+    flex-wrap: wrap;
     justify-content: space-evenly;
-    width: 10%;
+    width:80%;
 }
 .flag{
     background-color: var(--slate);
@@ -40,7 +59,17 @@
 
 
 .song-icon{
-    width:40%;
+    width:35%;
+    margin-left: 25px;
     aspect-ratio: 9/10;
     position: relative;
 }
+
+span{
+    cursor: pointer;
+}
+
+.play-btn{
+    cursor: pointer;
+}
+

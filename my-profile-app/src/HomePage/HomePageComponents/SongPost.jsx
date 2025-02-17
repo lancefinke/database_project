@@ -1,6 +1,15 @@
+import { useState } from 'react';
 import './../homePage.css'
+import { Play,Plus,Forward, Pause} from "lucide-react";
 
 const SongPost = ({name,creator,duration,flags,iconImage}) =>{
+
+    const [isPlaying,togglePlaying] = useState(false);
+
+    const handlePlaying = ()=>{
+        togglePlaying(!isPlaying)
+    }
+
     return(
         <div className="song-post-wrapper">
             <div className='info'>
@@ -10,6 +19,11 @@ const SongPost = ({name,creator,duration,flags,iconImage}) =>{
                 <div className='flags info-item'>
                   {flags.map((flagName)=><div className='flag'>{flagName}</div>)}  
                 </div>
+            </div>
+            <div className='interactables'>
+                <div className='play-btn' onClick={handlePlaying}>{isPlaying ? <Play size={60}color='white'/>: <Pause strokeWidth={1} size={60}color='white'/>}</div>
+                <div className='other-btns'><span title="Add to Playlist"><Plus color='white'/></span>
+                <span title='Share with a Friend'><Forward color='white'/></span></div>
             </div>
             <img className="song-icon" src={iconImage} alt="Song Icon"/>
         </div>
