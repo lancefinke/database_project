@@ -1,5 +1,29 @@
+.app-container {
+  min-height: 100vh;
+  background-color: #101010;
+  position: relative;
+}
+
+.main-content {
+  padding-bottom: 100px; /* Add space for the music player */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Update the song-list class */
+.song-list {
+  width: calc(100% - 24rem); /* Adjust width to account for profile card */
+  position: absolute;
+  top: 80px; /* Adjust this value to move it closer to top, assuming navbar is ~60-80px */
+  right: 40%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
 body {
-  background-color: #e43c12;
+  background-color: #101010;
   margin: 0;
   font-family: 'Roboto Mono', monospace;
   height: 100%;
@@ -161,6 +185,7 @@ body {
   align-items: center;
   justify-content: space-between;  /* Ensures proper spacing */
   padding: 1rem;
+  margin: 0;
 }
 
 .music-info-section {

@@ -1,9 +1,10 @@
 import ProfilePage from "./ProfilePage/ProfilePage";
 import MusicPlayer from "./ProfilePage/Components/MusicPlayer";
 import NavBar from "./ProfilePage/Components/NavBar";
-import SongIcon from "./ProfilePage/Components/SongIcon"; // Ensure correct import
+import SongIcon from "./ProfilePage/Components/SongIcon";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import "./ProfilePage/Components/SongIcon.css"; // Import the correct CSS file
+import "./ProfilePage/ProfilePage.css"; // Add this import
+import "./ProfilePage/Components/SongIcon.css";
 
 // Sample songs for testing
 const sampleSongs = [
@@ -38,24 +39,24 @@ const playlist = [
 
 function App() {
   return (
-    <div>
-      <ProfilePage />
-      <MusicPlayer playlist={playlist} />
+    <div className="app-container"> {/* Add a container class */}
       <NavBar />
-
-      {/* Display multiple SongIcon components */}
-      <div className="song-list">
-        {sampleSongs.map((song, index) => (
-          <SongIcon 
-            key={index}
-            name={song.name} 
-            creator={song.creator} 
-            duration={song.duration} 
-            flags={song.flags} 
-            iconImage={song.iconImage} 
-          />
-        ))}
-      </div>
+      <main className="main-content"> {/* Add a main content wrapper */}
+        <ProfilePage />
+        <div className="song-list">
+          {sampleSongs.map((song, index) => (
+            <SongIcon
+              key={index}
+              name={song.name}
+              creator={song.creator}
+              duration={song.duration}
+              flags={song.flags}
+              iconImage={song.iconImage}
+            />
+          ))}
+        </div>
+      </main>
+      <MusicPlayer playlist={playlist} />
     </div>
   );
 }
