@@ -1,6 +1,7 @@
 import React from 'react';
 import './ProfilePage.css';
 import MusicPlayer from "./Components/MusicPlayer";
+import SongIcon from "./Components/SongIcon";
 const ProfilePage = () => {
   return (
   
@@ -79,7 +80,7 @@ const ProfilePage = () => {
   </button>
 </div>
 
-
+ 
 <MusicPlayer song="Why Cant You" artist="Bryant Barnes" />
  {/*   
          
