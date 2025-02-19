@@ -1,32 +1,55 @@
-import { useState } from 'react';
-import { Play,Plus,Forward, Pause} from "lucide-react";
-import './SongIcon.css';
-const SongPost = ({name,creator,duration,flags,iconImage}) =>{
+import { useState } from "react";
+import { Play, Plus, Forward, Pause } from "lucide-react";
+import "./SongIcon.css";
 
-    const [isPlaying,togglePlaying] = useState(false);
+const SongPost = ({ name, creator, duration, flags, iconImage }) => {
+  const [isPlaying, togglePlaying] = useState(false);
 
-    const handlePlaying = ()=>{
-        togglePlaying(!isPlaying)
-    }
+  const handlePlaying = () => {
+    togglePlaying(!isPlaying);
+  };
 
-    return(
-        <div className="song-post-wrapper">
-            <div className='info'>
-                <h3 className='info-item'>{name}</h3>
-                <h4 className='info-item'>By: {creator}</h4>
-                <h5 className='info-item'>{duration}</h5>
-                <div className='flags info-item'>
-                  {flags.map((flagName)=><div className='flag'>{flagName}</div>)}  
-                </div>
+  return (
+    <div className="song-post-wrapper">
+      <div className="song-icon">
+        <img src="/img/testimage.jpg" alt="Song Icon" />
+      </div>
+
+      <div className="content-container">
+        <div className="song-info">
+          <div className="text-content">
+            <h3 className="song-title">{name}</h3>
+            <h4 className="song-creator">{creator}</h4>
+            <h5 className="song-duration">{duration}</h5>
+            <div className="flags">
+              {flags.map((flagName, index) => (
+                <div key={index} className="flag-item">{flagName}</div>
+              ))}
             </div>
-            <div className='interactables'>
-                <div className='play-btn' onClick={handlePlaying}>{isPlaying ? <Play size={60}color='white'/>: <Pause strokeWidth={1} size={60}color='white'/>}</div>
-                <div className='other-btns'><span title="Add to Playlist"><Plus color='white'/></span>
-                <span title='Share with a Friend'><Forward color='white'/></span></div>
-            </div>
-            <img className="song-icon" src={iconImage} alt="Song Icon"/>
+          </div>
         </div>
-    );
-}
+
+        <div className="controls-container">
+          <button className="play-btn" onClick={handlePlaying}>
+            {isPlaying ? (
+              <Pause strokeWidth={1} size={24} color="white" />
+            ) : (
+              <Play size={24} color="white" />
+            )}
+          </button>
+          
+          <div className="other-btns">
+            <button className="control-btn" title="Add to Playlist">
+              <Plus size={20} color="white" />
+            </button>
+            <button className="control-btn" title="Share with a Friend">
+              <Forward size={20} color="white" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default SongPost;
