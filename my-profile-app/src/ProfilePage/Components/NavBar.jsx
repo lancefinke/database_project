@@ -1,23 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './NavBar.css';
 
 const NavBar = () => {
   const location = useLocation();
   const isProfilePage = location.pathname === '/profile';
-  
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
   return (
-    <nav className={`navbar fixed-top ${isProfilePage ? 'profile-page-navbar' : 'full-width-navbar'}`}>
-      <div className="container">
+    <nav className={`navbar ${isProfilePage ? 'profile-page-navbar' : 'full-width-navbar'}`}>
+      <div className="nav-container">
         <button
-          data-bs-toggle="collapse"
-          data-bs-target="#navcol-1"
-          className="navbar-toggler"
+          className="menu-toggle"
+          onClick={toggleMenu}
+          aria-label="Toggle navigation"
         >
-          <span className="navbar-toggler-icon"></span>
+          <div className="menu-icon"></div>
         </button>
-        <div className="collapse navbar-collapse" id="navcol-1">
-          <ul className="navbar-nav ms-auto">
+        
+        <div className={`nav-menu ${menuOpen ? 'open' : ''}`}>
+          <ul className="nav-list">
             <li className="nav-item">
               <Link className="nav-link" to="/">HOME</Link>
             </li>
