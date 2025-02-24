@@ -1,80 +1,93 @@
-/* Custom navbar styling */
 .navbar {
-    position: fixed;
-    top: 0;
-    width: calc(100% - 27rem);
-    height: 60px;
-    background-color: #8E1616;
-    z-index: 1050;
-  }
-  
-  .navbar-container {
-    height: 100%;
-    padding: 0 24px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-  }
-  
-  .navbar-nav {
-    list-style-type: none; /* Remove bullet points */
-    padding-left: 30px; /* Add padding on the left side */
-    padding-right: 30px; /* Add padding on the right side */
-    margin-bottom: 0; /* Remove bottom margin */
-    display: flex; /* Align items in a row */
-    justify-content: space-between; /* Evenly space the items */
-    width: 100%; /* Ensure full width for flexbox */
-    align-items: center; /* Vertically center the items */
-    box-sizing: border-box; /* Include padding inside the height */
-  }
-  
+  position: fixed;
+  top: 0;
+  height: 60px;
+  background-color: #8E1616 !important;
+  z-index: 1050;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
 
+/* Navbar width variations based on page */
+.profile-page-navbar {
+  width: calc(100% - 27rem);
+  right: 0;
+}
+
+.full-width-navbar {
+  width: 100%;
+  left: 0;
+}
+
+.navbar-container {
+  height: 100%;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.navbar-nav {
+  list-style-type: none;
+  margin-bottom: 0;
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  align-items: center;
+}
+
+.nav-item {
+  margin: 0 15px;
+}
+
+.navbar-toggler {
+  padding: 8px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.navbar-toggler-icon {
+  display: block;
+  width: 24px;
+  height: 24px;
+  background-color: white;
+}
+
+.nav-link {
+  color: white !important;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 1.125rem;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
   .navbar-toggler {
-    display: none;
-    padding: 8px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .navbar-toggler-icon {
     display: block;
-    width: 24px;
-    height: 24px;
-    background-color: white;
+  }
+
+  .navbar-nav {
+    display: none;
+  }
+
+  .navbar-collapse.show .navbar-nav {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    background-color: #8E1616;
+    width: 100%;
+    padding: 16px;
   }
   
-  
-  .nav-link {
-    color: white;
-    text-decoration: none;
-    text-transform: uppercase;
-    font-size: 1.125rem;
-    font-weight: 500;
-    transition: color 0.2s ease;
+  .profile-page-navbar {
+    width: 100%;
   }
-  
-  .nav-link:hover {
-    color: black;
-  }
-  
-  @media (max-width: 768px) {
-    .navbar-toggler {
-      display: block;
-    }
-  
-    .navbar-nav {
-      display: none;
-    }
-  
-    .navbar-collapse.show .navbar-nav {
-      display: flex;
-      flex-direction: column;
-      position: absolute;
-      top: 60px;
-      right: 0;
-      background-color: #8E1616;
-      width: 100%;
-      padding: 16px;
-    }
-  }
+}

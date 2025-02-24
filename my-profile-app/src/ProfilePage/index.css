@@ -1,21 +1,52 @@
-* {
-    margin: 0;
-    padding: 0;
-    
+body, html {
+  margin: 0;
+  padding: 0;
+  background-color: #101010;
+  color: white;
+  font-family: 'Roboto Mono', monospace;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* Main content adjustments */
+.main-content {
+  padding-top: 70px; /* Space for fixed navbar */
+  padding-bottom: 100px; /* Space for music player */
+  min-height: calc(100vh - 170px);
+}
+
+/* Page container styles */
+.home-container,
+.search-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  color: white;
+}
+
+/* Adjust the song list positioning */
+.song-list {
+  padding: 20px;
+}
+
+/* Different song list positioning for profile page */
+.profile-page-active .song-list {
+  width: calc(100% - 24rem);
+  position: absolute;
+  top: 80px;
+  right: 40%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Responsiveness */
+@media (max-width: 992px) {
+  .profile-page-active .song-list {
+    position: static;
+    width: 100%;
+    margin-top: 20px;
   }
-  
-  body {
-    margin: 0;
-    padding: 0;
-    background-color: #101010;
-    font-family: 'Roboto Mono', monospace;
-  }
-  
-  /* Base app container */
-  .app-container {
-  
-    background-color: #101010;
-    position: relative;
-  }
-  
- 
+}
