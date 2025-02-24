@@ -12,9 +12,11 @@ body, html {
 
 /* Main content adjustments */
 .main-content {
-  padding-top: 70px; /* Space for fixed navbar */
-  padding-bottom: 100px; /* Space for music player */
-  min-height: calc(100vh - 170px);
+  padding-top: 0; /* Remove top padding since the children will handle it */
+  padding-bottom: 100px; /* Space for the music player */
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 60px); /* Subtract navbar height */
 }
 
 /* Page container styles */

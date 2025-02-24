@@ -103,7 +103,13 @@ body {
 .follow-button:hover {
   background-color: #343434;
 }
+.follow-button.following {
+  background-color: #343434;
+}
 
+.follow-button.following:hover {
+  background-color: #8E1616;
+}
 /* Music Genre Section */
 .music-container {
   display: flex;
@@ -175,7 +181,7 @@ body {
   background-color: #8E1616;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 1.5rem;
-  width: calc(100% - 30rem);
+  width: calc(100% - 29.5rem);
   position: fixed;
   bottom: 0;
   left: 0;
@@ -201,6 +207,7 @@ body {
   flex-direction: column;
   gap: 0.5rem;
 }
+
 
 .music-image {
   width: 3rem;
