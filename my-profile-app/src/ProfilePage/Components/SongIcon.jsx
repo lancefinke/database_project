@@ -10,7 +10,11 @@ const SongPost = ({ name, creator, duration, flags, iconImage }) => {
   };
 
   return (
-    <div className="song-post-wrapper">
+    <button 
+      className="song-post-wrapper"
+      onClick={handlePlaying}
+      aria-label={isPlaying ? "Pause song" : "Play song"}
+    >
       <div className="song-icon">
         <img src="/img/testimage.jpg" alt="Song Icon" />
       </div>
@@ -30,25 +34,37 @@ const SongPost = ({ name, creator, duration, flags, iconImage }) => {
         </div>
 
         <div className="controls-container">
-          <button className="play-btn" onClick={handlePlaying}>
+          <div className="control-icon play-icon">
             {isPlaying ? (
-              <Pause strokeWidth={1} size={24} color="white" />
+              <Pause strokeWidth={1} size={20} color="white" />
             ) : (
-              <Play size={24} color="white" />
+              <Play size={20} color="white" />
             )}
-          </button>
+          </div>
           
-          <div className="other-btns">
-            <button className="control-btn" title="Add to Playlist">
-              <Plus size={20} color="white" />
-            </button>
-            <button className="control-btn" title="Share with a Friend">
-              <Forward size={20} color="white" />
-            </button>
+          <div className="control-icon" 
+            title="Add to Playlist"
+            onClick={(e) => {
+              e.stopPropagation(); // Prevent triggering the parent button click
+              // Add your playlist logic here
+            }}
+          >
+            <Plus size={20} color="white" />
+          </div>
+          
+          <div 
+            className="control-icon" 
+            title="Share with a Friend"
+            onClick={(e) => {
+              e.stopPropagation(); // Prevent triggering the parent button click
+              // Add your share logic here
+            }}
+          >
+            <Forward size={20} color="white" />
           </div>
         </div>
       </div>
-    </div>
+    </button>
   );
 };
 
