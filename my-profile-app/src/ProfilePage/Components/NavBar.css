@@ -59,6 +59,12 @@
 .nav-link:hover {
   color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
+  
+  transform: scale(1.02);
+}
+.nav-link:active {
+  transform: scale(0.98);
+  
 }
 
 /* Mobile menu toggle */
