@@ -102,13 +102,24 @@ body {
 
 .follow-button:hover {
   background-color: #343434;
+  transform: scale(1.02);
+  background-color: var(--brick-hover);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.follow-button:active {
+  transform: scale(0.98);
+  background-color: var(--brick-active);
 }
 .follow-button.following {
   background-color: #343434;
+  transform: scale(1.02);
+  background-color: var(--brick-hover);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
 .follow-button.following:hover {
-  background-color: #8E1616;
+  background-color: #343434;
 }
 /* Music Genre Section */
 .music-container {
@@ -134,6 +145,14 @@ body {
 
 .music-genre:hover {
   background-color: #343434;
+  transform: scale(1.02);
+  background-color: var(--brick-hover);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.music-genre:active {
+  transform: scale(0.98);
+  background-color: var(--brick-active);
 }
 
 /* Playlist Section */
@@ -163,7 +182,10 @@ body {
 .playlist-button:hover {
   background-color: #343434;
 }
-
+.playlist-button:active {
+  transform: scale(0.98);
+  background-color: var(--brick-active);
+}
 .playlist-image {
   width: 60px;
   height: 60px;
@@ -377,4 +399,85 @@ body {
   
   .volume-control input[type="range"] {
     width: 100px;
+  }
+
+
+
+  .tooltip-container {
+    position: relative;
+    display: inline-block;
+  }
+  
+  /* Tooltip text */
+  .tooltip {
+    visibility: hidden;
+    width: auto;
+    min-width: 70px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    text-align: center;
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    
+    /* Position the tooltip */
+    position: absolute;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    
+    /* Fade in effect */
+    opacity: 0;
+    transition: opacity 0.2s, visibility 0.2s;
+    
+    /* Make sure it's above other elements */
+    z-index: 1100;
+  }
+  
+  /* Tooltip arrow */
+  .tooltip::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: rgba(0, 0, 0, 0.7) transparent transparent transparent;
+  }
+  
+  /* Show the tooltip when hovering over the container */
+  .tooltip-container:hover .tooltip {
+    visibility: visible;
+    opacity: 3;
+  }
+  
+  /* Special positioning for volume tooltip */
+  .tooltip-volume {
+    
+    left: 0;
+    transform: translateX(0);
+  }
+  
+  .tooltip-volume::after {
+    left: 80%;
+  }
+  
+  /* Make sure the control buttons don't change size when pressed */
+  .control-button {
+    min-width: 24px;
+    min-height: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Enhance the active/pressed states */
+  .control-button.active {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+  }
+  
+  .control-button.pressed {
+    transform: scale(0.95);
   }

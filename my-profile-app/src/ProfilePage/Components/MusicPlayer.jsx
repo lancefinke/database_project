@@ -1,6 +1,8 @@
 import React, { useState, useRef } from "react";
 import { Play, Pause, SkipForward, SkipBack, Shuffle, Plus, Check, Volume2 } from "lucide-react";
 
+
+
 const MusicPlayer = ({ song, artist }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isShuffling, setIsShuffling] = useState(false);
@@ -52,31 +54,65 @@ const MusicPlayer = ({ song, artist }) => {
         </div>
 
         <div className="controls-container">
-          <button onClick={toggleShuffle} className={`control-button ${isShuffling ? "active" : ""}`}>
-            <Shuffle size={20} color={isShuffling ? "black" : "white"} />
-          </button>
-          <button 
-            onClick={handleSkip} 
-            className={`control-button ${skipPressed ? "pressed" : ""}`}
-          >
-            <SkipBack size={20} color="white" />
-          </button>
-          <button onClick={togglePlayPause} className="control-button play-button">
-            {isPlaying ? <Pause size={24} color="white" /> : <Play size={24} color="white" />}
-          </button>
-          <button 
-            onClick={handleSkip} 
-            className={`control-button ${skipPressed ? "pressed" : ""}`}
-          >
-            <SkipForward size={20} color="white" />
-          </button>
-          <button onClick={handleAddToPlaylist} className="control-button">
-            {songAdded ? <Check size={20} color="black" /> : <Plus size={20} color="white" />}
-          </button>
+          <div className="tooltip-container">
+            <button 
+              onClick={toggleShuffle} 
+              className={`control-button ${isShuffling ? "active" : ""}`}
+            >
+              <Shuffle size={20} color={isShuffling ? "black" : "white"} />
+            </button>
+            <span className="tooltip">Shuffle</span>
+          </div>
+          
+          <div className="tooltip-container">
+            <button 
+              onClick={handleSkip} 
+              className={`control-button ${skipPressed ? "pressed" : ""}`}
+            >
+              <SkipBack size={20} color="white" />
+            </button>
+            <span className="tooltip">Previous</span>
+          </div>
+          
+          <div className="tooltip-container">
+            <button 
+              onClick={togglePlayPause} 
+              className="control-button play-button"
+            >
+              {isPlaying ? 
+                <Pause size={24} color="white" /> : 
+                <Play size={24} color="white" />
+              }
+            </button>
+            <span className="tooltip">{isPlaying ? "Pause" : "Play"}</span>
+          </div>
+          
+          <div className="tooltip-container">
+            <button 
+              onClick={handleSkip} 
+              className={`control-button ${skipPressed ? "pressed" : ""}`}
+            >
+              <SkipForward size={20} color="white" />
+            </button>
+            <span className="tooltip">Next</span>
+          </div>
+          
+          <div className="tooltip-container">
+            <button 
+              onClick={handleAddToPlaylist} 
+              className="control-button"
+            >
+              {songAdded ? 
+                <Check size={20} color="black" /> : 
+                <Plus size={20} color="white" />
+              }
+            </button>
+            <span className="tooltip">{songAdded ? "Added" : "Add to Playlist"}</span>
+          </div>
         </div>
       </div>
 
-      <div className="volume-control">
+      <div className="volume-control tooltip-container">
         <Volume2 size={20} color="white" />
         <input
           type="range"
@@ -91,6 +127,7 @@ const MusicPlayer = ({ song, artist }) => {
             }
           }}
         />
+        <span className="tooltip tooltip-volume">Volume</span>
       </div>
 
       <audio ref={audioRef} />
