@@ -11,21 +11,10 @@ const SearchPage = () => {
 
   return (
     <div className="search-container">
-      <h1>Search Music</h1>
-      <p>Find your favorite songs and artists.</p>
-      
-      <form onSubmit={handleSearch} className="search-form">
-        <div className="search-input-container">
-          <input 
-            type="text" 
-            placeholder="Search for songs, artists, albums..." 
-            className="search-input"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <button type="submit" className="search-button">Search</button>
+      <div className="search-bar-wrapper">
+            <div className="search-icon"><span className="icon-align">🔎︎</span></div>
+            <input className="search-bar" type="search" value={searchText} placeholder="Enter a Song name or Artist..." onChange={(e)=>{setSearchText(e.target.value)}}></input>
         </div>
-      </form>
       
       <div className="search-results">
         <h2>Search Results</h2>
