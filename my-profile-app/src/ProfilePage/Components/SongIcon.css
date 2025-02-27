@@ -1,9 +1,13 @@
 :root {
     --background: #1D1616;
-    --brick:  #101010;;
+    --brick:  #101010;
     --brick-hover: #343434;
     --brick-active: #343434;
     --slate: #54585a;
+    --home-background: #1e293b;
+    --home-hover: #334155;
+    --home-active: #1e293b;
+    --home-accent: #ffffff; /* Changed from blue to white */
 }
 
 .song-post-wrapper {
@@ -23,6 +27,7 @@
     outline: none;
     position: relative;
     border: 2px solid white;
+    font-family: 'Roboto Mono', monospace;
 }
 
 /* Button state styles */
@@ -32,11 +37,25 @@
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
+.home-song-wrapper:hover {
+    transform: scale(2.3); 
+    background-color: var(--brick-hover);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
 .song-post-wrapper:active {
     transform: scale(0.98);
     background-color: var(--brick-active);
 }
 
+.home-song-wrapper:active {
+    transform: scale(1.9); /* Same as non-hover state */
+    background-color: var(--brick-active);
+}
+
+.center-song-wrapper:active {
+    transform: scale(1.9); /* Same as non-hover state */
+    background-color: var(--brick-active);
+}
 /* Subtle highlight effect on hover */
 .song-post-wrapper::after {
     content: "";
@@ -154,8 +173,6 @@
     margin-right: auto;
 }
 
-
-
 .control-icon {
     background-color: rgba(0, 0, 0, 0.3);
     border-radius: 50%;
@@ -181,6 +198,42 @@
     transform: scale(1.1);
 }
 
+/* HOME PAGE STYLES */
+.home-song-wrapper {
+    width: 300px;
+    height: 300px;
+    transform: scale(1.8);
+    transition: all 0.4s ease;
+}
+
+
+/* CENTER SONG STYLES - for the song in the center of the carousel */
+.center-song-wrapper {
+    transform: scale(2.1);
+    border: 3px solid white; /* Changed from blue to white */
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.3); /* White glow instead of red */
+    z-index: 5;
+}
+
+.center-song-wrapper .song-title {
+    color: white;
+    font-size: 1.2rem;
+}
+
+.center-song-wrapper .song-creator {
+    color: white; /* Changed from blue to white */
+    font-weight: bold;
+}
+
+.center-song-wrapper .flag-item {
+    font-size: 0.8rem;
+    padding: 3px 5px;
+    background-color: #1D1616;
+    border-radius: 8px;
+    line-height: 1.2;
+}
+
+/* Media queries */
 @media (max-width: 400px) {
     .content-container {
         padding: 4px 14px;
@@ -205,5 +258,10 @@
     .controls-container {
         gap: 10px;
         max-width: 180px;
+    }
+
+    .home-song-wrapper {
+        width: 250px;
+        height: 250px;
     }
 }

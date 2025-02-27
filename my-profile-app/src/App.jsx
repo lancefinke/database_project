@@ -9,7 +9,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from "react-route
 import "./ProfilePage/ProfilePage.css";
 import "./ProfilePage/Components/SongIcon.css";
 
-// Sample songs for testing
+// Sample songs for the profile page
 const sampleSongs = [
   {
     name: "Lost in the Echo",
@@ -53,12 +53,15 @@ const AppLayout = () => {
     }
   }, [location]);
 
+  // Determine if we should show the music player based on the current route
+  const showMusicPlayer = location.pathname !== '/home';
+
   return (
     <div className="app-container">
       <NavBar />
       <main className="main-content">
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/home" element={<HomePage />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/profile" element={
             <>
@@ -72,14 +75,19 @@ const AppLayout = () => {
                     duration={song.duration}
                     flags={song.flags}
                     iconImage={song.iconImage}
+                    isHomePage={false} // Explicitly set to false for profile
                   />
                 ))}
               </div>
             </>
           } />
+          {/* Default route redirect to home */}
+          <Route path="/" element={<HomePage />} />
         </Routes>
       </main>
-      <MusicPlayer playlist={playlist} />
+      
+      {/* Only render MusicPlayer if not on the home page */}
+      {showMusicPlayer && <MusicPlayer playlist={playlist} />}
     </div>
   );
 };
