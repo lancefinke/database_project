@@ -2,16 +2,27 @@ import { useState } from "react";
 import { Play, Plus, Forward, Pause } from "lucide-react";
 import "./SongIcon.css";
 
-const SongPost = ({ name, creator, duration, flags, iconImage }) => {
+const SongIcon = ({ name, creator, duration, flags, iconImage, isHomePage, isCenter }) => {
   const [isPlaying, togglePlaying] = useState(false);
 
   const handlePlaying = () => {
     togglePlaying(!isPlaying);
   };
 
+  // Generate the appropriate class name based on props
+  let wrapperClass = "song-post-wrapper";
+  
+  if (isHomePage) {
+    wrapperClass += " home-song-wrapper";
+    
+    if (isCenter) {
+      wrapperClass += " center-song-wrapper";
+    }
+  }
+
   return (
     <button 
-      className="song-post-wrapper"
+      className={wrapperClass}
       onClick={handlePlaying}
       aria-label={isPlaying ? "Pause song" : "Play song"}
     >
@@ -68,4 +79,4 @@ const SongPost = ({ name, creator, duration, flags, iconImage }) => {
   );
 };
 
-export default SongPost;
+export default SongIcon;
