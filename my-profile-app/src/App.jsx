@@ -1,13 +1,15 @@
 import React, { useEffect } from "react";
 import ProfilePage from "./ProfilePage/ProfilePage";
 import MusicPlayer from "./ProfilePage/Components/MusicPlayer";
-import NavBar from "./ProfilePage/Components/NavBar";
+//import NavBar from "./ProfilePage/Components/NavBar";
 import SongIcon from "./ProfilePage/Components/SongIcon";
 import HomePage from "./HomePage/HomePage";
 import SearchPage from "./SearchPage/SearchPage";
+import SideBar from "./ProfilePage/Components/SideBar";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import "./ProfilePage/ProfilePage.css";
 import "./ProfilePage/Components/SongIcon.css";
+
 
 // Sample songs for the profile page
 const sampleSongs = [
@@ -58,7 +60,7 @@ const AppLayout = () => {
 
   return (
     <div className="app-container">
-      <NavBar />
+      <SideBar />
       <main className="main-content">
         <Routes>
           <Route path="/home" element={<HomePage />} />
