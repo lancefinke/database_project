@@ -1,10 +1,12 @@
 import React, { useEffect } from "react";
 import ProfilePage from "./ProfilePage/ProfilePage";
+import PersonalPage from "./PersonalPage/PersoanlPage";
 import MusicPlayer from "./ProfilePage/Components/MusicPlayer";
 import NavBar from "./ProfilePage/Components/NavBar";
 import SongIcon from "./ProfilePage/Components/SongIcon";
 import HomePage from "./HomePage/HomePage";
 import SearchPage from "./SearchPage/SearchPage";
+import LoginPage from "./LoginPage/LoginPage";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import "./ProfilePage/ProfilePage.css";
 import "./ProfilePage/Components/SongIcon.css";
@@ -54,16 +56,16 @@ const AppLayout = () => {
   }, [location]);
 
   // Determine if we should show the music player based on the current route
-  const showMusicPlayer = location.pathname !== '/home';
+  const showMusicPlayer = false; //location.pathname !== '/home';
 
   return (
     <div className="app-container">
-      <NavBar />
+      {location.pathname==='/login' || location.pathname==='/signup'? <></>:<NavBar />}
       <main className="main-content">
         <Routes>
           <Route path="/home" element={<HomePage />} />
           <Route path="/search" element={<SearchPage />} />
-          <Route path="/profile" element={
+          {/*<Route path="/profile" element={
             <>
               <ProfilePage />
               <div className="song-list">
@@ -80,7 +82,9 @@ const AppLayout = () => {
                 ))}
               </div>
             </>
-          } />
+          } />*/}
+          <Route path="/profile" element={<PersonalPage />} />
+          <Route path="/login" element={<LoginPage />} />
           {/* Default route redirect to home */}
           <Route path="/" element={<HomePage />} />
         </Routes>
