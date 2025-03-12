@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "ImVPoCyPVlM=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\MusicLibraryBackend.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Jose\\.nuget\\packages\\microsoft.aspnetcore.jsonpatch\\8.0.0\\microsoft.aspnetcore.jsonpatch.8.0.0.nupkg.sha512",
+    "C:\\Users\\Jose\\.nuget\\packages\\microsoft.aspnetcore.mvc.newtonsoftjson\\8.0.0\\microsoft.aspnetcore.mvc.newtonsoftjson.8.0.0.nupkg.sha512",
+    "C:\\Users\\Jose\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
+    "C:\\Users\\Jose\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
+    "C:\\Users\\Jose\\.nuget\\packages\\newtonsoft.json.bson\\1.0.2\\newtonsoft.json.bson.1.0.2.nupkg.sha512"
+  ],
+  "logs": []
+}
