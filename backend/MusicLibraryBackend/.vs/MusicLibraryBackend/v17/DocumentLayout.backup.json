@@ -1,121 +1,12 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{9A2044BF-669F-4C86-BC6C-B4BB9C09674A}|MusicLibraryBackend.csproj|c:\\users\\jose\\documents\\uh_spring_2025\\database\\database project\\database_project\\backend\\musiclibrarybackend\\musiclibrarybackend.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}",
-      "RelativeMoniker": "D:0:0:{9A2044BF-669F-4C86-BC6C-B4BB9C09674A}|MusicLibraryBackend.csproj|solutionrelative:musiclibrarybackend.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9A2044BF-669F-4C86-BC6C-B4BB9C09674A}|MusicLibraryBackend.csproj|c:\\users\\jose\\documents\\uh_spring_2025\\database\\database project\\database_project\\backend\\musiclibrarybackend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9A2044BF-669F-4C86-BC6C-B4BB9C09674A}|MusicLibraryBackend.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9A2044BF-669F-4C86-BC6C-B4BB9C09674A}|MusicLibraryBackend.csproj|c:\\users\\jose\\documents\\uh_spring_2025\\database\\database project\\database_project\\backend\\musiclibrarybackend\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{9A2044BF-669F-4C86-BC6C-B4BB9C09674A}|MusicLibraryBackend.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9A2044BF-669F-4C86-BC6C-B4BB9C09674A}|MusicLibraryBackend.csproj|c:\\users\\jose\\documents\\uh_spring_2025\\database\\database project\\database_project\\backend\\musiclibrarybackend\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}",
-      "RelativeMoniker": "D:0:0:{9A2044BF-669F-4C86-BC6C-B4BB9C09674A}|MusicLibraryBackend.csproj|solutionrelative:.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9A2044BF-669F-4C86-BC6C-B4BB9C09674A}|MusicLibraryBackend.csproj|c:\\users\\jose\\documents\\uh_spring_2025\\database\\database project\\database_project\\backend\\musiclibrarybackend\\controllers\\musiclibrarycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9A2044BF-669F-4C86-BC6C-B4BB9C09674A}|MusicLibraryBackend.csproj|solutionrelative:controllers\\musiclibrarycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9A2044BF-669F-4C86-BC6C-B4BB9C09674A}|MusicLibraryBackend.csproj|c:\\users\\jose\\documents\\uh_spring_2025\\database\\database project\\database_project\\backend\\musiclibrarybackend\\musiclibrarybackend.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{9A2044BF-669F-4C86-BC6C-B4BB9C09674A}|MusicLibraryBackend.csproj|solutionrelative:musiclibrarybackend.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": [
-        {
-          "DockedWidth": 218,
-          "SelectedChildIndex": 0,
-          "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "MusicLibraryBackend.http",
-              "DocumentMoniker": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\MusicLibraryBackend.http",
-              "RelativeDocumentMoniker": "MusicLibraryBackend.http",
-              "ToolTip": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\MusicLibraryBackend.http",
-              "RelativeToolTip": "MusicLibraryBackend.http",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003502|",
-              "WhenOpened": "2025-03-12T04:57:58.352Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": ".gitignore",
-              "DocumentMoniker": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\.gitignore",
-              "RelativeDocumentMoniker": ".gitignore",
-              "ToolTip": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\.gitignore",
-              "RelativeToolTip": ".gitignore",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-03-12T04:52:57.356Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\appsettings.json",
-              "RelativeDocumentMoniker": "appsettings.json",
-              "ToolTip": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\appsettings.json",
-              "RelativeToolTip": "appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-03-11T20:55:08.719Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "MusicLibraryController.cs",
-              "DocumentMoniker": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Controllers\\MusicLibraryController.cs",
-              "RelativeDocumentMoniker": "Controllers\\MusicLibraryController.cs",
-              "ToolTip": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Controllers\\MusicLibraryController.cs",
-              "RelativeToolTip": "Controllers\\MusicLibraryController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-11T20:54:48.829Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Program.cs",
-              "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Program.cs",
-              "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAANAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-11T20:30:00.592Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "MusicLibraryBackend.csproj",
-              "DocumentMoniker": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\MusicLibraryBackend.csproj",
-              "RelativeDocumentMoniker": "MusicLibraryBackend.csproj",
-              "ToolTip": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\MusicLibraryBackend.csproj",
-              "RelativeToolTip": "MusicLibraryBackend.csproj",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-03-11T20:29:53.192Z"
-            }
-          ]
-        }
-      ]
+      "DocumentGroups": []
     }
   ]
 }
