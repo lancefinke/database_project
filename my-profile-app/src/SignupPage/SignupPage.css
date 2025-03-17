@@ -1,0 +1,147 @@
+*{
+    box-sizing: border-box;
+}
+.signup-container{
+    border: 6px solid white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background-color: #8E1616;
+    width:30%;
+    margin: 5vh auto;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    gap:25px 0px;
+    min-width: 400px;
+}
+
+textarea{
+    resize: none;
+    width: 80%;
+    height: 90px;
+    margin: 2px auto;
+    font-size: medium;
+    transition: border-radius 0.35s ease;
+}
+textarea:hover,textarea:focus{
+    outline: none;
+    border: 4px solid white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+}
+.text{
+    height: 35px;
+    width: 80%;
+    margin: 2px auto;
+    font-size: medium;
+    transition: border-radius 0.35s ease;
+}
+
+.text:focus,.text:hover{
+    outline: none;
+    border: 4px solid white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+}
+
+h3,h2{
+    text-align: center;
+    width: 90%;
+}
+
+
+.roles{
+    width: 80%;
+    display: flex;
+    margin-top:-5px;
+    margin-bottom: 15px;
+    margin-left: 10px;
+    justify-content: center;
+}
+
+#artist:after,#listener:after {
+    width: 12px;
+    height: 12px;
+    border-radius: 15px;
+    position: relative;
+    background-color: white;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 2px solid white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.4s ease;
+}
+
+#artist:checked:after,#listener:checked:after {
+    width: 12px;
+    height: 12px;
+    border-radius: 15px;
+    position: relative;
+    background-color: #101010;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 2px solid white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+#artist:hover:after,#listener:hover:after{
+    transform: scale(1.15);
+    cursor: pointer;
+}
+
+.signup-btn{
+    width: 50%;
+    height: 60px;
+    margin: 20px auto;
+    color: white;
+    font-family: 'Roboto Mono', monospace;
+    border: 4px solid white;
+    background-color: #101010;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    transition: transform 0.3s ease;
+    font-size: large;
+}
+
+.signup-btn:hover{
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+.signup-pfp{
+    width:80%;
+    display: none;
+}
+.image-btn{
+    width:60%;
+    height: 50px;
+    margin-top:10px;
+    border: 4px solid white;
+    background-color: #101010;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    transition: transform 0.3s ease;
+    font-size: large;
+}
+.image-btn:hover{
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+img{
+    position: relative;
+    left: 230px;
+    bottom: 70px;
+    border-radius: 50%;
+}
+
+/*Hard Coded this format made the click window smaller*/
+.pfp-label{
+    height: 100px;
+    width: 180px;
+}
+

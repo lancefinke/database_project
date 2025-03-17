@@ -5,6 +5,7 @@ import MusicPlayer from "./ProfilePage/Components/MusicPlayer";
 import NavBar from "./ProfilePage/Components/NavBar";
 import SongIcon from "./ProfilePage/Components/SongIcon";
 import HomePage from "./HomePage/HomePage";
+import SignupPage from "./SignupPage/Signuppage";
 import SearchPage from "./SearchPage/SearchPage";
 import LoginPage from "./LoginPage/LoginPage";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
@@ -85,6 +86,7 @@ const AppLayout = () => {
           } />*/}
           <Route path="/profile" element={<PersonalPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
           {/* Default route redirect to home */}
           <Route path="/" element={<HomePage />} />
         </Routes>
