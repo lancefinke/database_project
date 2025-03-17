@@ -53,7 +53,6 @@ const SignupPage = ()=>{
             <label>CONFIRM PASSWORD<input type='password' className='text signup-confirm-password' required onChange={(e)=>{setConfirmPassword(e.target.value)}}></input></label>
             <button className='signup-btn' type='submit'>CREATE ACCOUNT</button>
         </div>
-        <h1>{id}</h1>
         </form>
     );
 
