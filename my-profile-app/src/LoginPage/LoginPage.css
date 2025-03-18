@@ -1,6 +1,4 @@
-*{
-    box-sizing: border-box;
-}
+
 .login-container{
     height: 45vh;
     width: 55%;
@@ -99,4 +97,11 @@ label{
     text-decoration: none;
     font-family: 'Roboto Mono', monospace;
     color: white;
+}
+.forgot-password-link{
+    font-family: 'Roboto Mono', monospace;
+    color:white;
+    margin-top: -40px;
+    margin-left: 40px;
+    font-size: 85%;
 }

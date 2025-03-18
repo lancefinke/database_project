@@ -19,6 +19,7 @@ const LoginPage = () =>{
                 <input type="email" className="login-input" id="login-email" onChange={(event)=>setEmail(event.target.value)}></input></label>
                 <label for="login-pswrd">PASSWORD
                 <input type="password" className="login-input" id="login-pswrd" onChange={(event)=>setPassword(event.target.value)}></input></label>
+                <Link className="forgot-password-link" to='/reset'>Forgot Password?</Link>
                 <button className="login-btn">LOGIN</button>
             </div>
             <div className="signup-option">
