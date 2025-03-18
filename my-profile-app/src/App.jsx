@@ -6,6 +6,7 @@ import NavBar from "./ProfilePage/Components/NavBar";
 import SongIcon from "./ProfilePage/Components/SongIcon";
 import HomePage from "./HomePage/HomePage";
 import SignupPage from "./SignupPage/Signuppage";
+import ResetPassword from "./ResetPasswordPage/ResetPassword";
 import SearchPage from "./SearchPage/SearchPage";
 import LoginPage from "./LoginPage/LoginPage";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
@@ -61,7 +62,7 @@ const AppLayout = () => {
 
   return (
     <div className="app-container">
-      {location.pathname==='/login' || location.pathname==='/signup'? <></>:<NavBar />}
+      {location.pathname==='/login' || location.pathname==='/signup' || location.pathname==='/reset'? <></>:<NavBar />}
       <main className="main-content">
         <Routes>
           <Route path="/home" element={<HomePage />} />
@@ -87,6 +88,7 @@ const AppLayout = () => {
           <Route path="/profile" element={<PersonalPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
+          <Route path="/reset" element={<ResetPassword />} />
           {/* Default route redirect to home */}
           <Route path="/" element={<HomePage />} />
         </Routes>
