@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import ProfilePage from "./ProfilePage/ProfilePage";
-import PersonalPage from "./PersonalPage/PersoanlPage";
+import UserPage from "./ProfilePage/UserPage/UserPage";
 import MusicPlayer from "./ProfilePage/Components/MusicPlayer";
 import NavBar from "./ProfilePage/Components/NavBar";
 import SongIcon from "./ProfilePage/Components/SongIcon";
@@ -58,7 +58,7 @@ const AppLayout = () => {
   }, [location]);
 
   // Determine if we should show the music player based on the current route
-  const showMusicPlayer = false; //location.pathname !== '/home';
+  const showMusicPlayer = location.pathname === '/account' || location.pathname==='/profile'; 
 
   return (
     <div className="app-container">
@@ -67,9 +67,9 @@ const AppLayout = () => {
         <Routes>
           <Route path="/home" element={<HomePage />} />
           <Route path="/search" element={<SearchPage />} />
-          {/*<Route path="/profile" element={
+          {<Route path="/account" element={
             <>
-              <ProfilePage />
+              <UserPage />
               <div className="song-list">
                 {sampleSongs.map((song, index) => (
                   <SongIcon
@@ -84,8 +84,7 @@ const AppLayout = () => {
                 ))}
               </div>
             </>
-          } />*/}
-          <Route path="/profile" element={<PersonalPage />} />
+          } />}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/reset" element={<ResetPassword />} />

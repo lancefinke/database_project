@@ -4,7 +4,7 @@ import './NavBar.css';
 
 const NavBar = () => {
   const location = useLocation();
-  const isProfilePage = location.pathname === '/profile';
+  const isProfilePage = location.pathname === '/profile' || location.pathname==='/account';
   const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -31,7 +31,7 @@ const NavBar = () => {
               <Link className="nav-link" to="/search">SEARCH</Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/profile">PROFILE</Link>
+              <Link className="nav-link" to="/account">PROFILE</Link>
             </li>
           </ul>
         </div>

@@ -1,9 +1,11 @@
 .search-container {
     padding: 20px;
     width: 55%;
+    height: 90vh;
     max-width: 1200px;
     min-width: 475px;
-    margin: 0 auto;
+    position: relative;
+    top: 40px;
   }
   
   .search-container h1, 

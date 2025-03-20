@@ -1,0 +1,20 @@
+.editable{
+    display: flex;
+    align-items: center;
+}
+.editable-input{
+    height:85%;
+    width: 85%;
+    margin: auto 0px;
+    background: none;
+    border: none;
+    font-size: medium;
+}
+button{
+    background: none;
+    border: none;
+    width: 15%;
+}
+button:hover{
+    cursor: pointer;
+}
