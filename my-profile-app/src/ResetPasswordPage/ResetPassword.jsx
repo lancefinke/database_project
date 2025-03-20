@@ -47,7 +47,6 @@ const ResetPassword = () =>{
                 </>:<></>
                 }
             </div>
-            <Editable title="Edit this" value={'test word'} type='text' div_width="250px" div_height="40px" backgroundColor="none" textColor="white"/>
         </>
     );
 

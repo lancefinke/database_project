@@ -2,7 +2,8 @@ import { useRef, useState } from 'react';
 import { Pencil } from "lucide-react";
 import './Editable.css';
 
-const Editable = ({title,value,type='',div_width,div_height,backgroundColor,textColor}) =>{
+
+const Editable = ({title,value,div_width,div_height,backgroundColor,textColor}) =>{
 
     const [isEditable,setEditable] = useState(false);
     const [text,setValue] = useState(value);
@@ -17,21 +18,26 @@ const Editable = ({title,value,type='',div_width,div_height,backgroundColor,text
         <div className="editable" style={{
             width:div_width,
             height:div_height,
-            backgroundColor:backgroundColor,
+            backgroundColor:backgroundColor
         }}>
-                <input className='editable-input'
+                <textarea className='editable-input'
                     style={{
-                        color:textColor
+                        color:textColor,
+                        width:"85%",
+                        height:'80%',
+                        margin: "auto 0px",
+                        background: "none",
+                        border: "none",
+                        resize:"none",
                     }}
+                    placeholder='Add a Description for Yo'
                     ref={inputRef}
-                    type={type} 
                     value={text} 
                     readOnly={!isEditable}
                     onBlur={()=>setEditable(false)}
-                    onChange={(e)=>{setValue(e.target.value)}}>
-                </input>
+                    onChange={(e)=>{setValue(e.target.value)}}></textarea>
             {!isEditable &&(
-                <button onClick={toggleEditMode} title={title}><Pencil className='edit-icon' style={{color:textColor}}/></button>
+                <button className='edit-btn' onClick={toggleEditMode} title={title}><Pencil className='edit-icon' style={{color:textColor}}/></button>
             )}
         </div>
     );

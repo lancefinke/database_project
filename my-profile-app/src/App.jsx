@@ -85,6 +85,24 @@ const AppLayout = () => {
               </div>
             </>
           } />}
+          {<Route path="/profile" element={
+            <>
+              <ProfilePage />
+              <div className="song-list">
+                {sampleSongs.map((song, index) => (
+                  <SongIcon
+                    key={index}
+                    name={song.name}
+                    creator={song.creator}
+                    duration={song.duration}
+                    flags={song.flags}
+                    iconImage={song.iconImage}
+                    isHomePage={false} // Explicitly set to false for profile
+                  />
+                ))}
+              </div>
+            </>
+          } />}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/reset" element={<ResetPassword />} />

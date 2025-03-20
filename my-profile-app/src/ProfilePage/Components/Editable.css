@@ -1,16 +1,15 @@
+*{
+    font-size: medium;
+    font-family: 'Roboto Mono', monospace;
+}
 .editable{
     display: flex;
     align-items: center;
+    margin-bottom: 10px;
+    margin-left: 15px;
 }
-.editable-input{
-    height:85%;
-    width: 85%;
-    margin: auto 0px;
-    background: none;
-    border: none;
-    font-size: medium;
-}
-button{
+
+.edit-btn{
     background: none;
     border: none;
     width: 15%;

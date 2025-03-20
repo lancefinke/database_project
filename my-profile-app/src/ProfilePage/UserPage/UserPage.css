@@ -1,0 +1,23 @@
+.add-genre-btn{
+    background-color:#343434;
+    width: 40%;
+    margin-right: 50%;
+}
+.add-genre-btn:hover{
+    background-color: #8E1616;
+}
+
+.genre-drop-down{
+    background-color:#343434;
+    color: white;
+    border-radius: 8px;
+}
+.remove-genre{
+    background: none;
+    color:#8E1616;
+    margin-left:5px;
+    margin-right:-10px;
+    border-radius:50%;
+    z-index: -10;
+}
+

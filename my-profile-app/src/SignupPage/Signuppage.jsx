@@ -44,7 +44,7 @@ const SignupPage = ()=>{
                 <label className='artist-btn'>ARTIST<input type='radio' id='artist' name='role' value='artist' checked={role === "artist"} onChange={changeRole}/></label>
                 <label className='listener-btn'>LISTENER<input type='radio' id='listener' name='role' value='listener' checked={role === "listener"} onChange={changeRole}/></label>
             </div>
-            <label>DESCRIPTION<textarea placeholder='Tell other users about yourself...' onChange={(e)=>{setDescription(e.target.value)}}></textarea></label>
+            <label>DESCRIPTION<textarea className='bio' placeholder='Tell other users about yourself...' onChange={(e)=>{setDescription(e.target.value)}}></textarea></label>
             <label className='pfp-label'>PROFILE PICTURE<input type='file' className='signup-pfp' onChange={uploadPicture}></input>
                 <div className='image-btn'>Image <ImageUp /></div>
                 <img src={pfpPrev} width="70" height="84"/>
