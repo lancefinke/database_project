@@ -5,6 +5,7 @@ import MusicPlayer from "./../Components/MusicPlayer";
 import SongIcon from "./../Components/SongIcon";
 import Editable from './../Components/Editable';
 import AddPlaylist from '../Components/AddPlaylist';
+import UserLink from '../../UserLink/UserLink';
 import { use } from 'react';
 
 

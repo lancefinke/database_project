@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./Admin.css";
 import image from './Borger.jfif';
 import { Play, Pause } from "lucide-react";
+import UserLink from "../UserLink/UserLink";
 
 const StatLine = ({name,stat}) =>{
     //The name is the actual statistic. EX 'Users'
@@ -29,7 +30,7 @@ const ReportedSong = ({songName,author,reporter,songImage,duration,reason}) =>{
         <div className="reported-song">
             <div className="report-info">
                 <p className="reported-item"><u>Title:</u> {songName}</p>
-                <p className="reported-item"><u>Author:</u> {author}</p>
+                <p className="reported-item"><UserLink text={`Author: ${author}`} userName={author}/></p>
                 <p className="reported-item"><u>Reported By:</u> {reporter}</p>
                 <p className="reported-item"><u>Duration:</u> {duration}</p>
                 <p className="reported-item"><u>Reason for Reporting:</u> {reason}</p>
