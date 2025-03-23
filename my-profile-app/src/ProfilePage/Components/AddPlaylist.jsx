@@ -2,10 +2,9 @@ import { useState } from "react";
 import "./../../SignupPage/Signuppage.css";
 
 
-const AddPlaylist = ({isVisible=false}) =>{
+const AddPlaylist = () =>{
 
     const [privacyStatus,setPrivacyStatus] = useState('public');
-    const [playlistName,setPlaylistName] = useState('');
 
     const changeStatus = (e)=>{
         setPrivacyStatus(e.target.value);
@@ -24,7 +23,6 @@ const AddPlaylist = ({isVisible=false}) =>{
                 <label className='artist-btn'>PRIVATE<input type='radio' id='private' name='privacy' value='private' checked={privacyStatus === "private"} onChange={changeStatus}/></label>
                 <label className='listener-btn'>PUBLIC<input type='radio' id='public' name='privacy' value='public' checked={privacyStatus === "public"} onChange={changeStatus}/></label>
                 </div>
-                <button className="add-playlist-btn">ADD PLAYLIST</button>
             </div>
         </div>
     );

@@ -3,7 +3,7 @@ import './UserLink.css';
 
 const UserLink = ({text,userName}) =>{
     return(
-        <Link className="user-link" to={`/profile/?name=${userName}`}>{text}</Link>
+        <Link className="user-link" to={`/user/?name=${userName}`}>{text}</Link>
     );
 }
 

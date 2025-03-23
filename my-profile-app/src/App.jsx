@@ -3,7 +3,12 @@ import ProfilePage from "./ProfilePage/ProfilePage";
 import MusicPlayer from "./ProfilePage/Components/MusicPlayer";
 import SongIcon from "./ProfilePage/Components/SongIcon";
 import HomePage from "./HomePage/HomePage";
+import LoginPage from "./LoginPage/LoginPage";
 import SearchPage from "./SearchPage/SearchPage";
+import Admin from "./Admin/Admin";
+import UserPage from "./ProfilePage/UserPage/UserPage";
+import SignupPage from "./SignupPage/Signuppage";
+import ResetPassword from "./ResetPasswordPage/ResetPassword";
 import SideBar from "./ProfilePage/Components/SideBar";
 import FollowingPage from "./FollowingPage/FollowingPage";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
@@ -69,7 +74,7 @@ const AppLayout = () => {
   }, [location]);
 
   // Show music player on all pages except home
-  const showMusicPlayer = location.pathname !== '/home';
+  const showMusicPlayer = location.pathname !== '/home' && location.pathname!=='/login' && location.pathname!=='/signup' && location.pathname!=='/reset' && location.pathname!=='/admin';
   
   // Determine which pageName to use for MusicPlayer based on the current route
   const getMusicPlayerPageName = () => {
@@ -81,14 +86,14 @@ const AppLayout = () => {
 
   return (
     <div className="app-container">
-      <SideBar />
+      {location.pathname!=='/login' && location.pathname!=='/signup' && location.pathname!=='/reset' && <SideBar />}
       <main className="main-content">
         <Routes>
           <Route path="/home" element={<HomePage />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/profile" element={
             <>
-              <ProfilePage />
+              <UserPage />
               <div className="song-list">
                 <div className="dice-five-layout">
                   {sampleSongs.map((song, index) => (
@@ -107,7 +112,12 @@ const AppLayout = () => {
               </div>
             </>
           } />
+          <Route path="/user" element={<ProfilePage />} />
           <Route path="/following" element={<FollowingPage />} />
+          <Route path='/login' element={<LoginPage />} />
+          <Route path='/signup' element={<SignupPage />} />
+          <Route path='/reset' element={<ResetPassword />} />
+          <Route path='/admin' element={<Admin />} />
           <Route path="/" element={<HomePage />} />
         </Routes>
       </main>

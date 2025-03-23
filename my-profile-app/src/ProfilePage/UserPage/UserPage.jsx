@@ -14,6 +14,7 @@ const UserPage = ({role}) => {
   const [availableGenres,setAvailableGenres] = useState(['Rnb','Rap','Country','HipHop','Pop','Rock']);
   const [userGenres,setUserGenres] = useState([]);
   const [showGenreOptions,setGenreOptions] = useState(false);
+  const [showAPwindow,setShowAPwindow ] = useState(false);
 
   const handleGenres = (e)=>{
     if(e.target.value!=='close'&&e.target.value!==''){
@@ -65,7 +66,7 @@ const UserPage = ({role}) => {
        
         <div className="playlist-container">
           <h1>Playlists</h1>
-          <button className="playlist-button">
+          <button className="playlist-button" onClick={()=>{setShowAPwindow(true)}}>
             <img
               src="https://via.placeholder.com/100"
               alt="Playlist Cover"
@@ -73,7 +74,7 @@ const UserPage = ({role}) => {
             />
             <span className="playlist-name"><strong>+ Add Playlist</strong></span>
           </button>
-          <AddPlaylist/>
+          {showAPwindow&&<><AddPlaylist/><button style={{marginTop:"-10px"}}onClick={()=>{setShowAPwindow(false)}} className="add-playlist-btn">ADD PLAYLIST</button><button className="add-playlist-btn" onClick={()=>{setShowAPwindow(false)}}>CLOSE</button></>}
           <button className="playlist-button">
             <img
               src="https://via.placeholder.com/100"
@@ -119,7 +120,7 @@ const UserPage = ({role}) => {
           </button>
         </div>
 
-        <MusicPlayer song="Why Cant You" artist="Bryant Barnes" />
+        {/*<MusicPlayer song="Why Cant You" artist="Bryant Barnes" />*/}
       </div>
     </div>
   );
