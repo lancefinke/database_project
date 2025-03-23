@@ -1,6 +1,47 @@
 [
   {
     "ContainingType": "MusicLibraryBackend.Controllers.UsersController",
+    "Method": "CreateUsers",
+    "RelativePath": "api/Users/CreateUsers",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "newUserName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "newEmail",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "newPictureURL",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "newBio",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "newPassword",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "role",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MusicLibraryBackend.Controllers.UsersController",
     "Method": "GetUsers",
     "RelativePath": "api/Users/GetUsers",
     "HttpMethod": "GET",

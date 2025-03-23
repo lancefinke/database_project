@@ -54,13 +54,54 @@ namespace MusicLibraryBackend.Controllers
         //}
 
         // TODO:::: POST api/<UsersController> 
-        //[HttpPost]
-        //[Route("login")]
-        //public IActionResult 
-        //public JsonResult CreateUser([From])
+        [HttpPost]
+        [Route("CreateUsers")]
+        public JsonResult CreateUsers([FromForm] 
+          //int newUserID, WILL BE ADDED LATER
+          string newUserName, 
+          string newEmail,
+          string newPictureURL, 
+          string newBio, 
+          string newPassword,
+          //DateOnly newDateCreation, 
+          bool role)
+        {
+            string query = "insert into dbo.USERS(Username, Email, ProfilePicture, Bio, UserPassword, CreatedAt, isArtist) values(@newUserName,@newEmail,@newPictureURL,@newBio,@newPassword,@newDateCreation,@role)";
+
+            DataTable table = new DataTable();
+            string sqlDatasource = _configuration.GetConnectionString("DefaultConnection");
+
+            SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    DateOnly currentDate = DateOnly.FromDateTime(DateTime.Now);
+                   // myCommand.Parameters.AddWithValue("@newUserID", newUserID);
+                    myCommand.Parameters.AddWithValue("@newUserName", newUserName);
+                    myCommand.Parameters.AddWithValue("@newEmail", newEmail);
+                    myCommand.Parameters.AddWithValue("@newPictureURL", newPictureURL);
+                    myCommand.Parameters.AddWithValue("@newBio", newBio);
+                    myCommand.Parameters.AddWithValue("@newPassword", newPassword);
+                    myCommand.Parameters.AddWithValue("@newDateCreation", currentDate.ToDateTime(TimeOnly.MinValue));
+
+
+                    myCommand.Parameters.AddWithValue("@role", role);
+                    
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+            return new JsonResult("Added Succesfully");
+
+        }
         //public void Post([FromBody] string value)
         //{
-        }
+        //}
 
         //// PUT api/<UsersController>/5
         //[HttpPut("{id}")]
