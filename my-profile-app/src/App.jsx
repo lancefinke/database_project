@@ -12,6 +12,7 @@ import LoginPage from "./LoginPage/LoginPage";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import "./ProfilePage/ProfilePage.css";
 import "./ProfilePage/Components/SongIcon.css";
+import Admin from "./Admin/Admin";
 
 // Sample songs for the profile page
 const sampleSongs = [
@@ -62,7 +63,7 @@ const AppLayout = () => {
 
   return (
     <div className="app-container">
-      {location.pathname==='/login' || location.pathname==='/signup' || location.pathname==='/reset'? <></>:<NavBar />}
+      {location.pathname==='/login' || location.pathname==='/signup' || location.pathname==='/reset' ||location.pathname==='/admin' ? <></>:<NavBar />}
       <main className="main-content">
         <Routes>
           <Route path="/home" element={<HomePage />} />
@@ -106,6 +107,7 @@ const AppLayout = () => {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/reset" element={<ResetPassword />} />
+          <Route path="/admin" element={<Admin />} />
           {/* Default route redirect to home */}
           <Route path="/" element={<HomePage />} />
         </Routes>

@@ -47,7 +47,7 @@ const SignupPage = ()=>{
             <label>DESCRIPTION<textarea className='bio' placeholder='Tell other users about yourself...' onChange={(e)=>{setDescription(e.target.value)}}></textarea></label>
             <label className='pfp-label'>PROFILE PICTURE<input type='file' className='signup-pfp' onChange={uploadPicture}></input>
                 <div className='image-btn'>Image <ImageUp /></div>
-                <img src={pfpPrev} width="70" height="84"/>
+                <img className="signup-img" src={pfpPrev} width="70" height="84"/>
             </label>
             <label>PASSWORD<input type='password' className='text signup-password' required onChange={(e)=>{setPassword(e.target.value)}}></input></label>
             <label>CONFIRM PASSWORD<input type='password' className='text signup-confirm-password' required onChange={(e)=>{setConfirmPassword(e.target.value)}}></input></label>

@@ -15,7 +15,7 @@ const AddPlaylist = ({isVisible=false}) =>{
     
 
     return(
-        <div className="add-playlist-window" style={{marginLeft:'-10%'}}>
+        <div className="add-playlist-window" style={{width:'80%',marginLeft:'-40%'}}>
             <div className="form-section">
                 <h1>New Playlist</h1>
                 <label className="playlist-label" style={{marginLeft:'0px'}}>PLAYLIST NAME<input required type='text' className='playlist-text' style={{width:'90%',height:'25px'}} onChange={handleChange}></input></label>
