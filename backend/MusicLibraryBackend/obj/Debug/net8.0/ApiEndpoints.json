@@ -42,7 +42,17 @@
   },
   {
     "ContainingType": "MusicLibraryBackend.Controllers.UsersController",
-    "Method": "GetUsers",
+    "Method": "GenerateUserReport",
+    "RelativePath": "api/Users/GenerateUserReport",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MusicLibraryBackend.Controllers.UsersController",
+    "Method": "GetUsersJson",
     "RelativePath": "api/Users/GetUsers",
     "HttpMethod": "GET",
     "IsController": true,

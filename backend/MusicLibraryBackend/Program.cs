@@ -1,3 +1,4 @@
+using MusicLibraryBackend.Services;
 using Newtonsoft.Json.Serialization;
 
 
@@ -17,6 +18,10 @@ builder.Services.AddSwaggerGen();
 
 //JSON Serializer
 builder.Services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore).AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
+
+//UserServices
+builder.Services.AddScoped<UserService>();
+
 
 var app = builder.Build();
 
