@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './SideBar.css';
 
-
 const Sidebar = () => {
   const location = useLocation();
   const isProfilePage = location.pathname === '/profile';
@@ -31,10 +30,10 @@ const Sidebar = () => {
               <Link className="sidebar-link" to="/search" data-initial="H">HOME</Link>
             </li>
             <li className="sidebar-item">
-              <Link className="sidebar-link" to="/profile" data-initial="P">PROFILE</Link>
+              <Link className="sidebar-link" to="/following" data-initial="F">FOLLOWING</Link>
             </li>
             <li className="sidebar-item">
-            <Link className="sidebar-link" to="/Following" data-initial="P">FOLLOWING</Link>
+            <Link className="sidebar-link" to="/profile" data-initial="P">PROFILE</Link>
             </li>
           </ul>
         </div>

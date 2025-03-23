@@ -1,15 +1,18 @@
 import React, { useState, useRef } from "react";
 import { Play, Pause, SkipForward, SkipBack, Shuffle, Plus, Check, Volume2 } from "lucide-react";
+import "./MusicPlayer.css"; // Keep the CSS import
 
-
-
-const MusicPlayer = ({ song, artist }) => {
+const MusicPlayer = ({ song, artist, pageName, playlist }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isShuffling, setIsShuffling] = useState(false);
   const [volume, setVolume] = useState(0.5);
   const [songAdded, setSongAdded] = useState(false);
-  const [skipPressed, setSkipPressed] = useState(false);
+  const [prevPressed, setPrevPressed] = useState(false);
+  const [nextPressed, setNextPressed] = useState(false);
   const audioRef = useRef(null);
+
+  // Apply page-specific class if provided - this will handle the styling
+  const playerClassName = `music-player-container ${pageName ? `music-player-${pageName}` : ""}`;
 
   const togglePlayPause = () => {
     if (audioRef.current) {
@@ -26,23 +29,33 @@ const MusicPlayer = ({ song, artist }) => {
     setIsShuffling(!isShuffling);
   };
 
-  const handleAddToPlaylist = () => {
-    setSongAdded(true);
-    setTimeout(() => setSongAdded(false), 2000); // Reset after 2 seconds
+  const toggleAddToPlaylist = () => {
+    // Toggle the songAdded state without a timeout
+    setSongAdded(!songAdded);
   };
 
-  const handleSkip = () => {
-    setSkipPressed(true);
-    setTimeout(() => setSkipPressed(false), 200);
+  const handlePrevious = () => {
+    setPrevPressed(true);
+    setTimeout(() => setPrevPressed(false), 200);
+  };
+
+  const handleNext = () => {
+    setNextPressed(true);
+    setTimeout(() => setNextPressed(false), 200);
   };
 
   return (
-    <div className="music-player-container">
+    <div className={playerClassName}>
+      {/* Left section with image and song info */}
       <div className="music-info-section">
-        <img src="https://via.placeholder.com/150" alt="music" className="music-image" />
+        <img 
+          src="https://via.placeholder.com/150" 
+          alt="music cover" 
+          className="music-image" 
+        />
         <div className="music-info">
-          <p className="music-name">{song}</p>
-          <p className="music-artist">{artist}</p>
+          <p className="music-name">{song || "Song Title"}</p>
+          <p className="music-artist">{artist || "Artist Name"}</p>
         </div>
       </div>
 
@@ -66,8 +79,8 @@ const MusicPlayer = ({ song, artist }) => {
           
           <div className="tooltip-container">
             <button 
-              onClick={handleSkip} 
-              className={`control-button ${skipPressed ? "pressed" : ""}`}
+              onClick={handlePrevious} 
+              className={`control-button ${prevPressed ? "pressed" : ""}`}
             >
               <SkipBack size={20} color="white" />
             </button>
@@ -89,8 +102,8 @@ const MusicPlayer = ({ song, artist }) => {
           
           <div className="tooltip-container">
             <button 
-              onClick={handleSkip} 
-              className={`control-button ${skipPressed ? "pressed" : ""}`}
+              onClick={handleNext} 
+              className={`control-button ${nextPressed ? "pressed" : ""}`}
             >
               <SkipForward size={20} color="white" />
             </button>
@@ -99,15 +112,15 @@ const MusicPlayer = ({ song, artist }) => {
           
           <div className="tooltip-container">
             <button 
-              onClick={handleAddToPlaylist} 
-              className="control-button"
+              onClick={toggleAddToPlaylist} 
+              className={`control-button ${songAdded ? "added" : ""}`}
             >
               {songAdded ? 
                 <Check size={20} color="black" /> : 
                 <Plus size={20} color="white" />
               }
             </button>
-            <span className="tooltip">{songAdded ? "Added" : "Add to Playlist"}</span>
+            <span className="tooltip">{songAdded ? "Added to Playlist" : "Add to Playlist"}</span>
           </div>
         </div>
       </div>

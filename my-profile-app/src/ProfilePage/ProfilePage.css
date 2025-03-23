@@ -10,16 +10,94 @@
   flex-direction: column;
 }
 
-/* Update the song-list class */
+/* Song list layout next to profile card */
 .song-list {
-  width: calc(100% - 24rem); /* Adjust width to account for profile card */
+  width: calc(100% - 28rem);
   position: absolute;
-  top: 80px; /* Adjust this value to move it closer to top, assuming navbar is ~60-80px */
-  right: 40%;
+  top: 0px;
+  left: 0;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+  height: 50%;
+  overflow-y: auto;
+}
+
+/* Container for the dice layout */
+.dice-five-layout {
+  position: relative;
+  width: 800px;  /* Increased width for larger icons */
+  height: 2000px; /* Increased height for larger icons */
+  margin: 20px auto;
+}
+
+/* Position each song in the dice pattern */
+.song-position-1 {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.song-position-2 {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.song-position-3 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.song-position-4 {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.song-position-5 {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+/* Styling for the song icons - LARGER SIZE */
+.dice-five-layout .song-post-wrapper {
+  width: 275px;  /* Increased size */
+  height: 275px; /* Increased size */
+}
+
+/* Override hover effects for corner positions */
+.song-position-1 .song-post-wrapper:hover,
+.song-position-2 .song-post-wrapper:hover,
+.song-position-4 .song-post-wrapper:hover,
+.song-position-3 .song-post-wrapper:hover,
+.song-position-5 .song-post-wrapper:hover {
+  transform: scale(1.1);
+}
+
+
+
+/* Custom scrollbar styling */
+.song-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.song-list::-webkit-scrollbar-track {
+  background: #101010;
+  border-radius: 10px;
+}
+
+.song-list::-webkit-scrollbar-thumb {
+  background: #343434;
+  border-radius: 10px;
+}
+
+.song-list::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 
 body {
@@ -111,6 +189,7 @@ body {
   transform: scale(0.98);
   background-color: var(--brick-active);
 }
+
 .follow-button.following {
   background-color: #343434;
   transform: scale(1.02);
@@ -121,6 +200,7 @@ body {
 .follow-button.following:hover {
   background-color: #343434;
 }
+
 /* Music Genre Section */
 .music-container {
   display: flex;
@@ -182,10 +262,12 @@ body {
 .playlist-button:hover {
   background-color: #343434;
 }
+
 .playlist-button:active {
   transform: scale(0.98);
   background-color: var(--brick-active);
 }
+
 .playlist-image {
   width: 60px;
   height: 60px;
@@ -197,287 +279,3 @@ body {
   color: white;
   font-family: 'Roboto Mono', monospace;
 }
-
-/* Music Player */
-.music-player-container {
-  background-color: #8E1616;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 1.5rem;
-  width: calc(100% - 29.5rem);
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  z-index: 1000;
-  display: flex;
-  gap: 2rem;
-  align-items: center;
-  justify-content: space-between;  /* Ensures proper spacing */
-  padding: 1rem;
-  margin: 0;
-}
-
-.music-info-section {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  min-width: 200px;
-}
-
-.player-main-section {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-
-.music-image {
-  width: 3rem;
-  height: 3rem;
-  border-radius: 8px;
-}
-
-.music-info {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  color: white;
-}
-
-.music-name {
-  font-size: 1.1rem;
-  font-weight: bold;
-  margin: 0;
-}
-
-.music-artist {
-  font-size: 0.8rem;
-  color: #ddd;
-  margin: 0;
-}
-
-/* Progress Bar */
-.progress-container {
-  display: flex;
-  align-items: center;
- 
-  gap: 0.5rem;
-  margin-left: 20px;
-  margin-right: 140px;
-}
-
-.progress-bar {
-  flex: 1;
-  -webkit-appearance: none;
-  height: 3px;
-  background: #ddd;
-  border-radius: 5px;
-  outline: none;
-  cursor: pointer;
-  transition: background 0.2s;
- 
-  
-}
-
-.progress-bar::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 10px;
-  height: 12px;
-  background: #fff;
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-.progress-bar:hover {
-  background: #bbb;
-}
-
-.current-time, .total-duration {
-  color: white;
-  font-size: 0.9rem;
-}
-
-/* Player Controls */
-.controls-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 0.5rem;
-  margin-right: 100px;
-}
-
-.control-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.2s ease;
-}
-
-.control-button:hover {
-  transform: scale(1.1);
-}
-
-.play-button {
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.play-button:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-}
-
-
-.music-player {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: #222;
-  color: white;
-  padding: 20px;
-  border-radius: 10px;
-}
-
-
-.volume-control {
-    margin-bottom: 55px;
-}
-  .volume-control input[type="range"] {
-    -webkit-appearance: none; /* Removes default styling */
-    width: 50%;
-    height: 3px;
-    background: white; /* White track */
-    border-radius: 5px;
-    outline: none;
-    opacity: 0.9;
-    transition: opacity 0.2s;
-    
-  }
-  
-  .volume-control input[type="range"]:hover {
-    opacity: 1;
-  }
-  
-  /* Customizing the slider thumb (the draggable part) */
-  .volume-control input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-  width: 10px;
-  height: 12px;
-  background: #fff;
-  border-radius: 50%;
-  cursor: pointer;
-}
-  
-  .volume-control input[type="range"]::-moz-range-thumb {
-    width: 15px;
-    height: 15px;
-    background: white;
-    border-radius: 50%;
-    cursor: pointer;
-  }
-
-  .control-button.pressed {
-    filter: brightness(0.7);
-    transition: filter 0.2s ease;
-  }
-  
-  /* Volume Icon Styling */
-  .volume-control {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  
-  .volume-control input[type="range"] {
-    width: 100px;
-  }
-
-
-
-  .tooltip-container {
-    position: relative;
-    display: inline-block;
-  }
-  
-  /* Tooltip text */
-  .tooltip {
-    visibility: hidden;
-    width: auto;
-    min-width: 70px;
-    background-color: rgba(0, 0, 0, 0.7);
-    color: #fff;
-    text-align: center;
-    padding: 5px 10px;
-    border-radius: 6px;
-    font-size: 0.75rem;
-    
-    /* Position the tooltip */
-    position: absolute;
-    bottom: 125%;
-    left: 50%;
-    transform: translateX(-50%);
-    
-    /* Fade in effect */
-    opacity: 0;
-    transition: opacity 0.2s, visibility 0.2s;
-    
-    /* Make sure it's above other elements */
-    z-index: 1100;
-  }
-  
-  /* Tooltip arrow */
-  .tooltip::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: rgba(0, 0, 0, 0.7) transparent transparent transparent;
-  }
-  
-  /* Show the tooltip when hovering over the container */
-  .tooltip-container:hover .tooltip {
-    visibility: visible;
-    opacity: 3;
-  }
-  
-  /* Special positioning for volume tooltip */
-  .tooltip-volume {
-    
-    left: 0;
-    transform: translateX(0);
-  }
-  
-  .tooltip-volume::after {
-    left: 80%;
-  }
-  
-  /* Make sure the control buttons don't change size when pressed */
-  .control-button {
-    min-width: 24px;
-    min-height: 24px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  /* Enhance the active/pressed states */
-  .control-button.active {
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
-  }
-  
-  .control-button.pressed {
-    transform: scale(0.95);
-  }

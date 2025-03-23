@@ -14,11 +14,11 @@
 
 /* Sidebar width variations based on page */
 .sidebar.profile-page {
-  width: 100px;
+  width: 120px;
 }
 
 .sidebar.full-width {
-  width: 100px;
+  width: 120px;
 }
 
 .sidebar-container {
