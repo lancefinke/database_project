@@ -10,6 +10,7 @@ const homeSongs = [
     duration: "3:31",
     flags: ["Rock", "Popular"],
     iconImage: "/images/lost-in-the-echo.jpg",
+    songSrc:"./FF Violin II - Clash On The Big Bridge By TAMUSIC.mp3",
   },
   {
     name: "Blinding Lights",
@@ -17,6 +18,7 @@ const homeSongs = [
     duration: "3:20",
     flags: ["Pop", "Hit"],
     iconImage: "/images/blinding-lights.jpg",
+    songSrc:"./FF Violin II - Clash On The Big Bridge By TAMUSIC.mp3",
   },
   {
     name: "Bohemian Rhapsody",
@@ -24,6 +26,7 @@ const homeSongs = [
     duration: "5:55",
     flags: ["Rock"],
     iconImage: "/images/bohemian-rhapsody.jpg",
+    songSrc:"./FF Violin II - Clash On The Big Bridge By TAMUSIC.mp3",
   },
   {
     name: "Shape of You",
@@ -31,6 +34,7 @@ const homeSongs = [
     duration: "3:53",
     flags: ["Pop", "Dance"],
     iconImage: "/images/shape-of-you.jpg",
+    songSrc:"./FF Violin II - Clash On The Big Bridge By TAMUSIC.mp3",
   },
   {
     name: "Starboy",
@@ -38,6 +42,7 @@ const homeSongs = [
     duration: "3:50",
     flags: ["Pop", "R&B"],
     iconImage: "/images/starboy.jpg",
+    songSrc:"./FF Violin II - Clash On The Big Bridge By TAMUSIC.mp3",
   },
   {
     name: "Uptown Funk",
@@ -45,6 +50,7 @@ const homeSongs = [
     duration: "4:30",
     flags: ["Funk", "Dance"],
     iconImage: "/images/uptown-funk.jpg",
+    songSrc:"./FF Violin II - Clash On The Big Bridge By TAMUSIC.mp3",
   }
 ];
 
@@ -68,6 +74,7 @@ const HomePage = () => {
       appContainer.style.overflow = 'hidden';
       appContainer.style.border = 'none';
     }
+
     
     // Hide music player specifically
     const musicPlayers = document.querySelectorAll('.music-player, [class*="music-player"], [class*="player-container"]');

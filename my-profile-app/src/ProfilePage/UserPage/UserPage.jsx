@@ -4,10 +4,11 @@ import './UserPage.css';
 import MusicPlayer from "./../Components/MusicPlayer";
 import SongIcon from "./../Components/SongIcon";
 import Editable from './../Components/Editable';
+import AddPlaylist from '../Components/AddPlaylist';
 import { use } from 'react';
-import { X } from 'lucide-react';
 
-const UserPage = () => {
+
+const UserPage = ({role}) => {
   const [isFollowing, setIsFollowing] = useState(false);
   const [availableGenres,setAvailableGenres] = useState(['Rnb','Rap','Country','HipHop','Pop','Rock']);
   const [userGenres,setUserGenres] = useState([]);
@@ -50,6 +51,7 @@ const UserPage = () => {
         </div>
         
         <div className="music-container">
+          <hr style={{backgroundColor:"white", width:"100%"}}></hr>
           {availableGenres.length!==0 &&<button className='add-genre-btn music-genre' onClick={handleGenres}>ADD GENRE</button>}
           {userGenres.length!==0&&<p>Click on Genre Icons to remove them</p>}
           {showGenreOptions && <select onChange={handleGenres} className='genre-drop-down' name='Genres'>
@@ -61,6 +63,16 @@ const UserPage = () => {
         </div>
        
         <div className="playlist-container">
+          <h1>Playlists</h1>
+          <button className="playlist-button">
+            <img
+              src="https://via.placeholder.com/100"
+              alt="Playlist Cover"
+              className="playlist-image"
+            />
+            <span className="playlist-name"><strong>+ Add Playlist</strong></span>
+          </button>
+          <AddPlaylist/>
           <button className="playlist-button">
             <img
               src="https://via.placeholder.com/100"
