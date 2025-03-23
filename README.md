@@ -1,2 +1,3 @@
 # database_project
-Group Project created for COSC338
+
+### Coog Music
