@@ -2,11 +2,12 @@ namespace MusicLibraryBackend.Models;
 
 public class User
 {
-    public int Id { get; set; }
+    public int UserID { get; set; }
     public string Username { get; set; } = string.Empty;
-    public string PasswordHash { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
-    public UserRole Role { get; set; }
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public DateTime? LastLoginAt { get; set; }
+    public string ProfilePicture { get; set; } = string.Empty;
+    public string Bio { get; set; } = string.Empty;
+    public string UserPassword { get; set; } = string.Empty;
+    public DateTime CreatedAt { get; set; }
+    public bool isArtist { get; set; }
 } 

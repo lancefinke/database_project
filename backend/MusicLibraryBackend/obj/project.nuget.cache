@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "ZohdDheOUOY=",
+  "dgSpecHash": "aNoP5X16tuQVPS6GF4VZ9ANxc1Zil22Q9yXD3kRTc2J17yfMOdbqvd98A5LHG+fUWM3BJJlIWxbt0Gfo2hm1fw==",
   "success": true,
   "projectFilePath": "/Users/bentran18/Documents/GitHub/database_project/backend/MusicLibraryBackend/MusicLibraryBackend.csproj",
   "expectedPackageFiles": [
@@ -47,10 +47,7 @@
     "/Users/bentran18/.nuget/packages/system.security.principal.windows/5.0.0/system.security.principal.windows.5.0.0.nupkg.sha512",
     "/Users/bentran18/.nuget/packages/system.text.encodings.web/4.7.2/system.text.encodings.web.4.7.2.nupkg.sha512",
     "/Users/bentran18/.nuget/packages/system.text.json/4.7.2/system.text.json.4.7.2.nupkg.sha512",
-    "/Users/bentran18/.nuget/packages/system.threading.tasks.extensions/4.5.4/system.threading.tasks.extensions.4.5.4.nupkg.sha512",
-    "/Users/bentran18/.nuget/packages/microsoft.netcore.app.ref/8.0.14/microsoft.netcore.app.ref.8.0.14.nupkg.sha512",
-    "/Users/bentran18/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.14/microsoft.aspnetcore.app.ref.8.0.14.nupkg.sha512",
-    "/Users/bentran18/.nuget/packages/microsoft.netcore.app.host.osx-arm64/8.0.14/microsoft.netcore.app.host.osx-arm64.8.0.14.nupkg.sha512"
+    "/Users/bentran18/.nuget/packages/system.threading.tasks.extensions/4.5.4/system.threading.tasks.extensions.4.5.4.nupkg.sha512"
   ],
   "logs": []
 }
