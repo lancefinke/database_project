@@ -1,18 +1,14 @@
 import React, { useEffect } from "react";
 import ProfilePage from "./ProfilePage/ProfilePage";
-import UserPage from "./ProfilePage/UserPage/UserPage";
 import MusicPlayer from "./ProfilePage/Components/MusicPlayer";
-import NavBar from "./ProfilePage/Components/NavBar";
 import SongIcon from "./ProfilePage/Components/SongIcon";
 import HomePage from "./HomePage/HomePage";
-import SignupPage from "./SignupPage/Signuppage";
-import ResetPassword from "./ResetPasswordPage/ResetPassword";
 import SearchPage from "./SearchPage/SearchPage";
-import LoginPage from "./LoginPage/LoginPage";
+import SideBar from "./ProfilePage/Components/SideBar";
+import FollowingPage from "./FollowingPage/FollowingPage";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import "./ProfilePage/ProfilePage.css";
 import "./ProfilePage/Components/SongIcon.css";
-import Admin from "./Admin/Admin";
 
 // Sample songs for the profile page
 const sampleSongs = [
@@ -36,6 +32,20 @@ const sampleSongs = [
     duration: "5:55",
     flags: ["Classic", "Legendary"],
     iconImage: "/images/bohemian-rhapsody.jpg",
+  },
+  {
+    name: "Stairway to Heaven",
+    creator: "Led Zeppelin",
+    duration: "8:02",
+    flags: ["Rock", "Classic"],
+    iconImage: "/images/stairway-to-heaven.jpg",
+  },
+  {
+    name: "Thriller",
+    creator: "Michael Jackson",
+    duration: "5:57",
+    flags: ["Pop", "Iconic"],
+    iconImage: "/images/thriller.jpg",
   }
 ];
 
@@ -58,63 +68,58 @@ const AppLayout = () => {
     }
   }, [location]);
 
-  // Determine if we should show the music player based on the current route
-  const showMusicPlayer = location.pathname === '/account' || location.pathname==='/profile'; 
+  // Show music player on all pages except home
+  const showMusicPlayer = location.pathname !== '/home';
+  
+  // Determine which pageName to use for MusicPlayer based on the current route
+  const getMusicPlayerPageName = () => {
+    if (location.pathname === '/profile') return 'profile';
+    if (location.pathname === '/search') return 'search';
+    if (location.pathname === '/following') return 'following';
+    return 'default';
+  };
 
   return (
     <div className="app-container">
-      {location.pathname==='/login' || location.pathname==='/signup' || location.pathname==='/reset' ||location.pathname==='/admin' ? <></>:<NavBar />}
+      <SideBar />
       <main className="main-content">
         <Routes>
           <Route path="/home" element={<HomePage />} />
           <Route path="/search" element={<SearchPage />} />
-          {<Route path="/account" element={
-            <>
-              <UserPage />
-              <div className="song-list">
-                {sampleSongs.map((song, index) => (
-                  <SongIcon
-                    key={index}
-                    name={song.name}
-                    creator={song.creator}
-                    duration={song.duration}
-                    flags={song.flags}
-                    iconImage={song.iconImage}
-                    isHomePage={false} // Explicitly set to false for profile
-                  />
-                ))}
-              </div>
-            </>
-          } />}
-          {<Route path="/profile" element={
+          <Route path="/profile" element={
             <>
               <ProfilePage />
               <div className="song-list">
-                {sampleSongs.map((song, index) => (
-                  <SongIcon
-                    key={index}
-                    name={song.name}
-                    creator={song.creator}
-                    duration={song.duration}
-                    flags={song.flags}
-                    iconImage={song.iconImage}
-                    isHomePage={false} // Explicitly set to false for profile
-                  />
-                ))}
+                <div className="dice-five-layout">
+                  {sampleSongs.map((song, index) => (
+                    <div key={index} className={`song-position-${index + 1}`}>
+                      <SongIcon
+                        name={song.name}
+                        creator={song.creator}
+                        duration={song.duration}
+                        flags={song.flags}
+                        iconImage={song.iconImage}
+                        isHomePage={false}
+                      />
+                    </div>
+                  ))}
+                </div>
               </div>
             </>
-          } />}
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
-          <Route path="/reset" element={<ResetPassword />} />
-          <Route path="/admin" element={<Admin />} />
-          {/* Default route redirect to home */}
+          } />
+          <Route path="/following" element={<FollowingPage />} />
           <Route path="/" element={<HomePage />} />
         </Routes>
       </main>
       
-      {/* Only render MusicPlayer if not on the home page */}
-      {showMusicPlayer && <MusicPlayer playlist={playlist} />}
+      {showMusicPlayer && (
+        <MusicPlayer
+          playlist={playlist}
+          song="Why Cant You"
+          artist="Bryant Barnes"
+          pageName={getMusicPlayerPageName()}
+        />
+      )}
     </div>
   );
 };

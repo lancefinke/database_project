@@ -1,0 +1,89 @@
+.following-container {
+    min-height: 100vh;
+    background-color: #101010;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    padding-bottom: 100px; /* Space for music player */
+  }
+  
+  .following-title {
+    color: #ffffff;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    font-family: 'Roboto Mono', monospace;
+  }
+  
+  .following-subtitle {
+    color: #999999;
+    font-size: 1rem;
+    margin-bottom: 3rem;
+    font-family: 'Roboto Mono', monospace;
+  }
+  
+  /* Following List Container - Using your provided styles */
+  .following-list-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .5rem;
+    margin-top: 1rem;
+    width: 100%;
+    max-width: 600px;
+  }
+  
+  .playlist-button {
+    background-color: #101010;
+    border: none;
+    border-radius: 10px;
+    padding: 0.75rem;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+    transition: background-color 0.3s ease;
+    width: 400px;
+    font-size: 24px;
+  }
+  
+  .playlist-button:hover {
+    background-color: #343434;
+  }
+  
+  .playlist-button:active {
+    transform: scale(0.98);
+    background-color: var(--brick-active);
+  }
+  
+  .playlist-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    margin-right: 1rem;
+    object-fit: cover; /* This ensures images maintain aspect ratio */
+  }
+  
+  .playlist-name {
+    color: white;
+    font-family: 'Roboto Mono', monospace;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 500px) {
+    .playlist-button {
+      width: 100%;
+      max-width: 400px;
+      font-size: 20px;
+    }
+    
+    .playlist-image {
+      width: 50px;
+      height: 50px;
+    }
+    
+    .following-title {
+      font-size: 2rem;
+    }
+  }
