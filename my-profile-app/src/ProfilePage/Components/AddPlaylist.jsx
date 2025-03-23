@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./../../SignupPage/Signuppage.css";
 
+
 const AddPlaylist = ({isVisible=false}) =>{
 
     const [privacyStatus,setPrivacyStatus] = useState('public');
