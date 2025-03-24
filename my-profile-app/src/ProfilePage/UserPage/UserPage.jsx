@@ -74,7 +74,7 @@ const UserPage = ({role}) => {
             />
             <span className="playlist-name"><strong>+ Add Playlist</strong></span>
           </button>
-          {showAPwindow&&<><AddPlaylist/><button style={{marginTop:"-10px"}}onClick={()=>{setShowAPwindow(false)}} className="add-playlist-btn">ADD PLAYLIST</button><button className="add-playlist-btn" onClick={()=>{setShowAPwindow(false)}}>CLOSE</button></>}
+          {showAPwindow&&<><AddPlaylist/><button className="add-playlist-btn" style={{marginTop:"-20px",marginLeft:"30px"}} onClick={()=>{setShowAPwindow(false)}}>CLOSE</button></>}
           <button className="playlist-button">
             <img
               src="https://via.placeholder.com/100"

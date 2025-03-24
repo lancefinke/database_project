@@ -23,6 +23,7 @@ const AddPlaylist = () =>{
                 <label className='artist-btn'>PRIVATE<input type='radio' id='private' name='privacy' value='private' checked={privacyStatus === "private"} onChange={changeStatus}/></label>
                 <label className='listener-btn'>PUBLIC<input type='radio' id='public' name='privacy' value='public' checked={privacyStatus === "public"} onChange={changeStatus}/></label>
                 </div>
+                <button style={{marginTop:"-10px"}}onClick={()=>{}} className="add-playlist-btn">ADD PLAYLIST</button>
             </div>
         </div>
     );
