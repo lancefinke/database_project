@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ProfilePage from "./ProfilePage/ProfilePage";
 import MusicPlayer from "./ProfilePage/Components/MusicPlayer";
 import SongIcon from "./ProfilePage/Components/SongIcon";
 import HomePage from "./HomePage/HomePage";
 import LoginPage from "./LoginPage/LoginPage";
 import SearchPage from "./SearchPage/SearchPage";
+import AddSong from "./ProfilePage/Components/AddSong";
 import Admin from "./Admin/Admin";
 import UserPage from "./ProfilePage/UserPage/UserPage";
 import SignupPage from "./SignupPage/Signuppage";
@@ -14,6 +15,7 @@ import FollowingPage from "./FollowingPage/FollowingPage";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import "./ProfilePage/ProfilePage.css";
 import "./ProfilePage/Components/SongIcon.css";
+import { CirclePlus } from 'lucide-react';
 
 // Sample songs for the profile page
 const sampleSongs = [
@@ -84,7 +86,12 @@ const AppLayout = () => {
     return 'default';
   };
 
+  //useStates
+  const [showAddSong,setAddVisibility] = useState(false);
+
   return (
+
+
     <div className="app-container">
       {location.pathname!=='/login' && location.pathname!=='/signup' && location.pathname!=='/reset' && <SideBar />}
       <main className="main-content">
@@ -95,6 +102,23 @@ const AppLayout = () => {
             <>
               <UserPage />
               <div className="song-list">
+              <button className="add-btn" onClick={()=>{setAddVisibility(true)}}title="Add new Song" style={{padding:"15px",borderRadius:"50%",backgroundColor:"#8E1616",width:"70px",height:"70px",color:"white",border:"3px solid white",position:"relative",right:"30%",bottom:"1%"}}><CirclePlus /></button>
+                {showAddSong &&<div className="add-window" style={{position:"fixed",zIndex:"10",backgroundColor:"#8E1616",height:"450px",width:"600px",borderRadius:'15px',border:"4px solid white"}}>
+                  <AddSong />
+                  <button className="close-add-song" onClick={()=>{setAddVisibility(false)}} 
+                  style={{position:"relative",
+                          width:"10%",
+                          left:"530px",
+                          bottom:"350px",
+                          color:"white",
+                          backgroundColor:"#101010",
+                          borderRadius:"10px",
+                          padding:"2px 4px",
+                          border: "4px solid white",
+                          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)"
+
+                  }}>CLOSE</button>
+                </div>}
                 <div className="dice-five-layout">
                   {sampleSongs.map((song, index) => (
                     <div key={index} className={`song-position-${index + 1}`}>

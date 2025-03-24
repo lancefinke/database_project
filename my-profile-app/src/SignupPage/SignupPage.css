@@ -26,7 +26,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     border-radius: 15px;
 }
-.text,.playlist-text{
+.text,.playlist-text,.song-input{
     font-size: medium;
     transition: border-radius 0.35s ease;
 }
@@ -36,7 +36,7 @@
     margin: 2px auto;
 }
 
-.text:focus,.text:hover,.playlist-text:focus,.playlist-text:hover{
+.text:focus,.text:hover,.playlist-text:focus,.playlist-text:hover,.song-input:hover,.song-input:focus{
     outline: none;
     border: 4px solid white;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -89,7 +89,7 @@ h3,h2{
     cursor: pointer;
 }
 
-.signup-btn,.add-playlist-btn{
+.signup-btn,.add-playlist-btn,.add-song-btn,.add-btn{
     color: white;
     font-family: 'Roboto Mono', monospace;
     border: 4px solid white;
@@ -99,7 +99,7 @@ h3,h2{
     transition: transform 0.3s ease;
     font-size: large;
 }
-.signup-btn{
+.signup-btn,.add-song-btn{
     width: 50%;
     height: 60px;
     margin: 20px auto;
@@ -109,7 +109,7 @@ h3,h2{
     height: 50px;
     margin: 10px auto;
 }
-.signup-btn:hover,.add-playlist-btn:hover{
+.signup-btn:hover,.add-playlist-btn:hover,.add-song-btn:hover,.add-btn:hover{
     transform: scale(1.1);
     cursor: pointer;
 }
@@ -118,7 +118,7 @@ h3,h2{
     width:80%;
     display: none;
 }
-.image-btn{
+.image-btn,.song-file-btn,.song-image{
     width:60%;
     height: 50px;
     margin-top:10px;
@@ -132,7 +132,7 @@ h3,h2{
     transition: transform 0.3s ease;
     font-size: large;
 }
-.image-btn:hover{
+.image-btn:hover,.song-file-btn:hover{
     transform: scale(1.1);
     cursor: pointer;
 }
