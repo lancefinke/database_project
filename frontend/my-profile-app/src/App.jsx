@@ -9,6 +9,9 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from "react-route
 import "./ProfilePage/ProfilePage.css";
 import "./ProfilePage/Components/SongIcon.css";
 
+
+
+
 // Sample songs for the profile page
 const sampleSongs = [
   {

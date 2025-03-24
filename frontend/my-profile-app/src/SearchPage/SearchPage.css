@@ -93,4 +93,9 @@
     padding: 20px;
     background-color: #f8f8f8;
     border-radius: 8px;
+    color:black;
+  }
+
+  .search-results-text{
+    color: black;
   }

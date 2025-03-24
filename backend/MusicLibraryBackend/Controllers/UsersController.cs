@@ -99,6 +99,30 @@ namespace MusicLibraryBackend.Controllers
             return new JsonResult("Added Succesfully");
 
         }
+        [HttpGet]
+        [Route("GetSearch")]
+        public JsonResult GetSearch([FromQuery] string search)
+        {
+             // will add th serach part later frf fr 
+            DataTable table = new DataTable();
+            string sqlDatasource = _configuration.GetConnectionString("DefaultConnection");
+            SqlDataReader myReader;
+            string query = "select Username from dbo.USERS where username like @search";
+            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@search","%"+ search+ "%");
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
+
+                }
+            }
+            return new JsonResult(table);
+        }
         //public void Post([FromBody] string value)
         //{
         //}
