@@ -30,7 +30,7 @@ const SongIcon = ({ name, creator, duration, flags, iconImage, isHomePage, isCen
       aria-label={isPlaying ? "Pause song" : "Play song"}
     >
       <div className="song-icon">
-        <img src="/img/testimage.jpg" alt="Song Icon" />
+        <img src={iconImage} alt="Song Icon" />
       </div>
 
       <div className="content-container">
