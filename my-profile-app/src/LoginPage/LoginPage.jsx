@@ -8,6 +8,11 @@ const LoginPage = () =>{
     const [password,setPassword] = useState('');
     const [success,setSuccess] = useState(false);
 
+    const storeToken = (token)=>{
+        setSuccess(true);
+        document.cookie=token
+    }
+
     const loginUser = async()=>{
         const requestOptions = {
             method: 'POST',
@@ -19,7 +24,7 @@ const LoginPage = () =>{
         };
         fetch('https://localhost:7152/api/Auth/login', requestOptions)
             .then(response => response.json())
-            .then(data =>{data.token?setSuccess(true):alert(data.message)});
+            .then(data =>{data.token?storeToken(data.token):alert(data.message)});
     }
 
     return(
@@ -41,7 +46,7 @@ const LoginPage = () =>{
                 <div className="link-container"><Link className="signup-link" to="/signup">Click Here to sign up</Link></div>
             </div>
         </div>
-        {success&&<Navigate to='/home'/>}
+        {success&&<Navigate to='/home' />}
         </>
     );
 
