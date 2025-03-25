@@ -127,7 +127,7 @@ const AppLayout = () => {
                         creator={song.creator}
                         duration={song.duration}
                         flags={song.flags}
-                        iconImage={song.iconImage}
+                        iconImage="https://upload.wikimedia.org/wikipedia/commons/e/e7/Everest_North_Face_toward_Base_Camp_Tibet_Luca_Galuzzi_2006.jpg"
                         isHomePage={false}
                       />
                     </div>

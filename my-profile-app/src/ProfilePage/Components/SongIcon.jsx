@@ -32,6 +32,14 @@ const SongIcon = ({ name, creator, duration, flags, iconImage, isHomePage, isCen
       <div className="song-icon">
         <img src={iconImage} alt="Song Icon" />
       </div>
+      <select className="rating-select">
+        <option className="rating-value" value="">Rate</option>
+        <option className="rating-value" value="1">1</option>
+        <option className="rating-value" value="1">2</option>
+        <option className="rating-value" value="1">3</option>
+        <option className="rating-value" value="1">4</option>
+        <option className="rating-value" value="1">5</option>
+      </select>
 
       <div className="content-container">
         <div className="song-info">

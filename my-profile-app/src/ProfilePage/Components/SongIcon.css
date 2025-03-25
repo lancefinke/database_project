@@ -232,6 +232,22 @@
     border-radius: 8px;
     line-height: 1.2;
 }
+.rating-value{
+    text-align:"center";
+}
+.rating-select{
+    z-index:10; 
+    width:25%;
+    margin:0px auto;
+    border:3px solid white;
+    background-color:black;
+    color:white;
+    border-radius:15px;
+    text-align: center;
+}
+.rating-select:focus{
+    width:15%;
+}
 
 /* Media queries */
 @media (max-width: 400px) {
