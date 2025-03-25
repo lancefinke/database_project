@@ -14,13 +14,7 @@ namespace MusicLibraryBackend.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        // configuration for connection strings
-        // WILL BE REFORMATED LATER
-        //private IConfiguration _configuration;
-        //public UsersController(IConfiguration configuration)
-        //{
-        //    _configuration = configuration;
-        //}
+        
         private readonly UserService _userService;
 
         public UsersController(UserService userService)
@@ -38,29 +32,6 @@ namespace MusicLibraryBackend.Controllers
             var users = _userService.GetAllUsers();
             return new JsonResult(users);
 
-            //OLD STUFF KEEPING JUST IN CASE
-            //string query = "select * from dbo.USERS";
-            //// puts all data into a table
-            //DataTable table = new DataTable();
-            //// access the database
-            //string sqlDatasource = _configuration.GetConnectionString("DefaultConnection");
-            //SqlDataReader myReader;
-            //// creates the connection
-            //using (SqlConnection myCon = new SqlConnection(sqlDatasource))
-            //{
-            //    myCon.Open();
-            //    // queries the database
-            //    using (SqlCommand myCommand = new SqlCommand(query, myCon))
-            //    {
-            //        // parses the query results and puts them into the table
-            //        myReader = myCommand.ExecuteReader();
-            //        table.Load(myReader);
-            //        myReader.Close();
-            //        myCon.Close();
-            //    }
-            //}
-            //// return the result as a json body
-            //return new JsonResult(table);
         }
 
 
@@ -90,41 +61,6 @@ namespace MusicLibraryBackend.Controllers
         return new JsonResult(result);
 
         }
-
-        //{
-        //    string query = "insert into dbo.USERS(Username, Email, ProfilePicture, Bio, UserPassword, CreatedAt, isArtist) values(@newUserName,@newEmail,@newPictureURL,@newBio,@newPassword,@newDateCreation,@role)";
-
-        //    DataTable table = new DataTable();
-        //    string sqlDatasource = _configuration.GetConnectionString("DefaultConnection");
-
-        //    SqlDataReader myReader;
-        //    using (SqlConnection myCon = new SqlConnection(sqlDatasource))
-
-        //    {
-        //        myCon.Open();
-        //        using (SqlCommand myCommand = new SqlCommand(query, myCon))
-        //        {
-        //            // gets current date instead of having to input 
-        //            DateOnly currentDate = DateOnly.FromDateTime(DateTime.Now);
-        //            // myCommand.Parameters.AddWithValue("@newUserID", newUserID);
-        //            // parameters for the queries
-        //            myCommand.Parameters.AddWithValue("@newUserName", newUserName);
-        //            myCommand.Parameters.AddWithValue("@newEmail", newEmail);
-        //            myCommand.Parameters.AddWithValue("@newPictureURL", newPictureURL);
-        //            myCommand.Parameters.AddWithValue("@newBio", newBio);
-        //            myCommand.Parameters.AddWithValue("@newPassword", newPassword);
-        //            myCommand.Parameters.AddWithValue("@newDateCreation", currentDate.ToDateTime(TimeOnly.MinValue));
-        //            myCommand.Parameters.AddWithValue("@role", role);
-
-        //            // parses data and uploads to database
-        //            myReader = myCommand.ExecuteReader();
-        //            table.Load(myReader);
-        //            myReader.Close();
-        //            myCon.Close();
-        //        }
-        //    }
-        //    // if result ok then it gets submitted to the database
-        //    return new JsonResult("Added Succesfully");
 
         
 

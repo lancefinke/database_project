@@ -11,4 +11,4 @@ namespace MusicLibraryBackend.Models;
         public DateTime CreatedAt { get; set; }
         public bool isArtist { get; set; }
     }
-}
+

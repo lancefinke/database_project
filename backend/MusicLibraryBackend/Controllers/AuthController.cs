@@ -23,7 +23,7 @@ public class AuthController : ControllerBase
     {
         _configuration = configuration;
         _jwtService = jwtService;
-        _connectionString = _configuration.GetConnectionString("DefaultConnection");
+        _connectionString = _configuration.GetConnectionString("DatabaseConnection");
     }
 
     [HttpPost("register")]
