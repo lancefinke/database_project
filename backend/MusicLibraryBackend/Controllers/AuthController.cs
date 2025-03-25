@@ -98,7 +98,7 @@ public class AuthController : ControllerBase
                 await connection.OpenAsync();
 
                 var cmd = new SqlCommand(
-                    "SELECT UserID, Username, UserPassword, IsArtist FROM Users WHERE Username = @Username",
+                    "SELECT UserID, Username, UserPassword, IsArtist, IsAdmin FROM Users WHERE Username = @Username",
                     connection);
                 cmd.Parameters.AddWithValue("@Username", request.Username);
 

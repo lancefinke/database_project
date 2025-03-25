@@ -61,8 +61,15 @@ namespace MusicLibraryBackend.Controllers
         return new JsonResult(result);
 
         }
+        [HttpGet]
+        [Route("GetSearch")]
+        public IActionResult GetSearch([FromQuery] string search)
+        {
+            var result = _userService.SearchUsers(search);
+            return new JsonResult(result);
+        }
 
-        
+
 
         [HttpGet]
         [Route("GenerateUserReport")]

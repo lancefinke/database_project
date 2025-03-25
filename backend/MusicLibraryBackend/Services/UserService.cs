@@ -43,16 +43,7 @@ namespace MusicLibraryBackend.Services
                         UserPassword = myReader["UserPassword"] != DBNull.Value ? myReader["UserPassword"].ToString() : null,
                         CreatedAt = myReader["CreatedAt"] != DBNull.Value ? Convert.ToDateTime(myReader["CreatedAt"]) : DateTime.MinValue,
                         isArtist = myReader["isArtist"] != DBNull.Value ? Convert.ToBoolean(myReader["isArtist"]) : false
-                        //    users.Add(new User
-                        //{
-                        //    UserID = Convert.ToInt32(myReader["UserID"]),
-                        //    Username = myReader["Username"].ToString(),
-                        //    Email = myReader["Email"].ToString(),
-                        //    ProfilePicture = myReader["ProfilePicture"].ToString(),
-                        //    Bio = myReader["Bio"].ToString(),
-                        //    UserPassword = myReader["UserPassword"].ToString(),
-                        //    CreatedAt = Convert.ToDateTime(myReader["CreatedAt"]),
-                        //    isArtist = Convert.ToBoolean(myReader["isArtist"])
+      
 
                         });
 
@@ -63,6 +54,42 @@ namespace MusicLibraryBackend.Services
             }
             return users;
         }
+        public List<User> SearchUsers(string search)
+        {
+            List<User> users = new List<User>();
+            string query = "SELECT * FROM dbo.USERS WHERE Username LIKE @search";
+            string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
+
+            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@search", "%" + search + "%");
+
+                    using (SqlDataReader myReader = myCommand.ExecuteReader())
+                    {
+                        while (myReader.Read())
+                        {
+                            users.Add(new User
+                            {
+                                UserID = myReader["UserID"] != DBNull.Value ? Convert.ToInt32(myReader["UserID"]) : 0,
+                                Username = myReader["Username"]?.ToString(),
+                                Email = myReader["Email"]?.ToString(),
+                                ProfilePicture = myReader["ProfilePicture"]?.ToString(),
+                                Bio = myReader["Bio"]?.ToString(),
+                                UserPassword = myReader["UserPassword"]?.ToString(),
+                                CreatedAt = myReader["CreatedAt"] != DBNull.Value ? Convert.ToDateTime(myReader["CreatedAt"]) : DateTime.MinValue,
+                                isArtist = myReader["isArtist"] != DBNull.Value ? Convert.ToBoolean(myReader["isArtist"]) : false
+                            });
+                        }
+                    }
+                }
+            }
+
+            return users;
+        }
+
         public string CreateUser(
             string newUserName,
             string newEmail,

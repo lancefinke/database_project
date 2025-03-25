@@ -124,6 +124,22 @@
   },
   {
     "ContainingType": "MusicLibraryBackend.Controllers.UsersController",
+    "Method": "GetSearch",
+    "RelativePath": "api/Users/GetSearch",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "search",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MusicLibraryBackend.Controllers.UsersController",
     "Method": "GetUsersJson",
     "RelativePath": "api/Users/GetUsers",
     "HttpMethod": "GET",
