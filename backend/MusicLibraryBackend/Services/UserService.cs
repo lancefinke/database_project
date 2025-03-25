@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using MusicLibraryBackend.Models;
 using System.Data;
@@ -20,7 +21,7 @@ namespace MusicLibraryBackend.Services
             string query = "select * from dbo.USERS";
 
             // access the database
-            string sqlDatasource = _configuration.GetConnectionString("DefaultConnection");
+            string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
 
             // creates the connection
             using (SqlConnection myCon = new SqlConnection(sqlDatasource))
@@ -33,16 +34,25 @@ namespace MusicLibraryBackend.Services
                 {
                     while (myReader.Read())
                     {
-                        users.Add(new User
-                        {
-                            UserID = Convert.ToInt32(myReader["UserID"]),
-                            Username = myReader["Username"].ToString(),
-                            Email = myReader["Email"].ToString(),
-                            ProfilePicture = myReader["ProfilePicture"].ToString(),
-                            Bio = myReader["Bio"].ToString(),
-                            UserPassword = myReader["UserPassword"].ToString(),
-                            CreatedAt = Convert.ToDateTime(myReader["CreatedAt"]),
-                            isArtist = Convert.ToBoolean(myReader["isArtist"])
+                        users.Add(new User { 
+                        UserID = myReader["UserID"] != DBNull.Value ? Convert.ToInt32(myReader["UserID"]) : 0,
+                        Username = myReader["Username"] != DBNull.Value ? myReader["Username"].ToString() : null,
+                        Email = myReader["Email"] != DBNull.Value ? myReader["Email"].ToString() : null,
+                        ProfilePicture = myReader["ProfilePicture"] != DBNull.Value ? myReader["ProfilePicture"].ToString() : null,
+                        Bio = myReader["Bio"] != DBNull.Value ? myReader["Bio"].ToString() : null,
+                        UserPassword = myReader["UserPassword"] != DBNull.Value ? myReader["UserPassword"].ToString() : null,
+                        CreatedAt = myReader["CreatedAt"] != DBNull.Value ? Convert.ToDateTime(myReader["CreatedAt"]) : DateTime.MinValue,
+                        isArtist = myReader["isArtist"] != DBNull.Value ? Convert.ToBoolean(myReader["isArtist"]) : false
+                        //    users.Add(new User
+                        //{
+                        //    UserID = Convert.ToInt32(myReader["UserID"]),
+                        //    Username = myReader["Username"].ToString(),
+                        //    Email = myReader["Email"].ToString(),
+                        //    ProfilePicture = myReader["ProfilePicture"].ToString(),
+                        //    Bio = myReader["Bio"].ToString(),
+                        //    UserPassword = myReader["UserPassword"].ToString(),
+                        //    CreatedAt = Convert.ToDateTime(myReader["CreatedAt"]),
+                        //    isArtist = Convert.ToBoolean(myReader["isArtist"])
 
                         });
 
