@@ -1,25 +1,28 @@
 {
   "format": 1,
   "restore": {
-    "/Users/bentran18/Documents/GitHub/database_project/backend/MusicLibraryBackend/MusicLibraryBackend.csproj": {}
+    "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\MusicLibraryBackend.csproj": {}
   },
   "projects": {
-    "/Users/bentran18/Documents/GitHub/database_project/backend/MusicLibraryBackend/MusicLibraryBackend.csproj": {
+    "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\MusicLibraryBackend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/bentran18/Documents/GitHub/database_project/backend/MusicLibraryBackend/MusicLibraryBackend.csproj",
+        "projectUniqueName": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\MusicLibraryBackend.csproj",
         "projectName": "MusicLibraryBackend",
-        "projectPath": "/Users/bentran18/Documents/GitHub/database_project/backend/MusicLibraryBackend/MusicLibraryBackend.csproj",
-        "packagesPath": "/Users/bentran18/.nuget/packages/",
-        "outputPath": "/Users/bentran18/Documents/GitHub/database_project/backend/MusicLibraryBackend/obj/",
+        "projectPath": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\MusicLibraryBackend.csproj",
+        "packagesPath": "C:\\Users\\Jose\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/bentran18/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Jose\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -32,6 +35,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -86,7 +94,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/opt/homebrew/Cellar/dotnet@8/8.0.14_1/libexec/sdk/8.0.114/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
