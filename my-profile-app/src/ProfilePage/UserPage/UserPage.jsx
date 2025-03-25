@@ -10,13 +10,13 @@ import UserLink from '../../UserLink/UserLink';
 import { use } from 'react';
 
 
-const UserPage = ({role}) => {
-  const [isFollowing, setIsFollowing] = useState(false);
+const UserPage = () => {
   const [availableGenres,setAvailableGenres] = useState(['Rnb','Rap','Country','HipHop','Pop','Rock']);
   const [userGenres,setUserGenres] = useState([]);
   const [showGenreOptions,setGenreOptions] = useState(false);
   const [showAPwindow,setShowAPwindow ] = useState(false);
   const [showAddAlbum,setShowAddAlbum] = useState(false);
+  const [role,setRole] = useState('artist');
 
   const handleGenres = (e)=>{
     if(e.target.value!=='close'&&e.target.value!==''){
@@ -69,14 +69,14 @@ const UserPage = ({role}) => {
        
         <div className="playlist-container">
           <h1>Playlists</h1>
-          <button className="playlist-button" onClick={()=>{setShowAPwindow(true)}}>
+          {role==='artist'&&<button className="playlist-button" onClick={()=>{setShowAPwindow(true)}}>
             <img
               src="https://via.placeholder.com/100"
               alt="Playlist Cover"
               className="playlist-image"
             />
             <span className="playlist-name"><strong>+ Add Playlist</strong></span>
-          </button>
+          </button>}
           {showAPwindow&&<><AddPlaylist/><button className="add-playlist-btn" style={{marginTop:"-20px",marginLeft:"30px"}} onClick={()=>{setShowAPwindow(false)}}>CLOSE</button></>}
           <button className="playlist-button">
             <img
@@ -125,7 +125,7 @@ const UserPage = ({role}) => {
 
         <hr style={{backgroundColor:"white", width:"100%"}}></hr>
 
-        <div className="playlist-container">
+        {role==='artist'&&<div className="playlist-container">
           <h1>Albums</h1>
           <button className="playlist-button" onClick={()=>{setShowAddAlbum(true)}}>
             <span className="playlist-name"><strong>+ Add Album</strong></span>
@@ -149,7 +149,7 @@ const UserPage = ({role}) => {
           <button className="playlist-button">
             <span className="playlist-name">Ballin'</span>
           </button>
-        </div>
+        </div>}
 
         {/*<MusicPlayer song="Why Cant You" artist="Bryant Barnes" />*/}
       </div>

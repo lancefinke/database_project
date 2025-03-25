@@ -12,10 +12,10 @@ import SignupPage from "./SignupPage/Signuppage";
 import ResetPassword from "./ResetPasswordPage/ResetPassword";
 import SideBar from "./ProfilePage/Components/SideBar";
 import FollowingPage from "./FollowingPage/FollowingPage";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation,Link } from "react-router-dom";
 import "./ProfilePage/ProfilePage.css";
 import "./ProfilePage/Components/SongIcon.css";
-import { CirclePlus } from 'lucide-react';
+import { CirclePlus/*, Link*/  } from 'lucide-react';
 
 
 
@@ -92,6 +92,7 @@ const AppLayout = () => {
   //useStates
   const [showAddSong,setAddVisibility] = useState(false);
   const [loggedIn,setLoggedIn] = useState(false);
+  const [role,setRole] = useState('admin');
 
   return (
 
@@ -106,7 +107,7 @@ const AppLayout = () => {
             <>
               <UserPage />
               <div className="song-list">
-              <button className="add-btn" onClick={()=>{setAddVisibility(true)}}title="Add new Song" style={{padding:"15px",borderRadius:"50%",backgroundColor:"#8E1616",width:"70px",height:"70px",color:"white",border:"3px solid white",position:"relative",right:"30%",bottom:"1%"}}><CirclePlus /></button>
+              {role==='artist'&&<button className="add-btn" onClick={()=>{setAddVisibility(true)}}title="Add new Song" style={{padding:"15px",borderRadius:"50%",backgroundColor:"#8E1616",width:"70px",height:"70px",color:"white",border:"3px solid white",position:"relative",right:"30%",bottom:"1%"}}><CirclePlus /></button>}
                 {showAddSong &&<div className="add-window" style={{position:"fixed",zIndex:"10",backgroundColor:"#8E1616",height:"450px",width:"600px",borderRadius:'15px',border:"4px solid white"}}>
                   <AddSong />
                   <button className="close-add-song" onClick={()=>{setAddVisibility(false)}} 
@@ -145,7 +146,7 @@ const AppLayout = () => {
           <Route path='/login' element={<LoginPage />} />
           <Route path='/signup' element={<SignupPage />} />
           <Route path='/reset' element={<ResetPassword />} />
-          <Route path='/admin' element={<Admin />} />
+          <Route path='/admin' element={role==='admin'?<Admin />:<h1 style={{fontSize:"200%"}}>You are not authorized to access this page. <Link style={{color:"white",fontSize:"100%"}} to="/home">Click Here to Return</Link></h1>}></Route>
           <Route path="/" element={<HomePage />} />
         </Routes>
       </main>
