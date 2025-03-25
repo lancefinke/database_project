@@ -58,7 +58,7 @@ const Admin = ({statlist=['User','Listener Users','Artist Users','Songs Uploaded
             </div>
             <div className="flagged-songs">
                 <h1 className="admin-label">Reported Songs</h1>
-                <ReportedSong songName="Bad Name" author="Bad Person" reporter="Reddit Admin" songImage={image} duration="3:10" reason="Lyrics contain Racial slurs and violence."/>
+                <ReportedSong songName="Bad Name" author=" -" reporter="Reddit Admin" songImage={image} duration="3:10" reason="Lyrics contain Racial slurs and violence."/>
                 <ReportedSong songName="My Struggle" author="Ye" reporter="Anyone with a soul" songImage="https://i.pinimg.com/736x/68/85/2d/68852d3139951c9e9a568dcd799c8828.jpg" duration="19:41" reason="Bruh I don't even want to say."/>
             </div>
         </div>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import AddAlbum from '../Components/AddAlbum';
 import './../ProfilePage.css';
 import './UserPage.css';
 import MusicPlayer from "./../Components/MusicPlayer";
@@ -15,6 +16,7 @@ const UserPage = ({role}) => {
   const [userGenres,setUserGenres] = useState([]);
   const [showGenreOptions,setGenreOptions] = useState(false);
   const [showAPwindow,setShowAPwindow ] = useState(false);
+  const [showAddAlbum,setShowAddAlbum] = useState(false);
 
   const handleGenres = (e)=>{
     if(e.target.value!=='close'&&e.target.value!==''){
@@ -118,6 +120,34 @@ const UserPage = ({role}) => {
               className="playlist-image"
             />
             <span className="playlist-name">Rap</span>
+          </button>
+        </div>
+
+        <hr style={{backgroundColor:"white", width:"100%"}}></hr>
+
+        <div className="playlist-container">
+          <h1>Albums</h1>
+          <button className="playlist-button" onClick={()=>{setShowAddAlbum(true)}}>
+            <span className="playlist-name"><strong>+ Add Album</strong></span>
+          </button>
+          {showAddAlbum&&<><AddAlbum/><button className="add-playlist-btn" style={{marginTop:"-20px",marginLeft:"30px"}} onClick={()=>{setShowAddAlbum(false)}}>CLOSE</button></>}
+          <button className="playlist-button">
+            <span className="playlist-name">First Album</span>
+          </button>
+
+          <button className="playlist-button">
+            <span className="playlist-name">Auston 2020 Tour</span>
+          </button>
+
+          <button className="playlist-button">
+            <span className="playlist-name">Break Up</span>
+          </button>
+          <button className="playlist-button">
+            <span className="playlist-name">Graduation</span>
+            
+          </button>
+          <button className="playlist-button">
+            <span className="playlist-name">Ballin'</span>
           </button>
         </div>
 
