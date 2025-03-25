@@ -73,6 +73,10 @@ builder.Services.AddControllers()
         options.SerializerSettings.ContractResolver = new DefaultContractResolver();
     });
 
+//UserServices
+builder.Services.AddScoped<UserService>();
+
+
 var app = builder.Build();
 
 //Enable CORS
