@@ -3,7 +3,7 @@ import { Pencil } from "lucide-react";
 import './Editable.css';
 
 
-const Editable = ({title,value,div_width,div_height,backgroundColor,textColor}) =>{
+const Editable = ({title,value,div_width,div_height,backgroundColor,textColor,placeholder}) =>{
 
     const [isEditable,setEditable] = useState(false);
     const [text,setValue] = useState(value);
@@ -30,7 +30,7 @@ const Editable = ({title,value,div_width,div_height,backgroundColor,textColor}) 
                         border: "none",
                         resize:"none",
                     }}
-                    placeholder='Add a Description for Yo'
+                    placeholder={placeholder}
                     ref={inputRef}
                     value={text} 
                     readOnly={!isEditable}

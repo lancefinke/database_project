@@ -1,10 +1,33 @@
 import { useState, useRef } from "react";
-import { Play, Plus, Forward, Pause } from "lucide-react";
+import { Play, Plus, Forward, Pause, Flag } from "lucide-react";
+import Editable from "./Editable";
 import "./SongIcon.css";
+
+
+const FlagIcon = ()=>{
+  return(
+    <div className="flag-icon-wrapper">
+      <label style={{margin:"0 auto",textAlign:"center"}}>REASON FOR REPORT</label>
+      <div className="editable-div-flag" style={{border:"3px solid white",borderRadius:"10px",width:"85%",margin:"auto",height:"60%"}}>
+      <Editable 
+            className="flag-editable"
+            title="Enter the reason for the report"
+            value=""
+            div_width="90%"
+            div_height="90%"
+            backgroundColor="#8E1616"
+            textColor="white"
+            placeholder="Example: Racism, hate speech promotes violence, etc."/>
+        </div>
+        <button className="submit-report-btn">REPORT SONG</button>
+    </div>
+  );
+}
 
 
 const SongIcon = ({ name, creator, duration, flags, iconImage, isHomePage, isCenter }) => {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [showReport,setShowReport] = useState(false);
   
 
   const togglePlay=()=>{
@@ -24,6 +47,9 @@ const SongIcon = ({ name, creator, duration, flags, iconImage, isHomePage, isCen
   }
 
   return (
+    <>
+    {showReport &&<FlagIcon />}
+    {showReport &&<button onClick={()=>{setShowReport(false)}}className="submit-report-btn" style={{margin:"15px 0px 0px 0px",width:"100px",position:"relative",zIndex:"10",bottom:"200px",backgroundColor:"#1D1616"}}>CLOSE</button>}
     <button 
       className={wrapperClass}
       onClick={togglePlay}
@@ -40,6 +66,9 @@ const SongIcon = ({ name, creator, duration, flags, iconImage, isHomePage, isCen
         <option className="rating-value" value="1">4</option>
         <option className="rating-value" value="1">5</option>
       </select>
+      <div className="flag-btn" title="Report Song" onClick={()=>{setShowReport(true)}}>
+       <Flag className="flag-icon"/>
+      </div>
 
       <div className="content-container">
         <div className="song-info">
@@ -87,6 +116,7 @@ const SongIcon = ({ name, creator, duration, flags, iconImage, isHomePage, isCen
         </div>
       </div>
     </button>
+    </>
   );
 };
 

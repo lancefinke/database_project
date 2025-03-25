@@ -45,7 +45,8 @@ const UserPage = ({role}) => {
             div_width="100%"
             div_height="200px"
             backgroundColor="none"
-            textColor="white"/>
+            textColor="white"
+            placeholder="Add a Description for your profile..."/>
         
         <div className="stats-container">
           <p className="follower-count">Followers: 10.2K</p>
