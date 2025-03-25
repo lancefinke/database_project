@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import './SignupPage.css';
 import { ImageUp } from "lucide-react";
+import { Navigate } from 'react-router-dom';
 
 const SignupPage = ()=>{
 
@@ -14,10 +15,27 @@ const SignupPage = ()=>{
     const [description,setDescription] = useState('');
     const [password,setPassword] = useState('');
     const [confirmPassword,setConfirmPassword] = useState('');
+    const [success,setSuccess] = useState(false);
 
 
-    const createUser  = (event)=>{
-        event.preventDefualt();
+    const createUser  = async()=>{
+        const isArtist = role==='artist';
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                username: username,
+                password: password,
+                email: email,
+                isArtist: isArtist
+               })
+        };
+        fetch('https://localhost:7152/api/Auth/register', requestOptions)
+            .then(response => response.json())
+            .then(data =>{data.message==='User registered successfully'?setSuccess(true):alert('There was an error signing up') });
+
+        
+    
     }
 
     const uploadPicture = (e)=>{
@@ -33,10 +51,10 @@ const SignupPage = ()=>{
 
 
     return(
-        <form onSubmit={createUser}>
+        
         <div className='signup-container'>
             <h2>Create a insert Name accont</h2>
-            <label>STUDENT ID<input required type='text' className='text signup-id' placeholder='your student id' onChange={(e)=>{setId(e.target.value)}}></input></label>
+            {/*<label>STUDENT ID<input required type='text' className='text signup-id' placeholder='your student id' onChange={(e)=>{setId(e.target.value)}}></input></label>*/}
             <label>SCHOOL EMAIL<input required type='email' className='text signup-email' placeholder='example@uh.edu' onChange={(e)=>{setEmail(e.target.value)}}></input></label>
             <label>USERNAME<input required type='text' className='text signup-username' onChange={(e)=>{setUsername(e.target.value)}}></input></label>
             <h3 className='roles-text'>What Role best suits you?</h3>
@@ -51,9 +69,10 @@ const SignupPage = ()=>{
             </label>
             <label>PASSWORD<input type='password' className='text signup-password' required onChange={(e)=>{setPassword(e.target.value)}}></input></label>
             <label>CONFIRM PASSWORD<input type='password' className='text signup-confirm-password' required onChange={(e)=>{setConfirmPassword(e.target.value)}}></input></label>
-            <button className='signup-btn' type='submit'>CREATE ACCOUNT</button>
+            <button className='signup-btn' onClick={createUser} >CREATE ACCOUNT</button>
+            {success&&<Navigate to='/login'/>}
         </div>
-        </form>
+
     );
 
 }
