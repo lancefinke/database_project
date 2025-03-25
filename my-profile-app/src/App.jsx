@@ -17,6 +17,8 @@ import "./ProfilePage/ProfilePage.css";
 import "./ProfilePage/Components/SongIcon.css";
 import { CirclePlus } from 'lucide-react';
 
+
+
 // Sample songs for the profile page
 const sampleSongs = [
   {
@@ -62,6 +64,7 @@ const playlist = [
   "/music/song3.mp3"
 ];
 
+
 // Layout wrapper to handle class changes based on route
 const AppLayout = () => {
   const location = useLocation();
@@ -88,6 +91,7 @@ const AppLayout = () => {
 
   //useStates
   const [showAddSong,setAddVisibility] = useState(false);
+  const [loggedIn,setLoggedIn] = useState(false);
 
   return (
 
@@ -165,5 +169,6 @@ function App() {
     </Router>
   );
 }
+
 
 export default App;
