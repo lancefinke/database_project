@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
-import { Play, Plus, Forward, Pause, Flag } from "lucide-react";
+import { Play, Plus, Forward, Pause, Flag, Heart } from "lucide-react";
 import Editable from "./Editable";
+import UserLink from "../../UserLink/UserLink";
 import "./SongIcon.css";
 
 
@@ -25,10 +26,17 @@ const FlagIcon = ()=>{
 }
 
 
-const SongIcon = ({ name, creator, duration, flags, iconImage, isHomePage, isCenter }) => {
+const SongIcon = ({ name, creator, duration, flags, iconImage, isHomePage,isCenter,likes }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [showReport,setShowReport] = useState(false);
-  
+  const [rating,setRating] = useState(0.0);
+  const [liked,setLiked] = useState(false);
+
+
+  const toggleLiked = ()=>{
+    setLiked(!liked);
+    console.log(liked);
+  }
 
   const togglePlay=()=>{
     setIsPlaying(!isPlaying);
@@ -58,23 +66,23 @@ const SongIcon = ({ name, creator, duration, flags, iconImage, isHomePage, isCen
       <div className="song-icon">
         <img src={iconImage} alt="Song Icon" />
       </div>
-      {location.pathname!=='/profile'&&<select className="rating-select">
+      <div className="rating-wrapper" style={{display:"flex"}}>{location.pathname!=='/profile'&&
+      <select className="rating-select">
         <option className="rating-value" value="">Rate</option>
         <option className="rating-value" value="1">1</option>
         <option className="rating-value" value="1">2</option>
         <option className="rating-value" value="1">3</option>
         <option className="rating-value" value="1">4</option>
         <option className="rating-value" value="1">5</option>
-      </select>}
+      </select>}<div className="avg-rating" style={{width:"50%",color:"white",fontSize:"70%", margin:"0px auto"}}>Average Rating: {rating}</div></div>
       {location.pathname!=='/profile'&&<div className="flag-btn" title="Report Song" onClick={()=>{setShowReport(true)}}>
        <Flag className="flag-icon"/>
       </div>}
-
       <div className="content-container">
         <div className="song-info">
           <div className="text-content">
             <h3 className="song-title">{name}</h3>
-            <h4 className="song-creator">{creator}</h4>
+            <h4 className="song-creator" style={{zIndex:"100"}}><UserLink text={creator} userName={creator}/></h4>
             <h5 className="song-duration">{duration}</h5>
             <div className="flags">
               {flags.map((flagName, index) => (

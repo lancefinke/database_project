@@ -89,8 +89,29 @@ line-height: normal;
 
 /* Search Results */
 .search-results {
-  margin-top: 30px;
-  padding: 20px;
-  background-color: #f8f8f8;
-  border-radius: 8px;
+  width:80%;
+  margin: 10px auto;
+}
+.result-song{
+  border: 4px solid white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: #8E1616;
+  border-radius: 15px;
+  display: flex;
+  margin:2px auto;
+  justify-content: space-evenly;
+  width:100%;
+  height: 20vh;
+  min-height: 200px;
+}
+.search-result{
+  margin: 5px auto;
+}
+.result-info{
+  margin:0px 10px 0px 0px;
+}
+.result-icons{
+  width:5%;
+  height: 10%;
+  margin: auto 5px;
 }

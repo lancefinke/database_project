@@ -1,5 +1,38 @@
 import React, { useState } from "react";
+import { Play, Pause } from "lucide-react";
 import "./SearchPage.css"; // Optional CSS import if you create this file
+import UserLink from "../UserLink/UserLink";
+
+
+const SearchResult = ({title,author,duration,image,audiofile,rating})=>{
+
+
+    const [playing,setPlaying] = useState(false);
+
+    const togglePlaying = ()=>{
+        setPlaying(!playing);
+    }
+    return(
+        <div className="search-result">
+            <div className="result-song">
+            <div className="result-info">
+                <p className="result-item">Title: {title}</p>
+                <p className="result-item"><UserLink text={`Author: ${author}`} userName={author}/></p>
+                <p className="result-item">Duration: {duration}</p>
+                <p className="result-item">Rating: {rating}</p>
+            </div>
+            <img src={image} alt="Image wasn't able to load" className="report-img"/>
+            <div className="result-icons" onClick={togglePlaying}>
+                {playing?<Play size={40}/>:<Pause size={40}/>}
+            </div>
+        </div>
+        <hr className="divider"></hr>
+        </div>
+    );
+}
+
+
+
 
 const SearchPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -30,8 +63,8 @@ const SearchPage = () => {
   
       
       <div className="search-results">
-        <h2>Search Results</h2>
-        <p>Enter a search term to find music.</p>
+        <SearchResult title="Song Title"author="Author Name"duration="3:00"image="https://www.billboard.com/wp-content/uploads/media/tyler-the-creator-igor-album-art-2019-billboard-embed.jpg?w=600"rating={2.4}/>
+        <SearchResult title="Song Title"author="Author Name"duration="3:00"image="https://www.billboard.com/wp-content/uploads/media/tyler-the-creator-igor-album-art-2019-billboard-embed.jpg?w=600"rating={2.4}/>
       </div>
     </div>
   );
