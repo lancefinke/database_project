@@ -47,9 +47,15 @@ const SignupPage = ()=>{
     const uploadPicture = (e)=>{
         const file = e.target.files?.[0];
         setPfpPrev(file ? URL.createObjectURL(file):undefined)
-        setPfpFile(file);
-        console.log(file);
+        
+        const data = new FileReader();
+        data.addEventListener("load",()=>{
+            setPfpFile(data.result);
+        });
+        data.readAsDataURL(file)
     }
+
+    console.log(pfpFile);
 
     const changeRole = (e)=>{
         setRole(e.target.value);
