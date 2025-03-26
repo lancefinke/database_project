@@ -36,10 +36,24 @@ const SearchResult = ({title,author,duration,image,audiofile,rating})=>{
 
 const SearchPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  
+  const [users, setUsers] = useState([]);
+
+  const API_URL = "https://coogmusic-g2dcaubsabgtfycy.centralus-01.azurewebsites.net/";
   const handleSearch = (e) => {
     e.preventDefault();
     console.log("Searching for:", searchQuery);
+
+    fetch(API_URL+ "api/Users/GetSearch?search=" + searchQuery,{
+      method:"GET",
+    })
+    .then(res =>res.json())
+    .then((result)=>{
+      setUsers(result);
+
+    })
+    .catch(error => console.error("Error fetching data:", error));
+
+
   };
 
   return (
@@ -63,8 +77,11 @@ const SearchPage = () => {
   
       
       <div className="search-results">
+        {users.map(user=><h1 style={{color:"white"}}>{user.Username}</h1>)}
+
         <SearchResult title="Song Title"author="Author Name"duration="3:00"image="https://www.billboard.com/wp-content/uploads/media/tyler-the-creator-igor-album-art-2019-billboard-embed.jpg?w=600"rating={2.4}/>
         <SearchResult title="Song Title"author="Author Name"duration="3:00"image="https://www.billboard.com/wp-content/uploads/media/tyler-the-creator-igor-album-art-2019-billboard-embed.jpg?w=600"rating={2.4}/>
+
       </div>
     </div>
   );
