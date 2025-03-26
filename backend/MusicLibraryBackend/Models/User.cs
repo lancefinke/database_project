@@ -1,14 +1,14 @@
-﻿namespace MusicLibraryBackend.Models
-{
+namespace MusicLibraryBackend.Models;
+
     public class User
     {
         public int UserID { get; set; }
-        public string Username { get; set; }
-        public string Email { get; set; }
-        public string ProfilePicture { get; set; }
-        public string Bio { get; set; }
-        public string UserPassword { get; set; }
+    public string Username { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    public string ProfilePicture { get; set; } = string.Empty;
+    public string Bio { get; set; } = string.Empty;
+    public string UserPassword { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }
         public bool isArtist { get; set; }
     }
-}
+
