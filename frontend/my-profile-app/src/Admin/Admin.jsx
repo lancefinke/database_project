@@ -58,7 +58,7 @@ const Admin = () =>{
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null)
 
-    const API_URL = "https://localhost:7152/";
+    const API_URL = "https://coogmusic-g2dcaubsabgtfycy.centralus-01.azurewebsites.net/";
 
 
     useEffect(() => {
