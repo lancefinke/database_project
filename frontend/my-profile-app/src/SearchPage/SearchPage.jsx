@@ -3,11 +3,26 @@ import "./SearchPage.css"; // Optional CSS import if you create this file
 
 const SearchPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  
+  const [users, setUsers] = useState([]);
+
+  const API_URL = "https://localhost:7152/";
   const handleSearch = (e) => {
     e.preventDefault();
     console.log("Searching for:", searchQuery);
+
+    fetch(API_URL+ "api/Users/GetSearch?search=" + searchQuery,{
+      method:"GET",
+    })
+    .then(res =>res.json())
+    .then((result)=>{
+      setUsers(result);
+
+    })
+    .catch(error => console.error("Error fetching data:", error));
+
+
   };
+
 
   return (
     <div className="search-container">
@@ -32,6 +47,8 @@ const SearchPage = () => {
       <div className="search-results">
         <h2>Search Results</h2>
         <p>Enter a search term to find music.</p>
+        {users.map(user=><h1 style={{color:"black"}}>{user.Username}</h1>)}
+
       </div>
     </div>
   );

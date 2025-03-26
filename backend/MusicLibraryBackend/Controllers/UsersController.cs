@@ -66,7 +66,7 @@ namespace MusicLibraryBackend.Controllers
         public IActionResult GetSearch([FromQuery] string search)
         {
             var result = _userService.SearchUsers(search);
-            return new JsonResult(result);
+            return new JsonResult(result);  
         }
 
 
