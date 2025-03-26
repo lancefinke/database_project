@@ -33,7 +33,7 @@ const SignupPage = ()=>{
                 Bio:description
                })
         };
-        fetch('https://localhost:7152/api/Auth/register', requestOptions)
+        fetch('https://coogmusic-g2dcaubsabgtfycy.centralus-01.azurewebsites.net/api/Auth/register', requestOptions)
             .then(response => response.json())
             .then(data =>{data.message==='User registered successfully'?setSuccess(true):alert(data.message) });
     }catch(error){

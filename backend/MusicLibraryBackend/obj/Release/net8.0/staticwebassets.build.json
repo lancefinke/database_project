@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "GfRQugDY2RwKpKQFVKVkE+u2xPW99SWJl9DYUMoYCv4=",
+  "Source": "MusicLibraryBackend",
+  "BasePath": "_content/MusicLibraryBackend",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

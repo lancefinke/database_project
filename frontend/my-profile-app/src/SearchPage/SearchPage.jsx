@@ -38,7 +38,7 @@ const SearchPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [users, setUsers] = useState([]);
 
-  const API_URL = "https://localhost:7152/";
+  const API_URL = "https://coogmusic-g2dcaubsabgtfycy.centralus-01.azurewebsites.net/";
   const handleSearch = (e) => {
     e.preventDefault();
     console.log("Searching for:", searchQuery);
