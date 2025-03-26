@@ -3,8 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\andre\\projects\\database\\backend\\MusicLibraryBackend\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|c:\\users\\andre\\projects\\database\\backend\\musiclibrarybackend\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|solutionrelative:controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|c:\\users\\andre\\projects\\database\\backend\\musiclibrarybackend\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|solutionrelative:controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|c:\\users\\andre\\projects\\database\\backend\\musiclibrarybackend\\musiclibrarybackend.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}",
+      "RelativeMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|solutionrelative:musiclibrarybackend.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|c:\\users\\andre\\projects\\database\\backend\\musiclibrarybackend\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -15,16 +23,8 @@
       "RelativeMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|solutionrelative:controllers\\testcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|c:\\users\\andre\\projects\\database\\backend\\musiclibrarybackend\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|solutionrelative:controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|c:\\users\\andre\\projects\\database\\backend\\musiclibrarybackend\\services\\jwtservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|solutionrelative:services\\jwtservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|c:\\users\\andre\\projects\\database\\backend\\musiclibrarybackend\\musiclibrarybackend.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}",
-      "RelativeMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|solutionrelative:musiclibrarybackend.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|c:\\users\\andre\\projects\\database\\backend\\musiclibrarybackend\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
@@ -61,7 +61,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 218,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 10,
           "Children": [
             {
               "$type": "Bookmark",
@@ -74,32 +74,6 @@
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "TestController.cs",
-              "DocumentMoniker": "C:\\Users\\andre\\projects\\database\\backend\\MusicLibraryBackend\\Controllers\\TestController.cs",
-              "RelativeDocumentMoniker": "Controllers\\TestController.cs",
-              "ToolTip": "C:\\Users\\andre\\projects\\database\\backend\\MusicLibraryBackend\\Controllers\\TestController.cs",
-              "RelativeToolTip": "Controllers\\TestController.cs",
-              "ViewState": "AgIAABAAAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-26T00:57:00.383Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "JwtService.cs",
-              "DocumentMoniker": "C:\\Users\\andre\\projects\\database\\backend\\MusicLibraryBackend\\Services\\JwtService.cs",
-              "RelativeDocumentMoniker": "Services\\JwtService.cs",
-              "ToolTip": "C:\\Users\\andre\\projects\\database\\backend\\MusicLibraryBackend\\Services\\JwtService.cs",
-              "RelativeToolTip": "Services\\JwtService.cs",
-              "ViewState": "AgIAABIAAAAAAAAAAAAYwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-26T00:56:42.228Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
               "Title": "MusicLibraryBackend.http",
               "DocumentMoniker": "C:\\Users\\andre\\projects\\database\\backend\\MusicLibraryBackend\\MusicLibraryBackend.http",
               "RelativeDocumentMoniker": "MusicLibraryBackend.http",
@@ -112,20 +86,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "UsersController.cs",
               "DocumentMoniker": "C:\\Users\\andre\\projects\\database\\backend\\MusicLibraryBackend\\Controllers\\UsersController.cs",
               "RelativeDocumentMoniker": "Controllers\\UsersController.cs",
-              "ToolTip": "C:\\Users\\andre\\projects\\database\\backend\\MusicLibraryBackend\\Controllers\\UsersController.cs*",
-              "RelativeToolTip": "Controllers\\UsersController.cs*",
-              "ViewState": "AgIAACoAAAAAAAAAAAAYwEcAAAAAAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\andre\\projects\\database\\backend\\MusicLibraryBackend\\Controllers\\UsersController.cs",
+              "RelativeToolTip": "Controllers\\UsersController.cs",
+              "ViewState": "AgIAACEAAAAAAAAAAAAYwEUAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-18T20:48:01.533Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "UserService.cs",
               "DocumentMoniker": "C:\\Users\\andre\\projects\\database\\backend\\MusicLibraryBackend\\Services\\UserService.cs",
               "RelativeDocumentMoniker": "Services\\UserService.cs",
@@ -198,15 +172,41 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "AuthController.cs",
               "DocumentMoniker": "C:\\Users\\andre\\projects\\database\\backend\\MusicLibraryBackend\\Controllers\\AuthController.cs",
               "RelativeDocumentMoniker": "Controllers\\AuthController.cs",
-              "ToolTip": "C:\\Users\\andre\\projects\\database\\backend\\MusicLibraryBackend\\Controllers\\AuthController.cs",
-              "RelativeToolTip": "Controllers\\AuthController.cs",
-              "ViewState": "AgIAAKUAAAAAAAAAAAAowHcAAAArAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\andre\\projects\\database\\backend\\MusicLibraryBackend\\Controllers\\AuthController.cs*",
+              "RelativeToolTip": "Controllers\\AuthController.cs*",
+              "ViewState": "AgIAAKsAAAAAAAAAAADwv7cAAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-25T19:29:01.811Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "JwtService.cs",
+              "DocumentMoniker": "C:\\Users\\andre\\projects\\database\\backend\\MusicLibraryBackend\\Services\\JwtService.cs",
+              "RelativeDocumentMoniker": "Services\\JwtService.cs",
+              "ToolTip": "C:\\Users\\andre\\projects\\database\\backend\\MusicLibraryBackend\\Services\\JwtService.cs",
+              "RelativeToolTip": "Services\\JwtService.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAAYwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-26T00:56:42.228Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "TestController.cs",
+              "DocumentMoniker": "C:\\Users\\andre\\projects\\database\\backend\\MusicLibraryBackend\\Controllers\\TestController.cs",
+              "RelativeDocumentMoniker": "Controllers\\TestController.cs",
+              "ToolTip": "C:\\Users\\andre\\projects\\database\\backend\\MusicLibraryBackend\\Controllers\\TestController.cs",
+              "RelativeToolTip": "Controllers\\TestController.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-26T00:57:00.383Z",
               "EditorCaption": ""
             },
             {

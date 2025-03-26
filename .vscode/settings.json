@@ -1,0 +1,4 @@
+{
+  "appService.defaultWebAppToDeploy": "undefined/subscriptions/64574c3b-f568-432c-b81b-53afd4115639/resourceGroups/appsvc_windows_centralus_basic/providers/Microsoft.Web/sites/coogmusic123",
+  "appService.deploySubpath": "."
+}
