@@ -1,13 +1,23 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ProfilePage from "./ProfilePage/ProfilePage";
 import MusicPlayer from "./ProfilePage/Components/MusicPlayer";
-import NavBar from "./ProfilePage/Components/NavBar";
 import SongIcon from "./ProfilePage/Components/SongIcon";
 import HomePage from "./HomePage/HomePage";
+import LoginPage from "./LoginPage/LoginPage";
 import SearchPage from "./SearchPage/SearchPage";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import AddSong from "./ProfilePage/Components/AddSong";
+import Admin from "./Admin/Admin";
+import UserPage from "./ProfilePage/UserPage/UserPage";
+import SignupPage from "./SignupPage/Signuppage";
+import ResetPassword from "./ResetPasswordPage/ResetPassword";
+import SideBar from "./ProfilePage/Components/SideBar";
+import FollowingPage from "./FollowingPage/FollowingPage";
+import { BrowserRouter as Router, Routes, Route, useLocation,Link } from "react-router-dom";
 import "./ProfilePage/ProfilePage.css";
 import "./ProfilePage/Components/SongIcon.css";
+import { CirclePlus/*, Link*/  } from 'lucide-react';
+
+
 
 // Sample songs for the profile page
 const sampleSongs = [
@@ -31,6 +41,20 @@ const sampleSongs = [
     duration: "5:55",
     flags: ["Classic", "Legendary"],
     iconImage: "/images/bohemian-rhapsody.jpg",
+  },
+  {
+    name: "Stairway to Heaven",
+    creator: "Led Zeppelin",
+    duration: "8:02",
+    flags: ["Rock", "Classic"],
+    iconImage: "/images/stairway-to-heaven.jpg",
+  },
+  {
+    name: "Thriller",
+    creator: "Michael Jackson",
+    duration: "5:57",
+    flags: ["Pop", "Iconic"],
+    iconImage: "/images/thriller.jpg",
   }
 ];
 
@@ -39,6 +63,7 @@ const playlist = [
   "/music/song2.mp3",
   "/music/song3.mp3"
 ];
+
 
 // Layout wrapper to handle class changes based on route
 const AppLayout = () => {
@@ -53,41 +78,87 @@ const AppLayout = () => {
     }
   }, [location]);
 
-  // Determine if we should show the music player based on the current route
-  const showMusicPlayer = location.pathname !== '/home';
+  // Show music player on all pages except home
+  const showMusicPlayer = location.pathname !== '/home' && location.pathname!=='/login' && location.pathname!=='/signup' && location.pathname!=='/reset' && location.pathname!=='/admin';
+  
+  // Determine which pageName to use for MusicPlayer based on the current route
+  const getMusicPlayerPageName = () => {
+    if (location.pathname === '/profile') return 'profile';
+    if (location.pathname === '/search') return 'search';
+    if (location.pathname === '/following') return 'following';
+    return 'default';
+  };
+
+  //useStates
+  const [showAddSong,setAddVisibility] = useState(false);
+  const [loggedIn,setLoggedIn] = useState(false);
+  const [role,setRole] = useState('admin');
 
   return (
+
+
     <div className="app-container">
-      <NavBar />
+      {location.pathname!=='/login' && location.pathname!=='/signup' && location.pathname!=='/reset' && <SideBar />}
       <main className="main-content">
         <Routes>
           <Route path="/home" element={<HomePage />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/profile" element={
             <>
-              <ProfilePage />
+              <UserPage />
               <div className="song-list">
-                {sampleSongs.map((song, index) => (
-                  <SongIcon
-                    key={index}
-                    name={song.name}
-                    creator={song.creator}
-                    duration={song.duration}
-                    flags={song.flags}
-                    iconImage={song.iconImage}
-                    isHomePage={false} // Explicitly set to false for profile
-                  />
-                ))}
+              {role==='artist'&&<button className="add-btn" onClick={()=>{setAddVisibility(true)}}title="Add new Song" style={{padding:"15px",borderRadius:"50%",backgroundColor:"#8E1616",width:"70px",height:"70px",color:"white",border:"3px solid white",position:"relative",right:"30%",bottom:"1%"}}><CirclePlus /></button>}
+                {showAddSong &&<div className="add-window" style={{position:"fixed",zIndex:"10",backgroundColor:"#8E1616",height:"450px",width:"600px",borderRadius:'15px',border:"4px solid white"}}>
+                  <AddSong />
+                  <button className="close-add-song" onClick={()=>{setAddVisibility(false)}} 
+                  style={{position:"relative",
+                          width:"10%",
+                          left:"530px",
+                          bottom:"350px",
+                          color:"white",
+                          backgroundColor:"#101010",
+                          borderRadius:"10px",
+                          padding:"2px 4px",
+                          border: "4px solid white",
+                          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)"
+
+                  }}>CLOSE</button>
+                </div>}
+                <div className="dice-five-layout">
+                  {sampleSongs.map((song, index) => (
+                    <div key={index} className={`song-position-${index + 1}`}>
+                      <SongIcon
+                        name={song.name}
+                        creator={song.creator}
+                        duration={song.duration}
+                        flags={song.flags}
+                        iconImage="https://upload.wikimedia.org/wikipedia/commons/e/e7/Everest_North_Face_toward_Base_Camp_Tibet_Luca_Galuzzi_2006.jpg"
+                        isHomePage={false}
+                      />
+                    </div>
+                  ))}
+                </div>
               </div>
             </>
           } />
-          {/* Default route redirect to home */}
+          <Route path="/user" element={<ProfilePage />} />
+          <Route path="/following" element={<FollowingPage />} />
+          <Route path='/login' element={<LoginPage />} />
+          <Route path='/signup' element={<SignupPage />} />
+          <Route path='/reset' element={<ResetPassword />} />
+          <Route path='/admin' element={role==='admin'?<Admin />:<h1 style={{fontSize:"200%"}}>You are not authorized to access this page. <Link style={{color:"white",fontSize:"100%"}} to="/home">Click Here to Return</Link></h1>}></Route>
           <Route path="/" element={<HomePage />} />
         </Routes>
       </main>
       
-      {/* Only render MusicPlayer if not on the home page */}
-      {showMusicPlayer && <MusicPlayer playlist={playlist} />}
+      {showMusicPlayer && (
+        <MusicPlayer
+          playlist={playlist}
+          song="Why Cant You"
+          artist="Bryant Barnes"
+          pageName={getMusicPlayerPageName()}
+        />
+      )}
     </div>
   );
 };
@@ -99,5 +170,6 @@ function App() {
     </Router>
   );
 }
+
 
 export default App;

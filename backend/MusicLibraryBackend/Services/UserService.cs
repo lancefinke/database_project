@@ -101,7 +101,7 @@ namespace MusicLibraryBackend.Services
             string query = "insert into dbo.USERS(Username, Email, ProfilePicture, Bio, UserPassword, CreatedAt, isArtist) values(@newUserName,@newEmail,@newPictureURL,@newBio,@newPassword,@newDateCreation,@role)";
 
             // access the database
-            string sqlDatasource = _configuration.GetConnectionString("DefaultConnection");
+            string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
 
             // creates the connection
             using (SqlConnection myCon = new SqlConnection(sqlDatasource))
