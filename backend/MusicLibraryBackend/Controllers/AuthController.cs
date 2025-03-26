@@ -123,7 +123,10 @@ public class AuthController : ControllerBase
                                 reader.GetBoolean(3)
                             );
 
-                            return Ok(new { token });
+                            return Ok(new {
+                                token = token,
+                                isAdmin = reader.GetBoolean(4)
+                            });
                         }
                     }
                 }

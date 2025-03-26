@@ -71,6 +71,7 @@ namespace MusicLibraryBackend.Controllers
 
 
 
+
         [HttpGet]
         [Route("GenerateUserReport")]
         public IActionResult GenerateUserReport()
@@ -92,6 +93,8 @@ namespace MusicLibraryBackend.Controllers
             {
                 Console.WriteLine($"Username: {user.Username}, Email: {user.Email}, CreatedAt: {user.CreatedAt}, IsArtist: {user.isArtist}");
             }
+
+
 
             var report = new
             {

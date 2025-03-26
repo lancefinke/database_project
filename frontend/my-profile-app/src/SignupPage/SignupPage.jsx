@@ -19,6 +19,7 @@ const SignupPage = ()=>{
 
 
     const createUser  = async()=>{
+        try{
         const isArtist = role==='artist';
         const requestOptions = {
             method: 'POST',
@@ -27,12 +28,17 @@ const SignupPage = ()=>{
                 username: username,
                 password: password,
                 email: email,
-                isArtist: isArtist
+                isArtist: isArtist,
+                ProfilePicture: pfpFile,
+                Bio:description
                })
         };
         fetch('https://localhost:7152/api/Auth/register', requestOptions)
             .then(response => response.json())
-            .then(data =>{data.message==='User registered successfully'?setSuccess(true):alert('There was an error signing up') });
+            .then(data =>{data.message==='User registered successfully'?setSuccess(true):alert(data.message) });
+    }catch(error){
+        console.log(error.message);
+    }
 
         
     

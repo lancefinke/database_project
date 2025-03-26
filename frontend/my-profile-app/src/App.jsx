@@ -147,7 +147,7 @@ const AppLayout = () => {
           <Route path='/signup' element={<SignupPage />} />
           <Route path='/reset' element={<ResetPassword />} />
           <Route path='/admin' element={role==='admin'?<Admin />:<h1 style={{fontSize:"200%"}}>You are not authorized to access this page. <Link style={{color:"white",fontSize:"100%"}} to="/home">Click Here to Return</Link></h1>}></Route>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<LoginPage />} />
         </Routes>
       </main>
       
