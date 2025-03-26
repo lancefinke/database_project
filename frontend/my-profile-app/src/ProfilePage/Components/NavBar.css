@@ -1,3 +1,5 @@
+
+
 .navbar {
   position: fixed;
   top: 0;
@@ -8,7 +10,7 @@
   align-items: center;
 }
 
-/* Navbar width variations based on page */
+/*/ Navbar width variations based on page /*/ 
 .profile-page-navbar {
   width: calc(100% - 27rem);
   Left: 0;
@@ -24,7 +26,7 @@
   height: 100%;
   display: flex;
   align-items: center;
-  justify-content: center; /* Center the navigation menu */
+  justify-content: center; /*/ Center the navigation menu /*/ 
 }
 
 .nav-menu {
@@ -37,8 +39,8 @@
   margin: 0;
   padding: 0;
   display: flex;
-  justify-content: center; /* Center the navigation items */
-  gap: 60px; /* Increased spacing between items */
+  justify-content: center; /*/ Center the navigation items /*/
+  gap: 60px; /* Increased spacing between items /*/
 }
 
 .nav-item {

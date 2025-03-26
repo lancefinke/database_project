@@ -76,7 +76,8 @@ public class AuthController : ControllerBase
 
                 var userId = (int)await cmd.ExecuteScalarAsync();
 
-                return Ok(new { 
+                return Ok(new
+                {
                     message = "User registered successfully",
                     userId = userId
                 });
@@ -108,7 +109,7 @@ public class AuthController : ControllerBase
                     {
                         var storedHash = reader.GetString(2);
                         var hashedPassword = HashPassword(request.Password);
-                        
+
                         // Debug logging
                         Console.WriteLine($"Stored hash: {storedHash}");
                         Console.WriteLine($"Computed hash: {hashedPassword}");
@@ -123,7 +124,11 @@ public class AuthController : ControllerBase
                                 reader.GetBoolean(3)
                             );
 
-                            return Ok(new { token });
+                            return Ok(new
+                            {
+                                token = token,
+                                isAdmin = reader.GetBoolean(4)
+                            });
                         }
                     }
                 }
@@ -183,4 +188,4 @@ public class AuthController : ControllerBase
         public string Username { get; set; }
         public string Password { get; set; }
     }
-} 
+}

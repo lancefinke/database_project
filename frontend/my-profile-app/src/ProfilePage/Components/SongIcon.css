@@ -125,7 +125,7 @@
 }
 
 .song-creator {
-    font-size: 0.9rem;
+    font-size: 0.7rem;
     font-weight: 500;
     white-space: nowrap;
     overflow: hidden;
@@ -137,12 +137,40 @@
 }
 
 .song-duration {
-    font-size: 0.7rem;
+    font-size: 0.5rem;
     opacity: 0.70;
     line-height: 1.2;
     margin: 0;
     text-align: center;
 }
+
+.flag-icon-wrapper{
+    background-color: #8E1616;
+    position: relative;
+    bottom: 60%;
+    height:120px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: -50px;
+    padding: 10px 0px;
+}
+.flag-icon{
+    color:white;
+    margin: auto;
+}
+.flag-btn{
+    z-index: 10;
+    transition: background-color 0.3s ease;
+    width:15%;
+    margin:2px auto;
+    border-radius: 25px;
+}
+.flag-btn:hover{
+    background-color: rgba(165,165,165,0.4);
+}
+
 
 .flags {
     display: flex;
@@ -166,11 +194,17 @@
     align-items: center;
     gap: 12px;
     width: 100%;
-    margin-top: 2px;
+    margin-top: 0px;
     padding: 0;
     max-width: 220px;
     margin-left: auto;
     margin-right: auto;
+}
+.liked{
+    color:#bc1010;
+}
+.like-btn{
+    z-index: 20;
 }
 
 .control-icon {
@@ -217,7 +251,7 @@
 
 .center-song-wrapper .song-title {
     color: white;
-    font-size: 1.2rem;
+    font-size: 0.9rem;
 }
 
 .center-song-wrapper .song-creator {
@@ -231,6 +265,22 @@
     background-color: #1D1616;
     border-radius: 8px;
     line-height: 1.2;
+}
+.rating-value{
+    text-align:"center";
+}
+.rating-select{
+    z-index:10; 
+    width:25%;
+    margin:0px auto;
+    border:3px solid white;
+    background-color:black;
+    color:white;
+    border-radius:15px;
+    text-align: center;
+}
+.rating-select:focus{
+    width:15%;
 }
 
 /* Media queries */

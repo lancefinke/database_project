@@ -1,0 +1,19 @@
+*{
+  font-size: medium;
+  font-family: 'Roboto Mono', monospace;
+}
+.editable{
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  margin-left: 15px;
+}
+
+.edit-btn{
+  background: none;
+  border: none;
+  width: 15%;
+}
+button:hover{
+  cursor: pointer;
+}
