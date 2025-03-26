@@ -3,29 +3,44 @@ import { useState } from "react";
 import './LoginPage.css';
 
 const LoginPage = () =>{
+  const [email,setEmail] = useState('');
+  const [password,setPassword] = useState('');
+  const [success,setSuccess] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
-    const [email,setEmail] = useState('');
-    const [password,setPassword] = useState('');
-    const [success,setSuccess] = useState(false);
+  const storeToken = (token, adminStatus)=>{
+      // Store token in localStorage instead of cookie
+      localStorage.setItem('userToken', token);
+      // Store admin status in localStorage
+      localStorage.setItem('isAdmin', adminStatus);
+      setIsAdmin(adminStatus);
+      setSuccess(true);
+  }
 
-    const storeToken = (token)=>{
-        setSuccess(true);
-        document.cookie=token
-    }
-
-    const loginUser = async()=>{
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                username: email,
-                password: password,
-               })
-        };
-        fetch('https://localhost:7152/api/Auth/login', requestOptions)
-            .then(response => response.json())
-            .then(data =>{data.token?storeToken(data.token):alert(data.message)});
-    }
+  const loginUser = async()=>{
+      const requestOptions = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+              username: email,
+              password: password,
+             })
+      };
+      fetch('https://coogmusic-g2dcaubsabgtfycy.centralus-01.azurewebsites.net//api/Auth/login', requestOptions)
+          .then(response => response.json())
+          .then(data => {
+              if(data.token){
+                  // Pass both token and admin status to storeToken
+                  storeToken(data.token, data.isAdmin);
+              } else {
+                  alert(data.message);
+              }
+          })
+          .catch(error => {
+              console.error('Login error:', error);
+              alert('An error occurred during login');
+          });
+  }
 
     return(
         <>
@@ -46,7 +61,11 @@ const LoginPage = () =>{
                 <div className="link-container"><Link className="signup-link" to="/signup">Click Here to sign up</Link></div>
             </div>
         </div>
-        {success&&<Navigate to='/home' />}
+        {success && (
+            isAdmin 
+                ? <Navigate to='/admin' /> 
+                : <Navigate to='/home' />
+        )}
         </>
     );
 
