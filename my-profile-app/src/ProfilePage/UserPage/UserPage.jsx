@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import AddAlbum from '../Components/AddAlbum';
 import './../ProfilePage.css';
 import './UserPage.css';
 import MusicPlayer from "./../Components/MusicPlayer";
@@ -9,12 +10,13 @@ import UserLink from '../../UserLink/UserLink';
 import { use } from 'react';
 
 
-const UserPage = ({role}) => {
-  const [isFollowing, setIsFollowing] = useState(false);
+const UserPage = () => {
   const [availableGenres,setAvailableGenres] = useState(['Rnb','Rap','Country','HipHop','Pop','Rock']);
   const [userGenres,setUserGenres] = useState([]);
   const [showGenreOptions,setGenreOptions] = useState(false);
   const [showAPwindow,setShowAPwindow ] = useState(false);
+  const [showAddAlbum,setShowAddAlbum] = useState(false);
+  const [role,setRole] = useState('artist');
 
   const handleGenres = (e)=>{
     if(e.target.value!=='close'&&e.target.value!==''){
@@ -45,7 +47,8 @@ const UserPage = ({role}) => {
             div_width="100%"
             div_height="200px"
             backgroundColor="none"
-            textColor="white"/>
+            textColor="white"
+            placeholder="Add a Description for your profile..."/>
         
         <div className="stats-container">
           <p className="follower-count">Followers: 10.2K</p>
@@ -66,14 +69,14 @@ const UserPage = ({role}) => {
        
         <div className="playlist-container">
           <h1>Playlists</h1>
-          <button className="playlist-button" onClick={()=>{setShowAPwindow(true)}}>
+          {role==='artist'&&<button className="playlist-button" onClick={()=>{setShowAPwindow(true)}}>
             <img
               src="https://via.placeholder.com/100"
               alt="Playlist Cover"
               className="playlist-image"
             />
             <span className="playlist-name"><strong>+ Add Playlist</strong></span>
-          </button>
+          </button>}
           {showAPwindow&&<><AddPlaylist/><button className="add-playlist-btn" style={{marginTop:"-20px",marginLeft:"30px"}} onClick={()=>{setShowAPwindow(false)}}>CLOSE</button></>}
           <button className="playlist-button">
             <img
@@ -119,6 +122,34 @@ const UserPage = ({role}) => {
             <span className="playlist-name">Rap</span>
           </button>
         </div>
+
+        <hr style={{backgroundColor:"white", width:"100%"}}></hr>
+
+        {role==='artist'&&<div className="playlist-container">
+          <h1>Albums</h1>
+          <button className="playlist-button" onClick={()=>{setShowAddAlbum(true)}}>
+            <span className="playlist-name"><strong>+ Add Album</strong></span>
+          </button>
+          {showAddAlbum&&<><AddAlbum/><button className="add-playlist-btn" style={{marginTop:"-20px",marginLeft:"30px"}} onClick={()=>{setShowAddAlbum(false)}}>CLOSE</button></>}
+          <button className="playlist-button">
+            <span className="playlist-name">First Album</span>
+          </button>
+
+          <button className="playlist-button">
+            <span className="playlist-name">Auston 2020 Tour</span>
+          </button>
+
+          <button className="playlist-button">
+            <span className="playlist-name">Break Up</span>
+          </button>
+          <button className="playlist-button">
+            <span className="playlist-name">Graduation</span>
+            
+          </button>
+          <button className="playlist-button">
+            <span className="playlist-name">Ballin'</span>
+          </button>
+        </div>}
 
         {/*<MusicPlayer song="Why Cant You" artist="Bryant Barnes" />*/}
       </div>

@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
+    "dotenv": "^16.4.7",
     "howler": "^2.2.4",
     "pg": "^8.13.3",
     "react": "^18.3.1",
