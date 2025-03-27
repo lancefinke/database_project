@@ -2,6 +2,7 @@
     background-color:#343434;
     width: 40%;
     margin-right: 50%;
+    
 }
 .add-genre-btn:hover{
     background-color: #8E1616;
@@ -20,3 +21,29 @@
     border-radius:50%;
 }
 
+.genre-drop-down {
+    font-family: 'Roboto Mono', monospace;
+    color: white;
+    font-size: 0.8rem;
+    background-color: #8E1616;
+    padding: 0.3rem 1.4rem;
+    border-radius: 50px;
+    cursor: pointer;
+    border: 1.5px solid white;
+    transition: background-color 0.3s ease;
+    appearance: none;
+    position: relative;
+    outline: none;
+  }
+  
+  .genre-drop-down:hover {
+    background-color: #343434;
+    transform: scale(1.02);
+    background-color: var(--brick-hover, #BC2020);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  }
+  
+  .genre-drop-down:focus {
+    transform: scale(0.98);
+    background-color: var(--brick-active, #6E1010);
+  }
