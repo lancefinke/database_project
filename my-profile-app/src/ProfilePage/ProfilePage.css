@@ -79,8 +79,6 @@
   transform: scale(1.1);
 }
 
-
-
 /* Custom scrollbar styling */
 .song-list::-webkit-scrollbar {
   width: 8px;
@@ -235,13 +233,74 @@ body {
   background-color: var(--brick-active);
 }
 
+/* Content Sections - New Styling */
+.content-section {
+  margin-top: 2rem;
+  width: 100%;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 0 0.5rem;
+}
+
+.section-title {
+  color: white;
+  font-size: 1.3rem;
+  margin: 0;
+  text-align: left;
+}
+
+/* Drag instructions */
+.drag-instructions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.drag-icon {
+  color: #8E1616;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.drag-text {
+  color: #999;
+  font-size: 0.8rem;
+}
+
+/* Drag handle */
+.drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+  cursor: grab;
+}
+
+.drag-dots {
+  color: #ffffff;
+  font-size: 1.5rem;
+  user-select: none;
+}
+
+/* Dragging state */
+.dragging {
+  opacity: 0.5;
+  background-color: #343434 !important;
+  box-shadow: 0 0 10px rgba(142, 22, 22, 0.5);
+}
+
 /* Playlist Section */
 .playlist-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: .5rem;
-  margin-top: 5rem;
+  margin-top: 0.5rem;
 }
 
 .playlist-button {
@@ -254,9 +313,10 @@ body {
   flex-direction: row;
   align-items: center;
   text-align: left;
-  transition: background-color 0.3s ease;
-  width: 400px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  width: 100%;
   font-size: 24px;
+  position: relative;
 }
 
 .playlist-button:hover {
@@ -276,6 +336,52 @@ body {
 }
 
 .playlist-name {
+  color: white;
+  font-family: 'Roboto Mono', monospace;
+}
+
+/* Album Section - New */
+.albums-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .5rem;
+  margin-top: 0.5rem;
+}
+
+.album-button {
+  background-color: #101010;
+  border: none;
+  border-radius: 10px;
+  padding: 0.75rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: left;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  width: 100%;
+  font-size: 24px;
+  position: relative;
+}
+
+.album-button:hover {
+  background-color: #343434;
+}
+
+.album-button:active {
+  transform: scale(0.98);
+  background-color: var(--brick-active);
+}
+
+.album-image {
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
+  margin-right: 1rem;
+}
+
+.album-name {
   color: white;
   font-family: 'Roboto Mono', monospace;
 }
