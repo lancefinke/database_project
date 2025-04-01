@@ -72,35 +72,57 @@ const SearchPage = () => {
   ];
 
   return (
-    <div className="search-container">
-      <div className="search-bar-wrapper">
-        <div className="search-icon"><span className="icon-align">🔎︎</span></div>
-        <input 
-          className="search-bar" 
-          type="search" 
-          value={searchQuery} 
-          placeholder="Search for Artist, song, or Album" 
-          onChange={(e) => {setSearchQuery(e.target.value)}}>
-        </input>
-        <button className="search-button" onClick={handleSearch}>Search</button>
+    <div className="search-page">
+      <div className="search-container">
+        <div className="search-bar-wrapper">
+          <div className="search-icon"><span className="icon-align">🔎︎</span></div>
+          <input 
+            className="search-bar" 
+            type="search" 
+            value={searchQuery} 
+            placeholder="Search for Artist, song, or Album" 
+            onChange={(e) => {setSearchQuery(e.target.value)}}>
+          </input>
+          <button className="search-button" onClick={handleSearch}>Search</button>
+        </div>
       </div>
       
-      <div className="search-results">
-        {users.length > 0 ? (
-          users.map(user => <h1 key={user.Username} style={{color:"white"}}>{user.Username}</h1>)
-        ) : (
-          // Display sample results when no users are returned from API
-          sampleSearchResults.map(result => (
-            <SearchResult 
-              key={result.id}
-              title={result.title}
-              author={result.author}
-              duration={result.duration}
-              image={result.image}
-              rating={result.rating}
-            />
-          ))
-        )}
+      <div className="searchpage-container">
+        <div className="search-results">
+          {users.length > 0 ? (
+            users.map(user => <h1 key={user.Username} style={{color:"white"}}>{user.Username}</h1>)
+          ) : (
+            // Display sample results when no users are returned from API
+            sampleSearchResults.map(result => (
+              <SearchResult 
+                key={result.id}
+                title={result.title}
+                author={result.author}
+                duration={result.duration}
+                image={result.image}
+                rating={result.rating}
+              />
+            ))
+          )}
+        </div>
+      </div>
+  
+      <div className="search-genres-container">
+        <h2 className="search-genres-title">Browse All Genres</h2>
+        <div className="search-genres-list">
+          <button className="genre-button">Pop</button>
+          <button className="genre-button">Rock</button>
+          <button className="genre-button">Hip-Hop</button>
+          <button className="genre-button">Jazz</button>
+          <button className="genre-button">Classical</button>
+          <button className="genre-button">Country</button>
+          <button className="genre-button">Metal</button>
+          <button className="genre-button">R&B</button>
+          <button className="genre-button">Afro</button>
+          <button className="genre-button">House</button>
+          <button className="genre-button">Jazz</button>
+          <button className="genre-button">Indie</button>
+        </div>
       </div>
     </div>
   );
