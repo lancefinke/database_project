@@ -34,6 +34,17 @@ namespace MusicLibraryBackend.Controllers
 
         }
 
+        //returns 1 user with specific username
+        [HttpGet]
+        [Route("GetUserByName")]
+        public JsonResult GetUserByName([FromQuery] string name)
+        {
+            var result = _userService.GetUserByName(name);
+            return new JsonResult(result);
+
+        }
+
+        //retrive all followers of a specific user
         [HttpGet]
         [Route("GetFollowers")]
         public JsonResult CreateUsers([FromQuery] int userID)
