@@ -63,6 +63,18 @@ public class AuthController : ControllerBase
                     return BadRequest(new { message = "Email already exists" });
                 }
 
+                //Check if user is banned
+                var checkIsBanned = new SqlCommand(
+                    "SELECT COUNT(1) FROM BANNEDUSERS WHERE UserEmail = @BannedEmail",
+                    connection);
+                checkIsBanned.Parameters.AddWithValue("@BannedEmail", request.Email);
+                var isBanned = (int)await checkIsBanned.ExecuteScalarAsync() > 0;
+
+                if (isBanned)
+                {
+                    return BadRequest(new { message = "This account has been banned" });
+                }
+
                 // Hash password using SHA256 and take first 20 characters
                 var hashedPassword = HashPassword(request.Password);
 
@@ -109,6 +121,8 @@ public class AuthController : ControllerBase
                     "SELECT UserID, Username, UserPassword, IsArtist FROM Users WHERE Username = @Username",
                     connection);
                 cmd.Parameters.AddWithValue("@Username", request.Username);
+
+                
 
                 using (var reader = await cmd.ExecuteReaderAsync())
                 {

@@ -289,3 +289,7 @@ C:\Users\lance\OneDrive\Desktop\College\UH\Programming Assignments\DB\database_p
 C:\Users\lance\OneDrive\Desktop\College\UH\Programming Assignments\DB\database_project\backend\MusicLibraryBackend\obj\Debug\net8.0\MusicLibraryBackend.pdb
 C:\Users\lance\OneDrive\Desktop\College\UH\Programming Assignments\DB\database_project\backend\MusicLibraryBackend\obj\Debug\net8.0\MusicLibraryBackend.genruntimeconfig.cache
 C:\Users\lance\OneDrive\Desktop\College\UH\Programming Assignments\DB\database_project\backend\MusicLibraryBackend\obj\Debug\net8.0\ref\MusicLibraryBackend.dll
+C:\Users\lance\OneDrive\Desktop\College\UH\Programming Assignments\DB\database_project\backend\MusicLibraryBackend\bin\Debug\net8.0\Azure.Storage.Blobs.dll
+C:\Users\lance\OneDrive\Desktop\College\UH\Programming Assignments\DB\database_project\backend\MusicLibraryBackend\bin\Debug\net8.0\Azure.Storage.Common.dll
+C:\Users\lance\OneDrive\Desktop\College\UH\Programming Assignments\DB\database_project\backend\MusicLibraryBackend\bin\Debug\net8.0\System.ClientModel.dll
+C:\Users\lance\OneDrive\Desktop\College\UH\Programming Assignments\DB\database_project\backend\MusicLibraryBackend\bin\Debug\net8.0\System.IO.Hashing.dll

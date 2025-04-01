@@ -189,7 +189,7 @@ namespace MusicLibraryBackend.Services
                     // gets current date instead of having to input 
                     DateTime currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, 0);
 
-                    myCommand.AddWithValue("@UserID", userID);
+                    myCommand.Parameters.AddWithValue("@UserID", userID);
                     // parameters for the queries
                     myCommand.Parameters.AddWithValue("@Email", email);
                     myCommand.Parameters.AddWithValue("@Reason", reason);
