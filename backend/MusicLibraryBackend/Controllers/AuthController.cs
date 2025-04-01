@@ -8,6 +8,8 @@ using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
+using static System.Net.Mime.MediaTypeNames;
+using Microsoft.AspNetCore.Http;
 
 namespace MusicLibraryBackend.Controllers;
 
@@ -31,8 +33,10 @@ public class AuthController : ControllerBase
     {
         try
         {
+
+
             using (var connection = new SqlConnection(_connectionString))
-            {
+                {
                 await connection.OpenAsync();
 
                 // Check if username already exists
@@ -64,8 +68,8 @@ public class AuthController : ControllerBase
 
                 // Insert new user
                 var cmd = new SqlCommand(
-                    @"INSERT INTO Users (Username, UserPassword, Email, IsArtist) 
-                      VALUES (@Username, @Password, @Email, @IsArtist);
+                    @"INSERT INTO Users (Username, UserPassword, Email, IsArtist,ProfilePicture,Bio) 
+                      VALUES (@Username, @Password, @Email, @IsArtist,@ProfilePicture,@Bio);
                       SELECT CAST(SCOPE_IDENTITY() as int)",
                     connection);
 
@@ -73,14 +77,18 @@ public class AuthController : ControllerBase
                 cmd.Parameters.AddWithValue("@Password", hashedPassword);
                 cmd.Parameters.AddWithValue("@Email", request.Email);
                 cmd.Parameters.AddWithValue("@IsArtist", request.IsArtist);
+                cmd.Parameters.AddWithValue("@ProfilePicture", request.ProfilePicture);
+                cmd.Parameters.AddWithValue("@Bio", request.Bio);
 
                 var userId = (int)await cmd.ExecuteScalarAsync();
 
-                return Ok(new { 
+                return Ok(new
+                {
                     message = "User registered successfully",
                     userId = userId
                 });
             }
+        
         }
         catch (Exception ex)
         {
@@ -176,6 +184,10 @@ public class AuthController : ControllerBase
         public string Password { get; set; }
         public string Email { get; set; }
         public bool IsArtist { get; set; }
+
+        public string ProfilePicture { get; set; }
+
+        public string Bio { get; set; }
     }
 
     public class LoginRequest

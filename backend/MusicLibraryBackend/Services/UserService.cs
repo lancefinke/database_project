@@ -100,6 +100,37 @@ namespace MusicLibraryBackend.Services
             }
             return "Added Succesfully";
         }
+
+        public List<Follower> GetUserFollowers(int userId)
+        {
+            var followers = new List<Follower>();
+            string query = "SELECT * FROM FOLLOWERS,USERS WHERE FOLLOWERS.FollowerID=USERS.UserID AND FOLLOWERS.FollowedID=@UserId";
+
+            string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
+
+            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, myCon))
+                {
+                    cmd.Parameters.AddWithValue("@UserId", userId);
+                    myCon.Open();
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            followers.Add(new Follower                            
+                            {
+                                UserID = reader["UserID"] != DBNull.Value ? Convert.ToInt32(reader["UserID"]) : 0,
+                                Username = reader["Username"] != DBNull.Value ? reader["Username"].ToString() : null,
+                                FollowedID = reader["FollowedID"] != DBNull.Value ? Convert.ToInt32(reader["FollowedID"]) : 0,
+                            });
+                        }
+                    }
+                }
+            }
+            return followers;
+        }
     }
 }
 

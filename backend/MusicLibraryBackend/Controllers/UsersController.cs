@@ -34,6 +34,15 @@ namespace MusicLibraryBackend.Controllers
 
         }
 
+        [HttpGet]
+        [Route("GetFollowers")]
+        public JsonResult CreateUsers([FromQuery] int userID)
+        {
+            var result = _userService.GetUserFollowers(userID);
+            return new JsonResult(result);
+
+        }
+
 
         // WORK IN PROGRESS
         // POST api/CreateUsers

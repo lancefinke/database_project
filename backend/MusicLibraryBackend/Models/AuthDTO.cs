@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using System.Reflection.Metadata;
 
 namespace MusicLibraryBackend.Models;
 
@@ -32,6 +33,13 @@ public class RegisterRequest
     [Required]
     [DefaultValue(false)]
     public bool isArtist { get; set; }
+
+    [Required]
+    public string? ProfilePicture { get; set; }
+
+    public string? Bio { get; set; } = string.Empty;
+
+
 }
 
 public class AuthResponse
