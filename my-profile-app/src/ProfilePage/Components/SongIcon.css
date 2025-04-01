@@ -75,7 +75,7 @@
 
 .song-icon {
     width: 100%;
-    height: 70%;
+    height: 60%;
     overflow: hidden;
 }
 
@@ -87,7 +87,7 @@
 
 .content-container {
     height: 30%;
-    padding: 8px 16px 12px;
+    padding: 8px 16px 25px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -108,41 +108,43 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2px;
+    gap: 0px; /* Remove gap between text elements */
     width: 100%;
 }
 
 .song-title {
-    font-size: 1rem;
+    font-size: 0.7rem; /* Reduce font size */
     font-weight: bold;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    line-height: 1.2;
+    line-height: 1.1; /* Reduce line height */
     margin: 0;
     text-align: center;
     width: 100%;
 }
 
 .song-creator {
-    font-size: 0.7rem;
+    font-size: 0.5rem; /* Reduce font size */
     font-weight: 500;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    line-height: 1.2;
-    margin: 0;
+    line-height: 1.1; /* Reduce line height */
+    margin: 0 0 1px 0; /* Add a tiny bottom margin */
     text-align: center;
     width: 100%;
 }
 
 .song-duration {
-    font-size: 0.5rem;
+    font-size: 0.45rem; /* Reduce font size */
     opacity: 0.70;
-    line-height: 1.2;
+    line-height: 1;
     margin: 0;
     text-align: center;
+    margin-top: 2px;
 }
+
 
 .flag-icon-wrapper{
     background-color: #8E1616;
@@ -175,17 +177,17 @@
 .flags {
     display: flex;
     justify-content: center;
-    gap: 3px;
-    margin-top: 8px;
+    gap: 2px; /* Reduce gap */
+    margin-top: 2px; /* Reduce margin */
     flex-wrap: wrap;
 }
 
 .flag-item {
-    font-size: 0.8rem;
-    padding: 3px 5px;
+    font-size: 0.65rem; /* Reduce font size */
+    padding: 2px 4px; /* Reduce padding */
     background-color: #1D1616;
-    border-radius: 8px;
-    line-height: 1.2;
+    border-radius: 6px; /* Smaller border radius */
+    line-height: 1;
 }
 
 .controls-container {
@@ -213,7 +215,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 5px;
+    padding: 4px; /* Reduce padding */
     transition: all 0.2s ease;
     position: relative;
     z-index: 2;
@@ -251,7 +253,7 @@
 
 .center-song-wrapper .song-title {
     color: white;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
 }
 
 .center-song-wrapper .song-creator {
@@ -265,22 +267,58 @@
     background-color: #1D1616;
     border-radius: 8px;
     line-height: 1.2;
+    margin: 0 2px; /* Adjusted margin for better spacing */
 }
-.rating-value{
-    text-align:"center";
-}
-.rating-select{
-    z-index:10; 
-    width:25%;
-    margin:0px auto;
-    border:3px solid white;
-    background-color:black;
-    color:white;
-    border-radius:15px;
+.rating-value {
     text-align: center;
+    margin-top: 12px;
+    position: relative;
+    top: 5px;
+    color: white;
+    font-weight: bold;
+    font-size: 0.9rem;
 }
-.rating-select:focus{
-    width:15%;
+
+.rating-select {
+    z-index: 10; 
+    width: 65px; /* Reduced width from 80px */
+    border: 1px solid white;
+    background-color: black;
+    color: white;
+    border-radius: 15px;
+    text-align: center;
+    margin: 0;
+    height: 13px; /* Reduced height from 25px */
+    font-size: 7px; /* Add smaller font size */
+    padding: 0; /* Fix padding issue */
+}
+
+.rating-select:focus {
+    width: 65px; /* Keep consistent width */
+}
+
+/* Fix the average rating positioning */
+.avg-rating {
+    width: auto; /* Adjust width to content */
+    color: white;
+    font-size: 50%;
+    text-align: center;
+    margin: 0; /* Remove margin */
+    position: static; /* Remove positioning */
+    line-height: 25px; /* Match height to select */
+}
+/* Update the rating wrapper to properly position both elements */
+.rating-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 1px; /* Increased space below the image to move it down */
+    gap: 70px; /* Reduced gap between elements */
+    position: relative;
+    z-index: 5;
+    padding: 0;
 }
 
 /* Media queries */

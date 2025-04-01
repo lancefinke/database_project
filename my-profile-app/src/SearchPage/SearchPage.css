@@ -241,11 +241,11 @@
   display: flex;
   background-color: #343434;
   border-radius: 8px;
-  overflow: hidden;
+  overflow: hidden; /* This is important to keep the ::after contained */
   transition: transform 0.2s ease;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-  width: 400px; /* Same width as search results */
-  height: 120px; /* Match height to search result height */
+  width: 400px;
+  height: 120px;
   border: none;
   color: white;
   font-size: 24px;
@@ -253,9 +253,81 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  position: relative; /* This is critical for absolute positioning of ::after */
+  font-family: 'Roboto Mono', monospace;
+}
+.genre-button span {
+  position: relative;
+  z-index: 2;
+}
+.genre-button:nth-child(1) { /* Pop */
+  background-color: #FF4081; /* Pink */
 }
 
+.genre-button:nth-child(2) { /* Rock */
+  background-color: #3F51B5; /* Dark blue */
+}
+
+.genre-button:nth-child(3) { /* Hip-Hop */
+  background-color: #FFC107; /* Amber */
+}
+
+.genre-button:nth-child(4) { /* Jazz */
+  background-color: #9C27B0; /* Purple */
+}
+
+.genre-button:nth-child(5) { /* Classical */
+  background-color: #4CAF50; /* Green */
+}
+
+.genre-button:nth-child(6) { /* Country */
+  background-color: #FF9800; /* Orange */
+}
+
+.genre-button:nth-child(7) { /* Metal */
+  background-color: #607D8B; /* Blue grey */
+}
+
+.genre-button:nth-child(8) { /* R&B */
+  background-color: #E91E63; /* Pink red */
+}
+
+.genre-button:nth-child(9) { /* Afro */
+  background-color: #8BC34A; /* Light green */
+}
+
+.genre-button:nth-child(10) { /* House */
+  background-color: #00BCD4; /* Cyan */
+}
+
+.genre-button:nth-child(11) { /* Jazz (duplicate) */
+  background-color: #673AB7; /* Deep purple */
+}
+
+.genre-button:nth-child(12) { /* Indie */
+  background-color: #795548; /* Brown */
+}
 .genre-button:hover {
-  transform: scale(1.01);
-  background-color: #3a3a3a;
+  transform: scale(1.03);
+  filter: brightness(1.1);
+}
+.genre-button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(0,0,0,0.1) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.genre-button:active {
+  transform: scale(0.98); /* Slight push effect */
+  filter: brightness(0.95); /* Darken slightly when pressed */
+  transition: transform 0.1s ease, filter 0.1s ease;
+}
+.genre-button.active::after {
+  background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(0,0,0,0.1) 100%);
 }

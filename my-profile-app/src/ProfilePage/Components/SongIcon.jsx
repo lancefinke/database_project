@@ -66,15 +66,25 @@ const SongIcon = ({ name, creator, duration, flags, iconImage, isHomePage,isCent
       <div className="song-icon">
         <img src={iconImage} alt="Song Icon" />
       </div>
-      <div className="rating-wrapper" style={{display:"flex"}}>{location.pathname!=='/profile'&&
-      <select className="rating-select">
-        <option className="rating-value" value="">Rate</option>
-        <option className="rating-value" value="1">1</option>
-        <option className="rating-value" value="1">2</option>
-        <option className="rating-value" value="1">3</option>
-        <option className="rating-value" value="1">4</option>
-        <option className="rating-value" value="1">5</option>
-      </select>}<div className="avg-rating" style={{width:"50%",color:"white",fontSize:"70%", margin:"0px auto"}}>Average Rating: {rating}</div></div>
+      <div className="rating-wrapper">
+  {location.pathname !== '/profile' && (
+    <select 
+    className="rating-select"
+    value={rating}
+    onChange={(e) => setRating(e.target.value)}
+    onClick={(e) => e.stopPropagation()}
+    onFocus={(e) => e.stopPropagation()}
+    onMouseDown={(e) => e.stopPropagation()}
+  >
+    <option value="">Rate</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+  </select>
+  )}<div className="avg-rating">Average Rating: {rating}</div>
+</div>
       {location.pathname!=='/profile'&&<div className="flag-btn" title="Report Song" onClick={()=>{setShowReport(true)}}>
        <Flag className="flag-icon"/>
       </div>}

@@ -262,28 +262,28 @@
   /* Page-specific styles */
   /* Profile page - narrower width */
   .music-player-profile {
-    width: 60% !important;
+    width: 70.5% !important;
     left: 110px;
     right: 0;
   }
   
   /* Search page */
   .music-player-search {
-    width: 90% !important;
+    width: 92.6% !important;
     left: 110px;
     right: 0;
   }
   
   /* Following page */
   .music-player-following {
-    width: 90% !important;
+    width: 92.6% !important;
     left: 110px;
     right: 0;
   }
   
   /* Default width (if needed) */
   .music-player-default {
-    width: 80% !important;
+    width: 90% !important;
     left: 110px;
   }
   
