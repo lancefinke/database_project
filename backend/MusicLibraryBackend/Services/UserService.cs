@@ -167,6 +167,38 @@ namespace MusicLibraryBackend.Services
             }
             return user;
         }
+        public string BanUser(
+            int userID,
+            string userName,
+            string email,
+            string reason)
+        {
+            string query = "INSERT INTO dbo.BANNEDUSERS(UserID,UserEmail,DateBanned,Reason) VALUES(@UserID,@Email,@DateBanned,@Reason)";
+
+            // access the database
+            string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
+
+            // creates the connection
+            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+            {
+                myCon.Open();
+                // queries the database
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+
+                    // gets current date instead of having to input 
+                    DateTime currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, 0);
+
+                    myCommand.AddWithValue("@UserID", userID);
+                    // parameters for the queries
+                    myCommand.Parameters.AddWithValue("@Email", email);
+                    myCommand.Parameters.AddWithValue("@Reason", reason);
+                    myCommand.Parameters.AddWithValue("@DateBanned", currentDate);
+                    myCommand.ExecuteNonQuery();
+                }
+            }
+            return "User Banned";
+        }
     }
 }
 

@@ -82,7 +82,26 @@ namespace MusicLibraryBackend.Controllers
 
         }
 
-        
+        [HttpPost]
+        [Route("banUser")]
+        public JsonResult BanUser([FromForm] 
+          //int newUserID, WILL BE ADDED LATER
+          int userID,
+          string userName,
+          string email,
+          string reason)
+        {
+            var result = _userService.BanUser(
+            userID,
+            userName,
+            email,
+            reason
+            );
+            return new JsonResult(result);
+
+        }
+
+
 
         [HttpGet]
         [Route("GenerateUserReport")]
