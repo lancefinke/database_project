@@ -299,6 +299,30 @@ const SearchPage = () => {
             >
               <span>R&B</span>
             </button>
+            <button 
+              className={`genre-button ${activeGenre === 'Electronic' ? 'active' : ''}`}
+              onClick={() => handleGenreClick('Electronic')}
+            >
+              <span>Electronic</span>
+            </button>
+            <button 
+              className={`genre-button ${activeGenre === 'Blues' ? 'active' : ''}`}
+              onClick={() => handleGenreClick('Blues')}
+            >
+              <span>Blues</span>
+            </button>
+            <button 
+              className={`genre-button ${activeGenre === 'Alternative' ? 'active' : ''}`}
+              onClick={() => handleGenreClick('Alternative')}
+            >
+              <span>Alternative</span>
+            </button>
+            <button 
+              className={`genre-button ${activeGenre === 'Indie' ? 'active' : ''}`}
+              onClick={() => handleGenreClick('Indie')}
+            >
+              <span>Indie</span>
+            </button>
           </div>
         </div>
       )}
