@@ -104,43 +104,68 @@ const AppLayout = () => {
           <Route path="/home" element={<HomePage />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/profile" element={
-            <>
-              <UserPage />
-              <div className="song-list">
-              {role==='artist'&&<button className="add-btn" onClick={()=>{setAddVisibility(true)}}title="Add new Song" style={{padding:"15px",borderRadius:"50%",backgroundColor:"#8E1616",width:"70px",height:"70px",color:"white",border:"3px solid white",position:"relative",right:"30%",bottom:"1%"}}><CirclePlus /></button>}
-                {showAddSong &&<div className="add-window" style={{position:"fixed",zIndex:"10",backgroundColor:"#8E1616",height:"450px",width:"600px",borderRadius:'15px',border:"4px solid white"}}>
-                  <AddSong />
-                  <button className="close-add-song" onClick={()=>{setAddVisibility(false)}} 
-                  style={{position:"relative",
-                          width:"10%",
-                          left:"530px",
-                          bottom:"350px",
-                          color:"white",
-                          backgroundColor:"#101010",
-                          borderRadius:"10px",
-                          padding:"2px 4px",
-                          border: "4px solid white",
-                          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)"
-
-                  }}>CLOSE</button>
-                </div>}
-                <div className="dice-five-layout">
-                  {sampleSongs.map((song, index) => (
-                    <div key={index} className={`song-position-${index + 1}`}>
-                      <SongIcon
-                        name={song.name}
-                        creator={song.creator}
-                        duration={song.duration}
-                        flags={song.flags}
-                        iconImage="https://upload.wikimedia.org/wikipedia/commons/e/e7/Everest_North_Face_toward_Base_Camp_Tibet_Luca_Galuzzi_2006.jpg"
-                        isHomePage={false}
-                      />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </>
-          } />
+  <>
+    <UserPage />
+    <div className="song-list">
+      {role === 'artist' && (
+        <button 
+          className="add-btn" 
+          onClick={() => { setAddVisibility(true) }} 
+          title="Add new Song" 
+          style={{
+            padding: "15px",
+            borderRadius: "50%",
+            backgroundColor: "#8E1616",
+            width: "70px",
+            height: "70px",
+            color: "white",
+            border: "3px solid white",
+            position: "relative",
+            right: "30%",
+            bottom: "1%"
+          }}
+        >
+          <CirclePlus />
+        </button>
+      )}
+      {showAddSong && (
+        <div 
+          className="add-window" 
+          style={{
+            position: "fixed",
+            zIndex: "10",
+            backgroundColor: "#8E1616",
+            height: "450px",
+            width: "600px",
+            borderRadius: '15px',
+            border: "2px solid white"
+          }}
+        >
+          <AddSong />
+          <button 
+            className="close-add-song" 
+            onClick={() => { setAddVisibility(false) }} 
+            style={{
+              position: "relative",
+              width: "10%",
+              left: "530px",
+              bottom: "350px",
+              color: "white",
+              backgroundColor: "#101010",
+              borderRadius: "10px",
+              padding: "2px 4px",
+              border: "2px solid white",
+              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)"
+            }}
+          >
+            CLOSE
+          </button>
+        </div>
+      )}
+      {/* Removed the SongIcon rendering */}
+    </div>
+  </>
+} />
           <Route path="/user" element={<ProfilePage />} />
           <Route path="/following" element={<FollowingPage />} />
           <Route path='/login' element={<LoginPage />} />

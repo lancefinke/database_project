@@ -3,9 +3,9 @@ import AddAlbum from '../Components/AddAlbum';
 import './../ProfilePage.css';
 import './UserPage.css';
 import MusicPlayer from "./../Components/MusicPlayer";
-import SongIcon from "./../Components/SongIcon";
 import Editable from './../Components/Editable';
 import AddPlaylist from '../Components/AddPlaylist';
+import PlaylistSongList from '../Components/PlaylistSongList';
 import UserLink from '../../UserLink/UserLink';
 
 const UserPage = () => {
@@ -15,14 +15,60 @@ const UserPage = () => {
   const [showAPwindow, setShowAPwindow] = useState(false);
   const [showAddAlbum, setShowAddAlbum] = useState(false);
   const [role, setRole] = useState('artist');
+  const [selectedPlaylist, setSelectedPlaylist] = useState(null); // Track selected playlist
   
   // Playlist drag and drop state
   const [playlists, setPlaylists] = useState([
-    { id: 1, name: "Chill Vibes", image: "https://via.placeholder.com/100" },
-    { id: 2, name: "Workout Hits", image: "https://via.placeholder.com/100" },
-    { id: 3, name: "Late Night", image: "https://via.placeholder.com/100" },
-    { id: 4, name: "Vibe", image: "https://via.placeholder.com/100" },
-    { id: 5, name: "Rap", image: "https://via.placeholder.com/100" }
+    { 
+      id: 1, 
+      name: "Chill Vibes", 
+      image: "https://via.placeholder.com/100",
+      songs: [
+        { id: 1, title: "Summer Breeze", artist: "Haitham Yousif", genre: "RnB", duration: 213, image: "https://via.placeholder.com/40" },
+        { id: 2, title: "Ocean Waves", artist: "Haitham Yousif", genre: "Pop", duration: 184, image: "https://via.placeholder.com/40" },
+        { id: 3, title: "Sunset Melody", artist: "Haitham Yousif", genre: "RnB", duration: 245, image: "https://via.placeholder.com/40" }
+      ]
+    },
+    { 
+      id: 2, 
+      name: "Workout Hits", 
+      image: "https://via.placeholder.com/100",
+      songs: [
+        { id: 4, title: "Power Up", artist: "Haitham Yousif", genre: "HipHop", duration: 192, image: "https://via.placeholder.com/40" },
+        { id: 5, title: "Run Fast", artist: "Haitham Yousif", genre: "Rap", duration: 176, image: "https://via.placeholder.com/40" },
+        { id: 6, title: "Lift Heavy", artist: "Haitham Yousif", genre: "Rock", duration: 230, image: "https://via.placeholder.com/40" },
+        { id: 7, title: "Beast Mode", artist: "Haitham Yousif", genre: "HipHop", duration: 205, image: "https://via.placeholder.com/40" }
+      ]
+    },
+    { 
+      id: 3, 
+      name: "Late Night", 
+      image: "https://via.placeholder.com/100",
+      songs: [
+        { id: 8, title: "Midnight Blues", artist: "Haitham Yousif", genre: "RnB", duration: 267, image: "https://via.placeholder.com/40" },
+        { id: 9, title: "Starry Sky", artist: "Haitham Yousif", genre: "Pop", duration: 198, image: "https://via.placeholder.com/40" }
+      ]
+    },
+    { 
+      id: 4, 
+      name: "Vibe", 
+      image: "https://via.placeholder.com/100",
+      songs: [
+        { id: 10, title: "Good Mood", artist: "Haitham Yousif", genre: "Pop", duration: 210, image: "https://via.placeholder.com/40" },
+        { id: 11, title: "Feeling Good", artist: "Haitham Yousif", genre: "RnB", duration: 223, image: "https://via.placeholder.com/40" },
+        { id: 12, title: "Positive Energy", artist: "Haitham Yousif", genre: "Pop", duration: 195, image: "https://via.placeholder.com/40" }
+      ]
+    },
+    { 
+      id: 5, 
+      name: "Rap", 
+      image: "https://via.placeholder.com/100",
+      songs: [
+        { id: 13, title: "Flow Master", artist: "Haitham Yousif", genre: "Rap", duration: 187, image: "https://via.placeholder.com/40" },
+        { id: 14, title: "Street Life", artist: "Haitham Yousif", genre: "Rap", duration: 234, image: "https://via.placeholder.com/40" },
+        { id: 15, title: "Rhythm & Poetry", artist: "Haitham Yousif", genre: "Rap", duration: 256, image: "https://via.placeholder.com/40" }
+      ]
+    }
   ]);
   
   // Album drag and drop state
@@ -117,6 +163,12 @@ const UserPage = () => {
     setDraggedAlbum(null);
   };
 
+  // Handle playlist click
+  const handlePlaylistClick = (playlist) => {
+    console.log("Playlist clicked:", playlist.name);
+    setSelectedPlaylist(playlist);
+  };
+
   return (
     <div className="profile-container">
       <div className="profile-card">
@@ -190,11 +242,12 @@ const UserPage = () => {
           {playlists.map(playlist => (
             <div 
               key={playlist.id} 
-              className="playlist-button"
+              className={`playlist-button ${selectedPlaylist && selectedPlaylist.id === playlist.id ? 'selected' : ''}`}
               draggable
               onDragStart={(e) => handlePlaylistDragStart(e, playlist)}
               onDragOver={(e) => handlePlaylistDragOver(e, playlist)}
               onDragEnd={handlePlaylistDragEnd}
+              onClick={() => handlePlaylistClick(playlist)}
             >
               <div className="drag-handle">
                 <span className="drag-dots">⋮⋮</span>
@@ -258,6 +311,30 @@ const UserPage = () => {
 
         {/*<MusicPlayer song="Why Cant You" artist="Bryant Barnes" />*/}
       </div>
+      
+      {selectedPlaylist && (
+        <>
+          {/* Single working back button styled to look like the original */}
+          <div 
+            className="styled-back-button"
+            onClick={() => {
+              console.log("Back button clicked");
+              setSelectedPlaylist(null);
+            }}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
+            </svg>
+            <span>Back to playlists</span>
+          </div>
+          
+          <PlaylistSongList 
+            songs={selectedPlaylist.songs} 
+            playlistName={selectedPlaylist.name}
+            playlistImage={selectedPlaylist.image}
+          />
+        </>
+      )}
     </div>
   );
 };

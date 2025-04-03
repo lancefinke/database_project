@@ -371,3 +371,94 @@ body {
   70% { box-shadow: 0 0 0 10px rgba(142, 22, 22, 0); }
   100% { box-shadow: 0 0 0 0 rgba(142, 22, 22, 0); }
 }
+
+/* Add these styles to your existing UserPage.css file */
+
+/* Selected playlist styling */
+.playlist-button.selected {
+  background-color: #343434;
+  position: relative;
+  border-left: 4px solid #8E1616;
+}
+
+.playlist-button.selected::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 4px;
+  background-color: #8E1616;
+}
+
+/* Add a back button to return from song list to playlists */
+.back-button {
+  background-color: transparent;
+  border: none;
+  color: #b3b3b3;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 10px 0;
+  margin-bottom: 20px;
+}
+
+.back-button:hover {
+  color: white;
+}
+
+.back-button svg {
+  margin-right: 5px;
+}
+
+/* Adjust the layout when song list is showing */
+.profile-container.showing-songs {
+  display: grid;
+  grid-template-columns: 24rem 1fr;
+}
+
+/* Make the profile card fixed when scrolling through songs */
+@media (min-height: 800px) {
+  .profile-card {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+}
+
+/* Keeping the fixed position but adjusting placement for the styled-back-button */
+.styled-back-button {
+  position: fixed;
+  top: 20px;
+  left: 130px;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  color: #b3b3b3;
+  background-color: transparent;
+  border: none;
+  padding: 10px 0;
+  margin: 0;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: 'Roboto Mono', monospace;
+  transition: color 0.2s ease;
+}
+
+.styled-back-button:hover {
+  color: white;
+}
+
+.styled-back-button svg {
+  margin-right: 8px;
+}
+
+/* Hide the built-in back button in PlaylistSongList */
+.playlist-song-list-container .back-button {
+  display: none;
+}
+.playlist-header {
+  margin-top: 40px; /* Increase this value to add more space */
+}
