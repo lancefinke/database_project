@@ -150,5 +150,47 @@ namespace database.Controllers
             }
             return new JsonResult(table);
         }
+
+        [HttpGet]
+        [Route("GetReportedSongs")]
+        public JsonResult GetReportedSongs()
+        {
+            var songs = new List<Song>();
+
+            string query = "SELECT * FROM dbo.SONGS WHERE SONGS.IsReported=1";
+            DataTable table = new DataTable();
+            string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
+            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+            {
+                myCon.Open();
+                // queries the database
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                //parse the data received from the query
+                using (SqlDataReader myReader = myCommand.ExecuteReader())
+                {
+                    while (myReader.Read())
+                    {
+                        songs.Add(new Song
+                        {
+                            SongID = myReader["SongID"] != DBNull.Value ? Convert.ToInt32(myReader["SongID"]) : 0,
+                            GenreCode = myReader["GenreCode"] != DBNull.Value ? Convert.ToInt32(myReader["SongID"]) : 0,
+                            SongFileName = myReader["SongFileName"] != DBNull.Value ? myReader["SongFileName"].ToString() : null,
+                            Title = myReader["Title"] != DBNull.Value ? myReader["Title"].ToString() : null,
+                            ReleaseDate = myReader["ReleaseDate"] != DBNull.Value ? Convert.ToDateTime(myReader["ReleaseDate"]) : DateTime.MinValue,
+                            CoverArtFileName = myReader["CoverArtFileName"] != DBNull.Value ? myReader["CoverArtFileName"].ToString() : null,
+                            Duration = myReader["Duration"] != DBNull.Value ? Convert.ToInt32(myReader["Duration"]) : 0,
+                            AuthorID = myReader["AuthorID"] != DBNull.Value ? Convert.ToInt32(myReader["AuthorID"]) : 1,
+                            Rating = myReader["Rating"] != DBNull.Value ? Convert.ToDouble(myReader["Rating"]) : 1,
+                            AlbumID = myReader["AlbumID"] != DBNull.Value ? Convert.ToInt32(myReader["AlbumID"]) : 0,
+                            IsReported = myReader["IsReported"] != DBNull.Value ? Convert.ToBoolean(myReader["IsReported"]) : false
+
+
+                        });
+                    }
+                }
+
+            }
+            return new JsonResult(table);
+        }
     }
 }
