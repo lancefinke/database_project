@@ -32,9 +32,11 @@
   border-radius: 8px;
   margin-top: 20px;
   display: flex;
-  justify-content: flex-start; /* Change to flex-start to push content left */
+  flex-direction: column;
+  justify-content: flex-start;
   margin-left: 0; /* Override the auto margin */
   padding-left: 0; /* Reduce left padding */
+  transition: all 0.3s ease-in-out;
 }
 /* Search Form */
 .search-bar-wrapper {
@@ -115,9 +117,9 @@
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
   justify-content: center;
-  max-width: 1600px; /* Maintain a max width */
+  max-width: 1600px;
+  animation: fadeIn 0.5s ease-in-/* Update styling for the genre page container and transitions */
 }
-
 .search-result {
   display: flex;
   background-color: #343434;
@@ -217,16 +219,7 @@
  
 }
 
-.search-genres-title {
-  color: white;
-  margin-bottom: 16px;
-  font-family: 'Roboto Mono', monospace;
-  font-size: 1.5rem;
-  text-align: left; /* Explicitly set left alignment */
-  padding-left: 0; /* Remove any left padding */
-  margin-left: 0; /* Remove any left margin */
-  padding-right: 0; /* Fix the syntax error */
-}
+
 
 
 .search-genres-list {
@@ -330,4 +323,131 @@
 }
 .genre-button.active::after {
   background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(0,0,0,0.1) 100%);
+}
+
+.back-button {
+  margin-bottom: 20px;
+  padding: 10px 20px;
+  background-color: #343434;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-family: 'Roboto Mono', monospace;
+  display: flex;
+  align-items: center;
+  align-self: flex-start;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+.back-button:hover {
+  background-color: #444444;
+  transform: translateX(-5px);
+}
+.search-genres-title {
+  color: white;
+  margin-bottom: 24px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 1.8rem;
+  text-align: left;
+  padding-left: 0;
+  margin-left: 0;
+  padding-right: 0;
+  position: relative;
+}
+.search-genres-title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -8px;
+  width: 60px;
+  height: 3px;
+  background-color: #FF4081;
+  transition: width 0.3s ease;
+}
+.search-genres-title:hover::after {
+  width: 120px;
+}
+.genre-button.active {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  border: 2px solid #ffffff;
+  position: relative;
+  z-index: 2;
+}
+
+/* Add highlight effect to active genre button */
+.genre-button.active::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border-radius: 12px;
+  background: transparent;
+  z-index: -1;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+  }
+}
+
+
+.playlist-result {
+  display: flex;
+  align-items: center;
+  background-color: #343434;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s ease;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+  width: 400px; /* Keep the same width as your current search results */
+  height: 120px; /* Match height with your current dimensions */
+  margin-left: 0;
+  padding-left: 0; /* Reduce left padding */
+}
+
+.playlist-result .result-image-container {
+  width: 120px;
+  height: 120px;
+  flex-shrink: 0;
+}
+
+.playlist-result .result-content {
+  flex: 1;
+  display: flex;
+  justify-content: center; /* Center the title */
+  align-items: center; /* Center vertically */
+  padding: 16px;
+  height: 100%;
+}
+
+.playlist-result .result-info {
+  display: flex;
+  flex-direction: column;
+  text-align: center; /* Center text */
+  width: 100%;
+}
+
+.playlist-result .result-title {
+  font-size: 22px; /* Larger font since it's the only text */
+  font-weight: 600;
+  color: white;
+  margin: 0;
+}
+
+.search-result-button:hover .playlist-result {
+  transform: scale(1.01);
+  background-color: #3a3a3a;
 }
