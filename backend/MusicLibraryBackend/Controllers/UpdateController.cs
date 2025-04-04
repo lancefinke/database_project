@@ -45,5 +45,14 @@ namespace MusicLibraryBackend.Controllers
             return new JsonResult(result);
 
         }
+
+        [HttpPatch]
+        [Route("UpdateFile")]
+        public async Task<IActionResult> UpdateFile([FromQuery] string container, string Table, string Column, IFormFile NewFile, string TableKey, int ID, string filetype)
+        {
+            var result = await _updateService.UpdateFile(container, Table, Column, NewFile, TableKey, ID, filetype);
+            return result;
+
+        }
     }
 }
