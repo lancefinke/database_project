@@ -211,6 +211,36 @@ namespace database.Controllers
             }
             return new JsonResult(table);
         }
+
+        [HttpGet]
+        [Route("GetPlaylistSongs")]
+        public JsonResult GetPlaylistSongs(int PlaylistID)
+        {
+
+
+            string query = "SELECT SONGS.GenreCode,SONGS.SongFileName,SONGS.SongName,SONGS.ReleaseDate,SONGS.CoverArtFileName,SONGS.Duration,SONGS.Rating FROM PLAYLIST,SONGS, PLAYLISTSONGS WHERE PLAYLISTSONGS.SongID=SONGS.SongID AND PLAYLISTSONGS.PlaylistID=PLAYLIST.PlaylistID AND PLAYLISTSONGS.PlaylistID=@PlaylistID";
+            DataTable table = new DataTable();
+            string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
+            SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+            {
+
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCon.Open();
+                    myCommand.Parameters.AddWithValue("@PlaylistID", PlaylistID);
+                    using (SqlDataReader reader = myCommand.ExecuteReader())
+                    {
+                        table.Load(reader);
+                        reader.Close();
+                        myCon.Close();
+                    }
+
+                }
+            }
+            return new JsonResult(table);
+        }
+
         [HttpGet]
         [Route("GetReportedSongs")]
         public JsonResult GetReportedSongs()
