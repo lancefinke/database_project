@@ -36,5 +36,14 @@ namespace MusicLibraryBackend.Controllers
             return new JsonResult(result);
 
         }
+
+        [HttpPatch]
+        [Route("UpdateBoolean")]
+        public JsonResult UpdateBoolean([FromQuery] string Table, string Column, bool NewValue, string TableKey, int ID)
+        {
+            var result = _updateService.UpdateBoolean(Table, Column, NewValue, TableKey, ID);
+            return new JsonResult(result);
+
+        }
     }
 }

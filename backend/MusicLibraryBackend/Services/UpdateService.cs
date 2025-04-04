@@ -80,5 +80,37 @@ namespace MusicLibraryBackend.Services
 
         }
 
+        public JsonResult UpdateBoolean(string Table, string Column, bool NewValue, string TableKey, int ID)
+        {
+            try
+            {
+                // Validate table/column names (do this for security!)
+                string query = $"UPDATE {Table} SET {Column} = @NewValue WHERE {TableKey} = @ID";
+
+                string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
+
+                using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+                {
+                    using (SqlCommand cmd = new SqlCommand(query, myCon))
+                    {
+                        cmd.Parameters.AddWithValue("@NewValue", NewValue);
+                        cmd.Parameters.AddWithValue("@ID", ID);
+
+                        myCon.Open();
+                        int rowsAffected = cmd.ExecuteNonQuery(); // use this instead of reader
+                        myCon.Close();
+
+                        string message = $"Successfully Updated {rowsAffected} row(s)";
+                        return new JsonResult(message);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult($"Upload Failed: {ex.Message}");
+            }
+
+        }
+
     }
 }
