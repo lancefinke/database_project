@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AddAlbum from '../Components/AddAlbum';
 import './../ProfilePage.css';
 import './UserPage.css';
@@ -17,9 +17,79 @@ const UserPage = () => {
   const [showAPwindow, setShowAPwindow] = useState(false);
   const [showAddAlbum, setShowAddAlbum] = useState(false);
   const [role, setRole] = useState('artist');
-  const [selectedPlaylist, setSelectedPlaylist] = useState(null); // Track selected playlist
-  const [selectedAlbum, setSelectedAlbum] = useState(null); // Track selected album
-  const [selectedGenre, setSelectedGenre] = useState(null); // Track selected genre
+  const [selectedPlaylist, setSelectedPlaylist] = useState(null);
+  
+  // Create a default album ID for "My Songs"
+  const defaultAlbumId = 0;
+  
+  // Album drag and drop state - with "My Songs" as the first album
+  const [albums, setAlbums] = useState([
+    { 
+      id: defaultAlbumId, 
+      name: "My Songs",
+      image: "https://via.placeholder.com/100",
+      songs: [
+        { id: 1001, title: "My First Song", artist: "Haitham Yousif", genre: "Pop", duration: 180, image: "https://via.placeholder.com/40", album: "My Songs" },
+        { id: 1002, title: "Late Night Vibes", artist: "Haitham Yousif", genre: "RnB", duration: 210, image: "https://via.placeholder.com/40", album: "My Songs" },
+        { id: 1003, title: "Weekend Mood", artist: "Haitham Yousif", genre: "Pop", duration: 195, image: "https://via.placeholder.com/40", album: "My Songs" },
+        { id: 1004, title: "Studio Session", artist: "Haitham Yousif", genre: "Rap", duration: 225, image: "https://via.placeholder.com/40", album: "My Songs" },
+      ]
+    },
+    { 
+      id: 1, 
+      name: "First Album",
+      image: "https://via.placeholder.com/100",
+      songs: [
+        { id: 101, title: "Album Intro", artist: "Haitham Yousif", genre: "RnB", duration: 120, image: "https://via.placeholder.com/40", album: "First Album" },
+        { id: 102, title: "First Hit", artist: "Haitham Yousif", genre: "Pop", duration: 195, image: "https://via.placeholder.com/40", album: "First Album" },
+        { id: 103, title: "New Sound", artist: "Haitham Yousif", genre: "RnB", duration: 210, image: "https://via.placeholder.com/40", album: "First Album" }
+      ]
+    },
+    { 
+      id: 2, 
+      name: "Auston 2020 Tour",
+      image: "https://via.placeholder.com/100",
+      songs: [
+        { id: 104, title: "Tour Opening", artist: "Haitham Yousif", genre: "Pop", duration: 180, image: "https://via.placeholder.com/40", album: "Auston 2020 Tour" },
+        { id: 105, title: "Auston Nights", artist: "Haitham Yousif", genre: "RnB", duration: 225, image: "https://via.placeholder.com/40", album: "Auston 2020 Tour" },
+        { id: 106, title: "City Lights", artist: "Haitham Yousif", genre: "Pop", duration: 198, image: "https://via.placeholder.com/40", album: "Auston 2020 Tour" }
+      ]
+    },
+    { 
+      id: 3, 
+      name: "Break Up",
+      image: "https://via.placeholder.com/100",
+      songs: [
+        { id: 107, title: "The End", artist: "Haitham Yousif", genre: "RnB", duration: 240, image: "https://via.placeholder.com/40", album: "Break Up" },
+        { id: 108, title: "Missing You", artist: "Haitham Yousif", genre: "Pop", duration: 205, image: "https://via.placeholder.com/40", album: "Break Up" },
+        { id: 109, title: "Better Days", artist: "Haitham Yousif", genre: "RnB", duration: 215, image: "https://via.placeholder.com/40", album: "Break Up" }
+      ]
+    },
+    { 
+      id: 4, 
+      name: "Graduation",
+      image: "https://via.placeholder.com/100",
+      songs: [
+        { id: 110, title: "New Beginnings", artist: "Haitham Yousif", genre: "Pop", duration: 190, image: "https://via.placeholder.com/40", album: "Graduation" },
+        { id: 111, title: "The Future", artist: "Haitham Yousif", genre: "Rap", duration: 210, image: "https://via.placeholder.com/40", album: "Graduation" },
+        { id: 112, title: "Dreams", artist: "Haitham Yousif", genre: "Pop", duration: 185, image: "https://via.placeholder.com/40", album: "Graduation" }
+      ]
+    },
+    { 
+      id: 5, 
+      name: "Ballin'",
+      image: "https://via.placeholder.com/100",
+      songs: [
+        { id: 113, title: "Money Talk", artist: "Haitham Yousif", genre: "Rap", duration: 200, image: "https://via.placeholder.com/40", album: "Ballin'" },
+        { id: 114, title: "Hustle", artist: "Haitham Yousif", genre: "HipHop", duration: 230, image: "https://via.placeholder.com/40", album: "Ballin'" },
+        { id: 115, title: "Big Dreams", artist: "Haitham Yousif", genre: "Rap", duration: 195, image: "https://via.placeholder.com/40", album: "Ballin'" }
+      ]
+    }
+  ]);
+  
+  // Set the default album as initially selected
+  const [selectedAlbum, setSelectedAlbum] = useState(albums[0]);
+  const [selectedGenre, setSelectedGenre] = useState(null);
   
   // Playlist drag and drop state
   const [playlists, setPlaylists] = useState([
@@ -71,60 +141,6 @@ const UserPage = () => {
         { id: 13, title: "Flow Master", artist: "Haitham Yousif", genre: "Rap", duration: 187, image: "https://via.placeholder.com/40", album: "Street Flow" },
         { id: 14, title: "Street Life", artist: "Haitham Yousif", genre: "Rap", duration: 234, image: "https://via.placeholder.com/40", album: "Street Flow" },
         { id: 15, title: "Rhythm & Poetry", artist: "Haitham Yousif", genre: "Rap", duration: 256, image: "https://via.placeholder.com/40", album: "Street Flow" }
-      ]
-    }
-  ]);
-  
-  // Album drag and drop state
-  const [albums, setAlbums] = useState([
-    { 
-      id: 1, 
-      name: "First Album",
-      image: "https://via.placeholder.com/100",
-      songs: [
-        { id: 101, title: "Album Intro", artist: "Haitham Yousif", genre: "RnB", duration: 120, image: "https://via.placeholder.com/40", album: "First Album" },
-        { id: 102, title: "First Hit", artist: "Haitham Yousif", genre: "Pop", duration: 195, image: "https://via.placeholder.com/40", album: "First Album" },
-        { id: 103, title: "New Sound", artist: "Haitham Yousif", genre: "RnB", duration: 210, image: "https://via.placeholder.com/40", album: "First Album" }
-      ]
-    },
-    { 
-      id: 2, 
-      name: "Auston 2020 Tour",
-      image: "https://via.placeholder.com/100",
-      songs: [
-        { id: 104, title: "Tour Opening", artist: "Haitham Yousif", genre: "Pop", duration: 180, image: "https://via.placeholder.com/40", album: "Auston 2020 Tour" },
-        { id: 105, title: "Auston Nights", artist: "Haitham Yousif", genre: "RnB", duration: 225, image: "https://via.placeholder.com/40", album: "Auston 2020 Tour" },
-        { id: 106, title: "City Lights", artist: "Haitham Yousif", genre: "Pop", duration: 198, image: "https://via.placeholder.com/40", album: "Auston 2020 Tour" }
-      ]
-    },
-    { 
-      id: 3, 
-      name: "Break Up",
-      image: "https://via.placeholder.com/100",
-      songs: [
-        { id: 107, title: "The End", artist: "Haitham Yousif", genre: "RnB", duration: 240, image: "https://via.placeholder.com/40", album: "Break Up" },
-        { id: 108, title: "Missing You", artist: "Haitham Yousif", genre: "Pop", duration: 205, image: "https://via.placeholder.com/40", album: "Break Up" },
-        { id: 109, title: "Better Days", artist: "Haitham Yousif", genre: "RnB", duration: 215, image: "https://via.placeholder.com/40", album: "Break Up" }
-      ]
-    },
-    { 
-      id: 4, 
-      name: "Graduation",
-      image: "https://via.placeholder.com/100",
-      songs: [
-        { id: 110, title: "New Beginnings", artist: "Haitham Yousif", genre: "Pop", duration: 190, image: "https://via.placeholder.com/40", album: "Graduation" },
-        { id: 111, title: "The Future", artist: "Haitham Yousif", genre: "Rap", duration: 210, image: "https://via.placeholder.com/40", album: "Graduation" },
-        { id: 112, title: "Dreams", artist: "Haitham Yousif", genre: "Pop", duration: 185, image: "https://via.placeholder.com/40", album: "Graduation" }
-      ]
-    },
-    { 
-      id: 5, 
-      name: "Ballin'",
-      image: "https://via.placeholder.com/100",
-      songs: [
-        { id: 113, title: "Money Talk", artist: "Haitham Yousif", genre: "Rap", duration: 200, image: "https://via.placeholder.com/40", album: "Ballin'" },
-        { id: 114, title: "Hustle", artist: "Haitham Yousif", genre: "HipHop", duration: 230, image: "https://via.placeholder.com/40", album: "Ballin'" },
-        { id: 115, title: "Big Dreams", artist: "Haitham Yousif", genre: "Rap", duration: 195, image: "https://via.placeholder.com/40", album: "Ballin'" }
       ]
     }
   ]);
@@ -288,30 +304,46 @@ const UserPage = () => {
   const handlePlaylistClick = (playlist) => {
     console.log("Playlist clicked:", playlist.name);
     setSelectedPlaylist(playlist);
-    setSelectedAlbum(null); // Ensure album view is closed when opening playlist
-    setSelectedGenre(null); // Ensure genre view is closed when opening playlist
+    setSelectedAlbum(null); // Clear selected album when opening a playlist
+    setSelectedGenre(null); // Clear selected genre when opening a playlist
   };
-
-  // Handle album click
+  
   const handleAlbumClick = (album) => {
     console.log("Album clicked:", album.name);
     setSelectedAlbum(album);
-    setSelectedPlaylist(null); // Ensure playlist view is closed when opening album
-    setSelectedGenre(null); // Ensure genre view is closed when opening album
+    setSelectedPlaylist(null); // Clear selected playlist when opening an album
+    setSelectedGenre(null); // Clear selected genre when opening an album
   };
-
-  // Handle genre click
+  
   const handleGenreClick = (genreName) => {
     console.log("Genre clicked:", genreName);
     if (genreSongs[genreName]) {
       setSelectedGenre(genreSongs[genreName]);
-      setSelectedPlaylist(null); // Ensure playlist view is closed when opening genre
-      setSelectedAlbum(null); // Ensure album view is closed when opening genre
+      setSelectedPlaylist(null); // Clear selected playlist when opening a genre
+      setSelectedAlbum(null); // Clear selected album when opening a genre
     } else {
       console.log("No songs found for genre:", genreName);
     }
   };
-
+  const handleBackFromPlaylist = () => {
+    console.log("Back button clicked from playlist");
+    setSelectedPlaylist(null);
+    setSelectedAlbum(albums[0]); // Set back to "My Songs" album
+  };
+  
+  const handleBackFromGenre = () => {
+    console.log("Back button clicked from genre");
+    setSelectedGenre(null);
+    setSelectedAlbum(albums[0]); // Set back to "My Songs" album
+  };
+  
+  const handleBackFromAlbum = (album) => {
+    console.log("Back button clicked from album");
+    // Only go back to "My Songs" if it's not the "My Songs" album itself
+    if (album.id !== defaultAlbumId) {
+      setSelectedAlbum(albums[0]); // Set back to "My Songs" album
+    }
+  };
   return (
     <div className="profile-container">
       <div className="profile-card">
@@ -455,77 +487,68 @@ const UserPage = () => {
       
       {/* Playlist Songs Display */}
       {selectedPlaylist && (
-        <>
-          {/* Single working back button styled to look like the original */}
-          <div 
-            className="styled-back-button"
-            onClick={() => {
-              console.log("Back button clicked");
-              setSelectedPlaylist(null);
-            }}
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
-            </svg>
-            <span>Back to playlists</span>
-          </div>
-          
-          <PlaylistSongList 
-            songs={selectedPlaylist.songs} 
-            playlistName={selectedPlaylist.name}
-            playlistImage={selectedPlaylist.image}
-          />
-        </>
-      )}
+  <>
+    <div 
+      className="styled-back-button"
+      onClick={handleBackFromPlaylist}
+    >
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
+      </svg>
+      <span>Back to playlists</span>
+    </div>
+    
+    <PlaylistSongList 
+      songs={selectedPlaylist.songs} 
+      playlistName={selectedPlaylist.name}
+      playlistImage={selectedPlaylist.image}
+    />
+  </>
+)}
 
-      {selectedAlbum && (
-        <>
-          {/* Single working back button styled to look like the original */}
-          <div 
-            className="styled-back-button"
-            onClick={() => {
-              console.log("Back button clicked");
-              setSelectedAlbum(null);
-            }}
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
-            </svg>
-            <span>Back to albums</span>
-          </div>
-          
-          <AlbumSongList 
-            songs={selectedAlbum.songs} 
-            playlistName={selectedAlbum.name}
-            playlistImage={selectedAlbum.image}
-          />
-        </>
-      )}
+{selectedAlbum && (
+  <>
+    {/* Only show back button if not the "My Songs" album */}
+    {selectedAlbum.id !== defaultAlbumId && (
+      <div 
+        className="styled-back-button"
+        onClick={() => handleBackFromAlbum(selectedAlbum)}
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
+        </svg>
+        <span>Back to albums</span>
+      </div>
+    )}
+    
+    <AlbumSongList 
+      songs={selectedAlbum.songs} 
+      playlistName={selectedAlbum.name}
+      playlistImage={selectedAlbum.image}
+    />
+  </>
+)}
       
       {/* Genre Songs Display */}
       {selectedGenre && (
-        <>
-          {/* Single working back button styled to look like the original */}
-          <div 
-            className="styled-back-button"
-            onClick={() => {
-              console.log("Back button clicked");
-              setSelectedGenre(null);
-            }}
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
-            </svg>
-            <span>Back to genres</span>
-          </div>
-          
-          <GenreSongList 
-            songs={selectedGenre.songs} 
-            playlistName={selectedGenre.name}
-            playlistImage={selectedGenre.image}
-          />
-        </>
-      )}
+  <>
+    <div 
+      className="styled-back-button"
+      onClick={handleBackFromGenre}
+    >
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
+      </svg>
+      <span>Back to genres</span>
+    </div>
+    
+    <GenreSongList 
+      songs={selectedGenre.songs} 
+      playlistName={selectedGenre.name}
+      playlistImage={selectedGenre.image}
+    />
+  </>
+)}
     </div>
   );
 };
