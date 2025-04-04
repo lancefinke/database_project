@@ -27,5 +27,14 @@ namespace MusicLibraryBackend.Controllers
             return new JsonResult(result);
 
         }
+
+        [HttpPatch]
+        [Route("UpdateNumber")]
+        public JsonResult UpdateInt([FromQuery] string Table, string Column, int NewValue, string TableKey, int ID)
+        {
+            var result = _updateService.UpdateInt(Table, Column, NewValue, TableKey, ID);
+            return new JsonResult(result);
+
+        }
     }
 }
