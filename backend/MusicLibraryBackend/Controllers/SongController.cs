@@ -161,7 +161,6 @@ namespace database.Controllers
             string query = "SELECT SONGS.GenreCode,SONGS.SongFileName,SONGS.SongName,SONGS.ReleaseDate,SONGS.CoverArtFileName,SONGS.Duration,SONGS.Rating,USERS.Username,ALBUM.Title FROM SONGS,ALBUM,ALBUMSONGS,USERS WHERE ALBUMSONGS.SongID=SONGS.SongID AND USERS.UserID=SONGS.AuthorID AND (ALBUM.Title LIKE @SearchQuery OR SONGS.SongName LIKE @SearchQuery OR USERS.Username LIKE @SearchQuery)";
             DataTable table = new DataTable();
             string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
-            SqlDataReader myReader;
             using (SqlConnection myCon = new SqlConnection(sqlDatasource))
             {
                 
@@ -184,6 +183,34 @@ namespace database.Controllers
             return new JsonResult(table);
         }
 
+        [HttpGet]
+        [Route("GetAlbumSongs")]
+        public JsonResult GetAlbumSongs(int AlbumID)
+        {
+
+
+            string query = "SELECT SONGS.GenreCode,SONGS.SongFileName,SONGS.SongName,SONGS.ReleaseDate,SONGS.CoverArtFileName,SONGS.Duration,SONGS.Rating FROM ALBUM,SONGS,ALBUMSONGS WHERE ALBUMSONGS.SongID=SONGS.SongID AND ALBUMSONGS.AlbumID=ALBUM.AlbumID AND ALBUMSONGS.AlbumID=@AlbumID";
+            DataTable table = new DataTable();
+            string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
+            SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+            {
+
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCon.Open();
+                    myCommand.Parameters.AddWithValue("@AlbumID", AlbumID);
+                    using (SqlDataReader reader = myCommand.ExecuteReader())
+                    {
+                        table.Load(reader);
+                        reader.Close();
+                        myCon.Close();
+                    }
+
+                }
+            }
+            return new JsonResult(table);
+        }
         [HttpGet]
         [Route("GetReportedSongs")]
         public JsonResult GetReportedSongs()
