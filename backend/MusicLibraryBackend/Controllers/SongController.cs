@@ -158,7 +158,7 @@ namespace database.Controllers
         {
             
 
-            string query = "SELECT SONGS.GenreCode,SONGS.SongFileName,SONGS.SongName,SONGS.ReleaseDate,SONGS.CoverArtFileName,SONGS.Duration,SONGS.Rating,USERS.Username,ALBUM.Title FROM SONGS,ALBUM,ALBUMSONGS,USERS WHERE ALBUMSONGS.SongID=SONGS.SongID AND USERS.UserID=SONGS.AuthorID AND (ALBUM.Title LIKE @SearchQuery)";
+            string query = "SELECT SONGS.GenreCode,SONGS.SongFileName,SONGS.SongName,SONGS.ReleaseDate,SONGS.CoverArtFileName,SONGS.Duration,SONGS.Rating,USERS.Username,ALBUM.Title FROM SONGS,ALBUM,ALBUMSONGS,USERS WHERE ALBUMSONGS.SongID=SONGS.SongID AND USERS.UserID=SONGS.AuthorID AND (ALBUM.Title LIKE @SearchQuery OR SONGS.SongName LIKE @SearchQuery OR USERS.Username LIKE @SearchQuery)";
             DataTable table = new DataTable();
             string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
             SqlDataReader myReader;
