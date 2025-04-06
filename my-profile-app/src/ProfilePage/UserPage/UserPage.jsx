@@ -9,6 +9,7 @@ import PlaylistSongList from '../Components/PlaylistSongList';
 import UserLink from '../../UserLink/UserLink';
 import AlbumSongList from '../Components/AlbumSongList';
 import GenreSongList from '../Components/GenreSongList';
+import AddSongModal from './AddSongModal';
 
 const UserPage = ({ onSongSelect }) => {
   const [availableGenres, setAvailableGenres] = useState(['R&B', 'Rap', 'Country', 'HipHop', 'Pop', 'Rock','Electronic','Blues','Jazz','Classical','Alternative','Classical','Indie','Metal']);
@@ -18,9 +19,11 @@ const UserPage = ({ onSongSelect }) => {
   const [showAddAlbum, setShowAddAlbum] = useState(false);
   const [role, setRole] = useState('artist');
   const [selectedPlaylist, setSelectedPlaylist] = useState(null);
-  
+  const [isAddSongModalOpen, setIsAddSongModalOpen] = useState(false);
   // Create a default album ID for "My Songs"
   const defaultAlbumId = 0;
+  
+
   
   // Album drag and drop state - with "My Songs" as the first album
   const [albums, setAlbums] = useState([
@@ -337,6 +340,7 @@ const UserPage = ({ onSongSelect }) => {
     setSelectedAlbum(albums[0]); // Set back to "My Songs" album
   };
   
+ 
   const handleBackFromAlbum = (album) => {
     console.log("Back button clicked from album");
     // Only go back to "My Songs" if it's not the "My Songs" album itself
@@ -344,6 +348,38 @@ const UserPage = ({ onSongSelect }) => {
       setSelectedAlbum(albums[0]); // Set back to "My Songs" album
     }
   };
+
+  // Add the handleAddSong function here
+  const handleAddSong = (songData) => {
+    console.log('Adding new song:', songData);
+    // Here you would typically make an API call to save the song
+    // and then update your albums state with the new song
+    
+    // For now, let's add it to the selected album as an example
+    const newSong = {
+      id: Date.now(), // temporary ID
+      title: songData.name,
+      artist: "Haitham Yousif", // Hardcoded for example
+      genre: "Unknown", // You might want to add genre to your form
+      duration: 180, // Default duration
+      image: songData.image ? URL.createObjectURL(songData.image) : "https://via.placeholder.com/40",
+      album: "My Songs"
+    };
+    
+    // Update albums state with the new song
+    const updatedAlbums = albums.map(album => {
+      if (album.id === parseInt(songData.albumId)) {
+        return {
+          ...album,
+          songs: [...album.songs, newSong]
+        };
+      }
+      return album;
+    });
+    
+    setAlbums(updatedAlbums);
+  };
+
   return (
     <div className="profile-container">
       <div className="profile-card">
@@ -381,7 +417,7 @@ const UserPage = ({ onSongSelect }) => {
 
         {role === 'artist' && (
   <div className="add-song-container">
-    <button className="add-song-btn" onClick={() => {/* Add your song upload function here */}}>
+    <button className="add-song-btn" onClick={() => setIsAddSongModalOpen(true)}>
       <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
         <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path>
       </svg>
@@ -563,6 +599,12 @@ const UserPage = ({ onSongSelect }) => {
     />
   </>
 )}
+{/* Add Song Modal */}
+<AddSongModal 
+        isOpen={isAddSongModalOpen}
+        onClose={() => setIsAddSongModalOpen(false)}
+        onSubmit={handleAddSong}
+      />
     </div>
   );
 };
