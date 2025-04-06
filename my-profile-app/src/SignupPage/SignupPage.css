@@ -1,5 +1,5 @@
 .signup-container,.form-section{
-    border: 6px solid white;
+    border: 1px solid white;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     background-color: #8E1616;
     width:30%;
@@ -9,7 +9,7 @@
     flex-direction: column;
     justify-content: space-evenly;
     gap:25px 0px;
-    min-width: 400px;
+    min-width: 380px;
 }
 
 .bio{
@@ -110,7 +110,7 @@ h3,h2{
     margin: 10px auto;
 }
 .signup-btn:hover,.add-playlist-btn:hover,.add-song-btn:hover,.add-btn:hover,.submit-report-btn:hover{
-    transform: scale(1.1);
+   
     cursor: pointer;
 }
 

@@ -58,6 +58,7 @@ const HomePage = () => {
   const carouselRef = useRef(null);
   const itemsRef = useRef([]);
   const [centerIndex, setCenterIndex] = useState(1); // Start with second item centered
+  const [playingSongIndex, setPlayingSongIndex] = useState(null); // Track which song is playing
 
   // Handle layout adjustments when component mounts
   useEffect(() => {
@@ -74,7 +75,6 @@ const HomePage = () => {
       appContainer.style.overflow = 'hidden';
       appContainer.style.border = 'none';
     }
-
     
     // Hide music player specifically
     const musicPlayers = document.querySelectorAll('.music-player, [class*="music-player"], [class*="player-container"]');
@@ -174,13 +174,22 @@ const HomePage = () => {
     };
   }, [centerIndex]);
 
-  // Function to scroll to a specific item
+  // Function to scroll to a specific item and play it
   const scrollToItem = (index) => {
+    // First stop any currently playing song
+    setPlayingSongIndex(null);
+    
+    // Scroll to the desired item
     if (itemsRef.current[index]) {
       itemsRef.current[index].scrollIntoView({
         behavior: 'smooth',
         inline: 'center'
       });
+      
+      // After a short delay to allow scrolling to complete, start playing the new song
+      setTimeout(() => {
+        setPlayingSongIndex(index);
+      }, 300);
     }
   };
 
@@ -203,6 +212,8 @@ const HomePage = () => {
                 iconImage="https://upload.wikimedia.org/wikipedia/commons/e/e7/Everest_North_Face_toward_Base_Camp_Tibet_Luca_Galuzzi_2006.jpg"
                 isHomePage={true}
                 isCenter={index === centerIndex}
+                shouldPlay={playingSongIndex === index}
+                songSrc={song.songSrc}
               />
             </div>
           ))}
