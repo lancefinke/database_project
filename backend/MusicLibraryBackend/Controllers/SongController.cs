@@ -111,11 +111,11 @@ namespace database.Controllers
 
         [HttpGet]
         [Route("GetSongs")]
-        public JsonResult GetSongs()
+        public JsonResult GetSongs(int UserID)
         {
             var songs = new List<Song>();
 
-            string query = "select * from dbo.songs";
+            string query = "select * from dbo.songs,dbo.users WHERE users.UserID=@UserId AND songs.AuthorID=users.UserID";
             DataTable table = new DataTable();
             string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
             using (SqlConnection myCon = new SqlConnection(sqlDatasource))
@@ -124,26 +124,72 @@ namespace database.Controllers
                 // queries the database
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 //parse the data received from the query
-                using (SqlDataReader myReader = myCommand.ExecuteReader())
                 {
-                    while (myReader.Read())
+                    myCommand.Parameters.AddWithValue("@UserID", UserID);
+                    using (SqlDataReader reader = myCommand.ExecuteReader())
                     {
-                        songs.Add(new Song
-                        {
-                            SongID = myReader["SongID"] != DBNull.Value ? Convert.ToInt32(myReader["SongID"]) : 0,
-                            GenreCode = myReader["GenreCode"] != DBNull.Value ? Convert.ToInt32(myReader["SongID"]) : 0,
-                            SongFileName = myReader["SongFileName"] != DBNull.Value ? myReader["SongFileName"].ToString() : null,
-                            Title = myReader["Title"] != DBNull.Value ? myReader["Title"].ToString() : null,
-                            ReleaseDate = myReader["ReleaseDate"] != DBNull.Value ? Convert.ToDateTime(myReader["ReleaseDate"]) : DateTime.MinValue,
-                            CoverArtFileName = myReader["CoverArtFileName"] != DBNull.Value ? myReader["CoverArtFileName"].ToString() : null,
-                            Duration = myReader["Duration"] != DBNull.Value ? Convert.ToInt32(myReader["Duration"]) : 0,
-                            AuthorID = myReader["AuthorID"] != DBNull.Value ? Convert.ToInt32(myReader["AuthorID"]) : 1,
-                            Rating = myReader["Rating"] != DBNull.Value ? Convert.ToDouble(myReader["Rating"]) : 1,
-                            AlbumID = myReader["AlbumID"] != DBNull.Value ? Convert.ToInt32(myReader["AlbumID"]) : 0,
-                            IsReported = myReader["IsReported"] != DBNull.Value ? Convert.ToBoolean(myReader["IsReported"]) : false
+                        table.Load(reader);
+                        reader.Close();
+                        myCon.Close();
+                    }
+                }
+
+            }
+            return new JsonResult(table);
+        }
+
+        [HttpGet]
+        [Route("GetSongsByName")]
+        public JsonResult GetSongsByName(string Username)
+        {
+            var songs = new List<Song>();
+
+            string query = "select * from dbo.songs,dbo.users WHERE users.Username=@Username AND songs.AuthorID=users.UserID";
+            DataTable table = new DataTable();
+            string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
+            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+            {
+                myCon.Open();
+                // queries the database
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                //parse the data received from the query
+                {
+                    myCommand.Parameters.AddWithValue("@Username", Username);
+                    using (SqlDataReader reader = myCommand.ExecuteReader())
+                    {
+                        table.Load(reader);
+                        reader.Close();
+                        myCon.Close();
+                    }
+                }
+
+            }
+            return new JsonResult(table);
+        }
 
 
-                        });
+        [HttpGet]
+        [Route("GetSongsByGenre")]
+        public JsonResult GetSongsByGenre(int GenreCode)
+        {
+            var songs = new List<Song>();
+
+            string query = "SELECT * FROM SONGS,GENRECODING WHERE SONGS.GenreCode = GENRECODING.GenreCode AND SONGS.GenreCode=@GenreCode";
+            DataTable table = new DataTable();
+            string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
+            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+            {
+                myCon.Open();
+                // queries the database
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                //parse the data received from the query
+                {
+                    myCommand.Parameters.AddWithValue("@GenreCode", GenreCode );
+                    using (SqlDataReader reader = myCommand.ExecuteReader())
+                    {
+                        table.Load(reader);
+                        reader.Close();
+                        myCon.Close();
                     }
                 }
 
@@ -256,27 +302,11 @@ namespace database.Controllers
                 // queries the database
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 //parse the data received from the query
-                using (SqlDataReader myReader = myCommand.ExecuteReader())
+                using (SqlDataReader reader = myCommand.ExecuteReader())
                 {
-                    while (myReader.Read())
-                    {
-                        songs.Add(new Song
-                        {
-                            SongID = myReader["SongID"] != DBNull.Value ? Convert.ToInt32(myReader["SongID"]) : 0,
-                            GenreCode = myReader["GenreCode"] != DBNull.Value ? Convert.ToInt32(myReader["SongID"]) : 0,
-                            SongFileName = myReader["SongFileName"] != DBNull.Value ? myReader["SongFileName"].ToString() : null,
-                            Title = myReader["Title"] != DBNull.Value ? myReader["Title"].ToString() : null,
-                            ReleaseDate = myReader["ReleaseDate"] != DBNull.Value ? Convert.ToDateTime(myReader["ReleaseDate"]) : DateTime.MinValue,
-                            CoverArtFileName = myReader["CoverArtFileName"] != DBNull.Value ? myReader["CoverArtFileName"].ToString() : null,
-                            Duration = myReader["Duration"] != DBNull.Value ? Convert.ToInt32(myReader["Duration"]) : 0,
-                            AuthorID = myReader["AuthorID"] != DBNull.Value ? Convert.ToInt32(myReader["AuthorID"]) : 1,
-                            Rating = myReader["Rating"] != DBNull.Value ? Convert.ToDouble(myReader["Rating"]) : 1,
-                            AlbumID = myReader["AlbumID"] != DBNull.Value ? Convert.ToInt32(myReader["AlbumID"]) : 0,
-                            IsReported = myReader["IsReported"] != DBNull.Value ? Convert.ToBoolean(myReader["IsReported"]) : false
-
-
-                        });
-                    }
+                    table.Load(reader);
+                    reader.Close();
+                    myCon.Close();
                 }
 
             }

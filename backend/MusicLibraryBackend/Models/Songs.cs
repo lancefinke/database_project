@@ -20,7 +20,5 @@ public class Song
 
     public double Rating { get; set; }
 
-    public int AlbumID { get; set; }
-
     public bool IsReported { get; set; }
 }

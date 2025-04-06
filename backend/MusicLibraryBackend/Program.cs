@@ -77,6 +77,7 @@ builder.Services.AddControllers()
 builder.Services.AddScoped<UserService>();
 //update service
 builder.Services.AddScoped<UpdateService>();
+builder.Services.AddScoped<DeleteService>();
 
 var app = builder.Build();
 
