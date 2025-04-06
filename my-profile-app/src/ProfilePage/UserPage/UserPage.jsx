@@ -10,7 +10,7 @@ import UserLink from '../../UserLink/UserLink';
 import AlbumSongList from '../Components/AlbumSongList';
 import GenreSongList from '../Components/GenreSongList';
 
-const UserPage = () => {
+const UserPage = ({ onSongSelect }) => {
   const [availableGenres, setAvailableGenres] = useState(['R&B', 'Rap', 'Country', 'HipHop', 'Pop', 'Rock','Electronic','Blues','Jazz','Classical','Alternative','Classical','Indie','Metal']);
   const [userGenres, setUserGenres] = useState([]);
   const [showGenreOptions, setGenreOptions] = useState(false);
@@ -378,6 +378,17 @@ const UserPage = () => {
           <button className="music-genre" onClick={() => handleGenreClick('Rock')}>Rock</button>
         </div>
        
+
+        {role === 'artist' && (
+  <div className="add-song-container">
+    <button className="add-song-btn" onClick={() => {/* Add your song upload function here */}}>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path>
+      </svg>
+      <span>Add Song</span>
+    </button>
+  </div>
+)}
         <div className="playlist-container">
           <div className="section-header">
             <h1>Playlists</h1>
@@ -502,6 +513,7 @@ const UserPage = () => {
       songs={selectedPlaylist.songs} 
       playlistName={selectedPlaylist.name}
       playlistImage={selectedPlaylist.image}
+      onSongSelect={onSongSelect}
     />
   </>
 )}
@@ -525,6 +537,7 @@ const UserPage = () => {
       songs={selectedAlbum.songs} 
       playlistName={selectedAlbum.name}
       playlistImage={selectedAlbum.image}
+      onSongSelect={onSongSelect}
     />
   </>
 )}
@@ -546,6 +559,7 @@ const UserPage = () => {
       songs={selectedGenre.songs} 
       playlistName={selectedGenre.name}
       playlistImage={selectedGenre.image}
+      onSongSelect={onSongSelect}
     />
   </>
 )}

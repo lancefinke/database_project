@@ -1,12 +1,21 @@
 import React from 'react';
 import './PlaylistSongList.css';
 
-const GenreSongList = ({ songs, playlistName, playlistImage }) => {
+const AlbumSongList = ({ songs, playlistName, playlistImage, onSongSelect }) => {
   // Function to format seconds to mm:ss
   const formatDuration = (seconds) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
     return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+  };
+
+  const handleSongClick = (song) => {
+    if (onSongSelect) {
+      onSongSelect({
+        name: song.title,
+        creator: song.artist
+      });
+    }
   };
 
   return (
@@ -21,7 +30,7 @@ const GenreSongList = ({ songs, playlistName, playlistImage }) => {
             className="playlist-header-image" 
           />
           <div className="playlist-header-text">
-            <h2 className="playlist-title">{playlistName || "Playlist"}</h2>
+            <h2 className="playlist-title">{playlistName || "Album"}</h2>
             <p className="song-count">{songs.length} songs</p>
           </div>
         </div>
@@ -31,16 +40,19 @@ const GenreSongList = ({ songs, playlistName, playlistImage }) => {
         <div className="songs-table-header">
           <div className="song-number-header">#</div>
           <div className="song-info-header">TITLE</div>
-          <div className="song-genre-header">ALBUM</div>
+          <div className="song-genre-header">GENRE</div>
           <div className="song-duration-header">DURATION</div>
         </div>
         
         <div className="songs-list">
           {songs.map((song, index) => (
-            <div key={song.id} className="song-row">
+            <div key={song.id} className="song-row" onClick={() => handleSongClick(song)}>
               <div className="song-number-cell">
                 <span className="song-number">{index + 1}</span>
-                <button className="play-button">
+                <button className="play-button" onClick={(e) => {
+                  e.stopPropagation();
+                  handleSongClick(song);
+                }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
                     <path d="M8 5v14l11-7z"></path>
                   </svg>
@@ -57,7 +69,7 @@ const GenreSongList = ({ songs, playlistName, playlistImage }) => {
                   <div className="song-artist">{song.artist}</div>
                 </div>
               </div>
-              <div className="song-album">{song.album}</div>
+              <div className="song-genre">{song.genre}</div>
               <div className="song-duration">{formatDuration(song.duration)}</div>
             </div>
           ))}
@@ -67,4 +79,4 @@ const GenreSongList = ({ songs, playlistName, playlistImage }) => {
   );
 };
 
-export default GenreSongList;
+export default AlbumSongList;

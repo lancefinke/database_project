@@ -50,7 +50,7 @@
   }
   
   .music-name {
-    font-size: 1.1rem;
+    font-size: .9rem;
     font-weight: bold;
     margin: 0 0 4px 0;
     color: white;
@@ -61,7 +61,7 @@
   }
   
   .music-artist {
-    font-size: 0.9rem;
+    font-size: 0.7rem;
     color: rgba(255, 255, 255, 0.8);
     margin: 0;
     white-space: nowrap;
@@ -283,7 +283,7 @@
   
   /* Default width (if needed) */
   .music-player-default {
-    width: 90% !important;
+    width: 70.5% !important;
     left: 110px;
   }
   

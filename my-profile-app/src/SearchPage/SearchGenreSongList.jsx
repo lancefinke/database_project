@@ -1,7 +1,9 @@
 import React from 'react';
-import './PlaylistSongList.css';
+import '../ProfilePage/Components/PlaylistSongList.css';
+import './SearchPage.css';
+import { Clock, MoreVertical, Play, ArrowLeft } from 'lucide-react';
 
-const PlaylistSongList = ({ songs, playlistName, playlistImage, onSongSelect }) => {
+const SearchGenreSongList = ({ songs, playlistName, onBackClick, onSongSelect }) => {
   // Function to format seconds to mm:ss
   const formatDuration = (seconds) => {
     const minutes = Math.floor(seconds / 60);
@@ -9,6 +11,7 @@ const PlaylistSongList = ({ songs, playlistName, playlistImage, onSongSelect }) 
     return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
   };
 
+  // Handle song click to play music
   const handleSongClick = (song) => {
     if (onSongSelect) {
       onSongSelect({
@@ -19,18 +22,19 @@ const PlaylistSongList = ({ songs, playlistName, playlistImage, onSongSelect }) 
   };
 
   return (
-    <div className="playlist-song-list-container">
-      {/* No back button here - it's now in the parent component */}
+    <div className="search-genre-list-container">
+      <button 
+        className="back-button" 
+        onClick={onBackClick}
+      >
+        ← Back to Genres
+      </button>
       
       <div className="playlist-header">
         <div className="playlist-info">
-          <img 
-            src={playlistImage || "https://via.placeholder.com/100"} 
-            alt={playlistName} 
-            className="playlist-header-image" 
-          />
+          {/* No image in genre view */}
           <div className="playlist-header-text">
-            <h2 className="playlist-title">{playlistName || "Playlist"}</h2>
+            <h2 className="playlist-title">{playlistName || "Genre"} Songs</h2>
             <p className="song-count">{songs.length} songs</p>
           </div>
         </div>
@@ -40,19 +44,26 @@ const PlaylistSongList = ({ songs, playlistName, playlistImage, onSongSelect }) 
         <div className="songs-table-header">
           <div className="song-number-header">#</div>
           <div className="song-info-header">TITLE</div>
-          <div className="song-genre-header">GENRE</div>
+          <div className="song-genre-header">ALBUM</div>
           <div className="song-duration-header">DURATION</div>
         </div>
         
         <div className="songs-list">
           {songs.map((song, index) => (
-            <div key={song.id} className="song-row" onClick={() => handleSongClick(song)}>
+            <div 
+              key={song.id} 
+              className="song-row"
+              onClick={() => handleSongClick(song)}
+            >
               <div className="song-number-cell">
                 <span className="song-number">{index + 1}</span>
-                <button className="play-button" onClick={(e) => {
-                  e.stopPropagation();
-                  handleSongClick(song);
-                }}>
+                <button 
+                  className="play-button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleSongClick(song);
+                  }}
+                >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
                     <path d="M8 5v14l11-7z"></path>
                   </svg>
@@ -69,7 +80,7 @@ const PlaylistSongList = ({ songs, playlistName, playlistImage, onSongSelect }) 
                   <div className="song-artist">{song.artist}</div>
                 </div>
               </div>
-              <div className="song-genre">{song.genre}</div>
+              <div className="song-album">{song.album}</div>
               <div className="song-duration">{formatDuration(song.duration)}</div>
             </div>
           ))}
@@ -79,4 +90,4 @@ const PlaylistSongList = ({ songs, playlistName, playlistImage, onSongSelect }) 
   );
 };
 
-export default PlaylistSongList;
+export default SearchGenreSongList;

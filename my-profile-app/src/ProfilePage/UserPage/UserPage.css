@@ -240,6 +240,8 @@ body {
   align-items: center;
   gap: .5rem;
   margin-top: 0.5rem;
+  padding-left: 1.02rem; 
+  
 }
 
 .playlist-button {
@@ -417,7 +419,11 @@ body {
   display: grid;
   grid-template-columns: 24rem 1fr;
 }
-
+hr {
+  max-width: 21rem;
+  margin-left: auto;
+  margin-right: auto;
+}
 /* Make the profile card fixed when scrolling through songs */
 @media (min-height: 800px) {
   .profile-card {
@@ -461,4 +467,144 @@ body {
 }
 .playlist-header {
   margin-top: 40px; /* Increase this value to add more space */
+}
+
+@media (min-height: 800px) {
+  .profile-card {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden; /* Add this to hide horizontal scrollbar */
+  }
+}
+
+/* Fix for horizontal scrollbar */
+.playlist-container {
+  max-width: 21rem; /* Slightly narrower than the container */
+}
+
+/* Fix for horizontal rule */
+hr {
+  max-width: 21rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Make sure content doesn't overflow */
+.profile-container {
+  overflow-x: hidden;
+}
+
+/* Prevent text overflow in playlist names */
+.playlist-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 14rem; /* Adjust based on your layout */
+}
+
+/* Add these styles to fix scrolling performance in song lists */
+
+/* Improve scrolling performance for all song lists */
+.playlist-song-list-container {
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  will-change: transform; /* Hardware acceleration hint */
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  z-index: 10; /* Higher z-index to ensure it captures scroll events */
+  padding-bottom: 60px; /* Extra space at the bottom */
+  scrollbar-gutter: stable; /* Prevents layout shift when scrollbar appears */
+  contain: content; /* Improves scrolling performance */
+
+}
+
+/* Apply smoother scrolling to the songs list */
+.songs-list {
+  overflow-y: auto;
+  height: calc(100vh - 160px); /* Adjust based on header height */
+  will-change: transform;
+  scrollbar-width: thin; /* For Firefox */
+}
+
+/* Ensure the songs table has proper sizing */
+.songs-table {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* Custom scrollbar styling for better performance */
+.playlist-song-list-container::-webkit-scrollbar,
+.songs-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.playlist-song-list-container::-webkit-scrollbar-track,
+.songs-list::-webkit-scrollbar-track {
+  background: #101010;
+  border-radius: 10px;
+}
+
+.playlist-song-list-container::-webkit-scrollbar-thumb,
+.songs-list::-webkit-scrollbar-thumb {
+  background: #343434;
+  border-radius: 10px;
+}
+
+.playlist-song-list-container::-webkit-scrollbar-thumb:hover,
+.songs-list::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Ensure content doesn't cause horizontal overflow */
+.profile-container {
+  overflow-x: hidden;
+}
+
+/* Add Song Button styling */
+.add-song-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 1.5rem 0;
+}
+
+.add-song-btn {
+  font-family: 'Roboto Mono', monospace;
+  background-color: #8E1616;
+  color: white;
+  padding: 0.5rem 1.5rem;
+  border-radius: 50px;
+  cursor: pointer;
+  border: 1.5px solid white;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.add-song-btn:hover {
+  background-color: #343434;
+  transform: scale(1.02);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.add-song-btn svg {
+  margin-right: 4px;
+}
+
+.add-song-btn:active {
+  transform: scale(0.96);
+  background-color: #721212;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  transition: all 0.1s ease;
+}
+
+/* Style for when the song add form is visible (if applicable) */
+.add-song-btn.active {
+  background-color: #343434;
+  transform: scale(1.02);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
