@@ -5,12 +5,15 @@ import UserLink from "../../UserLink/UserLink";
 import "./SongIcon.css";
 import ReactHowler from 'react-howler'
 
-const FlagIcon = ()=>{
-  return(
-    <div className="flag-icon-wrapper">
-      <label style={{margin:"0 auto",textAlign:"center"}}>REASON FOR REPORT</label>
-      <div className="editable-div-flag" style={{border:"3px solid white",borderRadius:"10px",width:"85%",margin:"auto",height:"60%"}}>
-      <Editable 
+// Updated FlagIcon to match MusicPlayer style
+const FlagIcon = ({ onClose }) => {
+  return (
+    <>
+      <div className="song-icon-overlay"></div>
+      <div className="song-icon-flag-wrapper">
+        <label style={{margin:"0 auto", textAlign:"center"}}>REASON FOR REPORT</label>
+        <div className="editable-div-flag" style={{border:"3px solid white", borderRadius:"10px", width:"85%", margin:"auto", height:"60%"}}>
+          <Editable 
             className="flag-editable"
             title="Enter the reason for the report"
             value=""
@@ -18,14 +21,20 @@ const FlagIcon = ()=>{
             div_height="90%"
             backgroundColor="#8E1616"
             textColor="white"
-            placeholder="Example: Racism, hate speech promotes violence, etc."/>
+            placeholder="Example: Racism, hate speech promotes violence, etc."
+          />
         </div>
-        <button className="submit-report-btn">REPORT SONG</button>
-    </div>
+        <div className="report-buttons">
+          <button className="submit-report-btn">REPORT SONG</button>
+          <button onClick={onClose} className="cancel-report-btn">CANCEL</button>
+        </div>
+      </div>
+    </>
   );
-}
+};
 
 const SongIcon = ({ name, creator, duration, flags, iconImage, isHomePage, isCenter, likes, shouldPlay = false, songSrc, onPlayStatusChange }) => {
+  // Keep existing state
   const [isPlaying, setIsPlaying] = useState(false);
   const [showReport, setShowReport] = useState(false);
   const [rating, setRating] = useState(0.0);
@@ -56,6 +65,10 @@ const SongIcon = ({ name, creator, duration, flags, iconImage, isHomePage, isCen
     setIsPlaying(!isPlaying);
   }
 
+  const handleCloseReport = () => {
+    setShowReport(false);
+  }
+
   // Generate the appropriate class name based on props
   let wrapperClass = "song-post-wrapper";
   
@@ -72,9 +85,9 @@ const SongIcon = ({ name, creator, duration, flags, iconImage, isHomePage, isCen
 
   return (
     <>
-      <ReactHowler   src='https://blobcontainer2005.blob.core.windows.net/songfilecontainer/uploads/008ad32f-f270-4462-8577-bf4a9c3db258.mp3' playing={isPlaying}/>
-      {showReport && <FlagIcon />}
-      {showReport && <button onClick={()=>{setShowReport(false)}} className="submit-report-btn" style={{margin:"15px 0px 0px 0px",width:"100px",position:"relative",zIndex:"10",bottom:"200px",backgroundColor:"#1D1616"}}>CLOSE</button>}
+      <ReactHowler src='https://blobcontainer2005.blob.core.windows.net/songfilecontainer/uploads/008ad32f-f270-4462-8577-bf4a9c3db258.mp3' playing={isPlaying}/>
+      {showReport && <FlagIcon onClose={handleCloseReport} />}
+      
       <button 
         className={wrapperClass}
         onClick={togglePlay}
@@ -140,8 +153,6 @@ const SongIcon = ({ name, creator, duration, flags, iconImage, isHomePage, isCen
             >
               <Plus size={20} color="white" />
             </div>
-            
-            {/* Share button removed as requested */}
           </div>
         </div>
       </button>

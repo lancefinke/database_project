@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import './FollowingPage.css'; // Make sure to create this file with the CSS we provided earlier
+import { useNavigate } from 'react-router-dom';
+import './FollowingPage.css';
 
 const FollowingPage = () => {
+  const navigate = useNavigate();
+  
   // Sample data for followed users
   const followedUsers = [
     { id: 1, name: "John Smith", profileImage: "https://via.placeholder.com/150" },
@@ -11,6 +14,11 @@ const FollowingPage = () => {
     { id: 5, name: "Alex Rodriguez", profileImage: "https://via.placeholder.com/150" }
   ];
 
+  // Function to handle navigation to user profile
+  const handleNavigateToProfile = (userId) => {
+    navigate(`/profile/${userId}`);
+  };
+
   return (
     <div className="following-container">
       <h1 className="following-title">Following</h1>
@@ -18,7 +26,11 @@ const FollowingPage = () => {
       
       <div className="following-list-container">
         {followedUsers.map(user => (
-          <button key={user.id} className="playlist-button">
+          <button 
+            key={user.id} 
+            className="playlist-button"
+            onClick={() => handleNavigateToProfile(user.id)}
+          >
             <img
               src={user.profileImage}
               alt={`${user.name}'s profile`}

@@ -72,17 +72,18 @@ const AppLayout = () => {
       {location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/reset' && <SideBar />}
       <main className="main-content">
       <Routes>
-  <Route path="/home" element={<HomePage />} />
-  <Route path="/search" element={<SearchPage onSongSelect={handleSongSelect} />} />
-  <Route path="/profile" element={<UserPage onSongSelect={handleSongSelect} />} />
-  <Route path="/user" element={<ProfilePage onSongSelect={handleSongSelect} />} />
-  <Route path="/following" element={<FollowingPage onSongSelect={handleSongSelect} />} />
-  <Route path='/login' element={<LoginPage />} />
-  <Route path='/signup' element={<SignupPage />} />
-  <Route path='/reset' element={<ResetPassword />} />
-  <Route path='/admin' element={role === 'admin' ? <Admin /> : <h1 style={{fontSize:"200%"}}>You are not authorized to access this page. <Link style={{color:"white",fontSize:"100%"}} to="/home">Click Here to Return</Link></h1>}></Route>
-  <Route path="/" element={<HomePage />} />
-</Routes>
+        <Route path="/home" element={<HomePage />} />
+        <Route path="/search" element={<SearchPage onSongSelect={handleSongSelect} />} />
+        <Route path="/profile" element={<UserPage onSongSelect={handleSongSelect} />} />
+        <Route path="/user" element={<ProfilePage onSongSelect={handleSongSelect} />} />
+        <Route path="/profile/:userId" element={<ProfilePage onSongSelect={handleSongSelect} />} />
+        <Route path="/following" element={<FollowingPage onSongSelect={handleSongSelect} />} />
+        <Route path='/login' element={<LoginPage />} />
+        <Route path='/signup' element={<SignupPage />} />
+        <Route path='/reset' element={<ResetPassword />} />
+        <Route path='/admin' element={role === 'admin' ? <Admin /> : <h1 style={{fontSize:"200%"}}>You are not authorized to access this page. <Link style={{color:"white",fontSize:"100%"}} to="/home">Click Here to Return</Link></h1>}></Route>
+        <Route path="/" element={<HomePage />} />
+      </Routes>
       </main>
       
       {showMusicPlayer && selectedSong && (

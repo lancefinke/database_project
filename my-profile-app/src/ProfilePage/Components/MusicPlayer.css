@@ -403,5 +403,93 @@
   .tooltip-container:hover .control-button.added {
     transform: scale(1.1);
   }
- 
+  .control-button.reporting {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+  }
   
+  /* Report form styling */
+  .music-player-flag-wrapper {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    height: 350px;
+    background-color: #8E1616;
+    border-radius: 15px;
+    padding: 20px;
+    z-index: 1200;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    border: 1px solid white;
+    font-family: 'Roboto Mono', monospace;
+    color: white;
+  }
+  
+  .music-player-flag-wrapper label {
+    font-weight: bold;
+    font-size: 1rem;
+    margin: 10px auto;
+    text-align: center;
+  }
+  
+  .editable-div-flag {
+    min-height: 180px;
+    margin-bottom: 15px;
+  }
+  
+  .submit-report-btn, .cancel-report-btn {
+    background-color: #101010;
+    color: white;
+    padding: 5px 10px;
+    border: 1px solid white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    margin: 5px auto;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 50%;
+    text-align: center;
+  }
+  
+  .submit-report-btn:hover, .cancel-report-btn:hover {
+    background-color: #343434;
+  }
+  
+  .cancel-report-btn {
+    background-color: #333;
+    margin-top: 10px;
+  }
+  
+  /* Ensure the report button has the right style when active */
+  .control-button.reporting {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+  }
+  
+  /* Ensure the report button stays consistent when hovering */
+  .tooltip-container:hover .control-button.reporting {
+    transform: scale(1.1);
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 600px) {
+    .music-player-flag-wrapper {
+      width: 90%;
+      height: auto;
+      min-height: 300px;
+    }
+  }
+  .music-player-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1100;
+  }
