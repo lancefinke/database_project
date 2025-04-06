@@ -5,18 +5,11 @@ import "./SearchPage.css";
 import UserLink from "../UserLink/UserLink";
 import SearchGenreSongList from './SearchGenreSongList';
 
-const SearchResult = ({title, author, duration, image, rating, showPlayButton = false, onSongSelect}) => {
-  const [playing, setPlaying] = useState(false);
-
-  const togglePlaying = (e) => {
-    e.stopPropagation(); // Prevent button click from triggering parent click
-    setPlaying(!playing);
-  }
-
-  const handleResultClick = () => {
-    console.log(`Clicked on song: ${title}`);
-    if (onSongSelect) {
-      onSongSelect({
+const SearchResult = ({title, author, image, onPlaylistSelect}) => {
+  const handlePlaylistClick = () => {
+    console.log(`Clicked on playlist: ${title}`);
+    if (onPlaylistSelect) {
+      onPlaylistSelect({
         name: title,
         creator: author
       });
@@ -24,52 +17,19 @@ const SearchResult = ({title, author, duration, image, rating, showPlayButton = 
   }
 
   return(
-      <button className="search-result-button" onClick={handleResultClick}>
-          <div className="search-result">
-              <div className="result-image-container">
-                  <img src={image} alt="Album cover" className="result-img"/>
-              </div>
-              <div className="result-content">
-                  <div className="result-info">
-                      <p className="result-title">{title}</p>
-                      {author && <p className="result-author"><UserLink text={author} userName={author}/></p>}
-                      {duration && (
-                          <div className="result-details">
-                              <span className="result-duration">{duration}</span>
-                              
-                          </div>
-                      )}
-                  </div>
-                  {showPlayButton && (
-                      <div className="result-controls" onClick={togglePlaying}>
-                          {playing ? <Pause size={32}/> : <Play size={32}/>}
-                      </div>
-                  )}
-              </div>
+    <button className="search-result-button" onClick={handlePlaylistClick}>
+      <div className="search-result playlist-result">
+        <div className="result-image-container">
+          <img src={image} alt="Playlist cover" className="result-img"/>
+        </div>
+        <div className="result-content">
+          <div className="result-info">
+            <p className="result-title">{title}</p>
+            {author && <p className="result-author"><UserLink text={author} userName={author}/></p>}
           </div>
-      </button>
-  );
-}
-
-const PlaylistResult = ({title, image}) => {
-  const handlePlaylistClick = () => {
-      console.log(`Clicked on playlist: ${title}`);
-      // Add your click logic here - navigate to playlist page
-  }
-
-  return(
-      <button className="search-result-button" onClick={handlePlaylistClick}>
-          <div className="search-result playlist-result">
-              <div className="result-image-container">
-                  <img src={image} alt="Playlist cover" className="result-img"/>
-              </div>
-              <div className="result-content">
-                  <div className="result-info">
-                      <p className="result-title">{title}</p>
-                  </div>
-              </div>
-          </div>
-      </button>
+        </div>
+      </div>
+    </button>
   );
 }
 
@@ -79,6 +39,8 @@ const SearchPage = ({ onSongSelect }) => {
   const [activeGenre, setActiveGenre] = useState(null);
   const [showGenreSongs, setShowGenreSongs] = useState(false);
   const [genreSongs, setGenreSongs] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
+  const [showSearchResults, setShowSearchResults] = useState(false);
   const navigate = useNavigate();
 
   const API_URL = "https://coogmusic-g2dcaubsabgtfycy.centralus-01.azurewebsites.net/";
@@ -87,31 +49,98 @@ const SearchPage = ({ onSongSelect }) => {
     e.preventDefault();
     console.log("Searching for:", searchQuery);
 
+    if (!searchQuery.trim()) {
+      // Clear search results if query is empty
+      setShowSearchResults(false);
+      return;
+    }
+
+    // In a real app, you would fetch from API
+    // For now, we'll use sample data
+    const sampleSongResults = [
+      { 
+        id: 101, 
+        title: searchQuery + " - Hit Song", 
+        artist: "Top Artist", 
+        genre: "Pop", 
+        duration: 180, 
+        image: "https://i.scdn.co/image/ab67616d0000b273ba5db46f4b838ef6027e6f96",
+        album: "Best Album"
+      },
+      { 
+        id: 102, 
+        title: "The " + searchQuery + " Experience", 
+        artist: "Famous Band", 
+        genre: "Rock", 
+        duration: 240, 
+        image: "https://i.scdn.co/image/ab67616d0000b273ba5db46f4b838ef6027e6f96",
+        album: "Greatest Hits"
+      },
+      { 
+        id: 103, 
+        title: "Finding " + searchQuery, 
+        artist: "New Artist", 
+        genre: "Hip-Hop", 
+        duration: 195, 
+        image: "https://i.scdn.co/image/ab67616d0000b273ba5db46f4b838ef6027e6f96",
+        album: "Fresh Beats"
+      },
+      { 
+        id: 104, 
+        title: searchQuery + " Dreams", 
+        artist: "Dream Team", 
+        genre: "R&B", 
+        duration: 210, 
+        image: "https://i.scdn.co/image/ab67616d0000b273ba5db46f4b838ef6027e6f96",
+        album: "Smooth Collection"
+      },
+      { 
+        id: 105, 
+        title: "Late Night " + searchQuery, 
+        artist: "Night Owl", 
+        genre: "Jazz", 
+        duration: 300, 
+        image: "https://i.scdn.co/image/ab67616d0000b273ba5db46f4b838ef6027e6f96",
+        album: "Midnight Sessions"
+      }
+    ];
+
+    // Set search results and show them
+    setSearchResults(sampleSongResults);
+    setShowSearchResults(true);
+
+    // Attempt API call as well
     fetch(API_URL + "api/Users/GetSearch?search=" + searchQuery, {
       method: "GET",
     })
     .then(res => res.json())
     .then((result) => {
       setUsers(result);
+      // If we had a real API for songs, we would set the search results here
     })
     .catch(error => console.error("Error fetching data:", error));
+  };
+
+  // Clear search results and return to main view
+  const handleBackFromSearch = () => {
+    setShowSearchResults(false);
   };
 
   // Sample genre songs data - in a real app, you'd fetch this from an API
   const genreSongsData = {
     'pop': [
-      { id: 1, title: "Pop Hit 1", author: "Pop Artist 1", duration: "3:15", rating: 4.7, image: "https://www.billboard.com/wp-content/uploads/media/tyler-the-creator-igor-album-art-2019-billboard-embed.jpg?w=600", album: "Pop Classics Vol. 1" },
-      { id: 2, title: "Pop Hit 2", author: "Pop Artist 2", duration: "2:58", rating: 4.3, image: "https://www.billboard.com/wp-content/uploads/media/tyler-the-creator-igor-album-art-2019-billboard-embed.jpg?w=600", album: "Summer Vibes" },
-      { id: 3, title: "Pop Hit 3", author: "Pop Artist 3", duration: "3:42", rating: 4.1, image: "https://www.billboard.com/wp-content/uploads/media/tyler-the-creator-igor-album-art-2019-billboard-embed.jpg?w=600", album: "Greatest Hits" },
+      { id: 1, title: "Pop Hit 1", artist: "Pop Artist 1", duration: "3:15", rating: 4.7, image: "https://www.billboard.com/wp-content/uploads/media/tyler-the-creator-igor-album-art-2019-billboard-embed.jpg?w=600", album: "Pop Classics Vol. 1" },
+      { id: 2, title: "Pop Hit 2", artist: "Pop Artist 2", duration: "2:58", rating: 4.3, image: "https://www.billboard.com/wp-content/uploads/media/tyler-the-creator-igor-album-art-2019-billboard-embed.jpg?w=600", album: "Summer Vibes" },
+      { id: 3, title: "Pop Hit 3", artist: "Pop Artist 3", duration: "3:42", rating: 4.1, image: "https://www.billboard.com/wp-content/uploads/media/tyler-the-creator-igor-album-art-2019-billboard-embed.jpg?w=600", album: "Greatest Hits" },
     ],
     'rock': [
-      { id: 1, title: "Rock Anthem 1", author: "Rock Band 1", duration: "4:30", rating: 4.8, image: "https://www.billboard.com/wp-content/uploads/media/tyler-the-creator-igor-album-art-2019-billboard-embed.jpg?w=600", album: "Rock Revival" },
-      { id: 2, title: "Rock Anthem 2", author: "Rock Band 2", duration: "5:12", rating: 4.6, image: "https://www.billboard.com/wp-content/uploads/media/tyler-the-creator-igor-album-art-2019-billboard-embed.jpg?w=600", album: "Garage Sessions" },
+      { id: 1, title: "Rock Anthem 1", artist: "Rock Band 1", duration: "4:30", rating: 4.8, image: "https://www.billboard.com/wp-content/uploads/media/tyler-the-creator-igor-album-art-2019-billboard-embed.jpg?w=600", album: "Rock Revival" },
+      { id: 2, title: "Rock Anthem 2", artist: "Rock Band 2", duration: "5:12", rating: 4.6, image: "https://www.billboard.com/wp-content/uploads/media/tyler-the-creator-igor-album-art-2019-billboard-embed.jpg?w=600", album: "Garage Sessions" },
     ],
     'hip-hop': [
-      { id: 1, title: "Hip Hop Track 1", author: "Rapper 1", duration: "3:45", rating: 4.9, image: "https://www.billboard.com/wp-content/uploads/media/tyler-the-creator-igor-album-art-2019-billboard-embed.jpg?w=600", album: "Street Chronicles" },
-      { id: 2, title: "Hip Hop Track 2", author: "Rapper 2", duration: "3:22", rating: 4.5, image: "https://www.billboard.com/wp-content/uploads/media/tyler-the-creator-igor-album-art-2019-billboard-embed.jpg?w=600", album: "Beats & Rhymes" },
-      { id: 3, title: "Hip Hop Track 3", author: "Rapper 3", duration: "3:50", rating: 4.7, image: "https://www.billboard.com/wp-content/uploads/media/tyler-the-creator-igor-album-art-2019-billboard-embed.jpg?w=600", album: "Platinum Hits" },
+      { id: 1, title: "Hip Hop Track 1", artist: "Rapper 1", duration: "3:45", rating: 4.9, image: "https://www.billboard.com/wp-content/uploads/media/tyler-the-creator-igor-album-art-2019-billboard-embed.jpg?w=600", album: "Street Chronicles" },
+      { id: 2, title: "Hip Hop Track 2", artist: "Rapper 2", duration: "3:22", rating: 4.5, image: "https://www.billboard.com/wp-content/uploads/media/tyler-the-creator-igor-album-art-2019-billboard-embed.jpg?w=600", album: "Beats & Rhymes" },
+      { id: 3, title: "Hip Hop Track 3", artist: "Rapper 3", duration: "3:50", rating: 4.7, image: "https://www.billboard.com/wp-content/uploads/media/tyler-the-creator-igor-album-art-2019-billboard-embed.jpg?w=600", album: "Platinum Hits" },
     ],
     // Add more genres as needed
   };
@@ -133,7 +162,7 @@ const SearchPage = ({ onSongSelect }) => {
   };
 
   // Sample data for search results
-  const sampleSearchResults = [
+  const samplePlaylistResults = [
     { 
       id: 1, 
       title: "Chill Vibes", 
@@ -176,17 +205,32 @@ const SearchPage = ({ onSongSelect }) => {
         <div className="search-bar-wrapper">
           <div className="search-icon"><span className="icon-align">🔎︎</span></div>
           <input 
-            className="search-bar" 
-            type="search" 
-            value={searchQuery} 
-            placeholder="Search for Artist, song, or Album" 
-            onChange={(e) => {setSearchQuery(e.target.value)}}>
-          </input>
+  className="search-bar" 
+  type="search" 
+  value={searchQuery} 
+  placeholder="Search for Artist, song, or Album" 
+  onChange={(e) => {setSearchQuery(e.target.value)}}
+  onKeyDown={(e) => {
+    if (e.key === 'Enter') {
+      handleSearch(e);
+    }
+  }}
+/>
           <button className="search-button" onClick={handleSearch}>Search</button>
         </div>
       </div>
       
-      {showGenreSongs ? (
+      {showSearchResults ? (
+        // SHOW SEARCH RESULTS VIEW
+        <div className="searchpage-container">
+          <SearchGenreSongList 
+            songs={searchResults}
+            playlistName={`Search Results for "${searchQuery}"`}
+            onBackClick={handleBackFromSearch}
+            onSongSelect={onSongSelect}
+          />
+        </div>
+      ) : showGenreSongs ? (
         // SHOW GENRE SONGS LIST VIEW
         <div className="searchpage-container">
           <SearchGenreSongList 
@@ -196,7 +240,8 @@ const SearchPage = ({ onSongSelect }) => {
               artist: song.author,
               duration: convertTimeToSeconds(song.duration),
               image: song.image,
-              album: song.album
+              album: song.album,
+              genre: song.genre || "Unknown"
             }))}
             playlistName={activeGenre}
             onBackClick={() => {
@@ -210,12 +255,13 @@ const SearchPage = ({ onSongSelect }) => {
         // SHOW NORMAL SEARCH RESULTS AND GENRE GRID
         <>
           <div className="searchpage-container">
+            <h2 className="search-results-title">Featured Playlists</h2>
             <div className="search-results">
               {users.length > 0 ? (
                 users.map(user => <h1 key={user.Username} style={{color:"white"}}>{user.Username}</h1>)
               ) : (
                 // Display sample results when no users are returned from API
-                sampleSearchResults.map(result => (
+                samplePlaylistResults.map(result => (
                   <SearchResult 
                     key={result.id}
                     title={result.title}

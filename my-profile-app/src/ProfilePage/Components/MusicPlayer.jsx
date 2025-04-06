@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import { Play, Pause, SkipForward, SkipBack, Shuffle, Plus, Check, Volume2, Flag } from "lucide-react";
 import Editable from "./Editable"; // Import Editable component
+import PlaylistSelectionPopup from "./PlaylistSelectionPopup"; // Import the new component
 import "./MusicPlayer.css";
 
 // Create FlagReport component for the reporting feature
@@ -38,7 +39,25 @@ const MusicPlayer = ({ song, artist, pageName, playlist }) => {
   const [nextPressed, setNextPressed] = useState(false);
   const [isReporting, setIsReporting] = useState(false);
   const [showReportForm, setShowReportForm] = useState(false);
+  const [showPlaylistSelection, setShowPlaylistSelection] = useState(false);
   const audioRef = useRef(null);
+  
+  // Mock data for available playlists - in a real app, this would be passed as props or fetched
+  const [availablePlaylists, setAvailablePlaylists] = useState([
+    { id: 1, name: "Chill Vibes", image: "https://via.placeholder.com/100" },
+    { id: 2, name: "Workout Hits", image: "https://via.placeholder.com/100" },
+    { id: 3, name: "Late Night", image: "https://via.placeholder.com/100" },
+    { id: 4, name: "Vibe", image: "https://via.placeholder.com/100" },
+    { id: 5, name: "Rap", image: "https://via.placeholder.com/100" }
+  ]);
+  
+  // Current song information - would typically come from props
+  const currentSong = {
+    id: 101,
+    title: song || "Song Title",
+    artist: artist || "Artist Name",
+    image: "https://via.placeholder.com/150"
+  };
 
   // Apply page-specific class if provided - this will handle the styling
   const playerClassName = `music-player-container ${pageName ? `music-player-${pageName}` : ""}`;
@@ -59,8 +78,24 @@ const MusicPlayer = ({ song, artist, pageName, playlist }) => {
   };
 
   const toggleAddToPlaylist = () => {
-    // Toggle the songAdded state without a timeout
-    setSongAdded(!songAdded);
+    // Show the playlist selection popup instead of just toggling the state
+    setShowPlaylistSelection(true);
+  };
+  
+  const handleAddToPlaylist = (playlistId) => {
+    console.log(`Adding song to playlist with ID: ${playlistId}`);
+    // Here you would typically make an API call to add the song to the selected playlist
+    
+    // For now, just update the UI to show the song was added
+    setSongAdded(true);
+    setShowPlaylistSelection(false);
+    
+    // Optional: Show a success message or toast notification
+    
+    // Reset the "added" state after a few seconds for visual feedback
+    setTimeout(() => {
+      setSongAdded(false);
+    }, 3000);
   };
 
   const toggleReporting = () => {
@@ -87,19 +122,28 @@ const MusicPlayer = ({ song, artist, pageName, playlist }) => {
     <>
       {showReportForm && <FlagReport onClose={handleCloseReport} />}
       
+      {showPlaylistSelection && (
+        <PlaylistSelectionPopup 
+          onClose={() => setShowPlaylistSelection(false)}
+          playlists={availablePlaylists}
+          onAddToPlaylist={handleAddToPlaylist}
+          currentSong={currentSong}
+        />
+      )}
+      
       <div className={playerClassName}>
         {/* Left section with image and song info */}
         <div className="music-info-section">
-          <img 
-            src="https://via.placeholder.com/150" 
-            alt="music cover" 
-            className="music-image" 
-          />
-          <div className="music-info">
-            <p className="music-name">{song || "Song Title"}</p>
-            <p className="music-artist">{artist || "Artist Name"}</p>
-          </div>
-        </div>
+  <img 
+    src="https://via.placeholder.com/150" 
+    alt="music cover" 
+    className="music-image" 
+  />
+  <div className="music-info">
+    <p className="music-name" title={song || "Song Title"}>{song || "Song Title"}</p>
+    <p className="music-artist" title={artist || "Artist Name"}>{artist || "Artist Name"}</p>
+  </div>
+</div>
 
         <div className="player-main-section">
           <div className="progress-container">
@@ -134,10 +178,13 @@ const MusicPlayer = ({ song, artist, pageName, playlist }) => {
                 onClick={togglePlayPause} 
                 className="control-button play-button"
               >
-                {isPlaying ? 
-                  <Pause size={24} color="white" /> : 
-                  <Play size={24} color="white" />
-                }
+                {isPlaying ? (
+                  <Pause size={24} color="white" />
+                ) : (
+                  <div className="play-icon-wrapper">
+                    <Play size={24} color="white" fill="white" />
+                  </div>
+                )}
               </button>
               <span className="tooltip">{isPlaying ? "Pause" : "Play"}</span>
             </div>
@@ -178,22 +225,26 @@ const MusicPlayer = ({ song, artist, pageName, playlist }) => {
         </div>
 
         <div className="volume-control tooltip-container">
-          <Volume2 size={20} color="white" />
-          <input
-            type="range"
-            min="0"
-            max="1"
-            step="0.01"
-            value={volume}
-            onChange={(e) => {
-              setVolume(e.target.value);
-              if (audioRef.current) {
-                audioRef.current.volume = e.target.value;
-              }
-            }}
-          />
-          <span className="tooltip tooltip-volume">Volume</span>
-        </div>
+  <Volume2 size={20} color="white" />
+  <input
+    type="range"
+    min="0"
+    max="1"
+    step="0.01"
+    value={volume}
+    style={{ "--volume-percentage": `${volume * 100}%` }}
+    onChange={(e) => {
+      const newVolume = e.target.value;
+      setVolume(newVolume);
+      if (audioRef.current) {
+        audioRef.current.volume = newVolume;
+      }
+      // Update the CSS custom property for the fill effect
+      e.target.style.setProperty('--volume-percentage', `${newVolume * 100}%`);
+    }}
+  />
+  <span className="tooltip tooltip-volume">Volume</span>
+</div>
 
         <audio ref={audioRef} />
       </div>

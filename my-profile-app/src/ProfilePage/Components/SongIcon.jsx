@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Play, Plus, Forward, Pause, Flag, Heart } from "lucide-react";
+import { Play, Plus, Forward, Pause, Flag, Heart, Check } from "lucide-react";
 import Editable from "./Editable";
 import UserLink from "../../UserLink/UserLink";
 import "./SongIcon.css";
@@ -40,6 +40,7 @@ const SongIcon = ({ name, creator, duration, flags, iconImage, isHomePage, isCen
   const [rating, setRating] = useState(0.0);
   const [liked, setLiked] = useState(false);
   const [userControlled, setUserControlled] = useState(false);
+  const [addedToPlaylist, setAddedToPlaylist] = useState(false); // New state for tracking plus/check toggle
 
   // Effect to handle external play control, but only if not user-controlled
   useEffect(() => {
@@ -67,6 +68,19 @@ const SongIcon = ({ name, creator, duration, flags, iconImage, isHomePage, isCen
 
   const handleCloseReport = () => {
     setShowReport(false);
+  }
+
+  // New function to toggle the add to playlist state
+  const toggleAddToPlaylist = (e) => {
+    e.stopPropagation(); // Prevent triggering the parent button click
+    setAddedToPlaylist(!addedToPlaylist);
+    
+    // Log the action (in a real app, you would make an API call here)
+    if (!addedToPlaylist) {
+      console.log(`Adding song "${name}" to playlist`);
+    } else {
+      console.log(`Removing song "${name}" from playlist`);
+    }
   }
 
   // Generate the appropriate class name based on props
@@ -144,14 +158,16 @@ const SongIcon = ({ name, creator, duration, flags, iconImage, isHomePage, isCen
               )}
             </div>
             
-            <div className="control-icon" 
-              title="Add to Playlist"
-              onClick={(e) => {
-                e.stopPropagation(); // Prevent triggering the parent button click
-                // Add your playlist logic here
-              }}
+            <div 
+              className={`control-icon ${addedToPlaylist ? "added" : ""}`}
+              title={addedToPlaylist ? "Remove from Playlist" : "Add to Playlist"}
+              onClick={toggleAddToPlaylist}
             >
-              <Plus size={20} color="white" />
+              {addedToPlaylist ? (
+                <Check size={20} color="white" />
+              ) : (
+                <Plus size={20} color="white" />
+              )}
             </div>
           </div>
         </div>
