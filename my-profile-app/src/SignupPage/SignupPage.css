@@ -110,7 +110,7 @@ h3,h2{
     margin: 10px auto;
 }
 .signup-btn:hover,.add-playlist-btn:hover,.add-song-btn:hover,.add-btn:hover,.submit-report-btn:hover{
-    transform: scale(1.1);
+   
     cursor: pointer;
 }
 
