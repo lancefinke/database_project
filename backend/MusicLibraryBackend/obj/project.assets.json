@@ -462,6 +462,19 @@
           }
         }
       },
+      "NReco.VideoInfo/1.2.1": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/NReco.VideoInfo.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/NReco.VideoInfo.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Swashbuckle.AspNetCore/6.5.0": {
         "type": "package",
         "dependencies": {
@@ -1740,6 +1753,21 @@
         "newtonsoft.json.bson.nuspec"
       ]
     },
+    "NReco.VideoInfo/1.2.1": {
+      "sha512": "q2u8BVNkvJauYLo0+6zWZayDbode6fRZIkclfYoMZNTW6/DuoCatKuUM8hGoluE/p3NbrHSXUPxeb+vOgEXX8Q==",
+      "type": "package",
+      "path": "nreco.videoinfo/1.2.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net45/NReco.VideoInfo.dll",
+        "lib/net45/NReco.VideoInfo.xml",
+        "lib/netstandard2.0/NReco.VideoInfo.dll",
+        "lib/netstandard2.0/NReco.VideoInfo.xml",
+        "nreco.videoinfo.1.2.1.nupkg.sha512",
+        "nreco.videoinfo.nuspec"
+      ]
+    },
     "Swashbuckle.AspNetCore/6.5.0": {
       "sha512": "FK05XokgjgwlCI6wCT+D4/abtQkL1X1/B9Oas6uIwHFmYrIO9WUD5aLC9IzMs9GnHfUXOtXZ2S43gN1mhs5+aA==",
       "type": "package",
@@ -2454,6 +2482,7 @@
       "Microsoft.AspNetCore.Mvc.NewtonsoftJson >= 8.0.2",
       "Microsoft.Data.SqlClient >= 5.2.0",
       "Microsoft.IdentityModel.Tokens >= 7.4.0",
+      "NReco.VideoInfo >= 1.2.1",
       "Swashbuckle.AspNetCore >= 6.5.0",
       "System.IdentityModel.Tokens.Jwt >= 7.4.0"
     ]
@@ -2520,6 +2549,10 @@
           "Microsoft.IdentityModel.Tokens": {
             "target": "Package",
             "version": "[7.4.0, )"
+          },
+          "NReco.VideoInfo": {
+            "target": "Package",
+            "version": "[1.2.1, )"
           },
           "Swashbuckle.AspNetCore": {
             "target": "Package",

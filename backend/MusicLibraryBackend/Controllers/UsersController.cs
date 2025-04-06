@@ -54,6 +54,24 @@ namespace MusicLibraryBackend.Controllers
 
         }
 
+        [HttpGet]
+        [Route("GetUserPlaylist")]
+        public JsonResult GetPlaylist([FromQuery] int userID)
+        {
+            var result = _userService.GetPlaylist(userID);
+            return new JsonResult(result);
+
+        }
+
+        [HttpGet]
+        [Route("GetUserAlbum")]
+        public JsonResult GetAlbums([FromQuery] int userID)
+        {
+            var result = _userService.GetAlbums(userID);
+            return new JsonResult(result);
+
+        }
+
 
         // WORK IN PROGRESS
         // POST api/CreateUsers

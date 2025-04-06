@@ -167,6 +167,60 @@ namespace MusicLibraryBackend.Services
             }
             return user;
         }
+        public JsonResult GetPlaylist(int UserID)
+        {
+            var songs = new List<Song>();
+
+            string query = "SELECT PlaylistID, Title, PlaylistDescription,PlaylistPicture,USERS.UserID FROM PLAYLIST,USERS WHERE USERS.UserID=@UserID AND PLAYLIST.UserID=USERS.UserID";
+            DataTable table = new DataTable();
+            string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
+            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+            {
+                myCon.Open();
+                // queries the database
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                //parse the data received from the query
+                {
+                    myCommand.Parameters.AddWithValue("@UserID", UserID);
+                    using (SqlDataReader reader = myCommand.ExecuteReader())
+                    {
+                        table.Load(reader);
+                        reader.Close();
+                        myCon.Close();
+                    }
+                }
+
+            }
+            return new JsonResult(table);
+        }
+
+        public JsonResult GetAlbums(int UserID)
+        {
+            var songs = new List<Song>();
+
+            string query = "SELECT AlbumID, Title, AlbumDescription,AlbumCoverArtFileName,USERS.UserID FROM ALBUM,USERS WHERE USERS.UserID=@UserID AND ALBUM.UserID=USERS.UserID";
+            DataTable table = new DataTable();
+            string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
+            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+            {
+                myCon.Open();
+                // queries the database
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                //parse the data received from the query
+                {
+                    myCommand.Parameters.AddWithValue("@UserID", UserID);
+                    using (SqlDataReader reader = myCommand.ExecuteReader())
+                    {
+                        table.Load(reader);
+                        reader.Close();
+                        myCon.Close();
+                    }
+                }
+
+            }
+            return new JsonResult(table);
+        }
+
         public string BanUser(
             int userID,
             string userName,

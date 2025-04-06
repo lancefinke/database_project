@@ -10,6 +10,7 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using static System.Net.Mime.MediaTypeNames;
 using Microsoft.AspNetCore.Http;
+using Azure.Core;
 
 namespace MusicLibraryBackend.Controllers;
 
@@ -157,6 +158,42 @@ public class AuthController : ControllerBase
         {
             return StatusCode(500, new { message = "Error during login", error = ex.Message });
         }
+    }
+
+    [HttpPatch("ResetPassword")]
+    public JsonResult ResetPassword(string NewPassword, string Email)
+    {
+        try
+        {
+            // Validate table/column names (do this for security!)
+            string query = $"UPDATE USERS SET UserPassword = @NewPassword WHERE Email = @Email";
+
+            string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
+
+            var hashedPassword = HashPassword(NewPassword);
+
+            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, myCon))
+                {
+
+                    cmd.Parameters.AddWithValue("@NewPassword", hashedPassword);
+                    cmd.Parameters.AddWithValue("@Email", Email);
+
+                    myCon.Open();
+                    int rowsAffected = cmd.ExecuteNonQuery(); // use this instead of reader
+                    myCon.Close();
+
+                    string message = $"Successfully Reset Password {rowsAffected} row(s)";
+                    return new JsonResult(message);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            return new JsonResult($"Reset Failed: {ex.Message}");
+        }
+
     }
 
     private string HashPassword(string password)

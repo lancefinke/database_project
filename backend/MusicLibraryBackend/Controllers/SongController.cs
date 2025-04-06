@@ -43,10 +43,166 @@ namespace database.Controllers
             }
         }
 
+
+        [HttpPost]
+        [Route("AddPlaylist")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> AddPlaylist(int UserID, string Title, string description, IFormFile PlaylistPicture)
+        {
+            try
+            {
+                BlobContainerClient blobcontainer = blobServiceClient.GetBlobContainerClient("playlistimagecontainer");
+
+                string uniqueID = Guid.NewGuid().ToString();
+                string uniquePhoto = $"uploads/" + uniqueID + ".png";
+                BlobClient blobclient = blobcontainer.GetBlobClient(uniquePhoto);
+
+                using (var stream = PlaylistPicture.OpenReadStream())
+                {
+                    await blobclient.UploadAsync(stream, true);
+                }
+                string playlistpictureurl = "https://blobcontainer2005.blob.core.windows.net/playlistimagecontainer/uploads/" + uniqueID + ".png";
+
+
+                string query = "insert into dbo.playlist(UserID, Title, PlaylistDescription,PlaylistPicture) VALUES(@UserID, @Title, @description, @playlistpictureurl)";
+                DataTable table = new DataTable();
+                string sqldatasource = _configuration.GetConnectionString("DatabaseConnection");
+                using (SqlConnection con = new SqlConnection(sqldatasource))
+                {
+                    con.Open();
+                    using (SqlCommand command = new SqlCommand(query, con))
+                    {
+                        command.Parameters.AddWithValue("@UserID", UserID);
+                        command.Parameters.AddWithValue("@Title", Title);
+                        command.Parameters.AddWithValue("@description", description);
+                        command.Parameters.AddWithValue("@playlistpictureurl", playlistpictureurl);
+                        SqlDataReader myReader = command.ExecuteReader();
+                        table.Load(myReader);
+                        myReader.Close();
+                        con.Close();
+                    }
+                }
+                return new JsonResult(playlistpictureurl);
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult($"Upload Failed: {ex.Message}");
+            }
+        }
+
+        [HttpPost]
+        [Route("AddSongPlaylist")]
+        public JsonResult AddSongPlaylist(int SongID, int PlaylistID)
+        {
+            string query = "insert into dbo.PLAYLISTSONGS(SongID, PlaylistID) VALUES (@SongID, @PlaylistID)";
+            DataTable table = new DataTable();
+            string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
+
+            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@SongID", SongID);
+                    myCommand.Parameters.AddWithValue("@PlaylistID", PlaylistID);
+                    SqlDataReader myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+            string message = PlaylistID + " has " + SongID;
+
+            return new JsonResult(message);
+
+        }
+
+        [HttpPost]
+        [Route("FollowUser")]
+        public JsonResult FollowUser(int FollowerID, int FollowedID)
+        {
+            string query = "insert into dbo.followers(FollowerID, FollowedID) VALUES (@FollowerID, @followedID)";
+            DataTable table = new DataTable();
+            string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
+
+            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@FollowerID", FollowerID);
+                    myCommand.Parameters.AddWithValue("@FollowedID", FollowedID);
+                    SqlDataReader myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+            string message = FollowerID + " has followed " + FollowedID;
+
+            return new JsonResult(message);
+
+        }
+
+        [HttpPost]
+        [Route("UploadAlbum")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> UploadAlbum(string albumName, IFormFile AlbumPicture, int artistID, string AlbumDescription)
+        {
+            try
+            {
+                BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient("albumimagecontainer");
+
+                string uniqueID = Guid.NewGuid().ToString();
+                string uniqueAlbumPhoto = $"uploads/" + uniqueID + ".png";
+                BlobClient blobclient = containerClient.GetBlobClient(uniqueAlbumPhoto);
+
+                //uploads file
+                using (var stream = AlbumPicture.OpenReadStream())
+                {
+                    await blobclient.UploadAsync(stream, true);
+                }
+
+                string bloburl = "https://blobcontainer2005.blob.core.windows.net/albumimagecontainer/uploads/" + uniqueID + ".png";
+
+                string query = "INSERT INTO dbo.album(Title, UserID, AlbumDescription, AlbumCoverArtFileName) VALUES (@albumName, @artistID, @albumDescription, @bloburl)";
+                DataTable table = new DataTable();
+                string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
+
+                using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+                {
+                    myCon.Open();
+                    using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                    {
+                        myCommand.Parameters.AddWithValue("@albumName", albumName);
+                        myCommand.Parameters.AddWithValue("@bloburl", bloburl);
+                        myCommand.Parameters.AddWithValue("@artistID", artistID);
+                        myCommand.Parameters.AddWithValue("@albumDescription", AlbumDescription);
+
+                        SqlDataReader myReader = myCommand.ExecuteReader();
+                        table.Load(myReader);
+                        myReader.Close();
+                        myCon.Close();
+                    }
+                }
+                string message = "Upload Successful. Here is the URL: " + bloburl;
+
+                return new JsonResult(message);
+
+            }
+
+
+
+            catch (Exception ex)
+            {
+                return new JsonResult($"Upload Failed: {ex.Message}");
+            }
+        }
+
         [HttpPost]
         [Route("UploadSong")]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> UploadSong(string songName, IFormFile SongMP3, IFormFile SongPicture)
+        public async Task<IActionResult> UploadSong(string songName, IFormFile SongMP3, IFormFile SongPicture, int authorID, int albumID, int genreCode)
         {
             try
             {
@@ -59,6 +215,7 @@ namespace database.Controllers
                 BlobClient blobClient = containerClient.GetBlobClient(uniqueSongName);
                 BlobClient songClient = containerClient.GetBlobClient(uniquePictureName);
 
+
                 // Upload the file
                 using (var stream = SongMP3.OpenReadStream())
                 {
@@ -69,36 +226,59 @@ namespace database.Controllers
                     await songClient.UploadAsync(pic, true);
                 }
 
+                string blobUrl = "https://blobcontainer2005.blob.core.windows.net/songfilecontainer/uploads/" + uniqueID + ".mp3";
+                string songUrl = "https://blobcontainer2005.blob.core.windows.net/songfilecontainer/uploads/" + uniqueID + ".png";
 
-                string blobUrl = "https://songcontainer.blob.core.windows.net/songs/uploads/" + uniqueID + ".mp3";
-                string songUrl = "https://songcontainer.blob.core.windows.net/songs/uploads/" + uniqueID + ".png";
+                var ffProbe = new NReco.VideoInfo.FFProbe();
+                var videoInfo = ffProbe.GetMediaInfo(blobUrl);
+                Console.WriteLine(videoInfo.FormatName);
+                Console.WriteLine(videoInfo.Duration);
+                int duration = (int)videoInfo.Duration.TotalSeconds;
 
-
-
-                string query = "INSERT INTO dbo.songs (SongName, BlobUrl, songpicture) VALUES (@SongName, @BlobUrl,@SongPicture)";
+                int songID;
                 DataTable table = new DataTable();
                 string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
 
                 using (SqlConnection myCon = new SqlConnection(sqlDatasource))
                 {
                     myCon.Open();
+
+                    // returns the song id idk got it from chat
+                    string query = "INSERT INTO dbo.songs (SongName, SongFileName, coverArtFileName, authorID, Duration,GenreCode) " +
+                                   "OUTPUT INSERTED.SongID " +
+                                   "VALUES (@SongName, @BlobUrl, @SongPicture, @authorID, @Duration,@GenreCode)";
+
                     using (SqlCommand myCommand = new SqlCommand(query, myCon))
                     {
                         myCommand.Parameters.AddWithValue("@SongName", songName);
                         myCommand.Parameters.AddWithValue("@BlobUrl", blobUrl);
                         myCommand.Parameters.AddWithValue("@SongPicture", songUrl);
+                        myCommand.Parameters.AddWithValue("@authorID", authorID);
+                        myCommand.Parameters.AddWithValue("@Duration", duration);
+                        myCommand.Parameters.AddWithValue("@GenreCode", genreCode);
 
-                        SqlDataReader myReader = myCommand.ExecuteReader();
-                        table.Load(myReader);
-                        myReader.Close();
-                        myCon.Close();
+                        // gets id 
+                        songID = (int)myCommand.ExecuteScalar();
                     }
+
+
+                    if (albumID > 0)
+                    {
+                        string albumSongQuery = "INSERT INTO dbo.albumSongs (AlbumID, SongID) VALUES (@AlbumID, @SongID)";
+
+                        using (SqlCommand albumCommand = new SqlCommand(albumSongQuery, myCon))
+                        {
+                            albumCommand.Parameters.AddWithValue("@AlbumID", albumID);
+                            albumCommand.Parameters.AddWithValue("@SongID", songID);
+                            albumCommand.ExecuteNonQuery();
+                        }
+                    }
+
+                    myCon.Close();
                 }
-                string message = "Upload Successful. Here is the URL: " + blobUrl + "/n Here is the songUrl: " + songUrl;
 
+                string message = "Upload Successful. Song added to album. URL: " + blobUrl + " | Cover: " + songUrl;
                 return new JsonResult(message);
-
-
             }
 
             catch (Exception ex)

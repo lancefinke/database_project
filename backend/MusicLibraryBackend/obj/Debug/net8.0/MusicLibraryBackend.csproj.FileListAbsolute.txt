@@ -293,3 +293,4 @@ C:\Users\lance\OneDrive\Desktop\College\UH\Programming Assignments\DB\database_p
 C:\Users\lance\OneDrive\Desktop\College\UH\Programming Assignments\DB\database_project\backend\MusicLibraryBackend\bin\Debug\net8.0\Azure.Storage.Common.dll
 C:\Users\lance\OneDrive\Desktop\College\UH\Programming Assignments\DB\database_project\backend\MusicLibraryBackend\bin\Debug\net8.0\System.ClientModel.dll
 C:\Users\lance\OneDrive\Desktop\College\UH\Programming Assignments\DB\database_project\backend\MusicLibraryBackend\bin\Debug\net8.0\System.IO.Hashing.dll
+C:\Users\lance\OneDrive\Desktop\College\UH\Programming Assignments\DB\database_project\backend\MusicLibraryBackend\bin\Debug\net8.0\NReco.VideoInfo.dll

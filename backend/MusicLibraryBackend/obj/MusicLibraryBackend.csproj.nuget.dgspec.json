@@ -64,6 +64,10 @@
               "target": "Package",
               "version": "[7.4.0, )"
             },
+            "NReco.VideoInfo": {
+              "target": "Package",
+              "version": "[1.2.1, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.5.0, )"
