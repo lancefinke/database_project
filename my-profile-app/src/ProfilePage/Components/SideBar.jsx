@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './SideBar.css';
+import { LogOut } from 'lucide-react';
+import { useLoginContext } from '../../LoginContext/LoginContext';
 
 const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const isProfilePage = location.pathname === '/profile';
   const [menuOpen, setMenuOpen] = useState(false);
+
+  //loggedinContext
+  const {setLoggedIn} = useLoginContext();
   
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -16,6 +21,7 @@ const Sidebar = () => {
     // Clear the authentication token and admin status
     localStorage.removeItem('userToken');
     localStorage.removeItem('isAdmin');
+    setLoggedIn(false);
     // Redirect to login page
     navigate('/login');
   };

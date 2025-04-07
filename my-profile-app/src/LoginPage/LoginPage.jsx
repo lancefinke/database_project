@@ -1,12 +1,14 @@
 import { Link,Navigate } from "react-router-dom";
 import { useState } from "react";
 import './LoginPage.css';
+import { useLoginContext } from "../LoginContext/LoginContext";
 
 const LoginPage = () =>{
   const [email,setEmail] = useState('');
   const [password,setPassword] = useState('');
-  const [success,setSuccess] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+
+  const { isLoggedIn, setLoggedIn } = useLoginContext();
 
   const storeToken = (token, adminStatus)=>{
       // Store token in localStorage instead of cookie
@@ -14,7 +16,7 @@ const LoginPage = () =>{
       // Store admin status in localStorage
       localStorage.setItem('isAdmin', adminStatus);
       setIsAdmin(adminStatus);
-      setSuccess(true);
+      setLoggedIn(true);
   }
 
   const loginUser = async()=>{
@@ -70,7 +72,7 @@ const LoginPage = () =>{
                 <div className="link-container"><Link className="signup-link" to="/signup">Click Here to sign up</Link></div>
             </div>
         </div>
-        {success && (
+        {isLoggedIn && (
             isAdmin 
                 ? <Navigate to='/admin' /> 
                 : <Navigate to='/home' />
