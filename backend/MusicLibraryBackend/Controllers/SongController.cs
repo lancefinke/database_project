@@ -5,6 +5,8 @@ using Microsoft.Data.SqlClient;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using MusicLibraryBackend.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
+using System.Collections.Generic;
 
 
 
@@ -145,6 +147,44 @@ namespace database.Controllers
         }
 
         [HttpPost]
+        [Route("ReportSong")]
+        [Consumes("application/json")]
+        public JsonResult ReportSong(int SongID, int ReportedBy, string Reason )
+        {
+
+            string query = "INSERT INTO REPORTEDLOGS(AdminID, SongID, ReportedBy, Reason, ReportStatus, CreatedAt) VALUES(0, @SongID, @ReportedBy,@Reason, 0, @Date)";
+            DataTable table = new DataTable();
+            string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
+
+            DateTime today = DateTime.Today;
+
+
+
+            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@SongID", SongID);
+                    myCommand.Parameters.AddWithValue("@ReportedBy", ReportedBy);
+                    myCommand.Parameters.AddWithValue("@Reason", Reason);
+                    myCommand.Parameters.AddWithValue("@Date", today);
+                    SqlDataReader myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+
+
+            string message = "Song Reported";
+
+            return new JsonResult(message);
+
+        }
+
+
+        [HttpPost]
         [Route("UploadAlbum")]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> UploadAlbum(string albumName, IFormFile AlbumPicture, int artistID, string AlbumDescription)
@@ -239,14 +279,16 @@ namespace database.Controllers
                 DataTable table = new DataTable();
                 string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
 
+                DateTime today = DateTime.Today;
+
                 using (SqlConnection myCon = new SqlConnection(sqlDatasource))
                 {
                     myCon.Open();
 
                     // returns the song id idk got it from chat
-                    string query = "INSERT INTO dbo.songs (SongName, SongFileName, coverArtFileName, authorID, Duration,GenreCode) " +
+                    string query = "INSERT INTO dbo.songs (SongName, SongFileName, coverArtFileName, authorID, Duration,GenreCode,ReleaseDate) " +
                                    "OUTPUT INSERTED.SongID " +
-                                   "VALUES (@SongName, @BlobUrl, @SongPicture, @authorID, @Duration,@GenreCode)";
+                                   "VALUES (@SongName, @BlobUrl, @SongPicture, @authorID, @Duration,@GenreCode,@Date)";
 
                     using (SqlCommand myCommand = new SqlCommand(query, myCon))
                     {
@@ -256,6 +298,7 @@ namespace database.Controllers
                         myCommand.Parameters.AddWithValue("@authorID", authorID);
                         myCommand.Parameters.AddWithValue("@Duration", duration);
                         myCommand.Parameters.AddWithValue("@GenreCode", genreCode);
+                        myCommand.Parameters.AddWithValue("@Date", today);
 
                         // gets id 
                         songID = (int)myCommand.ExecuteScalar();
