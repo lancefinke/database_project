@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import './SignupPage.css';
 import { ImageUp } from "lucide-react";
-import { Navigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 const SignupPage = ()=>{
 
     const [pfpPrev,setPfpPrev] = useState('https://i.pinimg.com/736x/07/1a/32/071a32648a9ca4aebad44fa4eb43c276.jpg');//creates a temporary picture
-    const [pfpFile,setPfpFile] = useState(undefined);//this will be stored in the database
+    const [pfpFile,setPfpFile] = useState(null);//this will be stored in the database
 
     const [id,setId] = useState('');
     const [email,setEmail] = useState('');
@@ -17,45 +17,53 @@ const SignupPage = ()=>{
     const [confirmPassword,setConfirmPassword] = useState('');
     const [success,setSuccess] = useState(false);
 
+    const navigate = useNavigate();
 
-    const createUser  = async()=>{
-        try{
-        const isArtist = role==='artist';
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                username: username,
-                password: password,
-                email: email,
-                isArtist: isArtist,
-                ProfilePicture: pfpFile,
-                Bio:description
-               })
-        };
-        fetch('https://coogmusic-g2dcaubsabgtfycy.centralus-01.azurewebsites.net/api/Auth/register', requestOptions)
-            .then(response => response.json())
-            .then(data =>{data.message==='User registered successfully'?setSuccess(true):alert(data.message) });
-    }catch(error){
-        console.log(error.message);
-    }
+    const createUser = async () => {
 
-        
-    
-    }
+        const formData = new FormData();
+
+        if(password!==confirmPassword){
+            alert('Passwords Do not match');
+            return;
+        }
+      
+        formData.append("profilePicture", pfpFile);
+      
+        // URL-encoded values
+        const usernameEncoded = encodeURIComponent(username);
+        const passwordEncoded = encodeURIComponent(password);
+        const emailEncoded = encodeURIComponent(email);
+        const isArtist = (role==='artist');
+        const bioEncoded = encodeURIComponent(description);
+      
+        const url = `https://localhost:7152/api/Auth/register?Username=${usernameEncoded}&Password=${passwordEncoded}&Email=${emailEncoded}&IsArtist=${isArtist}&Bio=${bioEncoded}`;
+      
+        try {
+          const response = await fetch(url, {
+            method: "POST",
+            body: formData,
+          });
+      
+          const result = await response.json();
+          if(result.message==="Username already exists" || result.message==='Email already exists'){
+            alert(result.message);
+            return;
+          }
+          navigate("/login");
+          
+        } catch (err) {
+          console.error("Error registering user:", err);
+        }
+      };
 
     const uploadPicture = (e)=>{
         const file = e.target.files?.[0];
         setPfpPrev(file ? URL.createObjectURL(file):undefined)
         
-        const data = new FileReader();
-        data.addEventListener("load",()=>{
-            setPfpFile(data.result);
-        });
-        data.readAsDataURL(file)
+        setPfpFile(file);
     }
 
-    console.log(pfpFile);
 
     const changeRole = (e)=>{
         setRole(e.target.value);

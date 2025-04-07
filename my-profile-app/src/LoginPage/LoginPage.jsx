@@ -26,7 +26,7 @@ const LoginPage = () =>{
               password: password,
              })
       };
-      fetch('https://coogmusic-g2dcaubsabgtfycy.centralus-01.azurewebsites.net//api/Auth/login', requestOptions)
+      fetch('https://localhost:7152/api/Auth/login', requestOptions)
           .then(response => response.json())
           .then(data => {
               if(data.token){
