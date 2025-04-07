@@ -1,7 +1,6 @@
 import { ImageUp, ListPlus } from "lucide-react";
 import { useState } from "react";
 import "./../../SignupPage/Signuppage.css";
-import { use } from "react";
 
 const AddSong = () =>{
 
@@ -10,6 +9,17 @@ const AddSong = () =>{
 
     const [audioFile,setAudioFile] = useState(undefined);
     const [audioFileName,setAudioFileName] = useState('');
+    
+    const [selectedGenre, setSelectedGenre] = useState('');
+    const [songName, setSongName] = useState('');
+    
+    const handleGenreChange = (e) => {
+        setSelectedGenre(e.target.value);
+    };
+
+    const handleSongNameChange = (e) => {
+        setSongName(e.target.value);
+    };
 
     const uploadAudio = (e) =>{
         const file = e.target.files?.[0];
@@ -24,9 +34,24 @@ const AddSong = () =>{
         console.log(file);
     }
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (!selectedGenre) {
+            alert("Please select a genre");
+            return;
+        }
+        // Submit form logic here
+        console.log({
+            songName,
+            selectedGenre,
+            audioFile,
+            songImageFile
+        });
+    }
+
     return(
 
-        <div className="add-song-wrapper"style={{width:'65%',height:"80%",margin:"0px auto"}}>
+        <div className="add-song-wrapper" style={{width:'65%',height:"80%",margin:"0px auto"}}>
             <style>
                 {
                     `.song-input{
@@ -43,8 +68,10 @@ const AddSong = () =>{
                     .song-file{
                         display:none;
                     }
-                    .album-select{
+                    .album-select, .genre-select{
                         width:80%;
+                        border-radius: 10px;
+                        height: 30px;
                     }
                     .file{
                         display:flex;
@@ -62,20 +89,74 @@ const AddSong = () =>{
                     `
                 }
             </style>
-            <label className="as-label">SONG NAME<input required type='text' className='song-input'></input></label>
-            <label className="as-label">SELECT ALBUM
-            <select className="album-select" style={{borderRadius:"10px"}}>
-                <option value="">Albums</option>
-            </select>
-            </label>
-            <label className='as-label file' >SONG FILE<input onChange={uploadAudio} type='file' className='song-file'></input>
-                <div style={{width:"30%"}}className='song-file-btn'>File <ListPlus /></div>{audioFileName}
-            </label>
-            <label className='as-label file'>SONG IMAGE<input onChange={uploadPicture} type='file' className='song-file'></input>
-                <div style={{width:"30%"}}className='song-file-btn'>Image <ImageUp /></div>
-                <img className="song-image-prev" src={songImagePrev} width="70" height="84"/>
-            </label>
-            <button className='add-song-btn'>UPLOAD SONG</button>
+            <form onSubmit={handleSubmit}>
+                <label className="as-label">
+                    SONG NAME
+                    <input 
+                        required 
+                        type='text' 
+                        className='song-input'
+                        value={songName}
+                        onChange={handleSongNameChange}
+                    />
+                </label>
+                
+                <label className="as-label">
+                    SELECT ALBUM
+                    <select className="album-select" style={{borderRadius:"10px"}}>
+                        <option value="">Albums</option>
+                    </select>
+                </label>
+                
+                <label className="as-label">
+                    SELECT GENRE
+                    <select 
+                        className="genre-select" 
+                        value={selectedGenre}
+                        onChange={handleGenreChange}
+                        required
+                    >
+                        <option value="">Select a genre</option>
+                        <option value="pop">Pop</option>
+                        <option value="rock">Rock</option>
+                        <option value="hip-hop">Hip-Hop</option>
+                        <option value="rnb">R&B</option>
+                        <option value="electronic">Electronic</option>
+                        <option value="country">Country</option>
+                        <option value="jazz">Jazz</option>
+                        <option value="blues">Blues</option>
+                        <option value="metal">Metal</option>
+                        <option value="classical">Classical</option>
+                        <option value="alternative">Alternative</option>
+                        <option value="indie">Indie</option>
+                    </select>
+                </label>
+                
+                <label className='as-label file'>
+                    SONG FILE
+                    <input 
+                        onChange={uploadAudio} 
+                        type='file' 
+                        className='song-file'
+                        required
+                    />
+                    <div style={{width:"30%"}} className='song-file-btn'>File <ListPlus /></div>
+                    {audioFileName}
+                </label>
+                
+                <label className='as-label file'>
+                    SONG IMAGE
+                    <input 
+                        onChange={uploadPicture} 
+                        type='file' 
+                        className='song-file'
+                    />
+                    <div style={{width:"30%"}} className='song-file-btn'>Image <ImageUp /></div>
+                    <img className="song-image-prev" src={songImagePrev} width="70" height="84"/>
+                </label>
+                
+                <button type="submit" className='add-song-btn'>UPLOAD SONG</button>
+            </form>
         </div>
     );
 }

@@ -70,7 +70,9 @@ const AlbumSongList = ({ songs, playlistName, playlistImage, onSongSelect }) => 
                 </div>
               </div>
               <div className="song-genre">{song.genre}</div>
-              <div className="song-duration">{formatDuration(song.duration)}</div>
+              <div className="song-duration" style={{ fontSize: '1rem', fontWeight: 'bold', color: 'white' }}>
+  {formatDuration(song.duration)}
+</div>
             </div>
           ))}
         </div>

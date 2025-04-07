@@ -343,12 +343,17 @@
 /* Search page */
 .music-player-search {
   width: 92.6% !important;
-  left: 110px;
-  right: 0;
+  left: 110px !important;  
+  right: 0 !important;
 }
 
 /* Following page */
 .music-player-following {
+  width: 92.6% !important;
+  left: 110px;
+  right: 0;
+}
+.music-player-dashboard {
   width: 92.6% !important;
   left: 110px;
   right: 0;
@@ -358,6 +363,7 @@
 .music-player-default {
   width: 70.5% !important;
   left: 110px;
+  right: 0;
 }
 
 /* Responsive Adjustments */
