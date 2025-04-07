@@ -43,11 +43,13 @@ const SearchPage = ({ onSongSelect }) => {
   const [showSearchResults, setShowSearchResults] = useState(false);
   const navigate = useNavigate();
 
-  const API_URL = "https://coogmusic-g2dcaubsabgtfycy.centralus-01.azurewebsites.net/";
+  //const API_URL = "https://coogmusic-g2dcaubsabgtfycy.centralus-01.azurewebsites.net/";
   
   const handleSearch = (e) => {
     e.preventDefault();
     console.log("Searching for:", searchQuery);
+
+    setSearchResults([]);
 
     if (!searchQuery.trim()) {
       // Clear search results if query is empty
@@ -55,68 +57,17 @@ const SearchPage = ({ onSongSelect }) => {
       return;
     }
 
-    // In a real app, you would fetch from API
-    // For now, we'll use sample data
-    const sampleSongResults = [
-      { 
-        id: 101, 
-        title: searchQuery + " - Hit Song", 
-        artist: "Top Artist", 
-        genre: "Pop", 
-        duration: 180, 
-        image: "https://i.scdn.co/image/ab67616d0000b273ba5db46f4b838ef6027e6f96",
-        album: "Best Album"
-      },
-      { 
-        id: 102, 
-        title: "The " + searchQuery + " Experience", 
-        artist: "Famous Band", 
-        genre: "Rock", 
-        duration: 240, 
-        image: "https://i.scdn.co/image/ab67616d0000b273ba5db46f4b838ef6027e6f96",
-        album: "Greatest Hits"
-      },
-      { 
-        id: 103, 
-        title: "Finding " + searchQuery, 
-        artist: "New Artist", 
-        genre: "Hip-Hop", 
-        duration: 195, 
-        image: "https://i.scdn.co/image/ab67616d0000b273ba5db46f4b838ef6027e6f96",
-        album: "Fresh Beats"
-      },
-      { 
-        id: 104, 
-        title: searchQuery + " Dreams", 
-        artist: "Dream Team", 
-        genre: "R&B", 
-        duration: 210, 
-        image: "https://i.scdn.co/image/ab67616d0000b273ba5db46f4b838ef6027e6f96",
-        album: "Smooth Collection"
-      },
-      { 
-        id: 105, 
-        title: "Late Night " + searchQuery, 
-        artist: "Night Owl", 
-        genre: "Jazz", 
-        duration: 300, 
-        image: "https://i.scdn.co/image/ab67616d0000b273ba5db46f4b838ef6027e6f96",
-        album: "Midnight Sessions"
-      }
-    ];
-
     // Set search results and show them
-    setSearchResults(sampleSongResults);
     setShowSearchResults(true);
-
     // Attempt API call as well
-    fetch(API_URL + "api/Users/GetSearch?search=" + searchQuery, {
+    fetch('https://localhost:7152/api/database/SearchSongs?SearchQuery='+searchQuery, {
       method: "GET",
     })
     .then(res => res.json())
     .then((result) => {
-      setUsers(result);
+      setSearchResults(result);
       // If we had a real API for songs, we would set the search results here
+      console.log(searchResults)
     })
     .catch(error => console.error("Error fetching data:", error));
   };

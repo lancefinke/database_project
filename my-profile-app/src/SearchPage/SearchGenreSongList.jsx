@@ -15,8 +15,8 @@ const SearchGenreSongList = ({ songs, playlistName, onBackClick, onSongSelect })
   const handleSongClick = (song) => {
     if (onSongSelect) {
       onSongSelect({
-        name: song.title,
-        creator: song.artist
+        name: song.SongName,
+        creator: song.Username
       });
     }
   };
@@ -51,7 +51,7 @@ const SearchGenreSongList = ({ songs, playlistName, onBackClick, onSongSelect })
         <div className="songs-list">
           {songs.map((song, index) => (
             <div 
-              key={song.id} 
+              key={song.SongID} 
               className="song-row"
               onClick={() => handleSongClick(song)}
             >
@@ -71,17 +71,17 @@ const SearchGenreSongList = ({ songs, playlistName, onBackClick, onSongSelect })
               </div>
               <div className="song-info">
                 <img 
-                  src={song.image || "https://via.placeholder.com/40"} 
-                  alt={song.title} 
+                  src={song.CoverArtFileName || "https://via.placeholder.com/40"} 
+                  alt={song.SongName} 
                   className="song-image" 
                 />
                 <div className="song-text">
-                  <div className="song-title">{song.title}</div>
-                  <div className="song-artist">{song.artist}</div>
+                  <div className="song-title">{song.SongName}</div>
+                  <div className="song-artist">{song.Username}</div>
                 </div>
               </div>
-              <div className="song-album">{song.album}</div>
-              <div className="song-duration">{formatDuration(song.duration)}</div>
+              <div className="song-album">{song.Title}</div>
+              <div className="song-duration">{formatDuration(song.Duration)}</div>
             </div>
           ))}
         </div>

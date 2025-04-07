@@ -3,6 +3,7 @@ import { Play, Pause, SkipForward, SkipBack, Shuffle, Plus, Check, Volume2, Flag
 import Editable from "./Editable"; // Import Editable component
 import PlaylistSelectionPopup from "./PlaylistSelectionPopup"; // Import the new component
 import "./MusicPlayer.css";
+import ReactHowler from 'react-howler'
 
 // Create FlagReport component for the reporting feature
 const FlagReport = ({ onClose }) => {
