@@ -131,7 +131,7 @@
   }
   
   .song-title {
-    font-size: 1rem;
+    font-size: 1.1rem; /* Increase from 1rem if needed */
     margin-bottom: 4px;
   }
   
@@ -142,18 +142,21 @@
   
   .song-genre {
     color: #b3b3b3;
-    font-size: 0.9rem;
+    font-size: 1rem; /* Increase from 0.9rem */
   }
   .song-album {
     color: #b3b3b3;
-    font-size: 0.9rem;
+    font-size: 1rem; /* Increase from 0.9rem */
   }
   .song-duration {
-    color: #b3b3b3;
-    font-size: 0.9rem;
+    color: white; /* Changed from #b3b3b3 to white for better visibility */
+    font-size: 1.2rem; /* Increased even more from 1.1rem */
     text-align: right;
+    font-weight: 600; /* Made bolder */
+    padding-right: 8px; /* Add some padding */
+    letter-spacing: 0.6px; /* Improve legibility */
   }
-  
+
   /* Responsive styles */
   @media (max-width: 768px) {
     .playlist-song-list-container {
@@ -236,3 +239,106 @@
   .back-text {
     font-weight: 500;
   }
+
+  /* Add these styles for the action menu */
+
+.songs-table-header {
+  display: grid;
+  grid-template-columns: 60px 4fr 2fr 80px 50px; /* Add space for actions column */
+  padding: 0 20px;
+  margin-bottom: 16px;
+  color: #b3b3b3;
+  font-weight: normal;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 8px;
+}
+
+.song-row {
+  display: grid;
+  grid-template-columns: 60px 4fr 2fr 80px 50px; /* Match header columns */
+  padding: 8px 20px;
+  align-items: center;
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+}
+
+.song-actions {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.song-actions-button {
+  background: none;
+  border: none;
+  color: #b3b3b3;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  opacity: 0.4;
+}
+
+.song-row:hover .song-actions-button {
+  opacity: 1;
+}
+
+.song-actions-button:hover {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.song-actions-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 100;
+  background-color: #282828;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  min-width: 160px;
+  padding: 4px 0;
+  animation: fadeIn 0.15s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.song-actions-menu-item {
+  padding: 12px 16px;
+  color: #b3b3b3;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.song-actions-menu-item:hover {
+  background-color: #333333;
+  color: white;
+}
+
+.song-actions-menu-item.delete {
+  color: #ff5252;
+}
+
+.song-actions-menu-item.delete:hover {
+  background-color: rgba(255, 82, 82, 0.1);
+}
+
+.song-actions-menu-item svg {
+  margin-right: 8px;
+}

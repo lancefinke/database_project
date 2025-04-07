@@ -19,7 +19,7 @@ const ProfilePage = ({ onSongSelect }) => {
       image: "https://via.placeholder.com/100",
       songs: [
         { id: 1001, title: "My First Song", artist: "Haitham Yousif", genre: "Pop", duration: 180, image: "https://via.placeholder.com/40", album: "Their Songs" },
-        { id: 1002, title: "Late Night Vibes", artist: "Haitham Yousif", genre: "RnB", duration: 210, image: "https://via.placeholder.com/40", album: "Their Songs" },
+        { id: 1002, title: "Late Night Vibes", artist: "Haitham Yousif", genre: "R&B", duration: 210, image: "https://via.placeholder.com/40", album: "Their Songs" },
         { id: 1003, title: "Weekend Mood", artist: "Haitham Yousif", genre: "Pop", duration: 195, image: "https://via.placeholder.com/40", album: "Their Songs" },
         { id: 1004, title: "Studio Session", artist: "Haitham Yousif", genre: "Rap", duration: 225, image: "https://via.placeholder.com/40", album: "Their Songs" },
       ]
@@ -29,9 +29,9 @@ const ProfilePage = ({ onSongSelect }) => {
       name: "First Album",
       image: "https://via.placeholder.com/100",
       songs: [
-        { id: 101, title: "Album Intro", artist: "Haitham Yousif", genre: "RnB", duration: 120, image: "https://via.placeholder.com/40", album: "First Album" },
+        { id: 101, title: "Album Intro", artist: "Haitham Yousif", genre: "R&B", duration: 120, image: "https://via.placeholder.com/40", album: "First Album" },
         { id: 102, title: "First Hit", artist: "Haitham Yousif", genre: "Pop", duration: 195, image: "https://via.placeholder.com/40", album: "First Album" },
-        { id: 103, title: "New Sound", artist: "Haitham Yousif", genre: "RnB", duration: 210, image: "https://via.placeholder.com/40", album: "First Album" }
+        { id: 103, title: "New Sound", artist: "Haitham Yousif", genre: "R&B", duration: 210, image: "https://via.placeholder.com/40", album: "First Album" }
       ]
     },
     { 
@@ -40,7 +40,7 @@ const ProfilePage = ({ onSongSelect }) => {
       image: "https://via.placeholder.com/100",
       songs: [
         { id: 104, title: "Tour Opening", artist: "Haitham Yousif", genre: "Pop", duration: 180, image: "https://via.placeholder.com/40", album: "Auston 2020 Tour" },
-        { id: 105, title: "Auston Nights", artist: "Haitham Yousif", genre: "RnB", duration: 225, image: "https://via.placeholder.com/40", album: "Auston 2020 Tour" },
+        { id: 105, title: "Auston Nights", artist: "Haitham Yousif", genre: "R&B", duration: 225, image: "https://via.placeholder.com/40", album: "Auston 2020 Tour" },
         { id: 106, title: "City Lights", artist: "Haitham Yousif", genre: "Pop", duration: 198, image: "https://via.placeholder.com/40", album: "Auston 2020 Tour" }
       ]
     },
@@ -49,9 +49,9 @@ const ProfilePage = ({ onSongSelect }) => {
       name: "Break Up",
       image: "https://via.placeholder.com/100",
       songs: [
-        { id: 107, title: "The End", artist: "Haitham Yousif", genre: "RnB", duration: 240, image: "https://via.placeholder.com/40", album: "Break Up" },
+        { id: 107, title: "The End", artist: "Haitham Yousif", genre: "R&B", duration: 240, image: "https://via.placeholder.com/40", album: "Break Up" },
         { id: 108, title: "Missing You", artist: "Haitham Yousif", genre: "Pop", duration: 205, image: "https://via.placeholder.com/40", album: "Break Up" },
-        { id: 109, title: "Better Days", artist: "Haitham Yousif", genre: "RnB", duration: 215, image: "https://via.placeholder.com/40", album: "Break Up" }
+        { id: 109, title: "Better Days", artist: "Haitham Yousif", genre: "R&B", duration: 215, image: "https://via.placeholder.com/40", album: "Break Up" }
       ]
     }
   ]);
@@ -67,9 +67,9 @@ const ProfilePage = ({ onSongSelect }) => {
       name: "Chill Vibes", 
       image: "https://via.placeholder.com/100",
       songs: [
-        { id: 1, title: "Summer Breeze", artist: "Haitham Yousif", genre: "RnB", duration: 213, image: "https://via.placeholder.com/40", album: "Summer Hits" },
+        { id: 1, title: "Summer Breeze", artist: "Haitham Yousif", genre: "R&B", duration: 213, image: "https://via.placeholder.com/40", album: "Summer Hits" },
         { id: 2, title: "Ocean Waves", artist: "Haitham Yousif", genre: "Pop", duration: 184, image: "https://via.placeholder.com/40", album: "Summer Hits" },
-        { id: 3, title: "Sunset Melody", artist: "Haitham Yousif", genre: "RnB", duration: 245, image: "https://via.placeholder.com/40", album: "Summer Hits" }
+        { id: 3, title: "Sunset Melody", artist: "Haitham Yousif", genre: "R&B", duration: 245, image: "https://via.placeholder.com/40", album: "Summer Hits" }
       ]
     },
     { 
@@ -87,7 +87,7 @@ const ProfilePage = ({ onSongSelect }) => {
       name: "Late Night", 
       image: "https://via.placeholder.com/100",
       songs: [
-        { id: 8, title: "Midnight Blues", artist: "Haitham Yousif", genre: "RnB", duration: 267, image: "https://via.placeholder.com/40", album: "Midnight Moods" },
+        { id: 8, title: "Midnight Blues", artist: "Haitham Yousif", genre: "R&B", duration: 267, image: "https://via.placeholder.com/40", album: "Midnight Moods" },
         { id: 9, title: "Starry Sky", artist: "Haitham Yousif", genre: "Pop", duration: 198, image: "https://via.placeholder.com/40", album: "Midnight Moods" }
       ]
     }
@@ -95,13 +95,13 @@ const ProfilePage = ({ onSongSelect }) => {
   
   // Genre song mapping - songs by genre
   const [genreSongs, setGenreSongs] = useState({
-    'Rnb': {
-      name: 'RnB',
+    'R&B': {
+      name: 'R&B',
       image: 'https://via.placeholder.com/100',
       songs: [
-        { id: 1, title: "Summer Breeze", artist: "Haitham Yousif", genre: "RnB", duration: 213, image: "https://via.placeholder.com/40", album: "Summer Hits" },
-        { id: 3, title: "Sunset Melody", artist: "Haitham Yousif", genre: "RnB", duration: 245, image: "https://via.placeholder.com/40", album: "Summer Hits" },
-        { id: 8, title: "Midnight Blues", artist: "Haitham Yousif", genre: "RnB", duration: 267, image: "https://via.placeholder.com/40", album: "Midnight Moods" }
+        { id: 1, title: "Summer Breeze", artist: "Haitham Yousif", genre: "R&B", duration: 213, image: "https://via.placeholder.com/40", album: "Summer Hits" },
+        { id: 3, title: "Sunset Melody", artist: "Haitham Yousif", genre: "R&B", duration: 245, image: "https://via.placeholder.com/40", album: "Summer Hits" },
+        { id: 8, title: "Midnight Blues", artist: "Haitham Yousif", genre: "R&B", duration: 267, image: "https://via.placeholder.com/40", album: "Midnight Moods" }
       ]
     },
     'Rap': {
@@ -179,7 +179,7 @@ const ProfilePage = ({ onSongSelect }) => {
         <h1 className="profile-name">Haitham yousif</h1>
         
         <p className="profile-bio">
-          Small Creator that focuses on Rnb and Rap style of music.
+          Small Creator that focuses on R&B and Rap style of music.
         </p>
         
         <div className="stats-container">
@@ -195,7 +195,7 @@ const ProfilePage = ({ onSongSelect }) => {
         </button>
         
         <div className="music-container">
-          <button className="music-genre" onClick={() => handleGenreClick('Rnb')}>Rnb</button>
+          <button className="music-genre" onClick={() => handleGenreClick('R&B')}>R&B</button>
           <button className="music-genre" onClick={() => handleGenreClick('Rap')}>Rap</button>
           <button className="music-genre" onClick={() => handleGenreClick('Pop')}>Pop</button>
           <button className="music-genre" onClick={() => handleGenreClick('Rock')}>Rock</button>

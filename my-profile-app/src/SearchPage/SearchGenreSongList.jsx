@@ -80,8 +80,15 @@ const SearchGenreSongList = ({ songs, playlistName, onBackClick, onSongSelect })
                   <div className="song-artist">{song.Username}</div>
                 </div>
               </div>
+<<<<<<< HEAD
               <div className="song-album">{song.Title}</div>
               <div className="song-duration">{formatDuration(song.Duration)}</div>
+=======
+              <div className="song-album">{song.album}</div>
+              <div className="song-duration" style={{ fontSize: '1rem', fontWeight: 'bold', color: 'white' }}>
+  {formatDuration(song.duration)}
+</div>
+>>>>>>> 1136963190ca63c8471ffbdac4865c4c08185249
             </div>
           ))}
         </div>

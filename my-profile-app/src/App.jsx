@@ -11,6 +11,7 @@ import SignupPage from "./SignupPage/Signuppage";
 import ResetPassword from "./ResetPasswordPage/ResetPassword";
 import SideBar from "./ProfilePage/Components/SideBar";
 import FollowingPage from "./FollowingPage/FollowingPage";
+import Dashboard from "./ProfilePage/UserPage/Dashboard"; // Import the Dashboard component
 import { BrowserRouter as Router, Routes, Route, useLocation, Link } from "react-router-dom";
 import "./ProfilePage/ProfilePage.css";
 
@@ -60,6 +61,7 @@ const AppLayout = () => {
     if (location.pathname === '/profile') return 'profile';
     if (location.pathname === '/search') return 'search';
     if (location.pathname === '/following') return 'following';
+    if (location.pathname === '/dashboard') return 'dashboard';
     return 'default';
   };
 
@@ -78,6 +80,7 @@ const AppLayout = () => {
         <Route path="/user" element={<ProfilePage onSongSelect={handleSongSelect} />} />
         <Route path="/profile/:userId" element={<ProfilePage onSongSelect={handleSongSelect} />} />
         <Route path="/following" element={<FollowingPage onSongSelect={handleSongSelect} />} />
+        <Route path="/dashboard" element={<Dashboard />} /> {/* Add Dashboard route */}
         <Route path='/login' element={<LoginPage />} />
         <Route path='/signup' element={<SignupPage />} />
         <Route path='/reset' element={<ResetPassword />} />

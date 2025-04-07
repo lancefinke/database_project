@@ -176,3 +176,50 @@
     transform: scale(1.02);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   }
+
+  .selected-genres {
+    margin-top: 10px;
+  }
+  
+  .genre-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  
+  .genre-tag {
+    display: inline-flex;
+    align-items: center;
+    background-color: #8E1616;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 20px;
+    font-size: 14px;
+  }
+  
+  .remove-genre {
+    background: none;
+    border: none;
+    color: white;
+    margin-left: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+  }
+  
+  .remove-genre:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+  
+  .genre-hint {
+    color: #999;
+    font-size: 14px;
+    margin-top: 5px;
+  }

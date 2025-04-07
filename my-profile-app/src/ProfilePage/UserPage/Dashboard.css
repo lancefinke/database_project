@@ -1,0 +1,350 @@
+.dashboard-container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .dashboard-title {
+    margin-bottom: 2rem;
+    font-size: 2rem;
+    color: #ffffff;
+  }
+  
+  .dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .stat-card {
+    background-color:  rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+  }
+  
+  .stat-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .stat-card h2 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    color: #ffffff;
+  }
+  
+  .top-song {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .song-title {
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  .song-artist {
+    color: #666;
+    margin-bottom: 0.5rem;
+  }
+  
+  .song-plays {
+    font-size: 0.9rem;
+    color: #888;
+  }
+  
+  .average-rating {
+    display: flex;
+    align-items: baseline;
+  }
+  
+  .rating-value {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #4a6fa5;
+  }
+  
+  .rating-max {
+    font-size: 1.2rem;
+    color: #999;
+    margin-left: 0.25rem;
+  }
+  
+  .account-status {
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    display: inline-block;
+  }
+  
+  .account-status.good {
+    background-color: #e7f9ed;
+    color: #2ea843;
+  }
+  
+  .account-status.reported {
+    background-color: #fee7e7;
+    color: #e53935;
+  }
+  
+  .total-listeners {
+    display: flex;
+    align-items: baseline;
+  }
+  
+  .listener-count {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #4a6fa5;
+  }
+  
+  .listener-label {
+    font-size: 1.2rem;
+    color: #999;
+    margin-left: 0.5rem;
+  }
+  
+  .dashboard-loading,
+  .dashboard-error {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+    font-size: 1.2rem;
+    color: #666;
+  }
+  
+  .dashboard-error {
+    color: #e53935;
+  }
+
+  /* Add this to your existing Dashboard.css file */
+
+.reported-songs-section {
+    margin-top: 3rem;
+    background-color:  rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .section-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: #ffffff;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 0.75rem;
+  }
+  
+  .reported-songs-list {
+    width: 100%;
+  }
+  
+  .reported-song-header {
+    display: grid;
+    grid-template-columns: 3fr 2fr 1.5fr;
+    gap: 1rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #eee;
+    font-weight: bold;
+    color: #ffffff;
+  }
+  
+  .reported-song-item {
+    display: grid;
+    grid-template-columns: 3fr 2fr 1.5fr;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.2s ease;
+  }
+  
+  .reported-song-item:hover {
+    background-color: #f9f9f9;
+  }
+  
+  .reported-song-title {
+    font-weight: 500;
+    color: #ffffff;
+  }
+  
+  .reported-song-reason {
+    color: #e53935;
+    font-style: italic;
+  }
+  
+  .reported-song-date {
+    color: #777;
+    text-align: right;
+  }
+  
+  .no-reports {
+    padding: 1.5rem 0;
+    color: #2ea843;
+    font-weight: 500;
+    text-align: center;
+  }
+  
+  @media (max-width: 768px) {
+    .reported-song-header, .reported-song-item {
+      grid-template-columns: 2fr 2fr 1fr;
+      font-size: 0.9rem;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .reported-song-header, .reported-song-item {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+    
+    .report-reason-header, .report-date-header {
+      display: none;
+    }
+    
+    .reported-song-reason, .reported-song-date {
+      font-size: 0.8rem;
+      display: inline-block;
+    }
+    
+    .reported-song-reason::before {
+      content: "Reason: ";
+      font-weight: 500;
+    }
+    
+    .reported-song-date::before {
+      content: "Date: ";
+      font-weight: 500;
+    }
+  }
+
+  /* Add this to your existing Dashboard.css file */
+
+.songs-section {
+    margin-top: 3rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .songs-list {
+    width: 100%;
+  }
+  
+  .song-header {
+    display: grid;
+    grid-template-columns: 3fr 1.5fr 1fr 1.5fr;
+    gap: 1rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #eee;
+    font-weight: bold;
+    color: #ffffff;
+  }
+  
+  .song-item {
+    display: grid;
+    grid-template-columns: 3fr 1.5fr 1fr 1.5fr;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: transform 0.2s ease;
+  }
+  
+  .song-item:hover {
+    transform: translateX(5px);
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+  
+  .song-title-value {
+    font-weight: 500;
+    color: #ffffff;
+  }
+  
+  .song-rating-value {
+    display: flex;
+    align-items: center;
+    color: #ffffff;
+  }
+  
+  .rating-stars {
+    margin-right: 0.5rem;
+  }
+  
+  .star {
+    color: #ccc;
+  }
+  
+  .star.filled {
+    color: gold;
+  }
+  
+  .star.half-filled {
+    position: relative;
+    color: #ccc;
+  }
+  
+  .star.half-filled:before {
+    content: "★";
+    position: absolute;
+    color: gold;
+    width: 50%;
+    overflow: hidden;
+  }
+  
+  .rating-number {
+    font-size: 0.9rem;
+    color: #aaa;
+  }
+  
+  .song-plays-value {
+    color: #4a6fa5;
+    font-weight: bold;
+  }
+  
+  .song-date-value {
+    color: #aaa;
+    font-size: 0.9rem;
+  }
+  
+  .no-songs {
+    padding: 1.5rem 0;
+    color: #aaa;
+    font-weight: 500;
+    text-align: center;
+  }
+  
+  @media (max-width: 768px) {
+    .song-header, .song-item {
+      grid-template-columns: 2fr 1.5fr 1fr 1fr;
+      font-size: 0.9rem;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .song-header, .song-item {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+    
+    .song-rating-header, .song-plays-header, .song-date-header {
+      display: none;
+    }
+    
+    .song-rating-value, .song-plays-value, .song-date-value {
+      font-size: 0.8rem;
+    }
+    
+    .song-plays-value::before {
+      content: "Plays: ";
+      font-weight: 500;
+    }
+    
+    .song-date-value::before {
+      content: "Released: ";
+      font-weight: 500;
+    }
+  }
