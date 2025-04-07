@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./ResetPassword.css";
 import emailjs from '@emailjs/browser'
 import keys from './keys';
+import { useNavigate } from "react-router-dom";
 
 
 const ResetPassword = () =>{
@@ -15,6 +16,8 @@ const ResetPassword = () =>{
     const [newPassword,setNewPassword] = useState('');
     const [confirmNewPassword,setConfirmNewPassword] = useState('');
 
+    const navigate = useNavigate();
+
     const validateCode = ()=>{
         if(resetCode===(codeText*1)){
             setConfirmed(true);
@@ -27,6 +30,30 @@ const ResetPassword = () =>{
     const sendEmail = (e)=>{
         e.preventDefault();
         emailjs.sendForm(keys.service,keys.template,e.target,keys.api_key);
+    }
+
+    const resetPassword = async()=>{
+
+        if(newPassword!==confirmNewPassword){
+            alert("Passwords do not match");
+            return;
+        }
+        const newPasswordEncoded = encodeURIComponent(newPassword);
+        const emailEncoded = encodeURIComponent(email);
+
+        const url = `https://localhost:7152/api/Auth/ResetPassword?NewPassword=${newPasswordEncoded}&Email=${emailEncoded}`;
+
+        try {
+            const response = await fetch(url, {
+            method: "PATCH",
+            });
+
+            const result = await response.json();
+            console.log("Password reset:", result);
+            navigate("/login");
+        } catch (err) {
+            console.error("Error resetting password:", err);
+        }
     }
 
 
@@ -59,7 +86,7 @@ const ResetPassword = () =>{
                 <input type="password" className="reset-input" id="reset-password" onChange={(e)=>{setNewPassword(e.target.value)}}></input></label>
                 <label htmlFor="reset-confirm">CONFIRM NEW PASSWORD
                 <input type="password" className="reset-input" id="reset-confirm" onChange={(e)=>{setConfirmNewPassword(e.target.value)}}></input></label>
-                <button className="reset-btn">RESET PASSWORD</button>
+                <button className="reset-btn" onClick={resetPassword}>RESET PASSWORD</button>
                 </>:<></>
                 }
             </div>
