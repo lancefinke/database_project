@@ -2,13 +2,15 @@ import { Link,Navigate } from "react-router-dom";
 import { useState } from "react";
 import './LoginPage.css';
 import { useLoginContext } from "../LoginContext/LoginContext";
+import { useUserContext } from "../LoginContext/UserContext";
 
 const LoginPage = () =>{
-  const [email,setEmail] = useState('');
+  const [username,setUsername] = useState('');
   const [password,setPassword] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
 
   const { isLoggedIn, setLoggedIn } = useLoginContext();
+  const { user, setUser } = useUserContext();
 
   const storeToken = (token, adminStatus)=>{
       // Store token in localStorage instead of cookie
@@ -19,12 +21,29 @@ const LoginPage = () =>{
       setLoggedIn(true);
   }
 
+  const getUserInfo = async()=>{
+    try {
+        const response = await fetch(
+          `https://localhost:7152/api/Users/GetUserByName?name=${encodeURIComponent(username)}`
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setUser(data);
+      } catch (error) {
+        console.error('Error fetching user:', error);
+      }
+  }
+
   const loginUser = async()=>{
       const requestOptions = {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ 
-              username: email,
+              username: username,
               password: password,
              })
       };
@@ -33,6 +52,7 @@ const LoginPage = () =>{
           .then(data => {
               if(data.token){
                   // Pass both token and admin status to storeToken
+                  getUserInfo();
                   storeToken(data.token, data.isAdmin);
               } else {
                   alert(data.message);
@@ -60,7 +80,7 @@ const LoginPage = () =>{
                         backgroundColor:"white",
                         color:"black"
                         }}
-                type="text" className="login-input" id="login-email" onChange={(event)=>setEmail(event.target.value)}></input></label>
+                type="text" className="login-input" id="login-email" onChange={(event)=>setUsername(event.target.value)}></input></label>
                 <label for="login-pswrd">PASSWORD
                 <input type="password" className="login-input" id="login-pswrd" onChange={(event)=>setPassword(event.target.value)}></input></label>
                 <Link className="forgot-password-link" to='/reset'>Forgot Password?</Link>
