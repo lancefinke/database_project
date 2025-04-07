@@ -11,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using static System.Net.Mime.MediaTypeNames;
 using Microsoft.AspNetCore.Http;
 using Azure.Core;
+using System.Reflection.PortableExecutable;
 
 namespace MusicLibraryBackend.Controllers;
 
@@ -86,6 +87,7 @@ public class AuthController : ControllerBase
                       SELECT CAST(SCOPE_IDENTITY() as int)",
                     connection);
 
+
                 cmd.Parameters.AddWithValue("@Username", request.Username);
                 cmd.Parameters.AddWithValue("@Password", hashedPassword);
                 cmd.Parameters.AddWithValue("@Email", request.Email);
@@ -118,12 +120,25 @@ public class AuthController : ControllerBase
             {
                 await connection.OpenAsync();
 
+                //Check if user is banned
+                var checkIsBanned = new SqlCommand(
+                    "SELECT COUNT(1) FROM BANNEDUSERS WHERE Username = @Username",
+                    connection);
+                checkIsBanned.Parameters.AddWithValue("@Username", request.Username);
+                var isBanned = (int)await checkIsBanned.ExecuteScalarAsync() > 0;
+
+                if (isBanned)
+                {
+                    return BadRequest(new { message = "This account has been banned" });
+                }
+
+
                 var cmd = new SqlCommand(
                     "SELECT UserID, Username, UserPassword, IsArtist FROM Users WHERE Username = @Username",
                     connection);
                 cmd.Parameters.AddWithValue("@Username", request.Username);
 
-                
+
 
                 using (var reader = await cmd.ExecuteReaderAsync())
                 {
@@ -131,7 +146,9 @@ public class AuthController : ControllerBase
                     {
                         var storedHash = reader.GetString(2);
                         var hashedPassword = HashPassword(request.Password);
-                        
+                       
+
+
                         // Debug logging
                         Console.WriteLine($"Stored hash: {storedHash}");
                         Console.WriteLine($"Computed hash: {hashedPassword}");
