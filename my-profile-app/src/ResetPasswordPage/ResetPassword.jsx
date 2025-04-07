@@ -42,7 +42,16 @@ const ResetPassword = () =>{
                 <input type="text" name="resetCode" value={resetCode} style={{display:"none"}}></input>
                 <button className="reset-btn" type="submit">SEND RESET CODE</button></form>
                 <label htmlFor="reset-code">ENTER CODE HERE
-                <input type="text" className="reset-input" id="reset-code" onChange={(e)=>{setCodeText(e.target.value)}}></input></label>
+                <input 
+                style={{height: "40px",
+                    width: "80%",
+                    margin: "2px auto",
+                    fontSize: "medium",
+                    transition: "border-radius 0.35s ease",
+                    backgroundColor:"white",
+                    color:"black"
+                    }}
+                type="text" className="reset-input" id="reset-code" onChange={(e)=>{setCodeText(e.target.value)}}></input></label>
                 <button className="reset-btn" onClick={validateCode}>CONFIRM CODE</button>
                 {confirmed?
                 <>

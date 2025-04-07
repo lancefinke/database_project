@@ -49,7 +49,16 @@ const LoginPage = () =>{
             <div className="login-option">
                 <h3>Returning User?</h3>
                 <label for="login-email">USERNAME
-                <input type="text" className="login-input" id="login-email" onChange={(event)=>setEmail(event.target.value)}></input></label>
+                <input 
+                style={{height: "40px",
+                        width: "82%",
+                        margin: "2px auto",
+                        fontSize: "medium",
+                        transition: "border-radius 0.35s ease",
+                        backgroundColor:"white",
+                        color:"black"
+                        }}
+                type="text" className="login-input" id="login-email" onChange={(event)=>setEmail(event.target.value)}></input></label>
                 <label for="login-pswrd">PASSWORD
                 <input type="password" className="login-input" id="login-pswrd" onChange={(event)=>setPassword(event.target.value)}></input></label>
                 <Link className="forgot-password-link" to='/reset'>Forgot Password?</Link>

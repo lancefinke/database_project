@@ -68,14 +68,25 @@ const SignupPage = ()=>{
             <h2>Create a insert Name accont</h2>
             {/*<label>STUDENT ID<input required type='text' className='text signup-id' placeholder='your student id' onChange={(e)=>{setId(e.target.value)}}></input></label>*/}
             <label>SCHOOL EMAIL<input required type='email' className='text signup-email' placeholder='example@uh.edu' onChange={(e)=>{setEmail(e.target.value)}}></input></label>
-            <label>USERNAME<input required type='text' className='text signup-username' onChange={(e)=>{setUsername(e.target.value)}}></input></label>
+            <label>USERNAME
+            <input 
+            style={{height: "40px",
+                width: "82%",
+                margin: "2px auto",
+                fontSize: "medium",
+                transition: "border-radius 0.35s ease",
+                backgroundColor:"white",
+                color:"black"
+                }}
+            required type='text' className='text signup-username' onChange={(e)=>{setUsername(e.target.value)}}>
+            </input></label>
             <h3 className='roles-text'>What Role best suits you?</h3>
             <div className='roles'>
                 <label className='artist-btn'>ARTIST<input type='radio' id='artist' name='role' value='artist' checked={role === "artist"} onChange={changeRole}/></label>
                 <label className='listener-btn'>LISTENER<input type='radio' id='listener' name='role' value='listener' checked={role === "listener"} onChange={changeRole}/></label>
             </div>
             <label>DESCRIPTION<textarea className='bio' placeholder='Tell other users about yourself...' onChange={(e)=>{setDescription(e.target.value)}}></textarea></label>
-            <label className='pfp-label'>PROFILE PICTURE<input type='file' className='signup-pfp' onChange={uploadPicture}></input>
+            <label className='pfp-label'>PROFILE PICTURE<input style={{width:"80%",display:"none"}}type='file' className='signup-pfp' onChange={uploadPicture}></input>
                 <div className='image-btn'>Image <ImageUp /></div>
                 <img className="signup-img" src={pfpPrev} width="70" height="84"/>
             </label>
