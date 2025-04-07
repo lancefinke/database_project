@@ -79,6 +79,10 @@ builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<UpdateService>();
 builder.Services.AddScoped<DeleteService>();
 
+// rating service
+builder.Services.AddScoped<RatingService>();
+
+
 var app = builder.Build();
 
 //Enable CORS

@@ -3,47 +3,71 @@
   "WorkspaceRootPath": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|c:\\users\\jose\\documents\\uh_spring_2025\\database\\database project\\database_project\\backend\\musiclibrarybackend\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|solutionrelative:controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|c:\\users\\jose\\documents\\uh_spring_2025\\database\\database project\\database_project\\backend\\musiclibrarybackend\\controllers\\songcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|solutionrelative:controllers\\songcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|c:\\users\\jose\\documents\\uh_spring_2025\\database\\database project\\database_project\\backend\\musiclibrarybackend\\models\\songs.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|solutionrelative:models\\songs.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|c:\\users\\jose\\documents\\uh_spring_2025\\database\\database project\\database_project\\backend\\musiclibrarybackend\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|solutionrelative:services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|c:\\users\\jose\\documents\\uh_spring_2025\\database\\database project\\database_project\\backend\\musiclibrarybackend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|c:\\users\\jose\\documents\\uh_spring_2025\\database\\database project\\database_project\\backend\\musiclibrarybackend\\services\\updateservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|solutionrelative:services\\updateservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|c:\\users\\jose\\documents\\uh_spring_2025\\database\\database project\\database_project\\backend\\musiclibrarybackend\\models\\userrole.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|solutionrelative:models\\userrole.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Jose\\AppData\\Roaming\\Microsoft\\UserSecrets\\3ce9bd24-9bca-4b6d-99ca-4d7bf14492a7\\secrets.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|c:\\users\\jose\\documents\\uh_spring_2025\\database\\database project\\database_project\\backend\\musiclibrarybackend\\models\\authdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|solutionrelative:models\\authdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|c:\\users\\jose\\documents\\uh_spring_2025\\database\\database project\\database_project\\backend\\musiclibrarybackend\\services\\ratingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|solutionrelative:services\\ratingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|c:\\users\\jose\\documents\\uh_spring_2025\\database\\database project\\database_project\\backend\\musiclibrarybackend\\services\\jwtservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|solutionrelative:services\\jwtservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|c:\\users\\jose\\documents\\uh_spring_2025\\database\\database project\\database_project\\backend\\musiclibrarybackend\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|solutionrelative:models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|c:\\users\\jose\\documents\\uh_spring_2025\\database\\database project\\database_project\\backend\\musiclibrarybackend\\services\\deleteservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|solutionrelative:services\\deleteservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|c:\\users\\jose\\documents\\uh_spring_2025\\database\\database project\\database_project\\backend\\musiclibrarybackend\\controllers\\ratingcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|solutionrelative:controllers\\ratingcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|c:\\users\\jose\\documents\\uh_spring_2025\\database\\database project\\database_project\\backend\\musiclibrarybackend\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|solutionrelative:controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|c:\\users\\jose\\documents\\uh_spring_2025\\database\\database project\\database_project\\backend\\musiclibrarybackend\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|solutionrelative:appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|c:\\users\\jose\\documents\\uh_spring_2025\\database\\database project\\database_project\\backend\\musiclibrarybackend\\models\\ratingresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|solutionrelative:models\\ratingresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Jose\\AppData\\Roaming\\Microsoft\\UserSecrets\\3ce9bd24-9bca-4b6d-99ca-4d7bf14492a7\\secrets.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|c:\\users\\jose\\documents\\uh_spring_2025\\database\\database project\\database_project\\backend\\musiclibrarybackend\\models\\ratingrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|solutionrelative:models\\ratingrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|c:\\users\\jose\\documents\\uh_spring_2025\\database\\database project\\database_project\\backend\\musiclibrarybackend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|c:\\users\\jose\\documents\\uh_spring_2025\\database\\database project\\database_project\\backend\\musiclibrarybackend\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|solutionrelative:controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|c:\\users\\jose\\documents\\uh_spring_2025\\database\\database project\\database_project\\backend\\musiclibrarybackend\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|c:\\users\\jose\\documents\\uh_spring_2025\\database\\database project\\database_project\\backend\\musiclibrarybackend\\controllers\\updatecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|solutionrelative:controllers\\updatecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|c:\\users\\jose\\documents\\uh_spring_2025\\database\\database project\\database_project\\backend\\musiclibrarybackend\\controllers\\deletecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EA790AAF-A31A-4DC4-9314-BB90DEC2EAFC}|MusicLibraryBackend.csproj|solutionrelative:controllers\\deletecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -53,108 +77,158 @@
       "DocumentGroups": [
         {
           "DockedWidth": 218,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 10,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
             },
             {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "AuthDTO.cs",
-              "DocumentMoniker": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Models\\AuthDTO.cs",
-              "RelativeDocumentMoniker": "Models\\AuthDTO.cs",
-              "ToolTip": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Models\\AuthDTO.cs",
-              "RelativeToolTip": "Models\\AuthDTO.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-25T19:36:12.853Z"
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "UserRole.cs",
-              "DocumentMoniker": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Models\\UserRole.cs",
-              "RelativeDocumentMoniker": "Models\\UserRole.cs",
-              "ToolTip": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Models\\UserRole.cs",
-              "RelativeToolTip": "Models\\UserRole.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "Songs.cs",
+              "DocumentMoniker": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Models\\Songs.cs",
+              "RelativeDocumentMoniker": "Models\\Songs.cs",
+              "ToolTip": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Models\\Songs.cs",
+              "RelativeToolTip": "Models\\Songs.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-25T19:36:09.298Z"
+              "WhenOpened": "2025-04-07T20:55:09.969Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "JwtService.cs",
-              "DocumentMoniker": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Services\\JwtService.cs",
-              "RelativeDocumentMoniker": "Services\\JwtService.cs",
-              "ToolTip": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Services\\JwtService.cs",
-              "RelativeToolTip": "Services\\JwtService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 9,
+              "Title": "RatingResponse.cs",
+              "DocumentMoniker": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Models\\RatingResponse.cs",
+              "RelativeDocumentMoniker": "Models\\RatingResponse.cs",
+              "ToolTip": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Models\\RatingResponse.cs",
+              "RelativeToolTip": "Models\\RatingResponse.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-25T19:29:14.349Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "AuthController.cs",
-              "DocumentMoniker": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Controllers\\AuthController.cs",
-              "RelativeDocumentMoniker": "Controllers\\AuthController.cs",
-              "ToolTip": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Controllers\\AuthController.cs",
-              "RelativeToolTip": "Controllers\\AuthController.cs",
-              "ViewState": "AgIAADkAAAAAAAAAAAAYwEAAAAAiAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-25T19:29:01.811Z",
+              "WhenOpened": "2025-04-07T16:44:15.507Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "secrets.json",
-              "DocumentMoniker": "C:\\Users\\Jose\\AppData\\Roaming\\Microsoft\\UserSecrets\\3ce9bd24-9bca-4b6d-99ca-4d7bf14492a7\\secrets.json",
-              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\..\\AppData\\Roaming\\Microsoft\\UserSecrets\\3ce9bd24-9bca-4b6d-99ca-4d7bf14492a7\\secrets.json",
-              "ToolTip": "C:\\Users\\Jose\\AppData\\Roaming\\Microsoft\\UserSecrets\\3ce9bd24-9bca-4b6d-99ca-4d7bf14492a7\\secrets.json",
-              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\..\\AppData\\Roaming\\Microsoft\\UserSecrets\\3ce9bd24-9bca-4b6d-99ca-4d7bf14492a7\\secrets.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAXAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-03-25T19:26:21.436Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "User.cs",
-              "DocumentMoniker": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Models\\User.cs",
-              "RelativeDocumentMoniker": "Models\\User.cs",
-              "ToolTip": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Models\\User.cs",
-              "RelativeToolTip": "Models\\User.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAaAAAAAAAAAA==",
+              "Title": "RatingService.cs",
+              "DocumentMoniker": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Services\\RatingService.cs",
+              "RelativeDocumentMoniker": "Services\\RatingService.cs",
+              "ToolTip": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Services\\RatingService.cs",
+              "RelativeToolTip": "Services\\RatingService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAFgAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-25T19:17:28.82Z"
+              "WhenOpened": "2025-04-07T16:38:24.554Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 11,
+              "Title": "RatingRequest.cs",
+              "DocumentMoniker": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Models\\RatingRequest.cs",
+              "RelativeDocumentMoniker": "Models\\RatingRequest.cs",
+              "ToolTip": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Models\\RatingRequest.cs",
+              "RelativeToolTip": "Models\\RatingRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-07T16:37:33.194Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-04-07T05:28:55.685Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "Controllers\\AuthController.cs",
+              "ToolTip": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "Controllers\\AuthController.cs",
+              "ViewState": "AgIAANgAAAAAAAAAAAAcwOgAAABEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-07T04:58:00.324Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "UpdateService.cs",
+              "DocumentMoniker": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Services\\UpdateService.cs",
+              "RelativeDocumentMoniker": "Services\\UpdateService.cs",
+              "ToolTip": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Services\\UpdateService.cs",
+              "RelativeToolTip": "Services\\UpdateService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAG4AAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-07T01:44:50.729Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "UserService.cs",
               "DocumentMoniker": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Services\\UserService.cs",
               "RelativeDocumentMoniker": "Services\\UserService.cs",
               "ToolTip": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Services\\UserService.cs",
               "RelativeToolTip": "Services\\UserService.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAAAzwAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAOQAAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-25T19:12:17.906Z"
+              "WhenOpened": "2025-04-07T01:44:48.623Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Program.cs",
-              "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Program.cs",
-              "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAA8AAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "SongController.cs",
+              "DocumentMoniker": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Controllers\\SongController.cs",
+              "RelativeDocumentMoniker": "Controllers\\SongController.cs",
+              "ToolTip": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Controllers\\SongController.cs",
+              "RelativeToolTip": "Controllers\\SongController.cs",
+              "ViewState": "AgIAAFABAAAAAAAAAAAAAF0BAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-18T20:51:56.464Z"
+              "WhenOpened": "2025-04-07T01:47:49.046Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "DeleteService.cs",
+              "DocumentMoniker": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Services\\DeleteService.cs",
+              "RelativeDocumentMoniker": "Services\\DeleteService.cs",
+              "ToolTip": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Services\\DeleteService.cs",
+              "RelativeToolTip": "Services\\DeleteService.cs",
+              "ViewState": "AgIAAEEAAAAAAAAAAAAwwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-07T20:55:51.51Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "JwtService.cs",
+              "DocumentMoniker": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Services\\JwtService.cs",
+              "RelativeDocumentMoniker": "Services\\JwtService.cs",
+              "ToolTip": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Services\\JwtService.cs",
+              "RelativeToolTip": "Services\\JwtService.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-07T20:55:59.791Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -164,33 +238,75 @@
               "RelativeDocumentMoniker": "Controllers\\UsersController.cs",
               "ToolTip": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Controllers\\UsersController.cs",
               "RelativeToolTip": "Controllers\\UsersController.cs",
-              "ViewState": "AgIAACUAAAAAAAAAAAAuwD8AAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAABEAAAAAAAAAAAAQwCQAAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-18T20:48:01.533Z"
+              "WhenOpened": "2025-04-07T03:14:27.107Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "appsettings.Development.json",
-              "DocumentMoniker": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\appsettings.Development.json",
-              "RelativeDocumentMoniker": "appsettings.Development.json",
-              "ToolTip": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\appsettings.Development.json",
-              "RelativeToolTip": "appsettings.Development.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-03-18T20:52:16.695Z"
+              "DocumentIndex": 7,
+              "Title": "RatingController.cs",
+              "DocumentMoniker": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Controllers\\RatingController.cs",
+              "RelativeDocumentMoniker": "Controllers\\RatingController.cs",
+              "ToolTip": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Controllers\\RatingController.cs",
+              "RelativeToolTip": "Controllers\\RatingController.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAxwBwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-07T19:26:59.959Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 10,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\appsettings.json",
-              "RelativeDocumentMoniker": "appsettings.json",
-              "ToolTip": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\appsettings.json",
-              "RelativeToolTip": "appsettings.json",
+              "Title": "secrets.json",
+              "DocumentMoniker": "C:\\Users\\Jose\\AppData\\Roaming\\Microsoft\\UserSecrets\\3ce9bd24-9bca-4b6d-99ca-4d7bf14492a7\\secrets.json",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\..\\AppData\\Roaming\\Microsoft\\UserSecrets\\3ce9bd24-9bca-4b6d-99ca-4d7bf14492a7\\secrets.json",
+              "ToolTip": "C:\\Users\\Jose\\AppData\\Roaming\\Microsoft\\UserSecrets\\3ce9bd24-9bca-4b6d-99ca-4d7bf14492a7\\secrets.json",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\..\\AppData\\Roaming\\Microsoft\\UserSecrets\\3ce9bd24-9bca-4b6d-99ca-4d7bf14492a7\\secrets.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-03-18T20:52:07.833Z"
+              "WhenOpened": "2025-04-07T19:33:18.422Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAEMAAAAAAAAAAAAAAFMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-07T19:34:29.321Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "DeleteController.cs",
+              "DocumentMoniker": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Controllers\\DeleteController.cs",
+              "RelativeDocumentMoniker": "Controllers\\DeleteController.cs",
+              "ToolTip": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Controllers\\DeleteController.cs",
+              "RelativeToolTip": "Controllers\\DeleteController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-07T03:38:13.502Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "UpdateController.cs",
+              "DocumentMoniker": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Controllers\\UpdateController.cs",
+              "RelativeDocumentMoniker": "Controllers\\UpdateController.cs",
+              "ToolTip": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\Controllers\\UpdateController.cs",
+              "RelativeToolTip": "Controllers\\UpdateController.cs",
+              "ViewState": "AgIAAC0AAAAAAAAAAAAIwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-07T03:36:12.021Z",
+              "EditorCaption": ""
             }
           ]
         }

@@ -43,16 +43,7 @@ namespace MusicLibraryBackend.Services
                         UserPassword = myReader["UserPassword"] != DBNull.Value ? myReader["UserPassword"].ToString() : null,
                         CreatedAt = myReader["CreatedAt"] != DBNull.Value ? Convert.ToDateTime(myReader["CreatedAt"]) : DateTime.MinValue,
                         isArtist = myReader["isArtist"] != DBNull.Value ? Convert.ToBoolean(myReader["isArtist"]) : false
-                        //    users.Add(new User
-                        //{
-                        //    UserID = Convert.ToInt32(myReader["UserID"]),
-                        //    Username = myReader["Username"].ToString(),
-                        //    Email = myReader["Email"].ToString(),
-                        //    ProfilePicture = myReader["ProfilePicture"].ToString(),
-                        //    Bio = myReader["Bio"].ToString(),
-                        //    UserPassword = myReader["UserPassword"].ToString(),
-                        //    CreatedAt = Convert.ToDateTime(myReader["CreatedAt"]),
-                        //    isArtist = Convert.ToBoolean(myReader["isArtist"])
+    
 
                         });
 
@@ -74,7 +65,7 @@ namespace MusicLibraryBackend.Services
             string query = "insert into dbo.USERS(Username, Email, ProfilePicture, Bio, UserPassword, CreatedAt, isArtist) values(@newUserName,@newEmail,@newPictureURL,@newBio,@newPassword,@newDateCreation,@role)";
 
             // access the database
-            string sqlDatasource = _configuration.GetConnectionString("DefaultConnection");
+            string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
 
             // creates the connection
             using (SqlConnection myCon = new SqlConnection(sqlDatasource))

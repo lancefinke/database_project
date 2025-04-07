@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\lance\\OneDrive\\Desktop\\College\\UH\\Programming Assignments\\DB\\database_project\\backend\\MusicLibraryBackend\\MusicLibraryBackend.csproj": {}
+    "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\MusicLibraryBackend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\lance\\OneDrive\\Desktop\\College\\UH\\Programming Assignments\\DB\\database_project\\backend\\MusicLibraryBackend\\MusicLibraryBackend.csproj": {
+    "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\MusicLibraryBackend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\lance\\OneDrive\\Desktop\\College\\UH\\Programming Assignments\\DB\\database_project\\backend\\MusicLibraryBackend\\MusicLibraryBackend.csproj",
+        "projectUniqueName": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\MusicLibraryBackend.csproj",
         "projectName": "MusicLibraryBackend",
-        "projectPath": "C:\\Users\\lance\\OneDrive\\Desktop\\College\\UH\\Programming Assignments\\DB\\database_project\\backend\\MusicLibraryBackend\\MusicLibraryBackend.csproj",
-        "packagesPath": "C:\\Users\\lance\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\lance\\OneDrive\\Desktop\\College\\UH\\Programming Assignments\\DB\\database_project\\backend\\MusicLibraryBackend\\obj\\",
+        "projectPath": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\MusicLibraryBackend.csproj",
+        "packagesPath": "C:\\Users\\Jose\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Jose\\Documents\\UH_SPRING_2025\\Database\\DATABASE PROJECT\\database_project\\backend\\MusicLibraryBackend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\lance\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Jose\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -22,6 +22,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -34,6 +35,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -96,7 +102,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

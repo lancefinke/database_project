@@ -18,7 +18,7 @@ public class Song
 
     public int AuthorID { get; set; }
 
-    public double Rating { get; set; }
+    public double TotalRatings { get; set; }
 
     public bool IsReported { get; set; }
 }
