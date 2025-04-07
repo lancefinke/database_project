@@ -32,6 +32,346 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "MusicLibraryBackend.Controllers.AuthController",
+    "Method": "ResetPassword",
+    "RelativePath": "api/Auth/ResetPassword",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "NewPassword",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Email",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "database.Controllers.databaseController",
+    "Method": "AddPlaylist",
+    "RelativePath": "api/database/AddPlaylist",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "UserID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Title",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "description",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "PlaylistPicture",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "database.Controllers.databaseController",
+    "Method": "AddSongPlaylist",
+    "RelativePath": "api/database/AddSongPlaylist",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "SongID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "PlaylistID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "database.Controllers.databaseController",
+    "Method": "FollowUser",
+    "RelativePath": "api/database/FollowUser",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "FollowerID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "FollowedID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "database.Controllers.databaseController",
+    "Method": "GetAlbumSongs",
+    "RelativePath": "api/database/GetAlbumSongs",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "AlbumID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "database.Controllers.databaseController",
+    "Method": "GetPlaylistSongs",
+    "RelativePath": "api/database/GetPlaylistSongs",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "PlaylistID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "database.Controllers.databaseController",
+    "Method": "GetReportedSongs",
+    "RelativePath": "api/database/GetReportedSongs",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "database.Controllers.databaseController",
+    "Method": "GetSongs",
+    "RelativePath": "api/database/GetSongs",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "UserID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "database.Controllers.databaseController",
+    "Method": "GetSongsByGenre",
+    "RelativePath": "api/database/GetSongsByGenre",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "GenreCode",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "database.Controllers.databaseController",
+    "Method": "GetSongsByName",
+    "RelativePath": "api/database/GetSongsByName",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Username",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "database.Controllers.databaseController",
+    "Method": "SearchSongs",
+    "RelativePath": "api/database/SearchSongs",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "SearchQuery",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "database.Controllers.databaseController",
+    "Method": "UploadAlbum",
+    "RelativePath": "api/database/UploadAlbum",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "albumName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "AlbumPicture",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "artistID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "AlbumDescription",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "database.Controllers.databaseController",
+    "Method": "UploadSong",
+    "RelativePath": "api/database/UploadSong",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "songName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "SongMP3",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "SongPicture",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "authorID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "albumID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "genreCode",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MusicLibraryBackend.Controllers.DeleteController",
+    "Method": "DeleteWithID",
+    "RelativePath": "api/Delete/DeleteByID",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Table",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Column",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MusicLibraryBackend.Controllers.DeleteController",
+    "Method": "DeleteWithName",
+    "RelativePath": "api/Delete/DeleteByName",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Table",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Column",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Name",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MusicLibraryBackend.Controllers.RatingsController",
+    "Method": "PostRating",
+    "RelativePath": "api/Ratings",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "MusicLibraryBackend.Models.RatingRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "MusicLibraryBackend.Controllers.TestController",
     "Method": "AdminEndpoint",
     "RelativePath": "api/Test/admin",
@@ -69,6 +409,191 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MusicLibraryBackend.Controllers.UpdateController",
+    "Method": "UpdateBoolean",
+    "RelativePath": "api/Update/UpdateBoolean",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Table",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Column",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "NewValue",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "TableKey",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MusicLibraryBackend.Controllers.UpdateController",
+    "Method": "UpdateFile",
+    "RelativePath": "api/Update/UpdateFile",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "container",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Table",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Column",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "NewFile",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "TableKey",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "filetype",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MusicLibraryBackend.Controllers.UpdateController",
+    "Method": "UpdateInt",
+    "RelativePath": "api/Update/UpdateNumber",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Table",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Column",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "NewValue",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "TableKey",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MusicLibraryBackend.Controllers.UpdateController",
+    "Method": "UpdateText",
+    "RelativePath": "api/Update/UpdateText",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Table",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Column",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "NewValue",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "TableKey",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MusicLibraryBackend.Controllers.UsersController",
+    "Method": "BanUser",
+    "RelativePath": "api/Users/banUser",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "userName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "reason",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": []
   },
   {
@@ -120,6 +645,70 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MusicLibraryBackend.Controllers.UsersController",
+    "Method": "CreateUsers",
+    "RelativePath": "api/Users/GetFollowers",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MusicLibraryBackend.Controllers.UsersController",
+    "Method": "GetAlbums",
+    "RelativePath": "api/Users/GetUserAlbum",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MusicLibraryBackend.Controllers.UsersController",
+    "Method": "GetUserByName",
+    "RelativePath": "api/Users/GetUserByName",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "name",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MusicLibraryBackend.Controllers.UsersController",
+    "Method": "GetPlaylist",
+    "RelativePath": "api/Users/GetUserPlaylist",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": []
   },
   {
