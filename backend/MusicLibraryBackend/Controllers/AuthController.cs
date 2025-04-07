@@ -12,6 +12,8 @@ using static System.Net.Mime.MediaTypeNames;
 using Microsoft.AspNetCore.Http;
 using Azure.Core;
 using System.Reflection.PortableExecutable;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 
 namespace MusicLibraryBackend.Controllers;
 
@@ -22,12 +24,27 @@ public class AuthController : ControllerBase
     private readonly IConfiguration _configuration;
     private readonly JwtService _jwtService;
     private readonly string _connectionString;
+    private BlobServiceClient blobServiceClient;
 
     public AuthController(IConfiguration configuration, JwtService jwtService)
     {
         _configuration = configuration;
         _jwtService = jwtService;
         _connectionString = _configuration.GetConnectionString("DatabaseConnection");
+
+
+        try
+        {
+            var connectionStrings = _configuration.GetSection("ConnectionStrings");
+            string blobConnectionString = _configuration["ConnectionStrings:blobDB"];
+
+
+            blobServiceClient = new BlobServiceClient(blobConnectionString);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error initializing BlobServiceClient: {ex.Message}");
+        }
     }
 
     [HttpPost("register")]
@@ -35,6 +52,18 @@ public class AuthController : ControllerBase
     {
         try
         {
+
+            BlobContainerClient blobcontainer = blobServiceClient.GetBlobContainerClient("profileimagecontainer");
+
+            string uniqueID = Guid.NewGuid().ToString();
+            string uniquePhoto = $"uploads/" + uniqueID + ".png";
+            BlobClient blobclient = blobcontainer.GetBlobClient(uniquePhoto);
+
+            using (var stream = request.ProfilePicture.OpenReadStream())
+            {
+                await blobclient.UploadAsync(stream, true);
+            }
+            string pfpUrl = "https://blobcontainer2005.blob.core.windows.net/profileimagecontainer/uploads/" + uniqueID + ".png";
 
 
             using (var connection = new SqlConnection(_connectionString))
@@ -82,18 +111,21 @@ public class AuthController : ControllerBase
 
                 // Insert new user
                 var cmd = new SqlCommand(
-                    @"INSERT INTO Users (Username, UserPassword, Email, IsArtist,ProfilePicture,Bio) 
-                      VALUES (@Username, @Password, @Email, @IsArtist,@ProfilePicture,@Bio);
+                    @"INSERT INTO Users (Username, UserPassword, Email, IsArtist,ProfilePicture,Bio,CreatedAt) 
+                      VALUES (@Username, @Password, @Email, @IsArtist,@ProfilePicture,@Bio,@CreatedAt);
                       SELECT CAST(SCOPE_IDENTITY() as int)",
                     connection);
+
+                DateTime currentTime = DateTime.Now;
 
 
                 cmd.Parameters.AddWithValue("@Username", request.Username);
                 cmd.Parameters.AddWithValue("@Password", hashedPassword);
                 cmd.Parameters.AddWithValue("@Email", request.Email);
                 cmd.Parameters.AddWithValue("@IsArtist", request.IsArtist);
-                cmd.Parameters.AddWithValue("@ProfilePicture", request.ProfilePicture);
+                cmd.Parameters.AddWithValue("@ProfilePicture", pfpUrl);
                 cmd.Parameters.AddWithValue("@Bio", request.Bio);
+                cmd.Parameters.AddWithValue("CreatedAt", currentTime);
 
                 var userId = (int)await cmd.ExecuteScalarAsync();
 
@@ -253,7 +285,7 @@ public class AuthController : ControllerBase
         public string Email { get; set; }
         public bool IsArtist { get; set; }
 
-        public string ProfilePicture { get; set; }
+        public IFormFile? ProfilePicture { get; set; }
 
         public string Bio { get; set; }
     }

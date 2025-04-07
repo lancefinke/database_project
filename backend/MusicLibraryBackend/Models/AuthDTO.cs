@@ -35,7 +35,7 @@ public class RegisterRequest
     public bool isArtist { get; set; }
 
     [Required]
-    public string? ProfilePicture { get; set; }
+    public IFormFile ProfilePicture { get; set; }
 
     public string? Bio { get; set; } = string.Empty;
 
