@@ -4,7 +4,7 @@ import Editable from "./Editable";
 import PlaylistSelectionPopup from "./PlaylistSelectionPopup";
 import "./MusicPlayer.css";
 
-// Create FlagReport component for the reporting feature
+// FlagReport component
 const FlagReport = ({ onClose }) => {
   return (
     <>
@@ -30,7 +30,7 @@ const FlagReport = ({ onClose }) => {
   );
 };
 
-// Create RatingDropdown component
+// RatingDropdown component
 const RatingDropdown = ({ rating, onRate, onClose }) => {
   return (
     <>
@@ -91,7 +91,7 @@ const MusicPlayer = ({ song, artist, pageName, playlist }) => {
   };
 
   // Apply page-specific class if provided
-  const playerClassName = `music-player-container ${pageName ? `music-player-${pageName}` : ""}`;
+  const playerClassName = `music-player-new ${pageName ? `music-player-${pageName}` : ""}`;
 
   const togglePlayPause = () => {
     if (audioRef.current) {
@@ -173,142 +173,125 @@ const MusicPlayer = ({ song, artist, pageName, playlist }) => {
       )}
       
       <div className={playerClassName}>
-        {/* Left section with image and song info */}
-        <div className="music-info-section">
+        {/* Song Info Section */}
+        <div className="player-song-info">
           <img 
             src="https://via.placeholder.com/150" 
-            alt="music cover" 
-            className="music-image" 
+            alt="Album cover" 
+            className="player-album-cover" 
           />
-          <div className="music-info">
-            <p className="music-name" title={song || "Song Title"}>{song || "Song Title"}</p>
-            <p className="music-artist" title={artist || "Artist Name"}>{artist || "Artist Name"}</p>
+          <div className="player-text-info">
+            <p className="player-song-title">{song || "Song Title"}</p>
+            <p className="player-artist-name">{artist || "Artist Name"}</p>
           </div>
         </div>
-
-        <div className="player-main-section">
-          <div className="progress-container">
-            <span className="current-time">0:00</span>
-            <input type="range" className="progress-bar" min="0" max="100" value="0" onChange={() => {}} />
-            <span className="total-duration">3:45</span>
+        
+        {/* Main Player Controls */}
+        <div className="player-controls-section">
+          {/* Progress Bar */}
+          <div className="player-progress">
+            <span className="player-time">0:00</span>
+            <div className="player-progress-bar-container">
+              <div className="player-progress-bar-bg">
+                <div className="player-progress-bar" style={{ width: "0%" }}></div>
+              </div>
+            </div>
+            <span className="player-time">3:45</span>
           </div>
-
-          <div className="controls-container">
-            <div className="tooltip-container">
-              <button 
-                onClick={toggleShuffle} 
-                className={`control-button ${isShuffling ? "active" : ""}`}
-              >
-                <Shuffle size={20} color={isShuffling ? "black" : "white"} />
-              </button>
-              <span className="tooltip">Shuffle</span>
-            </div>
+          
+          {/* Player Controls */}
+          <div className="player-controls">
+            <button 
+              className={`player-control-btn ${isShuffling ? "active" : ""}`}
+              onClick={toggleShuffle}
+              title="Shuffle"
+            >
+              <Shuffle size={18} color={isShuffling ? "#FFC107" : "white"} />
+            </button>
             
-            <div className="tooltip-container">
-              <button 
-                onClick={handlePrevious} 
-                className={`control-button ${prevPressed ? "pressed" : ""}`}
-              >
-                <SkipBack size={20} color="white" />
-              </button>
-              <span className="tooltip">Previous</span>
-            </div>
+            <button 
+              className={`player-control-btn ${prevPressed ? "pressed" : ""}`}
+              onClick={handlePrevious}
+              title="Previous"
+            >
+              <SkipBack size={20} color="white" />
+            </button>
             
-            <div className="tooltip-container">
-              {/* Using a button with text as the most reliable option */}
-              <button 
-                onClick={togglePlayPause} 
-                className="control-button play-button"
-                style={{ 
-                  display: 'flex', 
-                  justifyContent: 'center', 
-                  alignItems: 'center' 
-                }}
-              >
-                {isPlaying ? (
-                  <Pause size={24} color="white" />
-                ) : (
-                  <span style={{ 
-                    color: 'white', 
-                    fontSize: '20px', 
-                    fontWeight: 'bold', 
-                    marginLeft: '4px' 
-                  }}>▶</span>
-                )}
-              </button>
-              <span className="tooltip">{isPlaying ? "Pause" : "Play"}</span>
-            </div>
+            <button 
+              className="player-play-btn"
+              onClick={togglePlayPause}
+              title={isPlaying ? "Pause" : "Play"}
+            >
+              {isPlaying ? (
+                <Pause size={22} color="white" />
+              ) : (
+                "▶"
+              )}
+            </button>
             
-            <div className="tooltip-container">
-              <button 
-                onClick={handleNext} 
-                className={`control-button ${nextPressed ? "pressed" : ""}`}
-              >
-                <SkipForward size={20} color="white" />
-              </button>
-              <span className="tooltip">Next</span>
-            </div>
+            <button 
+              className={`player-control-btn ${nextPressed ? "pressed" : ""}`}
+              onClick={handleNext}
+              title="Next"
+            >
+              <SkipForward size={20} color="white" />
+            </button>
             
-            <div className="tooltip-container">
-              <button 
-                onClick={toggleAddToPlaylist} 
-                className={`control-button ${songAdded ? "added" : ""}`}
-              >
-                {songAdded ? 
-                  <Check size={20} color="black" /> : 
-                  <Plus size={20} color="white" />
-                }
-              </button>
-              <span className="tooltip">{songAdded ? "Added to Playlist" : "Add to Playlist"}</span>
-            </div>
-            
-            <div className="tooltip-container">
-              <button 
-                onClick={toggleRating} 
-                className={`control-button ${currentRating > 0 ? "rated" : ""}`}
-              >
-                <Star 
-                  size={20} 
-                  color={currentRating > 0 ? "white" : "white"} 
-                  fill={currentRating > 0 ? "#FFC107" : "none"} 
-                />
-              </button>
-              <span className="tooltip">Rate Song</span>
-            </div>
-            
-            <div className="tooltip-container">
-              <button 
-                onClick={toggleReporting} 
-                className={`control-button ${isReporting ? "reporting" : ""}`}
-              >
-                <Flag size={20} color={isReporting ? "black" : "white"} />
-              </button>
-              <span className="tooltip">Report Song</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="volume-control tooltip-container">
-          <Volume2 size={20} color="white" />
-          <input
-            type="range"
-            min="0"
-            max="1"
-            step="0.01"
-            value={volume}
-            style={{ "--volume-percentage": `${volume * 100}%` }}
-            onChange={(e) => {
-              const newVolume = e.target.value;
-              setVolume(newVolume);
-              if (audioRef.current) {
-                audioRef.current.volume = newVolume;
+            <button 
+              className={`player-control-btn ${songAdded ? "active" : ""}`}
+              onClick={toggleAddToPlaylist}
+              title={songAdded ? "Added to Playlist" : "Add to Playlist"}
+            >
+              {songAdded ? 
+                <Check size={18} color="#FFC107" /> : 
+                <Plus size={18} color="white" />
               }
-              e.target.style.setProperty('--volume-percentage', `${newVolume * 100}%`);
-            }}
-          />
-          <span className="tooltip tooltip-volume">Volume</span>
+            </button>
+          </div>
         </div>
-
+        
+        {/* Right Controls */}
+        <div className="player-right-controls">
+          <button 
+            className={`player-control-btn ${currentRating > 0 ? "active" : ""}`}
+            onClick={toggleRating}
+            title="Rate Song"
+          >
+            <Star 
+              size={18} 
+              color={currentRating > 0 ? "#FFC107" : "white"} 
+              fill={currentRating > 0 ? "#FFC107" : "none"} 
+            />
+          </button>
+          
+          <button 
+            className={`player-control-btn ${isReporting ? "active" : ""}`}
+            onClick={toggleReporting}
+            title="Report Song"
+          >
+            <Flag size={18} color={isReporting ? "#FFC107" : "white"} />
+          </button>
+          
+          <div className="player-volume">
+            <Volume2 size={18} color="white" />
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.01"
+              value={volume}
+              className="player-volume-slider"
+              onChange={(e) => {
+                const newVolume = e.target.value;
+                setVolume(newVolume);
+                if (audioRef.current) {
+                  audioRef.current.volume = newVolume;
+                }
+              }}
+            />
+          </div>
+        </div>
+        
         <audio ref={audioRef} />
       </div>
     </>
