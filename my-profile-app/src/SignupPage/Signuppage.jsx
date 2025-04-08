@@ -21,42 +21,47 @@ const SignupPage = ()=>{
 
 
     const createUser = async () => {
-
-        const formData = new FormData();
-
-        if(password!==confirmPassword){
-            alert('Passwords Do not match');
-            return;
-        }
-      
-        formData.append("profilePicture", pfpFile);
-      
-        // URL-encoded values
-        const usernameEncoded = encodeURIComponent(username);
-        const passwordEncoded = encodeURIComponent(password);
-        const emailEncoded = encodeURIComponent(email);
-        const isArtist = (role==='artist');
-        const bioEncoded = encodeURIComponent(description);
-      
-        const url = `https://localhost:7152/api/Auth/register?Username=${usernameEncoded}&Password=${passwordEncoded}&Email=${emailEncoded}&IsArtist=${isArtist}&Bio=${bioEncoded}`;
-      
-        try {
-          const response = await fetch(url, {
-            method: "POST",
-            body: formData,
-          });
-      
-          const result = await response.json();
-          if(result.message==="Username already exists" || result.message==='Email already exists'){
-            alert(result.message);
-            return;
-          }
-          navigate("/login");
-          
-        } catch (err) {
-          console.error("Error registering user:", err);
-        }
+      if (password !== confirmPassword) {
+        alert("Passwords do not match");
+        return;
+      }
+    
+      const isArtist = role === "artist";
+    
+      const requestBody = {
+        username,
+        password,
+        email,
+        isArtist,
+        profilePicture: pfpPrev, 
+        bio: description,
       };
+    
+      try {
+        const response = await fetch("https://localhost:7152/api/Auth/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody),
+        });
+    
+        const result = await response.json();
+    
+        if (
+          result.message === "Username already exists" ||
+          result.message === "Email already exists"
+        ) {
+          alert(result.message);
+          return;
+        }
+    
+        navigate("/login");
+      } catch (err) {
+        console.error("Error registering user:", err);
+      }
+    };
+    
 
     const uploadPicture = (e)=>{
         const file = e.target.files?.[0];
