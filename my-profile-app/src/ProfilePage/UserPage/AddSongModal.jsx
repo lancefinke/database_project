@@ -2,22 +2,22 @@ import React, { useState } from 'react';
 import { ImageUp, ListPlus, X } from 'lucide-react';
 import './AddSongModal.css';
 
-const AddSongModal = ({ isOpen, onClose, onSubmit }) => {
+const AddSongModal = ({ ID,albums,isOpen, onClose, onSubmit }) => {
   if (!isOpen) return null;
 
   const [songName, setSongName] = useState('');
   const [selectedAlbum, setSelectedAlbum] = useState('');
-  const [selectedGenres, setSelectedGenres] = useState([]);
+  const [selectedGenres, setSelectedGenres] = useState('');
   const [audioFile, setAudioFile] = useState(null);
   const [audioFileName, setAudioFileName] = useState('');
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState('https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=');
 
-  const genres = [
+  /*const genres = [
     'pop', 'rock', 'hip-hop', 'rnb', 'electronic',
     'country', 'jazz', 'blues', 'metal', 'classical',
     'alternative', 'indie'
-  ];
+  ];*/
 
   const handleAudioChange = (e) => {
     const file = e.target.files?.[0];
@@ -35,18 +35,22 @@ const AddSongModal = ({ isOpen, onClose, onSubmit }) => {
     }
   };
 
-  const handleGenreChange = (e) => {
+  /*const handleGenreChange = (e) => {
     const genre = e.target.value;
     if (!genre) return;
     
     if (!selectedGenres.includes(genre)) {
       setSelectedGenres([...selectedGenres, genre]);
     }
-  };
+  };*/
 
-  const removeGenre = (genreToRemove) => {
+  
+
+  
+
+  /*const removeGenre = (genreToRemove) => {
     setSelectedGenres(selectedGenres.filter(genre => genre !== genreToRemove));
-  };
+  };*/
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -74,13 +78,41 @@ const AddSongModal = ({ isOpen, onClose, onSubmit }) => {
     // Reset form and close modal
     setSongName('');
     setSelectedAlbum('');
-    setSelectedGenres([]);
+    setSelectedGenres('');
     setAudioFile(null);
     setAudioFileName('');
     setImageFile(null);
     setImagePreview('https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=');
     onClose();
   };
+
+  const uploadSong = async()=>{
+    const formData = new FormData();
+
+  // Append your images (or files)
+  formData.append("SongPicture", imageFile); // Adjust keys to match backend expectations
+  formData.append("SongMP3", audioFile);       // Adjust keys as needed
+
+  // Encode parameters for the URL
+  const encodedSongName = encodeURIComponent(songName);
+  const url = `https://localhost:7152/api/database/UploadSong?songName=${encodedSongName}&authorID=${ID}&albumID=${selectedAlbum}&genreCode=${selectedGenres}`;
+
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error(`Upload failed! Status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    alert("Upload successful");
+  } catch (err) {
+    console.error("Error uploading song:", err);
+  }
+  }
 
   return (
     <div className="modal-overlay">
@@ -111,36 +143,36 @@ const AddSongModal = ({ isOpen, onClose, onSubmit }) => {
               value={selectedAlbum}
               onChange={(e) => setSelectedAlbum(e.target.value)}
             >
-              <option value="0">My Songs</option>
-              <option value="1">First Album</option>
-              <option value="2">Auston 2020 Tour</option>
-              <option value="3">Break Up</option>
-              <option value="4">Graduation</option>
-              <option value="5">Ballin'</option>
+              {albums.map(album=>
+                <option value={album.AlbumID}>{album.Title}</option>
+              )}
             </select>
           </div>
           
           <div className="form-group">
-            <label htmlFor="genre">Genres (select multiple)</label>
+            <label htmlFor="genre">Genre</label>
             <select 
               id="genre"
-              value=""
-              onChange={handleGenreChange}
+              value={selectedGenres}
+              onChange={(e)=>{setSelectedGenres(e.target.value)}}
               required={selectedGenres.length === 0}
             >
-              <option value="">Add a genre</option>
-              {genres.map((genre) => (
-                <option 
-                  key={genre} 
-                  value={genre}
-                  disabled={selectedGenres.includes(genre)}
-                >
-                  {genre.charAt(0).toUpperCase() + genre.slice(1)}
-                </option>
-              ))}
+              <option value="">Pick a genre</option>
+              <option value="1">Pop</option>
+              <option value="2">Rock</option>
+              <option value="3">Hip-Hop</option>
+              <option value="4">R&B</option>
+              <option value="5">Electronic</option>
+              <option value="6">Country</option>
+              <option value="7">Jazz</option>
+              <option value="8">Blues</option>
+              <option value="9">Metal</option>
+              <option value="10">Classical</option>
+              <option value="11">Alternative</option>
+              <option value="12">Indie</option>
             </select>
             
-            <div className="selected-genres">
+            {/*<div className="selected-genres">
               {selectedGenres.length > 0 && (
                 <div className="genre-tags">
                   {selectedGenres.map(genre => (
@@ -160,7 +192,7 @@ const AddSongModal = ({ isOpen, onClose, onSubmit }) => {
               {selectedGenres.length === 0 && (
                 <p className="genre-hint">Please select at least one genre</p>
               )}
-            </div>
+            </div>*/}
           </div>
           
           <div className="form-group">
@@ -191,7 +223,7 @@ const AddSongModal = ({ isOpen, onClose, onSubmit }) => {
           
           <div className="form-actions">
             <button type="button" className="cancel-btn" onClick={onClose}>Cancel</button>
-            <button type="submit" className="submit-btn">Upload Song</button>
+            <button type="submit" className="submit-btn" onClick={uploadSong}>Upload Song</button>
           </div>
         </form>
       </div>

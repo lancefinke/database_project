@@ -1,13 +1,16 @@
 import React from 'react';
 import './PlaylistSongList.css';
+import { useEffect } from 'react';
 
-const AlbumSongList = ({ songs, playlistName, playlistImage, onSongSelect }) => {
+const AlbumSongList = ({ ID, onSongSelect }) => {
   // Function to format seconds to mm:ss
   const formatDuration = (seconds) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
     return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
   };
+
+
 
   const handleSongClick = (song) => {
     if (onSongSelect) {

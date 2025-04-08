@@ -1,7 +1,7 @@
 import React, { useState,useEffect } from 'react';
 import './PlaylistSongList.css';
 
-const AlbumSongList = ({ ID, onSongSelect, onDeleteSong, isMyAlbum = false }) => {
+const AlbumSongList = ({ ID, selectedAlbum, onSongSelect, onDeleteSong, isMyAlbum = false }) => {
   // Function to format seconds to mm:ss
   const formatDuration = (seconds) => {
     const minutes = Math.floor(seconds / 60);
@@ -81,12 +81,12 @@ const AlbumSongList = ({ ID, onSongSelect, onDeleteSong, isMyAlbum = false }) =>
       <div className="playlist-header">
         <div className="playlist-info">
           <img 
-            src={album.AlbumCoverArtFileName || "https://via.placeholder.com/100"} 
-            alt={album.Title} 
+            src={selectedAlbum.AlbumCoverArtFileName || "https://via.placeholder.com/100"} 
+            alt={selectedAlbum.Title} 
             className="playlist-header-image" 
           />
           <div className="playlist-header-text">
-            <h2 className="playlist-title">{album.Title || "Album"}</h2>
+            <h2 className="playlist-title">{selectedAlbum.Title || "Album"}</h2>
             <p className="song-count">{album.length} songs</p>
           </div>
         </div>
@@ -126,7 +126,7 @@ const AlbumSongList = ({ ID, onSongSelect, onDeleteSong, isMyAlbum = false }) =>
                   <div className="song-artist">{song.Username}</div>
                 </div>
               </div>
-              <div className="song-genre">{song.GenreCode}</div>
+              <div className="song-genre">{song.GenreText}</div>
               <div className="song-duration" style={{ fontSize: '1rem', fontWeight: 'bold', color: 'white' }}>
   {formatDuration(song.Duration)}
 </div>

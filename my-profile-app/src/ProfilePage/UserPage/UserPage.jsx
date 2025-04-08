@@ -59,6 +59,7 @@ const UserPage = ({ onSongSelect }) => {
   const [bio,setBio] = useState(user.Bio);
   const [albums, setAlbums] = useState([]);
   const [playlists,setPlaylists] = useState([]);
+  const [uID,setuID] = useState(user.UserID);
 
   // Confirmation modal state
   const [confirmModal, setConfirmModal] = useState({
@@ -144,6 +145,38 @@ const handleRetry = () => {
   setLoading(true); // Set loading back to true when retrying
 };
   
+
+const updateBio = async()=>{
+  const table = "USERS"; 
+  const column = "Bio"; 
+  const newValue =  bio;
+  const tableKey = "USERID"; 
+  const id = user.UserID;
+
+  // URL-encoded values to safely pass them in the URL
+  const tableEncoded = encodeURIComponent(table);
+  const columnEncoded = encodeURIComponent(column);
+  const newValueEncoded = encodeURIComponent(newValue);
+  const tableKeyEncoded = encodeURIComponent(tableKey);
+  const idEncoded = encodeURIComponent(id);
+
+  const url = `https://localhost:7152/api/Update/UpdateText?Table=${tableEncoded}&Column=${columnEncoded}&NewValue=${newValueEncoded}&TableKey=${tableKeyEncoded}&ID=${idEncoded}`;
+
+  try {
+    const response = await fetch(url, {
+      method: "PATCH", // Use PATCH method to update data
+    });
+
+    if (response.ok) {
+      console.log('Data updated successfully');
+    } else {
+      const errorText = await response.text();
+      console.error('Failed to update:', errorText);
+    }
+  } catch (err) {
+    console.error("Error updating data:", err);
+  }
+}
   
   // Set the default album as initially selected
   const [selectedAlbum, setSelectedAlbum] = useState(albums[0]);
@@ -323,14 +356,14 @@ const handleRetry = () => {
       // 1. Remove from albums
       const updatedAlbums = albums.map(album => ({
         ...album,
-        songs: album.songs.filter(s => s.id !== song.id)
+        songs: album.songs.filter(s => s.SongID !== song.SongID)
       }));
       setAlbums(updatedAlbums);
       
       // 2. Remove from playlists
       const updatedPlaylists = playlists.map(playlist => ({
         ...playlist,
-        songs: playlist.songs.filter(s => s.id !== song.id)
+        songs: playlist.songs.filter(s => s.SongID !== song.SongID)
       }));
       setPlaylists(updatedPlaylists);
       
@@ -339,7 +372,7 @@ const handleRetry = () => {
       Object.keys(updatedGenreSongs).forEach(genre => {
         updatedGenreSongs[genre] = {
           ...updatedGenreSongs[genre],
-          songs: updatedGenreSongs[genre].songs.filter(s => s.id !== song.id)
+          songs: updatedGenreSongs[genre].songs.filter(s => s.SongID !== song.SongID)
         };
       });
       setGenreSongs(updatedGenreSongs);
@@ -354,21 +387,21 @@ const handleRetry = () => {
           if (playlist.PlaylistID === selectedPlaylist.PlaylistID) {
             return {
               ...playlist,
-              songs: playlist.songs.filter(s => s.id !== song.id)
+              songs: playlist.songs.filter(s => s.SongID !== song.SongID)
             };
           }
           return playlist;
         });
         
         setPlaylists(updatedPlaylists);
-        setSelectedPlaylist(updatedPlaylists.find(p => p.id === selectedPlaylist.id));
+        setSelectedPlaylist(updatedPlaylists.find(p => p.PlaylistID === selectedPlaylist.PlaylistID));
       } else if (selectedAlbum && selectedAlbum.AlbumID !== defaultAlbumId) {
         // Remove from current album
         const updatedAlbums = albums.map(album => {
           if (album.AlbumID === selectedAlbum.AlbumID) {
             return {
               ...album,
-              songs: album.songs.filter(s => s.id !== song.id)
+              songs: album.songs.filter(s => s.SongID !== song.SongID)
             };
           }
           return album;
@@ -382,7 +415,7 @@ const handleRetry = () => {
         if (updatedGenreSongs[selectedGenre.name]) {
           updatedGenreSongs[selectedGenre.name] = {
             ...updatedGenreSongs[selectedGenre.name],
-            songs: updatedGenreSongs[selectedGenre.name].songs.filter(s => s.id !== song.id)
+            songs: updatedGenreSongs[selectedGenre.name].songs.filter(s => s.SongID !== song.SongID)
           };
           setGenreSongs(updatedGenreSongs);
           setSelectedGenre(updatedGenreSongs[selectedGenre.name]);
@@ -488,10 +521,10 @@ const handleRetry = () => {
         placeholder='Enter you Profile Bio here...' value={bio} onChange={(e)=>{setBio(e.target.value)}}
         >
         </textarea>
-        <button className='edit-btn' title="Save Bio" style={{color:"white",height:"40px",border:"2px solid white",borderRadius:"5px",position:"relative",bottom:"150px",left:"20px"}}><Pencil className='edit-icon'/></button>
+        <button className='edit-btn' title="Save Bio" onClick={updateBio} style={{color:"white",height:"40px",border:"2px solid white",borderRadius:"5px",position:"relative",bottom:"150px",left:"20px"}}><Pencil className='edit-icon'/></button>
         <div className="stats-container">
           <p className="follower-count">Followers: {followers}</p>
-          <p className="total-listens">Total Listens: 1.5M</p>
+          {/*<p className="total-listens">Total Listens: 1.5M</p>*/}
         </div>
         
         <div className="music-container">
@@ -667,6 +700,7 @@ const handleRetry = () => {
           
           <PlaylistSongList 
             ID={selectedPlaylist.PlaylistID} 
+            selectedPlaylist={selectedPlaylist}
             onSongSelect={onSongSelect}
             onDeleteSong={handleDeleteSong}
           />
@@ -690,6 +724,7 @@ const handleRetry = () => {
           
           <AlbumSongList 
             ID={selectedAlbum.AlbumID}
+            selectedAlbum={selectedAlbum}
             onSongSelect={onSongSelect}
             onDeleteSong={handleDeleteSong}
             isMyAlbum={selectedAlbum.AlbumID === defaultAlbumId}
@@ -719,6 +754,8 @@ const handleRetry = () => {
       
       {/* Add Song Modal */}
       <AddSongModal 
+        ID={uID}
+        albums={albums}
         isOpen={isAddSongModalOpen}
         onClose={() => setIsAddSongModalOpen(false)}
         onSubmit={handleAddSong}

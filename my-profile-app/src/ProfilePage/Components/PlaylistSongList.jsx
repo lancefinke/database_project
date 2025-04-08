@@ -1,7 +1,7 @@
 import React, { useState,useEffect } from 'react';
 import './PlaylistSongList.css';
 
-const PlaylistSongList = ({ ID, onSongSelect, onDeleteSong }) => {
+const PlaylistSongList = ({ ID, selectedPlaylist, onSongSelect, onDeleteSong }) => {
   // Function to format seconds to mm:ss
   const formatDuration = (seconds) => {
     const minutes = Math.floor(seconds / 60);
@@ -73,12 +73,12 @@ const PlaylistSongList = ({ ID, onSongSelect, onDeleteSong }) => {
       <div className="playlist-header">
         <div className="playlist-info">
           <img 
-            src={playlist.PlaylistPicture || "https://via.placeholder.com/100"} 
-            alt={playlist.Title} 
+            src={selectedPlaylist.PlaylistPicture || "https://via.placeholder.com/100"} 
+            alt={selectedPlaylist.Title} 
             className="playlist-header-image" 
           />
           <div className="playlist-header-text">
-            <h2 className="playlist-title">{playlist.Title || "Playlist"}</h2>
+            <h2 className="playlist-title">{selectedPlaylist.Title || "Playlist"}</h2>
             <p className="song-count">{playlist.length} songs</p>
           </div>
         </div>
@@ -95,7 +95,7 @@ const PlaylistSongList = ({ ID, onSongSelect, onDeleteSong }) => {
         
         <div className="songs-list">
           {playlist.map((song, index) => (
-            <div key={song.id} className="song-row" onClick={() => handleSongClick(song)}>
+            <div key={song.SongID} className="song-row" onClick={() => handleSongClick(song)}>
               <div className="song-number-cell">
                 <span className="song-number">{index + 1}</span>
                 <button className="play-button" onClick={(e) => {
@@ -125,7 +125,7 @@ const PlaylistSongList = ({ ID, onSongSelect, onDeleteSong }) => {
               <div className="song-actions" onClick={(e) => e.stopPropagation()}>
                 <button 
                   className="song-actions-button" 
-                  onClick={(e) => toggleMenu(e, song.id)}
+                  onClick={(e) => toggleMenu(e, song.SongID)}
                   aria-label="Song actions"
                 >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -133,7 +133,7 @@ const PlaylistSongList = ({ ID, onSongSelect, onDeleteSong }) => {
                   </svg>
                 </button>
                 
-                {activeMenu === song.id && (
+                {activeMenu === song.SongID&& (
                   <div className="song-actions-menu">
                     <div 
                       className="song-actions-menu-item delete"
