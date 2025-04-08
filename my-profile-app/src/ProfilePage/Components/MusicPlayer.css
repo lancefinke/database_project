@@ -13,7 +13,6 @@
   gap: 2rem;
   align-items: center;
   justify-content: space-between;
-  
 }
 
 /* Music Info Section */
@@ -55,7 +54,6 @@
   overflow: hidden; /* Prevent overflow */
 }
 
-
 .music-name {
   font-size: .9rem;
   font-weight: bold;
@@ -66,6 +64,7 @@
   text-overflow: ellipsis;
   max-width: 100%; /* Use full width of parent */
 }
+
 .music-artist {
   font-size: 0.7rem;
   color: rgba(255, 255, 255, 0.8);
@@ -159,6 +158,7 @@
   transform: scale(1.1);
 }
 
+/* Play button styling */
 .play-button {
   background-color: rgba(255, 255, 255, 0.1);
   border-radius: 50%;
@@ -167,24 +167,59 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0;
+  border: none;
+  cursor: pointer;
 }
 
 .play-button:hover {
   background-color: rgba(255, 255, 255, 0.2);
 }
 
-/* Play Icon Styles */
+/* NEW: Play button triangle using CSS with unique class name */
+.mp-play-button-triangle {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 10px 0 10px 16px;
+  border-color: transparent transparent transparent white;
+  margin-left: 3px; /* Adjust centering as needed */
+}
+
+/* Legacy play button styling - keeping for compatibility */
 .play-icon-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  transform: translateX(2px);
+  transform: translateX(2px);  /* This small shift helps center the play icon */
 }
 
 .play-button svg {
   fill: white;
   stroke: white;
   stroke-width: 1.5;
+}
+
+.play-icon {
+  /* Basic styling */
+  fill: white;
+  stroke: white;
+  stroke-width: 2;
+  
+  /* Center properly */
+  transform: translateX(2px);
+  
+  /* Make it more visible */
+  filter: drop-shadow(0px 0px 1px rgba(255, 255, 255, 0.5));
+}
+
+.custom-play-triangle {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 10px 0 10px 16px;
+  border-color: transparent transparent transparent white;
+  margin-left: 3px; /* Adjust centering as needed */
 }
 
 .control-button.active {
@@ -220,7 +255,6 @@
   position: relative;
 }
 
-
 .volume-control input[type="range"]:hover {
   background: rgba(255, 255, 255, 0.3);
 }
@@ -235,6 +269,7 @@
     rgba(255, 255, 255, 0.2) var(--volume-percentage, 50%)
   );
 }
+
 .volume-control input[type="range"]::-moz-range-track {
   height: 4px;
   border-radius: 5px;
@@ -244,6 +279,7 @@
     rgba(255, 255, 255, 0.2) var(--volume-percentage, 50%)
   );
 }
+
 .volume-control input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 12px;
@@ -254,6 +290,7 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
   margin-top: -4px; /* Center the thumb on the track */
 }
+
 .volume-control input[type="range"]::-ms-track {
   height: 4px;
   border-radius: 5px;
@@ -263,6 +300,7 @@
     rgba(255, 255, 255, 0.2) var(--volume-percentage, 50%)
   );
 }
+
 .volume-control input[type="range"]::-ms-thumb {
   width: 12px;
   height: 12px;
@@ -271,6 +309,7 @@
   cursor: pointer;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
+
 .volume-control input[type="range"]::-moz-range-thumb {
   width: 12px;
   height: 12px;
@@ -279,6 +318,7 @@
   cursor: pointer;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
+
 /* Tooltips */
 .tooltip-container {
   position: relative;
@@ -332,6 +372,35 @@
   left: 15px;
 }
 
+/* Button states */
+.control-button.added {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+}
+
+.tooltip-container:hover .control-button.added {
+  transform: scale(1.1);
+}
+
+.control-button.reporting {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+}
+
+.tooltip-container:hover .control-button.reporting {
+  transform: scale(1.1);
+}
+
+/* NEW: Rating button styling */
+.control-button.rated {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+}
+
+.tooltip-container:hover .control-button.rated {
+  transform: scale(1.1);
+}
+
 /* Page-specific styles */
 /* Profile page - narrower width */
 .music-player-profile {
@@ -353,6 +422,7 @@
   left: 110px;
   right: 0;
 }
+
 .music-player-dashboard {
   width: 92.6% !important;
   left: 110px;
@@ -460,31 +530,9 @@
   gap: 1.3rem; /* Increase spacing between controls */
 }
 
-
-
-
-
-/* Adjusting control positions for following page */
 .music-player-following .controls-container {
   margin-right: 350px; /* Smaller right margin than search page */
   gap: 1.3rem; /* Slightly different spacing between controls */
-}
-
-
-
-
-.control-button.added {
-  background-color: rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
-}
-
-/* Ensure the add/check button stays consistent when hovering */
-.tooltip-container:hover .control-button.added {
-  transform: scale(1.1);
-}
-.control-button.reporting {
-  background-color: rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
 }
 
 /* Report form styling */
@@ -544,25 +592,6 @@
   margin-top: 10px;
 }
 
-/* Ensure the report button has the right style when active */
-.control-button.reporting {
-  background-color: rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
-}
-
-/* Ensure the report button stays consistent when hovering */
-.tooltip-container:hover .control-button.reporting {
-  transform: scale(1.1);
-}
-
-/* Responsive adjustments */
-@media (max-width: 600px) {
-  .music-player-flag-wrapper {
-    width: 90%;
-    height: auto;
-    min-height: 300px;
-  }
-}
 .music-player-overlay {
   position: fixed;
   top: 0;
@@ -571,4 +600,89 @@
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.7);
   z-index: 1100;
+}
+
+/* NEW: Rating dropdown styling */
+.rating-dropdown {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  background-color: #8E1616;
+  border-radius: 15px;
+  padding: 20px;
+  z-index: 1200;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  border: 1px solid white;
+  font-family: 'Roboto Mono', monospace;
+  color: white;
+}
+
+.rating-title {
+  font-weight: bold;
+  font-size: 1rem;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.rating-stars {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+.rating-star {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.rating-star span {
+  margin-top: 5px;
+  font-size: 0.9rem;
+}
+
+.rating-star:hover {
+  transform: scale(1.1);
+}
+
+.rating-star.active svg {
+  filter: drop-shadow(0 0 3px rgba(255, 193, 7, 0.6));
+}
+
+.rating-close-btn {
+  background-color: #101010;
+  color: white;
+  padding: 8px 15px;
+  border: 1px solid white;
+  border-radius: 15px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-weight: bold;
+}
+
+.rating-close-btn:hover {
+  background-color: #343434;
+}
+
+/* Responsive adjustments for report form */
+@media (max-width: 600px) {
+  .music-player-flag-wrapper {
+    width: 90%;
+    height: auto;
+    min-height: 300px;
+  }
+  
+  .rating-dropdown {
+    width: 90%;
+  }
 }
