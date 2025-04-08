@@ -6,7 +6,6 @@ const Dashboard = () => {
     topSong: null,
     averageRating: 0,
     isReported: false,
-    totalListeners: 0,
     reportedSongs: [],
     allSongs: [],
     loading: true,
@@ -24,24 +23,31 @@ const Dashboard = () => {
         const mockData = {
           topSong: {
             title: "Example Song",
-            artist: "Example Artist",
-            plays: 142
+            artist: "Example Artist"
           },
           averageRating: 4.2,
           isReported: false,
-          totalListeners: 328,
           reportedSongs: [
             { 
               id: 1, 
               title: "Controversial Song", 
               reportReason: "Inappropriate content", 
-              reportDate: "2025-03-15" 
+              reportDate: "2025-03-15",
+              status: 1 // 1 for flagged
             },
             { 
               id: 2, 
               title: "Copyright Issue", 
               reportReason: "Copyright violation", 
-              reportDate: "2025-04-02" 
+              reportDate: "2025-04-02", 
+              status: 3 // 3 for removed
+            },
+            { 
+              id: 3, 
+              title: "Offensive Lyrics", 
+              reportReason: "Hate speech", 
+              reportDate: "2025-04-05", 
+              status: 1 // 1 for flagged
             }
           ],
           allSongs: [
@@ -102,7 +108,6 @@ const Dashboard = () => {
           topSong: response.data.topSong,
           averageRating: response.data.averageRating,
           isReported: response.data.isReported,
-          totalListeners: response.data.totalListeners,
           reportedSongs: response.data.reportedSongs || [],
           allSongs: response.data.allSongs || [],
           loading: false,
@@ -122,6 +127,16 @@ const Dashboard = () => {
     fetchDashboardData();
   }, []);
 
+  // Function to render status badges
+  const renderStatusBadge = (status) => {
+    if (status === 1) {
+      return <span className="status-badge flagged">Flagged</span>;
+    } else if (status === 3) {
+      return <span className="status-badge removed">Removed</span>;
+    }
+    return <span className="status-badge unknown">Unknown</span>;
+  };
+
   if (dashboardData.loading) {
     return <div className="dashboard-loading">Loading dashboard data...</div>;
   }
@@ -136,15 +151,14 @@ const Dashboard = () => {
       
       <div className="dashboard-stats">
         <div className="stat-card">
-          <h2>Top Listened Song</h2>
+          <h2>Highest Rated Song</h2>
           {dashboardData.topSong ? (
             <div className="top-song">
               <div className="song-title">{dashboardData.topSong.title}</div>
               <div className="song-artist">{dashboardData.topSong.artist}</div>
-              <div className="song-plays">{dashboardData.topSong.plays} plays</div>
             </div>
           ) : (
-            <p>No songs played yet</p>
+            <p>No rated songs yet</p>
           )}
         </div>
         
@@ -162,14 +176,6 @@ const Dashboard = () => {
             {dashboardData.isReported ? 'Reported' : 'Good Standing'}
           </div>
         </div>
-        
-        <div className="stat-card">
-          <h2>Total Listeners</h2>
-          <div className="total-listeners">
-            <span className="listener-count">{dashboardData.totalListeners}</span>
-            <span className="listener-label">listeners</span>
-          </div>
-        </div>
       </div>
 
       {/* All Songs Section */}
@@ -180,7 +186,6 @@ const Dashboard = () => {
             <div className="song-header">
               <span className="song-title-header">Song Title</span>
               <span className="song-rating-header">Rating</span>
-              <span className="song-plays-header">Listens</span>
               <span className="song-date-header">Release Date</span>
             </div>
             {dashboardData.allSongs.map(song => (
@@ -194,7 +199,6 @@ const Dashboard = () => {
                   </span>
                   <span className="rating-number">{song.rating.toFixed(1)}</span>
                 </span>
-                <span className="song-plays-value">{song.plays}</span>
                 <span className="song-date-value">{song.releaseDate}</span>
               </div>
             ))}
@@ -213,12 +217,16 @@ const Dashboard = () => {
               <span className="song-title-header">Song Title</span>
               <span className="report-reason-header">Reason</span>
               <span className="report-date-header">Date Reported</span>
+              <span className="report-status-header">Status</span>
             </div>
             {dashboardData.reportedSongs.map(song => (
               <div key={song.id} className="reported-song-item">
                 <span className="reported-song-title">{song.title}</span>
                 <span className="reported-song-reason">{song.reportReason}</span>
                 <span className="reported-song-date">{song.reportDate}</span>
+                <span className="reported-song-status">
+                  {renderStatusBadge(song.status)}
+                </span>
               </div>
             ))}
           </div>
