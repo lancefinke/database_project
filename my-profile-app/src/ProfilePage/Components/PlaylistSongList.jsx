@@ -118,7 +118,7 @@ const PlaylistSongList = ({ ID, onSongSelect, onDeleteSong }) => {
                   <div className="song-artist">{song.AuthorID}</div>
                 </div>
               </div>
-              <div className="song-genre">{song.genre}</div>
+              <div className="song-genre">{song.GenreText}</div>
               <div className="song-duration" style={{ fontSize: '1rem', fontWeight: 'bold', color: 'white' }}>
   {formatDuration(song.duration)}
 </div>

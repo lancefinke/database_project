@@ -8,7 +8,7 @@ const Editable = ({title,div_width,div_height,backgroundColor,textColor,placehol
 
     const {user} = useUserContext();
     const [isEditable,setEditable] = useState(false);
-    const [text,setValue] = useState(user.Bio);
+    const [text,setValue] = useState("");
     const inputRef = useRef(null);
 
     function toggleEditMode(){
