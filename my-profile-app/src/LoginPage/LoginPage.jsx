@@ -38,6 +38,7 @@ const LoginPage = () =>{
       }
   }
 
+
   const loginUser = async()=>{
       const requestOptions = {
           method: 'POST',
@@ -70,7 +71,7 @@ const LoginPage = () =>{
         <div className="login-container">
             <div className="login-option">
                 <h3>Returning User?</h3>
-                <label for="login-email">USERNAME
+                <label htmlFor="login-email">USERNAME
                 <input 
                 style={{height: "40px",
                         width: "82%",
@@ -81,7 +82,7 @@ const LoginPage = () =>{
                         color:"black"
                         }}
                 type="text" className="login-input" id="login-email" onChange={(event)=>setUsername(event.target.value)}></input></label>
-                <label for="login-pswrd">PASSWORD
+                <label htmlFor="login-pswrd">PASSWORD
                 <input type="password" className="login-input" id="login-pswrd" onChange={(event)=>setPassword(event.target.value)}></input></label>
                 <Link className="forgot-password-link" to='/reset'>Forgot Password?</Link>
                 <button className="login-btn" onClick={loginUser}>LOGIN</button>

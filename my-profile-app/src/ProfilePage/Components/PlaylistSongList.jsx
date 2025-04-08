@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import './PlaylistSongList.css';
 
-const PlaylistSongList = ({ songs, playlistName, playlistImage, onSongSelect, onDeleteSong }) => {
+const PlaylistSongList = ({ ID, onSongSelect, onDeleteSong }) => {
   // Function to format seconds to mm:ss
   const formatDuration = (seconds) => {
     const minutes = Math.floor(seconds / 60);
@@ -12,14 +12,30 @@ const PlaylistSongList = ({ songs, playlistName, playlistImage, onSongSelect, on
   const handleSongClick = (song) => {
     if (onSongSelect) {
       onSongSelect({
-        name: song.title,
-        creator: song.artist
+        name: song.SongName,
       });
     }
   };
 
   // State to track which song's action menu is open
   const [activeMenu, setActiveMenu] = useState(null);
+  const [playlistId,setPlaylistID] = useState(ID);
+  const [playlist,setPlaylist] = useState([]);
+
+
+  useEffect(() => {
+    const fetchSongs = async () => {
+      try {
+        const res = await fetch(`https://localhost:7152/api/database/GetPlaylistSongs?PlaylistID=${playlistId}`);
+        const data = await res.json();
+        setPlaylist(data);
+      } catch (error) {
+        console.error('Error fetching songs:', error);
+      }
+    };
+
+    fetchSongs();
+  }, []);
 
   // Toggle menu for a specific song
   const toggleMenu = (e, songId) => {
@@ -57,13 +73,13 @@ const PlaylistSongList = ({ songs, playlistName, playlistImage, onSongSelect, on
       <div className="playlist-header">
         <div className="playlist-info">
           <img 
-            src={playlistImage || "https://via.placeholder.com/100"} 
-            alt={playlistName} 
+            src={playlist.PlaylistPicture || "https://via.placeholder.com/100"} 
+            alt={playlist.Title} 
             className="playlist-header-image" 
           />
           <div className="playlist-header-text">
-            <h2 className="playlist-title">{playlistName || "Playlist"}</h2>
-            <p className="song-count">{songs.length} songs</p>
+            <h2 className="playlist-title">{playlist.Title || "Playlist"}</h2>
+            <p className="song-count">{playlist.length} songs</p>
           </div>
         </div>
       </div>
@@ -78,7 +94,7 @@ const PlaylistSongList = ({ songs, playlistName, playlistImage, onSongSelect, on
         </div>
         
         <div className="songs-list">
-          {songs.map((song, index) => (
+          {playlist.map((song, index) => (
             <div key={song.id} className="song-row" onClick={() => handleSongClick(song)}>
               <div className="song-number-cell">
                 <span className="song-number">{index + 1}</span>
@@ -93,13 +109,13 @@ const PlaylistSongList = ({ songs, playlistName, playlistImage, onSongSelect, on
               </div>
               <div className="song-info">
                 <img 
-                  src={song.image || "https://via.placeholder.com/40"} 
-                  alt={song.title} 
+                  src={song.CoverArtFileName || "https://via.placeholder.com/40"} 
+                  alt={song.SongName} 
                   className="song-image" 
                 />
                 <div className="song-text">
-                  <div className="song-title">{song.title}</div>
-                  <div className="song-artist">{song.artist}</div>
+                  <div className="song-title">{song.SongName}</div>
+                  <div className="song-artist">{song.AuthorID}</div>
                 </div>
               </div>
               <div className="song-genre">{song.genre}</div>

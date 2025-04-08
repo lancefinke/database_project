@@ -19,6 +19,7 @@ const SignupPage = ()=>{
 
     const navigate = useNavigate();
 
+
     const createUser = async () => {
 
         const formData = new FormData();

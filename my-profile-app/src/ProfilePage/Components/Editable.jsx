@@ -1,12 +1,14 @@
-import { useRef, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import { Pencil } from "lucide-react";
 import './Editable.css';
+import { useUserContext } from '../../LoginContext/UserContext';
 
 
-const Editable = ({title,value,div_width,div_height,backgroundColor,textColor,placeholder}) =>{
+const Editable = ({title,div_width,div_height,backgroundColor,textColor,placeholder}) =>{
 
+    const {user} = useUserContext();
     const [isEditable,setEditable] = useState(false);
-    const [text,setValue] = useState(value);
+    const [text,setValue] = useState(user.Bio);
     const inputRef = useRef(null);
 
     function toggleEditMode(){
@@ -37,7 +39,7 @@ const Editable = ({title,value,div_width,div_height,backgroundColor,textColor,pl
                     onBlur={()=>setEditable(false)}
                     onChange={(e)=>{setValue(e.target.value)}}></textarea>
             {!isEditable &&(
-                <button className='edit-btn' onClick={toggleEditMode} title={title}><Pencil className='edit-icon' style={{color:textColor}}/></button>
+                <button className='edit-btn' onClick={toggleEditMode} title="Save Bio"><Pencil className='edit-icon' style={{color:textColor}}/></button>
             )}
         </div>
     );
