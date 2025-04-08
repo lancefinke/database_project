@@ -123,6 +123,38 @@ namespace MusicLibraryBackend.Services
             return followers;
         }
 
+
+        public List<Follower> GetUserFollowing(int userId)
+        {
+            var followers = new List<Follower>();
+            string query = "SELECT * FROM FOLLOWERS,USERS WHERE FOLLOWERS.FollowedID=USERS.UserID AND FOLLOWERS.FollowerID=@UserId";
+
+            string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
+
+            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, myCon))
+                {
+                    cmd.Parameters.AddWithValue("@UserId", userId);
+                    myCon.Open();
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            followers.Add(new Follower
+                            {
+                                UserID = reader["UserID"] != DBNull.Value ? Convert.ToInt32(reader["UserID"]) : 0,
+                                Username = reader["Username"] != DBNull.Value ? reader["Username"].ToString() : null,
+                                FollowedID = reader["FollowedID"] != DBNull.Value ? Convert.ToInt32(reader["FollowedID"]) : 0,
+                            });
+                        }
+                    }
+                }
+            }
+            return followers;
+        }
+
         public User GetUserByName(string name)
         {
             var user = new User();
@@ -150,7 +182,8 @@ namespace MusicLibraryBackend.Services
                             user.UserPassword = myReader["UserPassword"] != DBNull.Value ? myReader["UserPassword"].ToString() : null;
                             user.CreatedAt = myReader["CreatedAt"] != DBNull.Value ? Convert.ToDateTime(myReader["CreatedAt"]) : DateTime.MinValue;
                             user.isArtist = myReader["isArtist"] != DBNull.Value ? Convert.ToBoolean(myReader["isArtist"]) : false;
-
+                            user.IsAdmin = myReader["IsAdmin"] != DBNull.Value ? Convert.ToBoolean(myReader["IsAdmin"]) : false;
+                            user.FlaggedNew = myReader["flagged_New"] != DBNull.Value ? Convert.ToInt32(myReader["flagged_New"]) : 0;
 
                         }
                     }
@@ -189,7 +222,7 @@ namespace MusicLibraryBackend.Services
         {
             var songs = new List<Song>();
 
-            string query = "SELECT AlbumID, Title, AlbumDescription,AlbumCoverArtFileName,USERS.UserID FROM ALBUM,USERS WHERE USERS.UserID=@UserID AND ALBUM.UserID=USERS.UserID";
+            string query = "SELECT AlbumID, Title, AlbumDescription,AlbumCoverArtFileName,USERS.UserID FROM ALBUM,USERS WHERE USERS.UserID=@UserID AND ALBUM.ArtistID=USERS.UserID";
             DataTable table = new DataTable();
             string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
             using (SqlConnection myCon = new SqlConnection(sqlDatasource))

@@ -205,7 +205,7 @@ namespace database.Controllers
 
                 string bloburl = "https://blobcontainer2005.blob.core.windows.net/albumimagecontainer/uploads/" + uniqueID + ".png";
 
-                string query = "INSERT INTO dbo.album(Title, UserID, AlbumDescription, AlbumCoverArtFileName) VALUES (@albumName, @artistID, @albumDescription, @bloburl)";
+                string query = "INSERT INTO dbo.album(Title, ArtistID, AlbumDescription, AlbumCoverArtFileName) VALUES (@albumName, @artistID, @albumDescription, @bloburl)";
                 DataTable table = new DataTable();
                 string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
 
@@ -427,7 +427,7 @@ namespace database.Controllers
         {
             
 
-            string query = "SELECT DISTINCT SONGS.SongID,SONGS.GenreCode,SONGS.SongFileName,SONGS.SongName,SONGS.ReleaseDate,SONGS.CoverArtFileName,SONGS.Duration,SONGS.TotalRatings,USERS.Username,ALBUM.Title FROM SONGS,ALBUM,ALBUMSONGS,USERS WHERE ALBUMSONGS.SongID=SONGS.SongID AND USERS.UserID=SONGS.AuthorID AND (ALBUM.Title LIKE @SearchQuery OR SONGS.SongName LIKE @SearchQuery OR USERS.Username LIKE @SearchQuery)";
+            string query = "SELECT DISTINCT SONGS.SongID,SONGS.GenreCode,SONGS.SongFileName,SONGS.SongName,SONGS.ReleaseDate,SONGS.CoverArtFileName,SONGS.Duration,SONGS.TotalRatings,USERS.Username,ALBUM.AlbumID,ALBUM.Title FROM SONGS JOIN  USERS ON USERS.UserID = SONGS.AuthorID JOIN  ALBUMSONGS ON ALBUMSONGS.SongID = SONGS.SongID JOIN ALBUM ON ALBUM.AlbumID = ALBUMSONGS.AlbumID WHERE SONGS.SongName LIKE @SearchQuery  OR USERS.Username LIKE @SearchQuery OR ALBUM.Title LIKE @SearchQuery";
             DataTable table = new DataTable();
             string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
             using (SqlConnection myCon = new SqlConnection(sqlDatasource))
