@@ -345,7 +345,7 @@ namespace database.Controllers
         [HttpPost]
         [Route("UploadAlbum")]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> UploadAlbum(string albumName, IFormFile AlbumPicture, int artistID, string AlbumDescription)
+        public async Task<IActionResult> UploadAlbum(string albumName, IFormFile AlbumPicture, int userID, string AlbumDescription)
         {
             try
             {
@@ -360,18 +360,34 @@ namespace database.Controllers
                 {
                     await blobclient.UploadAsync(stream, true);
                 }
-
+                int artistID = 0;
                 string bloburl = "https://blobcontainer2005.blob.core.windows.net/albumimagecontainer/uploads/" + uniqueID + ".png";
+                
 
                 string query = "INSERT INTO dbo.album(Title, ArtistID, AlbumDescription, AlbumCoverArtFileName) VALUES (@albumName, @artistID, @albumDescription, @bloburl)";
+                string getArtistQuery = "SELECT ArtistID FROM artists WHERE UserID = @userID";
+
                 DataTable table = new DataTable();
                 string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
+
 
                 using (SqlConnection myCon = new SqlConnection(sqlDatasource))
                 {
                     myCon.Open();
+                    using (SqlCommand getArtistCommand = new SqlCommand(getArtistQuery, myCon))
+                    {
+                        getArtistCommand.Parameters.AddWithValue("@userID", userID);
+                        var result = await getArtistCommand.ExecuteScalarAsync();
+
+                        if (result == null)
+                            return BadRequest("Artist not found for this user.");
+
+                        artistID = Convert.ToInt32(result);
+                    }
+
                     using (SqlCommand myCommand = new SqlCommand(query, myCon))
                     {
+
                         myCommand.Parameters.AddWithValue("@albumName", albumName);
                         myCommand.Parameters.AddWithValue("@bloburl", bloburl);
                         myCommand.Parameters.AddWithValue("@artistID", artistID);

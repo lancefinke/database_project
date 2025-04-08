@@ -43,7 +43,8 @@ const AlbumSongList = ({ songs, playlistName, playlistImage, onSongSelect }) => 
     if (onSongSelect) {
       onSongSelect({
         name: song.title,
-        creator: song.artist
+        creator: song.artist,
+        songSrc: song.songSrc || song.SongFileName
       });
     }
   };

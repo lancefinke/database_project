@@ -95,6 +95,7 @@ const AppLayout = () => {
     artist={selectedSong.creator}
     songUrl={selectedSong.SongFileName  || selectedSong.url}
     songId={selectedSong.SongID  ||  selectedSong.id}
+    songSrc = {selectedSong.SongSrc}
     pageName={getMusicPlayerPageName()}
     onClose={handleClosePlayer}
   />
