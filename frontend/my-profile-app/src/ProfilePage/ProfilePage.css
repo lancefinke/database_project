@@ -1,0 +1,387 @@
+.app-container {
+  min-height: 100vh;
+  background-color: #101010;
+  position: relative;
+}
+
+.main-content {
+  padding-bottom: 100px; /* Add space for the music player */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Song list layout next to profile card */
+.song-list {
+  width: calc(100% - 28rem);
+  position: absolute;
+  top: 0px;
+  left: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 50%;
+  overflow-y: auto;
+}
+
+/* Container for the dice layout */
+.dice-five-layout {
+  position: relative;
+  width: 800px;  /* Increased width for larger icons */
+  height: 2000px; /* Increased height for larger icons */
+  margin: 20px auto;
+}
+
+/* Position each song in the dice pattern */
+.song-position-1 {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.song-position-2 {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.song-position-3 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.song-position-4 {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.song-position-5 {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+/* Styling for the song icons - LARGER SIZE */
+.dice-five-layout .song-post-wrapper {
+  width: 275px;  /* Increased size */
+  height: 275px; /* Increased size */
+}
+
+/* Override hover effects for corner positions */
+.song-position-1 .song-post-wrapper:hover,
+.song-position-2 .song-post-wrapper:hover,
+.song-position-4 .song-post-wrapper:hover,
+.song-position-3 .song-post-wrapper:hover,
+.song-position-5 .song-post-wrapper:hover {
+  transform: scale(1.1);
+}
+
+/* Custom scrollbar styling */
+.song-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.song-list::-webkit-scrollbar-track {
+  background: #101010;
+  border-radius: 10px;
+}
+
+.song-list::-webkit-scrollbar-thumb {
+  background: #343434;
+  border-radius: 10px;
+}
+
+.song-list::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+body {
+  background-color: #101010;
+  margin: 0;
+  font-family: 'Roboto Mono', monospace;
+  height: 100%;
+}
+
+/* Profile Layout */
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  background-color: #101010;
+  min-height: 100vh;
+}
+
+.profile-card {
+  background-color: #101010;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(to bottom, #343434 10%, #101010 30%);
+  padding: 1.5rem;
+  width: 24rem;
+  text-align: center;
+  min-height: 100vh;
+}
+
+/* Profile Elements */
+.profile-image {
+  width: 8rem;
+  height: 8rem;
+  border-radius: 50%;
+  margin-bottom: 50px;
+  margin-top: 40px;
+}
+
+.profile-name {
+  color: #ffffff;
+  margin-top: 10px;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.profile-bio {
+  color: #ffffff;
+  margin-top: 20px;
+  font-size: .9rem;
+  font-weight: bold;
+}
+
+/* Stats Section */
+.stats-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.stats-container p {
+  font-size: .9rem;
+  color: #999999;
+  font-weight: bold;
+  margin-top: 50px;
+}
+
+/* Follow Button */
+.follow-button {
+  font-family: 'Roboto Mono', monospace;
+  margin-top: 1.5rem;
+  background-color: #101010;
+  color: white;
+  padding: 0.3rem 1.4rem;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border: 1px solid white;
+}
+
+.follow-button:hover {
+  background-color: #343434;
+  transform: scale(1.02);
+  background-color: var(--brick-hover);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.follow-button:active {
+  transform: scale(0.98);
+  background-color: var(--brick-active);
+}
+
+.follow-button.following {
+  background-color: #343434;
+  transform: scale(1.02);
+  background-color: var(--brick-hover);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.follow-button.following:hover {
+  background-color: #343434;
+}
+
+/* Music Genre Section */
+.music-container {
+  display: flex;
+  flex-direction: row;
+  padding: 1rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+.music-genre {
+  font-family: 'Roboto Mono', monospace;
+  color: white;
+  font-size: .8rem;
+  background-color: #8E1616;
+  padding: 0.3rem 1.4rem;
+  border-radius: 50px;
+  cursor: pointer;
+  border: 1.5px solid white;
+  transition: background-color 0.3s ease;
+}
+
+.music-genre:hover {
+  background-color: #343434;
+  transform: scale(1.02);
+  background-color: var(--brick-hover);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.music-genre:active {
+  transform: scale(0.98);
+  background-color: var(--brick-active);
+}
+
+/* Content Sections - New Styling */
+.content-section {
+  margin-top: 2rem;
+  width: 100%;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 0 0.5rem;
+}
+
+.section-title {
+  color: white;
+  font-size: 1.3rem;
+  margin: 0;
+  text-align: left;
+}
+
+/* Drag instructions */
+.drag-instructions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.drag-icon {
+  color: #8E1616;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.drag-text {
+  color: #999;
+  font-size: 0.8rem;
+}
+
+/* Drag handle */
+.drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+  cursor: grab;
+}
+
+.drag-dots {
+  color: #ffffff;
+  font-size: 1.5rem;
+  user-select: none;
+}
+
+/* Dragging state */
+.dragging {
+  opacity: 0.5;
+  background-color: #343434 !important;
+  box-shadow: 0 0 10px rgba(142, 22, 22, 0.5);
+}
+
+/* Playlist Section */
+.playlist-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .5rem;
+  margin-top: 0.5rem;
+}
+
+.playlist-button {
+  background-color: #101010;
+  border: none;
+  border-radius: 10px;
+  padding: 0.75rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: left;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  width: 100%;
+  font-size: 24px;
+  position: relative;
+}
+
+.playlist-button:hover {
+  background-color: #343434;
+}
+
+.playlist-button:active {
+  transform: scale(0.98);
+  background-color: var(--brick-active);
+}
+
+.playlist-image {
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
+  margin-right: 1rem;
+}
+
+.playlist-name {
+  color: white;
+  font-family: 'Roboto Mono', monospace;
+}
+
+/* Album Section - New */
+.albums-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .5rem;
+  margin-top: 0.5rem;
+}
+
+.album-button {
+  background-color: #101010;
+  border: none;
+  border-radius: 10px;
+  padding: 0.75rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: left;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  width: 100%;
+  font-size: 24px;
+  position: relative;
+}
+
+.album-button:hover {
+  background-color: #343434;
+}
+
+.album-button:active {
+  transform: scale(0.98);
+  background-color: var(--brick-active);
+}
+
+.album-image {
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
+  margin-right: 1rem;
+}
+
+.album-name {
+  color: white;
+  font-family: 'Roboto Mono', monospace;
+}
