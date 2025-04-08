@@ -146,7 +146,7 @@
 }
 
 .song-duration {
-    font-size: 0.45rem; /* Reduce font size */
+    font-size: 1rem; /* Reduce font size */
     opacity: 0.70;
     line-height: 1;
     margin: 0;

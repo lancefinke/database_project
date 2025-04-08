@@ -72,9 +72,20 @@ const SearchPage = ({ onSongSelect }) => {
     })
     .then(res => res.json())
     .then((result) => {
-      setSearchResults(result);
+      const formattedResults = result.map(song => ({
+        id: song.SongID || Date.now(), // Ensure we have an ID
+        title: song.SongName || "Untitled",
+        artist: song.Username || "Unknown Artist",
+        duration: song.Duration || 0,
+        image: song.CoverArtFileName || "https://via.placeholder.com/40",
+        album: song.AlbumTitle || "Unknown Album",
+        genre: song.GenreCode || "Unknown Genre",
+        songFile: song.SongFileName // Make sure to include the audio file URL
+      }));
       // If we had a real API for songs, we would set the search results here
       console.log(searchResults)
+      setSearchResults(formattedResults);
+
     })
     .catch(error => console.error("Error fetching data:", error));
   };
