@@ -1,9 +1,8 @@
 import React, { useState, useRef } from "react";
-import { Play, Pause, SkipForward, SkipBack, Shuffle, Plus, Check, Volume2, Flag } from "lucide-react";
-import Editable from "./Editable"; // Import Editable component
-import PlaylistSelectionPopup from "./PlaylistSelectionPopup"; // Import the new component
+import { Pause, SkipForward, SkipBack, Shuffle, Plus, Check, Volume2, Flag, Star } from "lucide-react";
+import Editable from "./Editable";
+import PlaylistSelectionPopup from "./PlaylistSelectionPopup";
 import "./MusicPlayer.css";
-import ReactHowler from 'react-howler'
 
 // Create FlagReport component for the reporting feature
 const FlagReport = ({ onClose }) => {
@@ -31,6 +30,35 @@ const FlagReport = ({ onClose }) => {
   );
 };
 
+// Create RatingDropdown component
+const RatingDropdown = ({ rating, onRate, onClose }) => {
+  return (
+    <>
+      <div className="music-player-overlay" onClick={onClose}></div>
+      <div className="rating-dropdown">
+        <div className="rating-title">RATE THIS SONG</div>
+        <div className="rating-stars">
+          {[1, 2, 3, 4, 5].map((star) => (
+            <div 
+              key={star} 
+              className={`rating-star ${rating >= star ? 'active' : ''}`} 
+              onClick={() => onRate(star)}
+            >
+              <Star 
+                size={24} 
+                fill={rating >= star ? "#FFC107" : "none"} 
+                color={rating >= star ? "#FFC107" : "white"} 
+              />
+              <span>{star}</span>
+            </div>
+          ))}
+        </div>
+        <button onClick={onClose} className="rating-close-btn">CLOSE</button>
+      </div>
+    </>
+  );
+};
+
 const MusicPlayer = ({ song, artist, pageName, playlist }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isShuffling, setIsShuffling] = useState(false);
@@ -41,9 +69,11 @@ const MusicPlayer = ({ song, artist, pageName, playlist }) => {
   const [isReporting, setIsReporting] = useState(false);
   const [showReportForm, setShowReportForm] = useState(false);
   const [showPlaylistSelection, setShowPlaylistSelection] = useState(false);
+  const [showRatingDropdown, setShowRatingDropdown] = useState(false);
+  const [currentRating, setCurrentRating] = useState(0);
   const audioRef = useRef(null);
   
-  // Mock data for available playlists - in a real app, this would be passed as props or fetched
+  // Mock data for available playlists
   const [availablePlaylists, setAvailablePlaylists] = useState([
     { id: 1, name: "Chill Vibes", image: "https://via.placeholder.com/100" },
     { id: 2, name: "Workout Hits", image: "https://via.placeholder.com/100" },
@@ -52,7 +82,7 @@ const MusicPlayer = ({ song, artist, pageName, playlist }) => {
     { id: 5, name: "Rap", image: "https://via.placeholder.com/100" }
   ]);
   
-  // Current song information - would typically come from props
+  // Current song information
   const currentSong = {
     id: 101,
     title: song || "Song Title",
@@ -60,7 +90,7 @@ const MusicPlayer = ({ song, artist, pageName, playlist }) => {
     image: "https://via.placeholder.com/150"
   };
 
-  // Apply page-specific class if provided - this will handle the styling
+  // Apply page-specific class if provided
   const playerClassName = `music-player-container ${pageName ? `music-player-${pageName}` : ""}`;
 
   const togglePlayPause = () => {
@@ -79,21 +109,14 @@ const MusicPlayer = ({ song, artist, pageName, playlist }) => {
   };
 
   const toggleAddToPlaylist = () => {
-    // Show the playlist selection popup instead of just toggling the state
     setShowPlaylistSelection(true);
   };
   
   const handleAddToPlaylist = (playlistId) => {
     console.log(`Adding song to playlist with ID: ${playlistId}`);
-    // Here you would typically make an API call to add the song to the selected playlist
-    
-    // For now, just update the UI to show the song was added
     setSongAdded(true);
     setShowPlaylistSelection(false);
     
-    // Optional: Show a success message or toast notification
-    
-    // Reset the "added" state after a few seconds for visual feedback
     setTimeout(() => {
       setSongAdded(false);
     }, 3000);
@@ -107,6 +130,15 @@ const MusicPlayer = ({ song, artist, pageName, playlist }) => {
   const handleCloseReport = () => {
     setShowReportForm(false);
     setIsReporting(false);
+  };
+
+  const toggleRating = () => {
+    setShowRatingDropdown(!showRatingDropdown);
+  };
+
+  const handleRateSong = (rating) => {
+    setCurrentRating(rating);
+    console.log(`Rating song as ${rating} stars`);
   };
 
   const handlePrevious = () => {
@@ -132,19 +164,27 @@ const MusicPlayer = ({ song, artist, pageName, playlist }) => {
         />
       )}
       
+      {showRatingDropdown && (
+        <RatingDropdown 
+          rating={currentRating}
+          onRate={handleRateSong}
+          onClose={() => setShowRatingDropdown(false)}
+        />
+      )}
+      
       <div className={playerClassName}>
         {/* Left section with image and song info */}
         <div className="music-info-section">
-  <img 
-    src="https://via.placeholder.com/150" 
-    alt="music cover" 
-    className="music-image" 
-  />
-  <div className="music-info">
-    <p className="music-name" title={song || "Song Title"}>{song || "Song Title"}</p>
-    <p className="music-artist" title={artist || "Artist Name"}>{artist || "Artist Name"}</p>
-  </div>
-</div>
+          <img 
+            src="https://via.placeholder.com/150" 
+            alt="music cover" 
+            className="music-image" 
+          />
+          <div className="music-info">
+            <p className="music-name" title={song || "Song Title"}>{song || "Song Title"}</p>
+            <p className="music-artist" title={artist || "Artist Name"}>{artist || "Artist Name"}</p>
+          </div>
+        </div>
 
         <div className="player-main-section">
           <div className="progress-container">
@@ -175,16 +215,25 @@ const MusicPlayer = ({ song, artist, pageName, playlist }) => {
             </div>
             
             <div className="tooltip-container">
+              {/* Using a button with text as the most reliable option */}
               <button 
                 onClick={togglePlayPause} 
                 className="control-button play-button"
+                style={{ 
+                  display: 'flex', 
+                  justifyContent: 'center', 
+                  alignItems: 'center' 
+                }}
               >
                 {isPlaying ? (
                   <Pause size={24} color="white" />
                 ) : (
-                  <div className="play-icon-wrapper">
-                    <Play size={24} color="white" fill="white" />
-                  </div>
+                  <span style={{ 
+                    color: 'white', 
+                    fontSize: '20px', 
+                    fontWeight: 'bold', 
+                    marginLeft: '4px' 
+                  }}>▶</span>
                 )}
               </button>
               <span className="tooltip">{isPlaying ? "Pause" : "Play"}</span>
@@ -215,6 +264,20 @@ const MusicPlayer = ({ song, artist, pageName, playlist }) => {
             
             <div className="tooltip-container">
               <button 
+                onClick={toggleRating} 
+                className={`control-button ${currentRating > 0 ? "rated" : ""}`}
+              >
+                <Star 
+                  size={20} 
+                  color={currentRating > 0 ? "white" : "white"} 
+                  fill={currentRating > 0 ? "#FFC107" : "none"} 
+                />
+              </button>
+              <span className="tooltip">Rate Song</span>
+            </div>
+            
+            <div className="tooltip-container">
+              <button 
                 onClick={toggleReporting} 
                 className={`control-button ${isReporting ? "reporting" : ""}`}
               >
@@ -226,26 +289,25 @@ const MusicPlayer = ({ song, artist, pageName, playlist }) => {
         </div>
 
         <div className="volume-control tooltip-container">
-  <Volume2 size={20} color="white" />
-  <input
-    type="range"
-    min="0"
-    max="1"
-    step="0.01"
-    value={volume}
-    style={{ "--volume-percentage": `${volume * 100}%` }}
-    onChange={(e) => {
-      const newVolume = e.target.value;
-      setVolume(newVolume);
-      if (audioRef.current) {
-        audioRef.current.volume = newVolume;
-      }
-      // Update the CSS custom property for the fill effect
-      e.target.style.setProperty('--volume-percentage', `${newVolume * 100}%`);
-    }}
-  />
-  <span className="tooltip tooltip-volume">Volume</span>
-</div>
+          <Volume2 size={20} color="white" />
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value={volume}
+            style={{ "--volume-percentage": `${volume * 100}%` }}
+            onChange={(e) => {
+              const newVolume = e.target.value;
+              setVolume(newVolume);
+              if (audioRef.current) {
+                audioRef.current.volume = newVolume;
+              }
+              e.target.style.setProperty('--volume-percentage', `${newVolume * 100}%`);
+            }}
+          />
+          <span className="tooltip tooltip-volume">Volume</span>
+        </div>
 
         <audio ref={audioRef} />
       </div>
