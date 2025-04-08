@@ -449,3 +449,4 @@ C:\Users\andre\Downloads\profileview\MusicLibraryBackend\obj\Debug\net8.0\refint
 C:\Users\andre\Downloads\profileview\MusicLibraryBackend\obj\Debug\net8.0\MusicLibraryBackend.pdb
 C:\Users\andre\Downloads\profileview\MusicLibraryBackend\obj\Debug\net8.0\MusicLibraryBackend.genruntimeconfig.cache
 C:\Users\andre\Downloads\profileview\MusicLibraryBackend\obj\Debug\net8.0\ref\MusicLibraryBackend.dll
+C:\Users\andre\Downloads\profileview\MusicLibraryBackend\obj\Debug\net8.0\MusicLibraryBackend.sourcelink.json

@@ -233,6 +233,32 @@
   },
   {
     "ContainingType": "database.Controllers.databaseController",
+    "Method": "ReportSong",
+    "RelativePath": "api/database/ReportSongs",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "SongID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "UserID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Reason",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "database.Controllers.databaseController",
     "Method": "SearchSongs",
     "RelativePath": "api/database/SearchSongs",
     "HttpMethod": "GET",
@@ -367,6 +393,22 @@
         "Name": "Name",
         "Type": "System.String",
         "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MusicLibraryBackend.Controllers.RatingsController",
+    "Method": "PostRating",
+    "RelativePath": "api/Ratings",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "MusicLibraryBackend.Models.RatingRequest",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []

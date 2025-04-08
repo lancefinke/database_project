@@ -9,6 +9,36 @@ const AlbumSongList = ({ songs, playlistName, playlistImage, onSongSelect }) => 
     return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
   };
 
+
+  const addAlbum = async () => {
+    const formData = new FormData();
+   
+    // Append the image to formData
+    formData.append("AlbumPicture", albumImage);  // albumImage should be a file
+ 
+    // URL parameters
+    const userIdEncoded = encodeURIComponent(user.UserID);
+    const titleEncoded = encodeURIComponent(albumName);
+    const descriptionEncoded = encodeURIComponent(description);
+   
+    // Construct the URL with query parameters
+    const url = `https://localhost:7152/api/database/UploadAlbum?albumName=${titleEncoded}&artistID=${userIdEncoded}&AlbumDescription=${descriptionEncoded}`;
+ 
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        body: formData,  // The formData that includes the image
+      });
+     
+    if(response.ok){
+        console.log('Album added successfully');
+    }
+    } catch (error) {
+      console.log("Error adding album:", error.message);
+    }
+  };
+
+
   const handleSongClick = (song) => {
     if (onSongSelect) {
       onSongSelect({

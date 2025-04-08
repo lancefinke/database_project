@@ -5,6 +5,7 @@ import "./SearchPage.css";
 import UserLink from "../UserLink/UserLink";
 import SearchGenreSongList from './SearchGenreSongList';
 
+
 const SearchResult = ({title, author, image, onPlaylistSelect}) => {
   const handlePlaylistClick = () => {
     console.log(`Clicked on playlist: ${title}`);
@@ -15,6 +16,7 @@ const SearchResult = ({title, author, image, onPlaylistSelect}) => {
       });
     }
   }
+
 
   return(
     <button className="search-result-button" onClick={handlePlaylistClick}>
@@ -32,7 +34,8 @@ const SearchResult = ({title, author, image, onPlaylistSelect}) => {
     </button>
   );
 }
-//SONGS.GenreCode,SONGS.SongFileName,SONGS.SongName,SONGS.ReleaseDate,SONGS.CoverArtFileName,SONGS.Duration,SONGS.Rating,USERS.Username,ALBUM.Title
+
+
 const SearchPage = ({ onSongSelect }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [users, setUsers] = useState([]);
@@ -43,76 +46,23 @@ const SearchPage = ({ onSongSelect }) => {
   const [showSearchResults, setShowSearchResults] = useState(false);
   const navigate = useNavigate();
 
-  const API_URL = "https://localhost:7152";
-  
+
+  //const API_URL = "https://coogmusic-g2dcaubsabgtfycy.centralus-01.azurewebsites.net/";
+ 
   const handleSearch = (e) => {
     e.preventDefault();
     console.log("Searching for:", searchQuery);
 
-    // In a real app, you would fetch from API
-    // For now, we'll use sample data
-   /*/ const sampleSongResults = [
-      { 
-        id: 101, 
-        title: searchQuery + " - Hit Song", 
-        artist: "Top Artist", 
-        genre: "Pop", 
-        duration: 180, 
-        image: "https://i.scdn.co/image/ab67616d0000b273ba5db46f4b838ef6027e6f96",
-        album: "Best Album"
-      },
-      { 
-        id: 102, 
-        title: "The " + searchQuery + " Experience", 
-        artist: "Famous Band", 
-        genre: "Rock", 
-        duration: 240, 
-        image: "https://i.scdn.co/image/ab67616d0000b273ba5db46f4b838ef6027e6f96",
-        album: "Greatest Hits"
-      },
-      { 
-        id: 103, 
-        title: "Finding " + searchQuery, 
-        artist: "New Artist", 
-        genre: "Hip-Hop", 
-        duration: 195, 
-        image: "https://i.scdn.co/image/ab67616d0000b273ba5db46f4b838ef6027e6f96",
-        album: "Fresh Beats"
-      },
-      { 
-        id: 104, 
-        title: searchQuery + " Dreams", 
-        artist: "Dream Team", 
-        genre: "R&B", 
-        duration: 210, 
-        image: "https://i.scdn.co/image/ab67616d0000b273ba5db46f4b838ef6027e6f96",
-        album: "Smooth Collection"
-      },
-      { 
-        id: 105, 
-        title: "Late Night " + searchQuery, 
-        artist: "Night Owl", 
-        genre: "Jazz", 
-        duration: 300, 
-        image: "https://i.scdn.co/image/ab67616d0000b273ba5db46f4b838ef6027e6f96",
-        album: "Midnight Sessions"
-      }
-    ];/*/
 
-    // Set search results and show them
-    /*/setSearchResults(sampleSongResults);
-    setShowSearchResults(true);
-/*/
-    // Attempt API call as well
-
-    //SONGS.GenreCode,SONGS.SongFileName,SONGS.SongName,SONGS.ReleaseDate,SONGS.CoverArtFileName,SONGS.Duration,SONGS.Rating,USERS.Username,ALBUM.Title
     setSearchResults([]);
+
 
     if (!searchQuery.trim()) {
       // Clear search results if query is empty
       setShowSearchResults(false);
       return;
     }
+
 
     // Set search results and show them
     setShowSearchResults(true);
@@ -127,12 +77,15 @@ const SearchPage = ({ onSongSelect }) => {
       console.log(searchResults)
     })
     .catch(error => console.error("Error fetching data:", error));
-  }; 
+  };
 
 
+  // Clear search results and return to main view
   const handleBackFromSearch = () => {
     setShowSearchResults(false);
   };
+
+
   // Sample genre songs data - in a real app, you'd fetch this from an API
   const genreSongsData = {
     'pop': [
@@ -152,53 +105,56 @@ const SearchPage = ({ onSongSelect }) => {
     // Add more genres as needed
   };
 
+
   // Handle genre button clicks
   const handleGenreClick = (genre) => {
     // Set active genre
     setActiveGenre(genre);
-    
+   
     // Convert genre name to lowercase for use as a key
     const genreKey = genre.toLowerCase().replace(/\s+/g, '-');
-    
+   
     // Get songs for this genre - in a real app you'd fetch from an API
     const songs = genreSongsData[genreKey] || [];
     setGenreSongs(songs);
     setShowGenreSongs(true);
-    
+   
     console.log(`Showing songs for genre: ${genre}`);
   };
 
+
   // Sample data for search results
   const samplePlaylistResults = [
-    { 
-      id: 1, 
-      title: "Chill Vibes", 
+    {
+      id: 1,
+      title: "Chill Vibes",
       author: "Various Artists",
       duration: "5:20",
-      image: "https://i.scdn.co/image/ab67706f0000000291f511334d761a18891e3d5f" 
+      image: "https://i.scdn.co/image/ab67706f0000000291f511334d761a18891e3d5f"
     },
-    { 
-      id: 2, 
-      title: "Workout Hits", 
+    {
+      id: 2,
+      title: "Workout Hits",
       author: "DJ Fitness",
       duration: "4:15",
-      image: "https://i.scdn.co/image/ab67706f00000002b60db5d0cd3b85d9d67f7a95" 
+      image: "https://i.scdn.co/image/ab67706f00000002b60db5d0cd3b85d9d67f7a95"
     },
-    { 
-      id: 3, 
-      title: "Late Night Drive", 
+    {
+      id: 3,
+      title: "Late Night Drive",
       author: "Night Owl",
       duration: "3:45",
-      image: "https://i.scdn.co/image/ab67706f000000025ea54b91b073c2776b966e7b" 
+      image: "https://i.scdn.co/image/ab67706f000000025ea54b91b073c2776b966e7b"
     },
-    { 
-      id: 4, 
-      title: "Study Focus", 
+    {
+      id: 4,
+      title: "Study Focus",
       author: "Study Beats",
       duration: "6:30",
-      image: "https://i.scdn.co/image/ab67706f00000002724554ed6bed6f051d9b0bfc" 
+      image: "https://i.scdn.co/image/ab67706f00000002724554ed6bed6f051d9b0bfc"
     }
   ];
+
 
   // Helper function to convert time string to seconds
   const convertTimeToSeconds = (timeString) => {
@@ -206,16 +162,17 @@ const SearchPage = ({ onSongSelect }) => {
     return parseInt(parts[0]) * 60 + parseInt(parts[1]);
   };
 
+
   return (
     <div className="search-page">
       <div className="search-container">
         <div className="search-bar-wrapper">
           <div className="search-icon"><span className="icon-align">🔎︎</span></div>
-          <input 
-  className="search-bar" 
-  type="search" 
-  value={searchQuery} 
-  placeholder="Search for Artist, song, or Album" 
+          <input
+  className="search-bar"
+  type="search"
+  value={searchQuery}
+  placeholder="Search for Artist, song, or Album"
   onChange={(e) => {setSearchQuery(e.target.value)}}
   onKeyDown={(e) => {
     if (e.key === 'Enter') {
@@ -226,11 +183,11 @@ const SearchPage = ({ onSongSelect }) => {
           <button className="search-button" onClick={handleSearch}>Search</button>
         </div>
       </div>
-      
+     
       {showSearchResults ? (
         // SHOW SEARCH RESULTS VIEW
         <div className="searchpage-container">
-          <SearchGenreSongList 
+          <SearchGenreSongList
             songs={searchResults}
             playlistName={`Search Results for "${searchQuery}"`}
             onBackClick={handleBackFromSearch}
@@ -240,7 +197,7 @@ const SearchPage = ({ onSongSelect }) => {
       ) : showGenreSongs ? (
         // SHOW GENRE SONGS LIST VIEW
         <div className="searchpage-container">
-          <SearchGenreSongList 
+          <SearchGenreSongList
             songs={genreSongs.map(song => ({
               id: song.id,
               title: song.title,
@@ -269,7 +226,7 @@ const SearchPage = ({ onSongSelect }) => {
               ) : (
                 // Display sample results when no users are returned from API
                 samplePlaylistResults.map(result => (
-                  <SearchResult 
+                  <SearchResult
                     key={result.id}
                     title={result.title}
                     author={result.author}
@@ -282,77 +239,77 @@ const SearchPage = ({ onSongSelect }) => {
               )}
             </div>
           </div>
-          
+         
           <div className="search-genres-container">
             <h2 className="search-genres-title">Browse All Genres</h2>
             <div className="search-genres-list">
-              <button 
+              <button
                 className={`genre-button ${activeGenre === 'Pop' ? 'active' : ''}`}
                 onClick={() => handleGenreClick('Pop')}
               >
                 <span>Pop</span>
               </button>
-              <button 
+              <button
                 className={`genre-button ${activeGenre === 'Rock' ? 'active' : ''}`}
                 onClick={() => handleGenreClick('Rock')}
               >
                 <span>Rock</span>
               </button>
-              <button 
+              <button
                 className={`genre-button ${activeGenre === 'Hip-Hop' ? 'active' : ''}`}
                 onClick={() => handleGenreClick('Hip-Hop')}
               >
                 <span>Hip-Hop</span>
               </button>
-              <button 
+              <button
                 className={`genre-button ${activeGenre === 'Jazz' ? 'active' : ''}`}
                 onClick={() => handleGenreClick('Jazz')}
               >
                 <span>Jazz</span>
               </button>
-              <button 
+              <button
                 className={`genre-button ${activeGenre === 'Classical' ? 'active' : ''}`}
                 onClick={() => handleGenreClick('Classical')}
               >
                 <span>Classical</span>
               </button>
-              <button 
+              <button
                 className={`genre-button ${activeGenre === 'Country' ? 'active' : ''}`}
                 onClick={() => handleGenreClick('Country')}
               >
                 <span>Country</span>
               </button>
-              <button 
+              <button
                 className={`genre-button ${activeGenre === 'Metal' ? 'active' : ''}`}
                 onClick={() => handleGenreClick('Metal')}
               >
                 <span>Metal</span>
               </button>
-              <button 
+              <button
                 className={`genre-button ${activeGenre === 'R&B' ? 'active' : ''}`}
                 onClick={() => handleGenreClick('R&B')}
               >
                 <span>R&B</span>
               </button>
-              <button 
+              <button
                 className={`genre-button ${activeGenre === 'Electronic' ? 'active' : ''}`}
                 onClick={() => handleGenreClick('Electronic')}
               >
                 <span>Electronic</span>
               </button>
-              <button 
+              <button
                 className={`genre-button ${activeGenre === 'Blues' ? 'active' : ''}`}
                 onClick={() => handleGenreClick('Blues')}
               >
                 <span>Blues</span>
               </button>
-              <button 
+              <button
                 className={`genre-button ${activeGenre === 'Alternative' ? 'active' : ''}`}
                 onClick={() => handleGenreClick('Alternative')}
               >
                 <span>Alternative</span>
               </button>
-              <button 
+              <button
                 className={`genre-button ${activeGenre === 'Indie' ? 'active' : ''}`}
                 onClick={() => handleGenreClick('Indie')}
               >
@@ -365,5 +322,6 @@ const SearchPage = ({ onSongSelect }) => {
     </div>
   );
 };
+
 
 export default SearchPage;

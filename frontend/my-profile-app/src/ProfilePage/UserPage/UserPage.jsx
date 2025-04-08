@@ -11,6 +11,7 @@ import AlbumSongList from '../Components/AlbumSongList';
 import GenreSongList from '../Components/GenreSongList';
 import AddSongModal from './AddSongModal';
 import ReactHowler from 'react-howler'
+import { Play, Pause, SkipBack, SkipForward, Shuffle, Repeat, Volume2, VolumeX, Plus, Check } from "lucide-react";
 
 const UserPage = ({ onSongSelect }) => {
   const [availableGenres, setAvailableGenres] = useState(['R&B', 'Rap', 'Country', 'HipHop', 'Pop', 'Rock','Electronic','Blues','Jazz','Classical','Alternative','Classical','Indie','Metal']);
@@ -317,13 +318,30 @@ const GetSongs = (userId) => {
             return album;
           });
         });
+        if (selectedAlbum && selectedAlbum.id === albumId) {
+          setSelectedAlbum(prevSelected => ({
+            ...prevSelected,
+            songs: formattedSongs
+          }));
+        }
       } else {
         console.log("No songs returned for album");
+        setAlbums(prevAlbums => {
+          return prevAlbums.map(album => {
+            if (album.id === albumId) {
+              return {
+                ...album,
+                songs: []
+              };
+            }
+            return album;
+          });
+        });
       }
     })
     .catch(error => console.error("Error fetching album songs:", error));
   };
-  
+
   const GetPlaylistSongs = (playlistId) => {
     console.log("Getting songs for playlist ID:", playlistId);
     fetch(`${API_URL}/api/database/GetPlaylistSongs?PlaylistID=${playlistId}`, {
@@ -535,6 +553,7 @@ const GetSongs = (userId) => {
     }
   };
   
+  
   // Handle playlist drag end
   const handlePlaylistDragEnd = (e) => {
     e.currentTarget.classList.remove('dragging');
@@ -587,6 +606,11 @@ const GetSongs = (userId) => {
     setSelectedAlbum(album);
     setSelectedPlaylist(null); // Clear selected playlist when opening an album
     setSelectedGenre(null); // Clear selected genre when opening an album
+
+    if (album.id !== defaultAlbumId) { // Skip for "My Songs" which is loaded differently
+      console.log("Fetching songs for album ID:", album.id);
+      GetAlbumSongs(album.id);
+    }
   };
   
   const handleGenreClick = (genreName) => {
@@ -620,70 +644,25 @@ const GetSongs = (userId) => {
     }
   };
 
-  // Add the handleAddSong function here
   const handleAddSong = (songData) => {
     console.log('Adding new song:', songData);
-
-    const formData = new FormData();
-    formData.append('songName', songData.name);
-    formData.append('SongMP3', songData.songFile); 
-    formData.append('SongPicture', songData.image); 
-    formData.append('authorID', currentUserId); 
-    formData.append('albumID', songData.albumId || 0); 
-    formData.append('genreCode', songData.genreCode || 1); 
-    
-    fetch(`${API_URL}/api/database/UploadSong`, {
-      method: 'POST',
-      body: formData,
-      
-    })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`Upload failed with status ${response.status}`);
-      }
-      return response.json();
-    })
-    .then(data => {
-      console.log('Upload successful:', data);
-      alert('Song uploaded successfully!');
-      if (currentUserId) {
-        GetUserAlbums(currentUserId);
-      }
-      
-    })
-    .catch(error => {
-      console.error('Error uploading song:', error);
-      alert('Failed to upload song: ' + error.message);
-    });
-  
-    
     // Here you would typically make an API call to save the song
     // and then update your albums state with the new song
-    
+   
     // For now, let's add it to the selected album as an example
     const newSong = {
       id: Date.now(), // temporary ID
       title: songData.name,
       artist: "Haitham Yousif", // Hardcoded for example
-      genre: "Unknown", // You might want to add genre to your form
+      genre: songData.genre || "Unknown", // You might want to add genre to your form
       duration: 180, // Default duration
       image: songData.image ? URL.createObjectURL(songData.image) : "https://via.placeholder.com/40",
       album: "My Songs"
     };
-    
-    // Update albums state with the new song
-    const updatedAlbums = albums.map(album => {
-      if (album.id === parseInt(songData.albumId)) {
-        return {
-          ...album,
-          songs: [...album.songs, newSong]
-        };
-      }
-      return album;
-    });
-    
-    setAlbums(updatedAlbums);
-  };
+
+  }
+
+ 
 
   const AddPlaylistComponent = (playlistData) => {
     console.log("Making a new playlist: ", playlistData);

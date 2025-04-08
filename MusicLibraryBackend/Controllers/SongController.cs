@@ -219,6 +219,10 @@ namespace database.Controllers
             return new JsonResult(table);
         }
 
+
+
+
+
         [HttpGet]
         [Route("GetSongsByGenre")]
         public JsonResult GetSongsByGenre(int GenreCode)
@@ -521,6 +525,34 @@ namespace database.Controllers
 
             return new JsonResult(message);
 
+        }
+
+        [HttpPost]
+        [Route("ReportSongs")]
+        public JsonResult ReportSong(int SongID, int UserID, string Reason)
+        {
+            string query = "insert into reportedlogs(SongID,ReportedBy,Reason,ReportStatus, CreatedAt,AdminID) values (@SongID, @ReportedBy,@Reason,0, @CreatedAt, 1)";
+            DataTable table = new DataTable();
+            string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
+
+            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@SongID", SongID);
+                    myCommand.Parameters.AddWithValue("@ReportedBy", UserID);
+                    myCommand.Parameters.AddWithValue("@Reason", Reason);
+                    myCommand.Parameters.AddWithValue("CreatedAt", DateTime.Now);
+                    SqlDataReader myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
+                }
+
+            }
+            string message = SongID + " has been reported by " + UserID + " for this reason : " + Reason;
+            return new JsonResult(message);
         }
 
 

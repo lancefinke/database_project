@@ -78,6 +78,8 @@ builder.Services.AddScoped<UserService>();
 //update service
 builder.Services.AddScoped<UpdateService>();
 builder.Services.AddScoped<DeleteService>();
+builder.Services.AddScoped<RatingService>();
+
 
 var app = builder.Build();
 

@@ -25,8 +25,10 @@ const playlist = [
 const AppLayout = () => {
   const location = useLocation();
   
+  
   // Add state to track selected song
   const [selectedSong, setSelectedSong] = useState(null);
+  
   
   useEffect(() => {
     // Add a class to the app container based on the current route
@@ -84,15 +86,19 @@ const AppLayout = () => {
         <Route path="/" element={<LoginPage />} /> </Routes>
       </main>
       
+      
+      
       {showMusicPlayer && selectedSong && (
-        <MusicPlayer
-          playlist={playlist}
-          song={selectedSong.name}
-          artist={selectedSong.creator}
-          pageName={getMusicPlayerPageName()}
-          onClose={handleClosePlayer}
-        />
-      )}
+  <MusicPlayer
+    playlist={playlist}
+    song={selectedSong.name}
+    artist={selectedSong.creator}
+    songUrl={selectedSong.SongFileName  || selectedSong.url}
+    songId={selectedSong.SongID  ||  selectedSong.id}
+    pageName={getMusicPlayerPageName()}
+    onClose={handleClosePlayer}
+  />
+)}
     </div>
   );
 };

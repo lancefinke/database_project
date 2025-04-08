@@ -98,7 +98,7 @@ const HomePage = () => {
           flags: ["Top Rated"], 
           iconImage: song.CoverArtFileName,
           songSrc: song.SongFileName,
-          songId: song.SongID,
+          songID: song.SongID,
           totalRatings: song.TotalRatings
         }));
         
@@ -285,7 +285,8 @@ const HomePage = () => {
                 isCenter={index === centerIndex}
                 shouldPlay={playingSongIndex === index}
                 songSrc={song.songSrc}
-                rating = {song.totalRatings}
+                AverageRating = {song.totalRatings}
+                songID = {song.songID}
               />
             </div>
           ))}

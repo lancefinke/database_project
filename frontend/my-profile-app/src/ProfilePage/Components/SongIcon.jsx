@@ -6,26 +6,133 @@ import "./SongIcon.css";
 import ReactHowler from 'react-howler'
 
 // Updated FlagIcon to match MusicPlayer style
-const FlagIcon = ({ onClose }) => {
+const FlagIcon = ({ onClose, SongID }) => {
+  const [reportReason,setReportReason] = useState("");
+  const[isSubmitting,setIsSubmitting]= useState(false);
+  const[error,setError] = useState("");
+  const[success,setSuccess] = useState("");
+  const [currentUserId, setCurrentUserId] = useState("");
+  
+
+  const API_URL = "https://localhost:7152";
+
+  useEffect(() => {
+    // Get token from localStorage
+    const token = localStorage.getItem('userToken');
+    if (token) {
+      try {
+        
+        // gets token payload
+        const payload = JSON.parse(atob(token.split('.')[1]));
+  
+        const userId = payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
+        if (userId) {
+          setCurrentUserId(userId);
+          console.log("User ID extracted:", userId);
+  
+        } 
+        else {
+          console.error("Could not find userID in token");
+        }
+        //username  
+      } catch (error) {
+        console.error("Error parsing JWT token:", error);
+      }
+    } else {
+      console.log("No token found in localStorage");
+    }
+  }, []);
+  const handleReportSubmit = () => {
+    console.log("Button pressed");
+    console.log(reportReason);
+    if (!reportReason || reportReason.trim() === '') {
+      setError("Please provide a reason for the report");
+      return;
+    }
+    if (!currentUserId) {
+      console.error("No user ID available");
+      setError("No user ID available. Please log in again.");
+      return;
+    }
+    console.log(SongID);
+    console.log(reportReason);
+    if (!SongID) {
+      console.error("No song ID provided");
+      setError("No song ID provided. Cannot submit report.");
+      return;
+    }
+    
+    setIsSubmitting(true);
+    setError("");
+    fetch(`${API_URL}/api/database/ReportSongs?SongID=${SongID}&UserID=${currentUserId}&Reason=${reportReason}`, {
+      method: 'POST',
+      })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} ${response.statusText}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log("Report submitted successfully:", data);
+      setSuccess("Report submitted successfully");
+      
+      // Close the modal after a short delay
+      setTimeout(() => {
+        onClose();
+      }, 1500);
+    })
+    .catch(error => {
+      console.error("Error submitting report:", error);
+      setError("Error submitting report: " + error.message);
+    })
+    .finally(() => {
+      setIsSubmitting(false);
+    });
+  };
+  const handleReasonChange = (value) => {
+    console.log("Reason changed to " , value);
+    setReportReason(value);
+  };
+  
   return (
     <>
       <div className="song-icon-overlay"></div>
       <div className="song-icon-flag-wrapper">
         <label style={{margin:"0 auto", textAlign:"center"}}>REASON FOR REPORT</label>
         <div className="editable-div-flag" style={{border:"3px solid white", borderRadius:"10px", width:"85%", margin:"auto", height:"60%"}}>
-          <Editable 
-            className="flag-editable"
-            title="Enter the reason for the report"
-            value=""
-            div_width="90%"
-            div_height="90%"
-            backgroundColor="#8E1616"
-            textColor="white"
-            placeholder="Example: Racism, hate speech promotes violence, etc."
-          />
+        <textarea 
+          value={reportReason}
+          onChange={(e) => {
+            console.log("Typing:", e.target.value);
+            setReportReason(e.target.value);
+          }}
+          placeholder="Example: Racism, hate speech promotes violence, etc."
+          style={{
+            width: "100%",
+            height: "100%",
+            backgroundColor: "#8E1616",
+            color: "white",
+            border: "none",
+            padding: "10px",
+            resize: "none",
+            outline: "none",
+            fontFamily: "inherit",
+            fontSize: "14px",
+            zIndex: 200000
+          }}
+          onClick={(e) => e.stopPropagation()}
+          onFocus={(e) => e.stopPropagation()}
+        />
         </div>
         <div className="report-buttons">
-          <button className="submit-report-btn">REPORT SONG</button>
+          <button className="submit-report-btn" onClick={(e) => {
+           e.stopPropagation();
+          e.preventDefault(); 
+         e.nativeEvent.stopImmediatePropagation();
+          handleReportSubmit();
+        }} 
+   disabled = {isSubmitting} >REPORT SONG</button>
           <button onClick={onClose} className="cancel-report-btn">CANCEL</button>
         </div>
       </div>
@@ -33,12 +140,12 @@ const FlagIcon = ({ onClose }) => {
   );
 };
 
-const SongIcon = ({ name, creator, duration, flags, iconImage, isHomePage, isCenter, likes, shouldPlay = false, songSrc, onPlayStatusChange }) => {
+const SongIcon = ({ name, creator, duration, flags, iconImage, isHomePage, isCenter, likes, shouldPlay = false, songSrc, onPlayStatusChange,AverageRating,songID }) => {
   // Keep existing state
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [showReport, setShowReport] = useState(false);
-  const [rating, setRating] = useState(0.0);
+  const [rating, setRating] = useState(false);
   const [liked, setLiked] = useState(false);
   const [userControlled, setUserControlled] = useState(false);
   const [addedToPlaylist, setAddedToPlaylist] = useState(false); // New state for tracking plus/check toggle
@@ -102,7 +209,7 @@ const SongIcon = ({ name, creator, duration, flags, iconImage, isHomePage, isCen
     <>
       <ReactHowler src={songSrc || 'https://blobcontainer2005.blob.core.windows.net/songfilecontainer/uploads/008ad32f-f270-4462-8577-bf4a9c3db258.mp3'}
        playing={isPlaying}/>
-      {showReport && <FlagIcon onClose={handleCloseReport} />}
+      {showReport && <FlagIcon onClose={handleCloseReport} SongID = {songID}/>}
       
       <button 
         className={wrapperClass}
@@ -117,7 +224,7 @@ const SongIcon = ({ name, creator, duration, flags, iconImage, isHomePage, isCen
             <select 
               className="rating-select"
               value={rating}
-              onChange={(e) => setRating(e.target.value)}
+              onChange={(e) => setRating(e.target.value)} //changes this so you can send the ratings  /api/Ratings gets back average rating so you can update it 
               onClick={(e) => e.stopPropagation()}
               onFocus={(e) => e.stopPropagation()}
               onMouseDown={(e) => e.stopPropagation()}
@@ -130,10 +237,14 @@ const SongIcon = ({ name, creator, duration, flags, iconImage, isHomePage, isCen
               <option value="5">5</option>
             </select>
           )}
-          <div className="avg-rating">Average Rating: {rating}</div>
+          <div className="avg-rating">Average Rating: {AverageRating}</div>
         </div>
         {location.pathname !== '/profile' && 
-          <div className="flag-btn" title="Report Song" onClick={(e) => {e.stopPropagation(); setShowReport(true)}}>
+          <div className="flag-btn" title="Report Song" onClick={(e) => {e.stopPropagation();e.preventDefault();console.log("Butotn lcicked"); setShowReport(true)}}
+          style={{ 
+            position: "relative", // Ensure it's positioned properly
+            zIndex: 100000 // Higher z-index to ensure it's clickable
+          }}>
             <Flag className="flag-icon"/>
           </div>
         }
