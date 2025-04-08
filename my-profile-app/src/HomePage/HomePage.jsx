@@ -2,63 +2,15 @@ import React, { useRef, useEffect, useState } from "react";
 import SongIcon from "../ProfilePage/Components/SongIcon";
 import "./HomePage.css";
 
-// Sample songs for the home page
-const homeSongs = [
-  {
-    name: "Lost in the Echo",
-    creator: "Linkin Park",
-    duration: "3:31",
-    flags: ["Rock", "Popular"],
-    iconImage: "/images/lost-in-the-echo.jpg",
-    songSrc:"./FF Violin II - Clash On The Big Bridge By TAMUSIC.mp3",
-  },
-  {
-    name: "Blinding Lights",
-    creator: "The Weeknd",
-    duration: "3:20",
-    flags: ["Pop", "Hit"],
-    iconImage: "/images/blinding-lights.jpg",
-    songSrc:"./FF Violin II - Clash On The Big Bridge By TAMUSIC.mp3",
-  },
-  {
-    name: "Bohemian Rhapsody",
-    creator: "Queen",
-    duration: "5:55",
-    flags: ["Rock"],
-    iconImage: "/images/bohemian-rhapsody.jpg",
-    songSrc:"./FF Violin II - Clash On The Big Bridge By TAMUSIC.mp3",
-  },
-  {
-    name: "Shape of You",
-    creator: "Ed Sheeran",
-    duration: "3:53",
-    flags: ["Pop", "Dance"],
-    iconImage: "/images/shape-of-you.jpg",
-    songSrc:"./FF Violin II - Clash On The Big Bridge By TAMUSIC.mp3",
-  },
-  {
-    name: "Starboy",
-    creator: "The Weeknd",
-    duration: "3:50",
-    flags: ["Pop", "R&B"],
-    iconImage: "/images/starboy.jpg",
-    songSrc:"./FF Violin II - Clash On The Big Bridge By TAMUSIC.mp3",
-  },
-  {
-    name: "Uptown Funk",
-    creator: "Mark Ronson ft. Bruno Mars",
-    duration: "4:30",
-    flags: ["Funk", "Dance"],
-    iconImage: "/images/uptown-funk.jpg",
-    songSrc:"./FF Violin II - Clash On The Big Bridge By TAMUSIC.mp3",
-  }
-];
 
 const HomePage = () => {
   const carouselRef = useRef(null);
   const itemsRef = useRef([]);
   const [centerIndex, setCenterIndex] = useState(1); // Start with second item centered
   const [playingSongIndex, setPlayingSongIndex] = useState(null); // Track which song is playing
+  const [homeSongs, setSongs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null); 
 
   // Handle layout adjustments when component mounts
   useEffect(() => {
@@ -104,6 +56,42 @@ const HomePage = () => {
         }
       });
     };
+  }, []);
+
+
+  useEffect(() => {
+    setLoading(true);
+
+    fetch(`https://localhost:7152/api/database/GetSongsByRating`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to fetch top songs');
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log("API returned songs:", data);
+        const formattedSongs = data.map(song => ({
+          name: song.SongName,
+          creator: song.Username,
+          duration: song.Duration,
+          flags: ["Top Rated"], 
+          iconImage: song.CoverArtFileName,
+          songSrc: song.SongFileName,
+          songId: song.SongID,
+          totalRatings: song.TotalRatings
+        }));
+
+        setSongs(formattedSongs);
+      })
+      .catch(err => {
+        console.error("Error fetching top songs:", err);
+        setError(err.message);
+
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   // Set up refs for each carousel item
@@ -209,7 +197,7 @@ const HomePage = () => {
                 creator={song.creator}
                 duration={song.duration}
                 flags={song.flags}
-                iconImage="https://upload.wikimedia.org/wikipedia/commons/e/e7/Everest_North_Face_toward_Base_Camp_Tibet_Luca_Galuzzi_2006.jpg"
+                iconImage={song.iconImage}
                 isHomePage={true}
                 isCenter={index === centerIndex}
                 shouldPlay={playingSongIndex === index}

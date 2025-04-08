@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import './PlaylistSongList.css';
 
-const AlbumSongList = ({ songs, playlistName, playlistImage, onSongSelect, onDeleteSong, isMyAlbum = false }) => {
+const AlbumSongList = ({ ID, selectedAlbum, onSongSelect, onDeleteSong, isMyAlbum = false }) => {
   // Function to format seconds to mm:ss
   const formatDuration = (seconds) => {
     const minutes = Math.floor(seconds / 60);
@@ -12,14 +12,29 @@ const AlbumSongList = ({ songs, playlistName, playlistImage, onSongSelect, onDel
   const handleSongClick = (song) => {
     if (onSongSelect) {
       onSongSelect({
-        name: song.title,
-        creator: song.artist
+        name: song.SongName,
       });
     }
   };
 
   // State to track which song's action menu is open
   const [activeMenu, setActiveMenu] = useState(null);
+  const [albumId,setAlbumID] = useState(ID);
+  const [album,setAlbum] = useState([]);
+
+  useEffect(() => {
+    const fetchSongs = async () => {
+      try {
+        const res = await fetch(`https://localhost:7152/api/database/GetAlbumSongs?AlbumID=${albumId}`);
+        const data = await res.json();
+        setAlbum(data);
+      } catch (error) {
+        console.error('Error fetching songs:', error);
+      }
+    };
+
+    fetchSongs();
+  }, []);
 
   // Toggle menu for a specific song
   const toggleMenu = (e, songId) => {
@@ -40,6 +55,8 @@ const AlbumSongList = ({ songs, playlistName, playlistImage, onSongSelect, onDel
       setActiveMenu(null); // Close menu after action
     }
   };
+
+
 
   // Add click event listener to document to close menu when clicking outside
   React.useEffect(() => {
@@ -64,13 +81,13 @@ const AlbumSongList = ({ songs, playlistName, playlistImage, onSongSelect, onDel
       <div className="playlist-header">
         <div className="playlist-info">
           <img 
-            src={playlistImage || "https://via.placeholder.com/100"} 
-            alt={playlistName} 
+            src={selectedAlbum.AlbumCoverArtFileName || "https://via.placeholder.com/100"} 
+            alt={selectedAlbum.Title} 
             className="playlist-header-image" 
           />
           <div className="playlist-header-text">
-            <h2 className="playlist-title">{playlistName || "Album"}</h2>
-            <p className="song-count">{songs.length} songs</p>
+            <h2 className="playlist-title">{selectedAlbum.Title || "Album"}</h2>
+            <p className="song-count">{album.length} songs</p>
           </div>
         </div>
       </div>
@@ -85,8 +102,8 @@ const AlbumSongList = ({ songs, playlistName, playlistImage, onSongSelect, onDel
         </div>
         
         <div className="songs-list">
-          {songs.map((song, index) => (
-            <div key={song.id} className="song-row" onClick={() => handleSongClick(song)}>
+          {album.map((song, index) => (
+            <div key={song.SongID} className="song-row" onClick={() => handleSongClick(song)}>
               <div className="song-number-cell">
                 <span className="song-number">{index + 1}</span>
                 <button className="play-button" onClick={(e) => {
@@ -94,29 +111,29 @@ const AlbumSongList = ({ songs, playlistName, playlistImage, onSongSelect, onDel
                   handleSongClick(song);
                 }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
-                    <path d="M8 5v14l11-7z"></path>
+                    <path d="M8 5v14l11-7"></path>
                   </svg>
                 </button>
               </div>
               <div className="song-info">
                 <img 
-                  src={song.image || "https://via.placeholder.com/40"} 
-                  alt={song.title} 
+                  src={song.CoverArtFileName || "https://via.placeholder.com/40"} 
+                  alt={song.SongName} 
                   className="song-image" 
                 />
                 <div className="song-text">
-                  <div className="song-title">{song.title}</div>
-                  <div className="song-artist">{song.artist}</div>
+                  <div className="song-title">{song.SongName}</div>
+                  <div className="song-artist">{song.Username}</div>
                 </div>
               </div>
-              <div className="song-genre">{song.genre}</div>
+              <div className="song-genre">{song.GenreText}</div>
               <div className="song-duration" style={{ fontSize: '1rem', fontWeight: 'bold', color: 'white' }}>
-  {formatDuration(song.duration)}
+  {formatDuration(song.Duration)}
 </div>
               <div className="song-actions" onClick={(e) => e.stopPropagation()}>
                 <button 
                   className="song-actions-button" 
-                  onClick={(e) => toggleMenu(e, song.id)}
+                  onClick={(e) => toggleMenu(e, song.SongID)}
                   aria-label="Song actions"
                 >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -124,7 +141,7 @@ const AlbumSongList = ({ songs, playlistName, playlistImage, onSongSelect, onDel
                   </svg>
                 </button>
                 
-                {activeMenu === song.id && (
+                {activeMenu === song.SongID && (
                   <div className="song-actions-menu">
                     <div 
                       className="song-actions-menu-item delete"

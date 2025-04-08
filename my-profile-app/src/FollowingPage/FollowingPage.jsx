@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import UserLink from '../UserLink/UserLink';
 import { useNavigate } from 'react-router-dom';
 import './FollowingPage.css';
 
@@ -14,10 +15,7 @@ const FollowingPage = () => {
     { id: 5, name: "Alex Rodriguez", profileImage: "https://via.placeholder.com/150" }
   ];
 
-  // Function to handle navigation to user profile
-  const handleNavigateToProfile = (userId) => {
-    navigate(`/profile/${userId}`);
-  };
+ 
 
   return (
     <div className="following-container">
@@ -29,14 +27,13 @@ const FollowingPage = () => {
           <button 
             key={user.id} 
             className="playlist-button"
-            onClick={() => handleNavigateToProfile(user.id)}
           >
             <img
               src={user.profileImage}
               alt={`${user.name}'s profile`}
               className="playlist-image"
             />
-            <span className="playlist-name">{user.name}</span>
+            <span className="playlist-name"><UserLink text={user.name} userName={user.name}/></span>
           </button>
         ))}
       </div>

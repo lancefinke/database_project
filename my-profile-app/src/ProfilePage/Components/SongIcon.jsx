@@ -104,7 +104,7 @@ const SongIcon = ({ name, creator, duration, flags, iconImage, isHomePage, isCen
       
       <button 
         className={wrapperClass}
-        onClick={togglePlay}
+        /*onClick={togglePlay}*/
         aria-label={isPlaying ? "Pause song" : "Play song"}
       >
         <div className="song-icon">
