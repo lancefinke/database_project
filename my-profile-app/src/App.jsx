@@ -14,6 +14,7 @@ import FollowingPage from "./FollowingPage/FollowingPage";
 import Dashboard from "./ProfilePage/UserPage/Dashboard";
 import { BrowserRouter as Router, Routes, Route, useLocation, Link } from "react-router-dom";
 import "./ProfilePage/ProfilePage.css";
+import { useLoginContext } from "./LoginContext/LoginContext";
 
 // Sample audio files for the music player
 const playlist = [
@@ -22,15 +23,20 @@ const playlist = [
   "/music/song3.mp3"
 ];
 
+const LeaveAdminPage = () => {
+  return(
+    <h1 style={{fontSize:"200%", color: "white"}}>You are not authorized to access this page. <Link style={{color:"white",fontSize:"100%"}} to="/home">Click Here to Return</Link></h1>
+  );
+}
+
 // Layout wrapper to handle class changes based on route
 const AppLayout = () => {
   const location = useLocation();
-  
-  // Add state to track selected song
   const [selectedSong, setSelectedSong] = useState(null);
+  const { isLoggedIn } = useLoginContext();
+  const [role, setRole] = useState('admin');
   
   useEffect(() => {
-    // Add a class to the app container based on the current route
     if (location.pathname === '/profile') {
       document.body.classList.add('profile-page-active');
     } else {
@@ -38,17 +44,14 @@ const AppLayout = () => {
     }
   }, [location]);
 
-  // Function to handle song selection
   const handleSongSelect = (song) => {
     setSelectedSong(song);
   };
 
-  // Function to close the music player
   const handleClosePlayer = () => {
     setSelectedSong(null);
   };
   
-  // Show music player only when a song is selected and not on excluded pages
   const showMusicPlayer = selectedSong !== null && 
     location.pathname !== '/home' && 
     location.pathname !== '/login' && 
@@ -56,7 +59,6 @@ const AppLayout = () => {
     location.pathname !== '/reset' && 
     location.pathname !== '/admin';
   
-  // Determine which pageName to use for MusicPlayer based on the current route
   const getMusicPlayerPageName = () => {
     if (location.pathname === '/profile') return 'profile';
     if (location.pathname === '/search') return 'search';
@@ -65,39 +67,24 @@ const AppLayout = () => {
     return 'default';
   };
 
-  //useStates
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [role, setRole] = useState('admin');
-
-  // Check if current path should show the sidebar
-  const shouldShowSidebar = 
-    location.pathname !== '/login' && 
-    location.pathname !== '/signup' && 
-    location.pathname !== '/reset' && 
-    location.pathname !== '/';
-
   return (
     <div className="app-container">
-      {shouldShowSidebar && <SideBar />}
-      <main className={`main-content ${shouldShowSidebar ? 'with-sidebar' : ''}`}>
-      <Routes>
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/search" element={<SearchPage onSongSelect={handleSongSelect} />} />
-        <Route path="/profile" element={<UserPage onSongSelect={handleSongSelect} />} />
-        <Route path="/user" element={<ProfilePage onSongSelect={handleSongSelect} />} />
-        <Route path="/profile/:userId" element={<ProfilePage onSongSelect={handleSongSelect} />} />
-        <Route path="/following" element={<FollowingPage />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path='/login' element={<LoginPage />} />
-        <Route path='/signup' element={<SignupPage />} />
-        <Route path='/reset' element={<ResetPassword />} />
-        <Route path='/admin' element={
-          role === 'admin' 
-            ? <Admin /> 
-            : <h1 style={{fontSize:"200%"}}>You are not authorized to access this page. <Link style={{color:"white",fontSize:"100%"}} to="/home">Click Here to Return</Link></h1>
-        } />
-        <Route path="/" element={<LoginPage />} />
-      </Routes>
+      {isLoggedIn && location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/reset' && location.pathname !== '/' && <SideBar />}
+      <main className="main-content">
+        <Routes>
+          <Route path="/home" element={isLoggedIn ? <HomePage /> : <LoginPage />} />
+          <Route path="/search" element={isLoggedIn ? <SearchPage onSongSelect={handleSongSelect} /> : <LoginPage />} />
+          <Route path="/profile" element={isLoggedIn ? <UserPage onSongSelect={handleSongSelect} /> : <LoginPage />} />
+          <Route path="/user" element={isLoggedIn ? <ProfilePage onSongSelect={handleSongSelect} /> : <LoginPage />} />
+          <Route path="/profile/:userId" element={isLoggedIn ? <ProfilePage onSongSelect={handleSongSelect} /> : <LoginPage />} />
+          <Route path="/following" element={isLoggedIn ? <FollowingPage onSongSelect={handleSongSelect} /> : <LoginPage />} />
+          <Route path="/dashboard" element={isLoggedIn ? <Dashboard /> : <LoginPage />} />
+          <Route path='/admin' element={isLoggedIn ? (role === 'admin' ? <Admin /> : <LeaveAdminPage />) : <LoginPage />} />
+          <Route path='/login' element={<LoginPage />} />
+          <Route path='/signup' element={<SignupPage />} />
+          <Route path='/reset' element={<ResetPassword />} />
+          <Route path="/" element={<LoginPage />} />
+        </Routes>
       </main>
       
       {showMusicPlayer && selectedSong && (
