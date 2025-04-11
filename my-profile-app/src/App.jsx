@@ -11,7 +11,7 @@ import SignupPage from "./SignupPage/Signuppage";
 import ResetPassword from "./ResetPasswordPage/ResetPassword";
 import SideBar from "./ProfilePage/Components/SideBar";
 import FollowingPage from "./FollowingPage/FollowingPage";
-import Dashboard from "./ProfilePage/UserPage/Dashboard"; // Import the Dashboard component
+import Dashboard from "./ProfilePage/UserPage/Dashboard";
 import { BrowserRouter as Router, Routes, Route, useLocation, Link } from "react-router-dom";
 import "./ProfilePage/ProfilePage.css";
 
@@ -69,22 +69,33 @@ const AppLayout = () => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [role, setRole] = useState('admin');
 
+  // Check if current path should show the sidebar
+  const shouldShowSidebar = 
+    location.pathname !== '/login' && 
+    location.pathname !== '/signup' && 
+    location.pathname !== '/reset' && 
+    location.pathname !== '/';
+
   return (
     <div className="app-container">
-      {location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/reset' && location.pathname!=='/'&&<SideBar />}
-      <main className="main-content">
+      {shouldShowSidebar && <SideBar />}
+      <main className={`main-content ${shouldShowSidebar ? 'with-sidebar' : ''}`}>
       <Routes>
         <Route path="/home" element={<HomePage />} />
         <Route path="/search" element={<SearchPage onSongSelect={handleSongSelect} />} />
         <Route path="/profile" element={<UserPage onSongSelect={handleSongSelect} />} />
         <Route path="/user" element={<ProfilePage onSongSelect={handleSongSelect} />} />
         <Route path="/profile/:userId" element={<ProfilePage onSongSelect={handleSongSelect} />} />
-        <Route path="/following" element={<FollowingPage onSongSelect={handleSongSelect} />} />
-        <Route path="/dashboard" element={<Dashboard />} /> {/* Add Dashboard route */}
+        <Route path="/following" element={<FollowingPage />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path='/login' element={<LoginPage />} />
         <Route path='/signup' element={<SignupPage />} />
         <Route path='/reset' element={<ResetPassword />} />
-        <Route path='/admin' element={role === 'admin' ? <Admin /> : <h1 style={{fontSize:"200%"}}>You are not authorized to access this page. <Link style={{color:"white",fontSize:"100%"}} to="/home">Click Here to Return</Link></h1>}></Route>
+        <Route path='/admin' element={
+          role === 'admin' 
+            ? <Admin /> 
+            : <h1 style={{fontSize:"200%"}}>You are not authorized to access this page. <Link style={{color:"white",fontSize:"100%"}} to="/home">Click Here to Return</Link></h1>
+        } />
         <Route path="/" element={<LoginPage />} />
       </Routes>
       </main>
