@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./ResetPassword.css";
 import emailjs from '@emailjs/browser'
 import keys from './keys';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const ResetPassword = () => {
     const [confirmed, setConfirmed] = useState(false);
@@ -52,6 +52,9 @@ const ResetPassword = () => {
 
     return (
         <div className="reset-container">
+            <div className="back-button-container">
+                <Link to="/login" className="back-button">← Back to Login</Link>
+            </div>
             <h1 className="reset-title">Reset Password</h1>
             <p className="instructions">To reset your password, a 6-digit code will be sent to your email.</p>
             

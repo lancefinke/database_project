@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import './SignupPage.css';
 import { ImageUp } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const SignupPage = () => {
     const [pfpPrev, setPfpPrev] = useState('https://i.pinimg.com/736x/07/1a/32/071a32648a9ca4aebad44fa4eb43c276.jpg');
@@ -66,6 +66,9 @@ const SignupPage = () => {
 
     return (
         <div className='signup-container'>
+            <div className="back-button-container">
+                <Link to="/login" className="back-button">← Back to Login</Link>
+            </div>
             <h1 className='signup-title'>Create your account</h1>
             
             <div className='signup-block'>
