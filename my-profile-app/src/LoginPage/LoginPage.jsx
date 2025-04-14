@@ -24,7 +24,7 @@ const LoginPage = () => {
     const getUserInfo = async()=>{
         try {
             const response = await fetch(
-                `https://localhost:7152/api/Users/GetUserByName?name=${encodeURIComponent(username)}`
+                `http://localhost:5142/api/Users/GetUserByName?name=${encodeURIComponent(username)}`
             );
 
             if (!response.ok) {
@@ -47,7 +47,7 @@ const LoginPage = () => {
                 password: password,
             })
         };
-        fetch('https://localhost:7152/api/Auth/login', requestOptions)
+        fetch('http://localhost:5142/api/Auth/login', requestOptions)
             .then(response => response.json())
             .then(data => {
                 if(data.token){
