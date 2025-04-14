@@ -1,11 +1,15 @@
-import { useState } from "react";
-import "./../../SignupPage/Signuppage.css";
+import React, { useState } from "react";
+import ReactDOM from "react-dom";
+import { X } from "lucide-react";
+import "./AddPlaylist.css";
 
-const AddPlaylist = () => {
+const AddPlaylist = ({ isOpen, onClose, onSubmit }) => {
+    if (!isOpen) return null;
+    
     const [privacyStatus, setPrivacyStatus] = useState('public');
     const [playlistName, setPlaylistName] = useState('');
     const [playlistImage, setPlaylistImage] = useState(null);
-    const [imagePreview, setImagePreview] = useState(null);
+    const [imagePreview, setImagePreview] = useState("https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=");
 
     const changeStatus = (e) => {
         setPrivacyStatus(e.target.value);
@@ -19,102 +23,113 @@ const AddPlaylist = () => {
         const file = e.target.files[0];
         if (file) {
             setPlaylistImage(file);
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setImagePreview(reader.result);
-            };
-            reader.readAsDataURL(file);
+            setImagePreview(URL.createObjectURL(file));
         }
     }
     
-    const handleSubmit = () => {
+    const handleSubmit = (e) => {
+        e.preventDefault();
         if (!playlistName || !playlistImage) {
             alert("Please provide both a playlist name and image.");
             return;
         }
-        // Add your submission logic here
+        
+        onSubmit && onSubmit({
+            name: playlistName,
+            image: playlistImage,
+            privacy: privacyStatus
+        });
+        
+        // Reset form
+        setPlaylistName('');
+        setPlaylistImage(null);
+        setImagePreview("https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=");
+        setPrivacyStatus('public');
+        onClose && onClose();
     }
 
-    return (
-        <div className="add-playlist-window" style={{width:'80%',marginLeft:'-40%'}}>
-            <div className="form-section">
-                <h1>New Playlist</h1>
-                <label className="playlist-label" style={{marginLeft:'0px'}}>
-                    PLAYLIST NAME
-                    <input 
-                        required 
-                        type='text' 
-                        className='playlist-text' 
-                        style={{width:'90%',height:'25px'}} 
-                        onChange={handleChange}
-                    />
-                </label>
+    // Create the modal markup to be rendered with portal
+    const modalContent = (
+        <div className="modal-overlay">
+            <div className="modal-content">
+                <div className="modal-header">
+                    <h2>New Playlist</h2>
+                    <button className="close-button" onClick={onClose}>
+                        <X size={20} />
+                    </button>
+                </div>
                 
-                <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '15px'}}>
-                    <label className="image-btn">
-                        {imagePreview ? 'CHANGE IMAGE' : 'SELECT COVER IMAGE'}
+                <form onSubmit={handleSubmit}>
+                    <div className="form-group">
+                        <label htmlFor="playlist-name">Playlist Name</label>
                         <input 
-                            type="file" 
-                            accept="image/*" 
-                            className="signup-pfp" 
-                            onChange={handleImageChange} 
+                            id="playlist-name"
+                            type="text" 
+                            value={playlistName}
+                            onChange={handleChange}
                             required
                         />
-                    </label>
+                    </div>
                     
-                    {imagePreview && (
-                        <div style={{marginTop: '15px'}}>
-                            <img 
-                                src={imagePreview} 
-                                alt="Playlist cover" 
-                                style={{
-                                    width: '150px', 
-                                    height: '150px', 
-                                    objectFit: 'cover',
-                                    borderRadius: '8px',
-                                    border: '2px solid white'
-                                }} 
-                            />
+                    <div className="form-group">
+                        <label>Privacy Setting</label>
+                        <div className="privacy-options">
+                            <label className={`privacy-option ${privacyStatus === 'private' ? 'selected' : ''}`}>
+                                <input 
+                                    type="radio" 
+                                    name="privacy" 
+                                    value="private" 
+                                    checked={privacyStatus === "private"} 
+                                    onChange={changeStatus}
+                                />
+                                Private
+                            </label>
+                            <label className={`privacy-option ${privacyStatus === 'public' ? 'selected' : ''}`}>
+                                <input 
+                                    type="radio" 
+                                    name="privacy" 
+                                    value="public" 
+                                    checked={privacyStatus === "public"} 
+                                    onChange={changeStatus}
+                                />
+                                Public
+                            </label>
                         </div>
-                    )}
-                </div>
-                
-                <div className='roles'>
-                    <label className='artist-btn'>
-                        PRIVATE
+                    </div>
+                    
+                    <div className="form-group">
+                        <label htmlFor="playlist-image">Playlist Image</label>
                         <input 
-                            type='radio' 
-                            id='private' 
-                            name='privacy' 
-                            value='private' 
-                            checked={privacyStatus === "private"} 
-                            onChange={changeStatus}
+                            id="playlist-image"
+                            type="file" 
+                            accept="image/*" 
+                            onChange={handleImageChange}
+                            required={!playlistImage}
                         />
-                    </label>
-                    <label className='listener-btn'>
-                        PUBLIC
-                        <input 
-                            type='radio' 
-                            id='public' 
-                            name='privacy' 
-                            value='public' 
-                            checked={privacyStatus === "public"} 
-                            onChange={changeStatus}
-                        />
-                    </label>
-                </div>
-                
-                <button 
-                    style={{marginTop: "10px"}} 
-                    onClick={handleSubmit} 
-                    className="add-playlist-btn"
-                    disabled={!playlistName || !playlistImage}
-                >
-                    ADD PLAYLIST
-                </button>
+                        <div className="image-preview">
+                            <img src={imagePreview} alt="Playlist cover" />
+                        </div>
+                    </div>
+                    
+                    <div className="form-actions">
+                        <button type="button" className="cancel-btn" onClick={onClose}>
+                            Cancel
+                        </button>
+                        <button 
+                            type="submit" 
+                            className="submit-btn"
+                            disabled={!playlistName || !playlistImage}
+                        >
+                            Create Playlist
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     );
+
+    // Use React Portal to render outside the normal DOM hierarchy
+    return ReactDOM.createPortal(modalContent, document.body);
 }
 
 export default AddPlaylist;

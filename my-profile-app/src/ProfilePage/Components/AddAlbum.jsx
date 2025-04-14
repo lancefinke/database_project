@@ -1,90 +1,155 @@
-import { useState } from "react";
-import "./../../SignupPage/Signuppage.css";
+import React, { useState } from 'react';
+import './PlaylistSongList.css';
 
-const AddAlbum = () => {
-    const [albumName, setAlbumName] = useState('');
-    const [albumImage, setAlbumImage] = useState(null);
-    const [imagePreview, setImagePreview] = useState(null);
+const AlbumSongList = ({ songs, playlistName, playlistImage, onSongSelect, onDeleteSong, isMyAlbum = false }) => {
+  // Function to format seconds to mm:ss
+  const formatDuration = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+  };
 
-    const handleChange = (e) => {
-        setAlbumName(e.target.value);
+  const handleSongClick = (song) => {
+    if (onSongSelect) {
+      onSongSelect({
+        name: song.title,
+        creator: song.artist
+      });
     }
-    
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            setAlbumImage(file);
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setImagePreview(reader.result);
-            };
-            reader.readAsDataURL(file);
+  };
+
+  // State to track which song's action menu is open
+  const [activeMenu, setActiveMenu] = useState(null);
+
+  // Toggle menu for a specific song
+  const toggleMenu = (e, songId) => {
+    e.stopPropagation(); // Prevent row click event
+    setActiveMenu(activeMenu === songId ? null : songId);
+  };
+
+  // Close menu when clicking outside
+  const closeMenu = () => {
+    setActiveMenu(null);
+  };
+
+  // Handle delete song
+  const handleDeleteSong = (e, song) => {
+    e.stopPropagation(); // Prevent row click event
+    if (onDeleteSong) {
+      onDeleteSong(song, isMyAlbum);
+      setActiveMenu(null); // Close menu after action
+    }
+  };
+
+  // Add click event listener to document to close menu when clicking outside
+  React.useEffect(() => {
+    if (activeMenu !== null) {
+      const handleClickOutside = (e) => {
+        if (!e.target.closest('.song-actions')) {
+          closeMenu();
         }
+      };
+      
+      document.addEventListener('click', handleClickOutside);
+      return () => {
+        document.removeEventListener('click', handleClickOutside);
+      };
     }
-    
-    const handleSubmit = () => {
-        if (!albumName || !albumImage) {
-            alert("Please provide both an album name and image.");
-            return;
-        }
-        // Add your submission logic here
-    }
+  }, [activeMenu]);
 
-    return (
-        <div className="add-playlist-window" style={{width:'80%',marginLeft:'-40%'}}>
-            <div className="form-section">
-                <h1>New Album</h1>
-                <label className="playlist-label" style={{marginLeft:'0px'}}>
-                    ALBUM NAME
-                    <input 
-                        required 
-                        type='text' 
-                        className='playlist-text' 
-                        style={{width:'90%',height:'25px'}} 
-                        onChange={handleChange}
-                    />
-                </label>
-                
-                <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '15px'}}>
-                    <label className="image-btn">
-                        {imagePreview ? 'CHANGE IMAGE' : 'SELECT ALBUM COVER'}
-                        <input 
-                            type="file" 
-                            accept="image/*" 
-                            className="signup-pfp" 
-                            onChange={handleImageChange} 
-                            required
-                        />
-                    </label>
-                    
-                    {imagePreview && (
-                        <div style={{marginTop: '15px'}}>
-                            <img 
-                                src={imagePreview} 
-                                alt="Album cover" 
-                                style={{
-                                    width: '150px', 
-                                    height: '150px', 
-                                    objectFit: 'cover',
-                                    borderRadius: '8px',
-                                    border: '2px solid white'
-                                }} 
-                            />
-                        </div>
-                    )}
-                </div>
-                
-                <button 
-                    style={{marginTop: "10px"}} 
-                    onClick={handleSubmit} 
-                    className="add-playlist-btn"
-                    disabled={!albumName || !albumImage}
-                >
-                    ADD ALBUM
-                </button>
-            </div>
+  return (
+    <div className="playlist-song-list-container">
+      <div className="playlist-header">
+        <div className="playlist-info">
+          <img 
+            src={playlistImage || "https://via.placeholder.com/220"} 
+            alt={playlistName} 
+            className="playlist-header-image" 
+          />
+          <div className="playlist-header-text">
+            <h2 className="playlist-title">{playlistName || "Playlist"}</h2>
+            <p className="song-count">{songs.length} {songs.length === 1 ? 'song' : 'songs'}</p>
+          </div>
         </div>
-    );
-}
+      </div>
+      
+      <div className="songs-table">
+        <div className="songs-table-header">
+          <div className="song-number-header">#</div>
+          <div className="song-image-header"></div>
+          <div className="song-info-header">TITLE</div>
+          <div className="song-genre-header">GENRE</div>
+          <div className="song-duration-header">DURATION</div>
+          <div className="song-actions-header"></div>
+        </div>
+        
+        {/* Removed the songs-list div wrapper to eliminate the nested scrolling */}
+        {songs.length > 0 ? (
+          songs.map((song, index) => (
+            <div key={song.id} className="song-row" onClick={() => handleSongClick(song)}>
+              <div className="song-number-cell">
+                <span className="song-number">{index + 1}</span>
+                <button className="play-button" onClick={(e) => {
+                  e.stopPropagation();
+                  handleSongClick(song);
+                }}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
+                    <path d="M8 5v14l11-7z"></path>
+                  </svg>
+                </button>
+              </div>
+              <div className="playlist-song-thumbnail-cell">
+                <img 
+                  src={song.image || "https://via.placeholder.com/80"} 
+                  alt={song.title} 
+                  className="playlist-song-thumbnail" 
+                />
+              </div>
+              <div className="song-info">
+                <div className="song-text">
+                  <span className="song-title">{song.title}</span>
+                  <span className="song-artist">{song.artist}</span>
+                </div>
+              </div>
+              <div className="song-genre">{song.genre}</div>
+              <div className="song-duration">
+                {formatDuration(song.duration)}
+              </div>
+              <div className="song-actions" onClick={(e) => e.stopPropagation()}>
+                <button 
+                  className="song-actions-button" 
+                  onClick={(e) => toggleMenu(e, song.id)}
+                  aria-label="Song actions"
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
+                  </svg>
+                </button>
+                
+                {activeMenu === song.id && (
+                  <div className="song-actions-menu">
+                    <div 
+                      className="song-actions-menu-item delete"
+                      onClick={(e) => handleDeleteSong(e, song)}
+                    >
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path>
+                      </svg>
+                      Remove from album
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="empty-playlist-message">
+            <p>This Album is empty. Add some songs to get started!</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
 
-export default AddAlbum;
+export default AlbumSongList;

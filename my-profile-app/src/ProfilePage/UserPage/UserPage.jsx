@@ -616,7 +616,7 @@ const UserPage = ({ onSongSelect }) => {
           </div>
           
           {role === 'artist' && (
-            <button className="playlist-button add-btn" onClick={() => {setShowAPwindow(true)}}>
+            <button className="playlist-button add-btn" onClick={() => setShowAPwindow(true)}>
               <img
                 src="https://via.placeholder.com/100"
                 alt="Playlist Cover"
@@ -625,19 +625,30 @@ const UserPage = ({ onSongSelect }) => {
               <span className="playlist-name"><strong>+ Add Playlist</strong></span>
             </button>
           )}
-          
-          {showAPwindow && (
-            <>
-              <AddPlaylist/>
-              <button 
-                className="add-playlist-btn" 
-                style={{marginTop:"-20px",marginLeft:"30px"}} 
-                onClick={() => {setShowAPwindow(false)}}
-              >
-                CLOSE
-              </button>
-            </>
-          )}
+
+          {/* Playlist Modal */}
+          <AddPlaylist
+            isOpen={showAPwindow}
+            onClose={() => setShowAPwindow(false)}
+            onSubmit={(playlistData) => {
+              // Handle new playlist creation
+              console.log("Creating new playlist:", playlistData);
+              
+              // Create a new playlist object
+              const newPlaylist = {
+                id: Date.now(), // Generate a unique ID
+                name: playlistData.name,
+                image: playlistData.image ? URL.createObjectURL(playlistData.image) : "https://via.placeholder.com/100",
+                songs: []
+              };
+              
+              // Add the new playlist to the playlists array
+              setPlaylists([...playlists, newPlaylist]);
+              
+              // Close the modal
+              setShowAPwindow(false);
+            }}
+          />
           
           {playlists.map(playlist => (
             <div 
@@ -687,22 +698,38 @@ const UserPage = ({ onSongSelect }) => {
               </div>
             </div>
             
-            <button className="playlist-button add-btn" onClick={() => {setShowAddAlbum(true)}}>
+            <button className="playlist-button add-btn" onClick={() => setShowAddAlbum(true)}>
+              <img
+                src="https://via.placeholder.com/100"
+                alt="Album Cover"
+                className="playlist-image"
+              />
               <span className="playlist-name"><strong>+ Add Album</strong></span>
             </button>
             
-            {showAddAlbum && (
-              <>
-                <AddAlbum/>
-                <button 
-                  className="add-playlist-btn" 
-                  style={{marginTop:"-20px",marginLeft:"30px"}} 
-                  onClick={() => {setShowAddAlbum(false)}}
-                >
-                  CLOSE
-                </button>
-              </>
-            )}
+            {/* Album Modal */}
+            <AddAlbum
+              isOpen={showAddAlbum}
+              onClose={() => setShowAddAlbum(false)}
+              onSubmit={(albumData) => {
+                // Handle new album creation
+                console.log("Creating new album:", albumData);
+                
+                // Create a new album object
+                const newAlbum = {
+                  id: Date.now(), // Generate a unique ID
+                  name: albumData.name,
+                  image: albumData.image ? URL.createObjectURL(albumData.image) : "https://via.placeholder.com/100",
+                  songs: []
+                };
+                
+                // Add the new album to the albums array
+                setAlbums([...albums, newAlbum]);
+                
+                // Close the modal
+                setShowAddAlbum(false);
+              }}
+            />
             
             {albums.map(album => (
               <div 
@@ -717,6 +744,11 @@ const UserPage = ({ onSongSelect }) => {
                 <div className="drag-handle">
                   <span className="drag-dots">⋮⋮</span>
                 </div>
+                <img
+                  src={album.image}
+                  alt={`${album.name} Cover`}
+                  className="playlist-image"
+                />
                 <span className="playlist-name">{album.name}</span>
                 
                 {/* Only show delete button if not "My Songs" album */}
@@ -740,23 +772,23 @@ const UserPage = ({ onSongSelect }) => {
       {/* Playlist Songs Display */}
       {selectedPlaylist && (
         <>
-          <div 
-            className="styled-back-button"
-            onClick={handleBackFromPlaylist}
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
-            </svg>
-            <span>Back to playlists</span>
+          {/* Place the back button inside the PlaylistSongList or right before it */}
+          <div className="playlist-content-area">
+            <div className="styled-back-button" onClick={handleBackFromPlaylist}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
+              </svg>
+              <span>Back to My Songs</span>
+            </div>
+            
+            <PlaylistSongList 
+              songs={selectedPlaylist.songs} 
+              playlistName={selectedPlaylist.name}
+              playlistImage={selectedPlaylist.image}
+              onSongSelect={onSongSelect}
+              onDeleteSong={handleDeleteSong}
+            />
           </div>
-          
-          <PlaylistSongList 
-            songs={selectedPlaylist.songs} 
-            playlistName={selectedPlaylist.name}
-            playlistImage={selectedPlaylist.image}
-            onSongSelect={onSongSelect}
-            onDeleteSong={handleDeleteSong}
-          />
         </>
       )}
 
@@ -771,7 +803,7 @@ const UserPage = ({ onSongSelect }) => {
               <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
               </svg>
-              <span>Back to albums</span>
+              <span>Back to My Songs</span>
             </div>
           )}
           
@@ -789,22 +821,21 @@ const UserPage = ({ onSongSelect }) => {
       {/* Genre Songs Display */}
       {selectedGenre && (
         <>
-          <div 
-            className="styled-back-button"
-            onClick={handleBackFromGenre}
-          >
+        {/* Place the back button inside the PlaylistSongList or right before it */}
+        <div className="playlist-content-area">
+          <div className="styled-back-button" onClick={handleBackFromGenre}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
               <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
             </svg>
-            <span>Back to genres</span>
+            <span>Back to My Songs</span>
           </div>
-          
           <GenreSongList 
             songs={selectedGenre.songs} 
             playlistName={selectedGenre.name}
             playlistImage={selectedGenre.image}
             onSongSelect={onSongSelect}
           />
+        </div>
         </>
       )}
       

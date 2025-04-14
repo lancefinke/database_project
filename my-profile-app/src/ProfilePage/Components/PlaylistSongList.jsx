@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './PlaylistSongList.css';
 
 const PlaylistSongList = ({ songs, playlistName, playlistImage, onSongSelect, onDeleteSong }) => {
@@ -37,7 +37,7 @@ const PlaylistSongList = ({ songs, playlistName, playlistImage, onSongSelect, on
   };
 
   // Add click event listener to document to close menu when clicking outside
-  React.useEffect(() => {
+  useEffect(() => {
     if (activeMenu !== null) {
       const handleClickOutside = (e) => {
         if (!e.target.closest('.song-actions')) {
@@ -57,13 +57,13 @@ const PlaylistSongList = ({ songs, playlistName, playlistImage, onSongSelect, on
       <div className="playlist-header">
         <div className="playlist-info">
           <img 
-            src={playlistImage || "https://via.placeholder.com/100"} 
+            src={playlistImage || "https://via.placeholder.com/220"} 
             alt={playlistName} 
             className="playlist-header-image" 
           />
           <div className="playlist-header-text">
             <h2 className="playlist-title">{playlistName || "Playlist"}</h2>
-            <p className="song-count">{songs.length} songs</p>
+            <p className="song-count">{songs.length} {songs.length === 1 ? 'song' : 'songs'}</p>
           </div>
         </div>
       </div>
@@ -71,14 +71,16 @@ const PlaylistSongList = ({ songs, playlistName, playlistImage, onSongSelect, on
       <div className="songs-table">
         <div className="songs-table-header">
           <div className="song-number-header">#</div>
+          <div className="song-image-header"></div>
           <div className="song-info-header">TITLE</div>
           <div className="song-genre-header">GENRE</div>
           <div className="song-duration-header">DURATION</div>
-          <div className="song-actions-header"></div> {/* New header for actions */}
+          <div className="song-actions-header"></div>
         </div>
         
-        <div className="songs-list">
-          {songs.map((song, index) => (
+        {/* Removed the songs-list div wrapper to eliminate the nested scrolling */}
+        {songs.length > 0 ? (
+          songs.map((song, index) => (
             <div key={song.id} className="song-row" onClick={() => handleSongClick(song)}>
               <div className="song-number-cell">
                 <span className="song-number">{index + 1}</span>
@@ -86,33 +88,35 @@ const PlaylistSongList = ({ songs, playlistName, playlistImage, onSongSelect, on
                   e.stopPropagation();
                   handleSongClick(song);
                 }}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
                     <path d="M8 5v14l11-7z"></path>
                   </svg>
                 </button>
               </div>
-              <div className="song-info">
+              <div className="playlist-song-thumbnail-cell">
                 <img 
-                  src={song.image || "https://via.placeholder.com/40"} 
+                  src={song.image || "https://via.placeholder.com/80"} 
                   alt={song.title} 
-                  className="song-image" 
+                  className="playlist-song-thumbnail" 
                 />
+              </div>
+              <div className="song-info">
                 <div className="song-text">
-                  <div className="song-title">{song.title}</div>
-                  <div className="song-artist">{song.artist}</div>
+                  <span className="song-title">{song.title}</span>
+                  <span className="song-artist">{song.artist}</span>
                 </div>
               </div>
               <div className="song-genre">{song.genre}</div>
-              <div className="song-duration" style={{ fontSize: '1rem', fontWeight: 'bold', color: 'white' }}>
-  {formatDuration(song.duration)}
-</div>
+              <div className="song-duration">
+                {formatDuration(song.duration)}
+              </div>
               <div className="song-actions" onClick={(e) => e.stopPropagation()}>
                 <button 
                   className="song-actions-button" 
                   onClick={(e) => toggleMenu(e, song.id)}
                   aria-label="Song actions"
                 >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
                   </svg>
                 </button>
@@ -123,7 +127,7 @@ const PlaylistSongList = ({ songs, playlistName, playlistImage, onSongSelect, on
                       className="song-actions-menu-item delete"
                       onClick={(e) => handleDeleteSong(e, song)}
                     >
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path>
                       </svg>
                       Remove from playlist
@@ -132,8 +136,12 @@ const PlaylistSongList = ({ songs, playlistName, playlistImage, onSongSelect, on
                 )}
               </div>
             </div>
-          ))}
-        </div>
+          ))
+        ) : (
+          <div className="empty-playlist-message">
+            <p>This playlist is empty. Add some songs to get started!</p>
+          </div>
+        )}
       </div>
     </div>
   );
