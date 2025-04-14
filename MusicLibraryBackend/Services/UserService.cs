@@ -19,7 +19,7 @@ namespace MusicLibraryBackend.Services
         public List<User> GetAllUsers()
         {
             List<User> users = new List<User>();
-            string query = "select * from dbo.USERS";
+            string query = "select * from dbo.USERS where";
 
             // access the database
             string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
@@ -167,13 +167,19 @@ namespace MusicLibraryBackend.Services
             }
             return user;
         }
-        public string BanUser(
-            int userID,
-            string userName,
+        public bool BanUser(
+           string userName,
             string email,
             string reason)
         {
-            string query = "INSERT INTO dbo.BANNEDUSERS(UserID,UserEmail,DateBanned,Reason) VALUES(@UserID,@Email,@DateBanned,@Reason)";
+            User user = GetUserByName(userName);
+
+            if (user == null || user.UserID == 0)
+            {
+                return false; // User not found
+            }
+            string updatequery = "UPDATE USERS SET isDeactivated = 1 WHERE ID = @userID";
+            string bannedquery = "INSERT INTO dbo.BANNEDUSERS(UserID,UserEmail,DateBanned,Reason) VALUES(@UserID,@Email,@DateBanned,@Reason)";
 
             // access the database
             string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
@@ -183,13 +189,24 @@ namespace MusicLibraryBackend.Services
             {
                 myCon.Open();
                 // queries the database
-                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                using (SqlCommand updateCommand = new SqlCommand(updatequery, myCon))
+                {
+
+                    updateCommand.Parameters.AddWithValue("@UserId", user.UserID);
+                    int rowsAffected = updateCommand.ExecuteNonQuery();
+
+                    if (rowsAffected == 0)
+                    {
+                        return false;
+                    }
+                }
+                using (SqlCommand myCommand = new SqlCommand(bannedquery, myCon))
                 {
 
                     // gets current date instead of having to input 
                     DateTime currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, 0);
 
-                    myCommand.Parameters.AddWithValue("@UserID", userID);
+                    myCommand.Parameters.AddWithValue("@UserID", user.UserID);
                     // parameters for the queries
                     myCommand.Parameters.AddWithValue("@Email", email);
                     myCommand.Parameters.AddWithValue("@Reason", reason);
@@ -197,7 +214,7 @@ namespace MusicLibraryBackend.Services
                     myCommand.ExecuteNonQuery();
                 }
             }
-            return "User Banned";
+            return true;
         }
 
         /// <summary>

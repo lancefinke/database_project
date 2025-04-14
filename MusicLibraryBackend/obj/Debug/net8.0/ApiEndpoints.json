@@ -292,7 +292,7 @@
         "IsRequired": false
       },
       {
-        "Name": "artistID",
+        "Name": "userID",
         "Type": "System.Int32",
         "IsRequired": false
       },
@@ -615,11 +615,6 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [
-      {
-        "Name": "userID",
-        "Type": "System.Int32",
-        "IsRequired": false
-      },
       {
         "Name": "userName",
         "Type": "System.String",

@@ -82,20 +82,25 @@ namespace MusicLibraryBackend.Controllers
 
         [HttpPost]
         [Route("banUser")]
-        public JsonResult BanUser([FromForm] 
-          //int newUserID, WILL BE ADDED LATER
-          int userID,
+        public IActionResult BanUser([FromForm] 
+          
+          
           string userName,
           string email,
           string reason)
         {
-            var result = _userService.BanUser(
-            userID,
+            bool result = _userService.BanUser(
+            
             userName,
             email,
             reason
             );
-            return new JsonResult(result);
+            if (!result)
+            {
+                return NotFound(new { message = "User not found or already deactivated." });
+            }
+
+            return Ok(new { message = "User successfully banned and deactivated." });
 
         }
 

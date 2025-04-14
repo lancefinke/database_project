@@ -65,9 +65,9 @@ public class AuthController : ControllerBase
 
                 //Check if user is banned
                 var checkIsBanned = new SqlCommand(
-                    "SELECT COUNT(1) FROM BANNEDUSERS WHERE UserEmail = @BannedEmail",
+                    "SELECT COUNT(1) FROM BANNEDUSERS WHERE Username = @Username",
                     connection);
-                checkIsBanned.Parameters.AddWithValue("@BannedEmail", request.Email);
+                checkIsBanned.Parameters.AddWithValue("@Username", request.Username);
                 var isBanned = (int)await checkIsBanned.ExecuteScalarAsync() > 0;
 
                 if (isBanned)
@@ -118,11 +118,9 @@ public class AuthController : ControllerBase
                 await connection.OpenAsync();
 
                 var cmd = new SqlCommand(
-                    "SELECT UserID, Username, UserPassword, IsArtist FROM Users WHERE Username = @Username",
+                    "SELECT UserID, Username, UserPassword, isArtist, isAdmin FROM Users WHERE Username = @Username",
                     connection);
                 cmd.Parameters.AddWithValue("@Username", request.Username);
-
-                
 
                 using (var reader = await cmd.ExecuteReaderAsync())
                 {
@@ -130,22 +128,21 @@ public class AuthController : ControllerBase
                     {
                         var storedHash = reader.GetString(2);
                         var hashedPassword = HashPassword(request.Password);
-                        
-                        // Debug logging
-                        Console.WriteLine($"Stored hash: {storedHash}");
-                        Console.WriteLine($"Computed hash: {hashedPassword}");
-                        Console.WriteLine($"Hash length: {storedHash.Length}");
-                        Console.WriteLine($"Computed hash length: {hashedPassword.Length}");
 
                         if (storedHash == hashedPassword)
                         {
-                            var token = GenerateJwtToken(
-                                reader.GetInt32(0),
-                                reader.GetString(1),
-                                reader.GetBoolean(3)
-                            );
+                            var userId = reader.GetInt32(0);
+                            var username = reader.GetString(1);
+                            var isArtist = reader.GetBoolean(3);
+                            var isAdmin = reader.GetBoolean(4);
 
-                            return Ok(new { token });
+                            var token = GenerateJwtToken(userId, username, isArtist, isAdmin);
+
+                            return Ok(new
+                            {
+                                token,
+                                isAdmin = isAdmin //
+                            });
                         }
                     }
                 }
@@ -159,6 +156,7 @@ public class AuthController : ControllerBase
         }
     }
 
+
     private string HashPassword(string password)
     {
         using (var sha256 = SHA256.Create())
@@ -169,17 +167,18 @@ public class AuthController : ControllerBase
         }
     }
 
-    private string GenerateJwtToken(int userId, string username, bool isArtist)
+    private string GenerateJwtToken(int userId, string username, bool isArtist, bool isAdmin)
     {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var claims = new[]
         {
-            new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
-            new Claim(ClaimTypes.Name, username),
-            new Claim("IsArtist", isArtist.ToString())
-        };
+        new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
+        new Claim(ClaimTypes.Name, username),
+        new Claim("IsArtist", isArtist.ToString()),
+        new Claim("IsAdmin", isAdmin.ToString()) //
+    };
 
         var token = new JwtSecurityToken(
             issuer: _configuration["Jwt:Issuer"],
