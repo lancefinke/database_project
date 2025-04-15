@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import ReactDOM from "react-dom";
 import { X } from "lucide-react";
 import "./AddPlaylist.css"; // Reusing the same CSS file
 
@@ -40,7 +41,8 @@ const AddAlbum = ({ isOpen, onClose, onSubmit }) => {
         onClose && onClose();
     }
 
-    return (
+    // Use React Portal to render the modal outside the normal DOM hierarchy
+    return ReactDOM.createPortal(
         <div className="modal-overlay">
             <div className="modal-content">
                 <div className="modal-header">
@@ -90,7 +92,8 @@ const AddAlbum = ({ isOpen, onClose, onSubmit }) => {
                     </div>
                 </form>
             </div>
-        </div>
+        </div>,
+        document.body // This renders the modal directly in the body element
     );
 }
 
