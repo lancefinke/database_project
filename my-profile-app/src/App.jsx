@@ -13,7 +13,7 @@ import SideBar from "./ProfilePage/Components/SideBar";
 import AdminSidebar from "./Admin/AdminSidebar"; // Admin-specific sidebar
 import FollowingPage from "./FollowingPage/FollowingPage";
 import Dashboard from "./ProfilePage/UserPage/Dashboard";
-import { BrowserRouter as Router, Routes, Route, useLocation, Link, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation, Link, Navigate, useNavigate } from "react-router-dom";
 import "./ProfilePage/ProfilePage.css";
 import { useLoginContext } from "./LoginContext/LoginContext";
 
@@ -27,17 +27,51 @@ const playlist = [
 // Layout wrapper to handle class changes based on route
 const AppLayout = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [selectedSong, setSelectedSong] = useState(null);
-  const { isLoggedIn } = useLoginContext();
+  const { isLoggedIn, setLoggedIn } = useLoginContext(); // Get full context
   const [isAdmin, setIsAdmin] = useState(false);
   
+  console.log("AppLayout rendering, path:", location.pathname);
+  
+  // Check admin status on initial load and whenever login status changes
   useEffect(() => {
-    // Check if the user is an admin on component mount
-    const adminStatus = localStorage.getItem('isAdmin') === 'true';
-    console.log("localStorage 'isAdmin':", localStorage.getItem('isAdmin'));
-    console.log("Converted adminStatus:", adminStatus);
-    setIsAdmin(adminStatus);
-  }, []);
+    const checkAdminStatus = () => {
+      // Get raw value from localStorage
+      const rawAdminValue = localStorage.getItem('isAdmin');
+      // Convert to boolean
+      const adminStatus = rawAdminValue === 'true';
+      
+      console.log("ADMIN CHECK - localStorage 'isAdmin':", rawAdminValue);
+      console.log("ADMIN CHECK - Converted adminStatus:", adminStatus);
+      console.log("ADMIN CHECK - isLoggedIn:", isLoggedIn);
+      
+      // Update state
+      setIsAdmin(adminStatus);
+      
+      // Immediate redirect for admin users
+      if (isLoggedIn && adminStatus && 
+          location.pathname !== '/admin' && 
+          location.pathname !== '/login' && 
+          location.pathname !== '/signup' && 
+          location.pathname !== '/reset') {
+        console.log("IMMEDIATE REDIRECT to admin page");
+        navigate('/admin');
+      }
+    };
+    
+    checkAdminStatus();
+  }, [isLoggedIn, location.pathname, navigate]);
+  
+  useEffect(() => {
+    console.log("Admin state changed to:", isAdmin);
+    
+    // Force redirect when isAdmin becomes true
+    if (isAdmin && isLoggedIn && location.pathname !== '/admin') {
+      console.log("FORCE REDIRECTING to admin page after state change");
+      navigate('/admin');
+    }
+  }, [isAdmin, isLoggedIn, navigate, location.pathname]);
   
   useEffect(() => {
     if (location.pathname === '/profile') {
@@ -70,11 +104,9 @@ const AppLayout = () => {
     return 'default';
   };
 
-  // If user is logged in as admin, redirect to admin page
-  if (isLoggedIn && isAdmin && location.pathname !== '/admin' && 
-      location.pathname !== '/login' && location.pathname !== '/signup' && 
-      location.pathname !== '/reset') {
-    return <Navigate to="/admin" />;
+  // If not fully loaded yet, show loading
+  if (isLoggedIn === undefined) {
+    return <div>Loading...</div>;
   }
 
   return (
@@ -87,59 +119,59 @@ const AppLayout = () => {
         <Routes>
           <Route path="/home" element={
             isLoggedIn 
-              ? (isAdmin ? <Navigate to="/admin" /> : <HomePage />) 
-              : <Navigate to="/login" />
+              ? (isAdmin ? <Navigate to="/admin" replace /> : <HomePage />) 
+              : <Navigate to="/login" replace />
           } />
           <Route path="/search" element={
             isLoggedIn 
-              ? (isAdmin ? <Navigate to="/admin" /> : <SearchPage onSongSelect={handleSongSelect} />)
-              : <Navigate to="/login" />
+              ? (isAdmin ? <Navigate to="/admin" replace /> : <SearchPage onSongSelect={handleSongSelect} />)
+              : <Navigate to="/login" replace />
           } />
           <Route path="/profile" element={
             isLoggedIn 
-              ? (isAdmin ? <Navigate to="/admin" /> : <UserPage onSongSelect={handleSongSelect} />)
-              : <Navigate to="/login" />
+              ? (isAdmin ? <Navigate to="/admin" replace /> : <UserPage onSongSelect={handleSongSelect} />)
+              : <Navigate to="/login" replace />
           } />
           <Route path="/user" element={
             isLoggedIn 
-              ? (isAdmin ? <Navigate to="/admin" /> : <ProfilePage onSongSelect={handleSongSelect} />)
-              : <Navigate to="/login" />
+              ? (isAdmin ? <Navigate to="/admin" replace /> : <ProfilePage onSongSelect={handleSongSelect} />)
+              : <Navigate to="/login" replace />
           } />
           <Route path="/profile/:userId" element={
             isLoggedIn 
-              ? (isAdmin ? <Navigate to="/admin" /> : <ProfilePage onSongSelect={handleSongSelect} />)
-              : <Navigate to="/login" />
+              ? (isAdmin ? <Navigate to="/admin" replace /> : <ProfilePage onSongSelect={handleSongSelect} />)
+              : <Navigate to="/login" replace />
           } />
           <Route path="/following" element={
             isLoggedIn 
-              ? (isAdmin ? <Navigate to="/admin" /> : <FollowingPage onSongSelect={handleSongSelect} />)
-              : <Navigate to="/login" />
+              ? (isAdmin ? <Navigate to="/admin" replace /> : <FollowingPage onSongSelect={handleSongSelect} />)
+              : <Navigate to="/login" replace />
           } />
           <Route path="/dashboard" element={
             isLoggedIn 
-              ? (isAdmin ? <Navigate to="/admin" /> : <Dashboard />)
-              : <Navigate to="/login" />
+              ? (isAdmin ? <Navigate to="/admin" replace /> : <Dashboard />)
+              : <Navigate to="/login" replace />
           } />
           <Route path='/admin' element={
             isLoggedIn 
-              ? (isAdmin ? <Admin /> : <Navigate to="/home" />)
-              : <Navigate to="/login" />
+              ? (isAdmin ? <Admin /> : <Navigate to="/home" replace />)
+              : <Navigate to="/login" replace />
           } />
           <Route path='/login' element={
             isLoggedIn 
-              ? (isAdmin ? <Navigate to="/admin" /> : <Navigate to="/home" />)
+              ? (isAdmin ? <Navigate to="/admin" replace /> : <Navigate to="/home" replace />)
               : <LoginPage />
           } />
           <Route path='/signup' element={
             isLoggedIn 
-              ? (isAdmin ? <Navigate to="/admin" /> : <Navigate to="/home" />)
+              ? (isAdmin ? <Navigate to="/admin" replace /> : <Navigate to="/home" replace />)
               : <SignupPage />
           } />
           <Route path='/reset' element={<ResetPassword />} />
           <Route path="/" element={
             isLoggedIn 
-              ? (isAdmin ? <Navigate to="/admin" /> : <Navigate to="/home" />)
-              : <Navigate to="/login" />
+              ? (isAdmin ? <Navigate to="/admin" replace /> : <Navigate to="/home" replace />)
+              : <Navigate to="/login" replace />
           } />
         </Routes>
       </main>
