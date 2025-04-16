@@ -10,32 +10,9 @@ import UserLink from '../../UserLink/UserLink';
 import AlbumSongList from '../Components/AlbumSongList';
 import GenreSongList from '../Components/GenreSongList';
 import AddSongModal from './AddSongModal';
-import PlaylistSelectionPopup from '../Components/PlaylistSelectionPopup';
-
-const ConfirmationModal = ({ isOpen, message, onCancel, onConfirm }) => {
-  if (!isOpen) return null;
-  
-  return (
-    <>
-      <div className="confirmation-overlay" onClick={onCancel}></div>
-      <div className="confirmation-modal">
-        <div className="confirmation-header">
-          <h3>Confirm Action</h3>
-          <button className="confirmation-close-btn" onClick={onCancel}>×</button>
-        </div>
-        
-        <div className="confirmation-content">
-          <p>{message}</p>
-        </div>
-        
-        <div className="confirmation-actions">
-          <button className="confirmation-cancel-btn" onClick={onCancel}>Cancel</button>
-          <button className="confirmation-confirm-btn" onClick={onConfirm}>Delete</button>
-        </div>
-      </div>
-    </>
-  );
-};
+import playlistIcon from './playlist.png';
+import ReactHowler from 'react-howler'
+import { Play, Pause, SkipBack, SkipForward, Shuffle, Repeat, Volume2, VolumeX, Plus, Check } from "lucide-react";
 
 const UserPage = ({ onSongSelect }) => {
   const [availableGenres, setAvailableGenres] = useState(['R&B', 'Rap', 'Country', 'HipHop', 'Pop', 'Rock','Electronic','Blues','Jazz','Classical','Alternative','Classical','Indie','Metal']);
@@ -46,37 +23,171 @@ const UserPage = ({ onSongSelect }) => {
   const [role, setRole] = useState('artist');
   const [selectedPlaylist, setSelectedPlaylist] = useState(null);
   const [isAddSongModalOpen, setIsAddSongModalOpen] = useState(false);
+  const [userProfile,setUserProfile] = useState(false);
+  const [isEditingProfilePic, setIsEditingProfilePic] = useState(false);
+
   // Create a default album ID for "My Songs"
   const defaultAlbumId = 0;
   
-  // Confirmation modal state
-  const [confirmModal, setConfirmModal] = useState({
-    isOpen: false,
-    message: '',
-    onConfirm: null
-  });
+
+// Replace your current useEffect with this enhanced version
+
+const genreMap = {
+  1: "Pop",
+  2: "Rock", 
+  3: "HipHop",
+  4: "R&B",
+  5: "Electronic",
+  6: "Country",
+  7: "Jazz",
+  8: "Blues",
+  9: "Metal",
+  10: "Classical",
+  11: "Alternative",
+  12: "Indie"
+  // Add all your genres here
+};
+
+const API_URL = "https://localhost:7152";
+const [currentUsername, setCurrentUsername] = useState("");
+
+const [currentUserId, setCurrentUserId] = useState("");
+
+useEffect(() => {
+  // Get token from localStorage
+  const token = localStorage.getItem('userToken');
+  if (token) {
+    try {
+      
+      // Extract user ID using the correct claim identifier
+      const payload = JSON.parse(atob(token.split('.')[1]));
+
+      const userId = payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
+      if (userId) {
+        setCurrentUserId(userId);
+        console.log("User ID extracted:", userId);
+        
+        GetUserProfile(userId);
+        GetSongs(userId);
+        GetUserPlaylists(userId);
+        GetUserAlbums(userId); 
+
+      } else {
+        console.error("Could not find userID in token");
+      }
+      //username
+
+      const username = payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
+
+      // Check if user is an artist
+      const isArtist = payload.IsArtist === "True";
+      setRole(isArtist ? 'artist' : 'user');
+      
+    } catch (error) {
+      console.error("Error parsing JWT token:", error);
+    }
+  } else {
+    console.log("No token found in localStorage");
+  }
+}, []);
+
+
+const GetUserProfile = (userId) => {
+  console.log("Fetching profile data for user ID:", userId);
   
+  fetch(`${API_URL}/api/database/GetUserProfile?UserID=${userId}`, {
+    method: "GET",
+  })
+  .then(res => res.json())
+  .then(result => {
+    console.log("API returned profile data:", result);
+    if (result) {
+      const userData = result[0];
+      setUserProfile({
+        
+        name: userData.Username || "User",
+        bio: userData.Bio || "No bio available",
+        profileImage: userData.ProfilePicture || "https://via.placeholder.com/150",
+        followers: result.FollowerCount || 0,
+        totalListens: result.TotalListens || 0
+      });
+    }
+  })
+  .catch(error => console.error("Error fetching user profile:", error));
+};
+
+const GetSongs = (userId) => {
+  console.log("Getting songs for user ID:", userId);
+  
+  fetch(`${API_URL}/api/database/GetSongs?UserID=${userId}`, {
+    method: "GET",
+  })
+  .then(res => res.json())
+  .then(result => {
+    console.log("API returned songs:", result);
+    
+    if (result && result.length > 0) { // if song is bigger than 
+      
+
+      const formattedSongs = result.map(song => ({
+        
+        id: song.SongID,
+        title: song.SongName || "Untitled",
+        artist: song.Username || currentUsername, 
+        genre: genreMap[song.GenreCode] || "Unknown Genre", 
+        duration: song.Duration || 0  , 
+        image: song.CoverArtFileName ||  "/likedsongs.jpg",
+        album: "My Songs",
+        songFile: song.SongFileName
+        
+      }));
+      console.log("Formatted songs:", formattedSongs);
+      
+      setAlbums(prevAlbums => {
+        const updatedAlbums = prevAlbums.map(album => {
+          if (album.id === defaultAlbumId) {
+            console.log("Updating My Songs album with", formattedSongs.length, "songs");
+            return {
+              ...album,
+              songs: formattedSongs
+            };
+          }
+          return album;
+        });
+        
+        return updatedAlbums;
+      });
+    } else {
+      console.log("No songs returned from API");
+    }
+  })
+  .catch(error => console.error("Error fetching user songs:", error));
+};
+
+
+
+
   // Album drag and drop state - with "My Songs" as the first album
   const [albums, setAlbums] = useState([
     { 
       id: defaultAlbumId, 
       name: "My Songs",
-      image: "https://via.placeholder.com/100",
+      image: "https://preview.redd.it/heres-some-playlist-icons-in-the-style-of-liked-songs-you-v0-cahrrr1is8ee1.png?width=320&crop=smart&auto=webp&s=159a0b02328aa4238f0d928549e776146a27cae7",
       songs: [
         { id: 1001, title: "My First Song", artist: "Haitham Yousif", genre: "Pop", duration: 180, image: "https://via.placeholder.com/40", album: "My Songs" },
-        { id: 1002, title: "Late Night Vibes", artist: "Haitham Yousif", genre: "R&B", duration: 210, image: "https://via.placeholder.com/40", album: "My Songs" },
+        { id: 1002, title: "Late Night Vibes", artist: "Haitham Yousif", genre: "RnB", duration: 210, image: "https://via.placeholder.com/40", album: "My Songs" },
         { id: 1003, title: "Weekend Mood", artist: "Haitham Yousif", genre: "Pop", duration: 195, image: "https://via.placeholder.com/40", album: "My Songs" },
         { id: 1004, title: "Studio Session", artist: "Haitham Yousif", genre: "Rap", duration: 225, image: "https://via.placeholder.com/40", album: "My Songs" },
       ]
-    },
-    { 
+    }]);
+      /*/
       id: 1, 
       name: "First Album",
       image: "https://via.placeholder.com/100",
       songs: [
-        { id: 101, title: "Album Intro", artist: "Haitham Yousif", genre: "R&B", duration: 120, image: "https://via.placeholder.com/40", album: "First Album" },
+        { id: 101, title: "Album Intro", artist: "Haitham Yousif", genre: "RnB", duration: 120, image: "https://via.placeholder.com/40", album: "First Album" },
         { id: 102, title: "First Hit", artist: "Haitham Yousif", genre: "Pop", duration: 195, image: "https://via.placeholder.com/40", album: "First Album" },
-        { id: 103, title: "New Sound", artist: "Haitham Yousif", genre: "R&B", duration: 210, image: "https://via.placeholder.com/40", album: "First Album" }
+        { id: 103, title: "New Sound", artist: "Haitham Yousif", genre: "RnB", duration: 210, image: "https://via.placeholder.com/40", album: "First Album" }
       ]
     },
     { 
@@ -85,7 +196,7 @@ const UserPage = ({ onSongSelect }) => {
       image: "https://via.placeholder.com/100",
       songs: [
         { id: 104, title: "Tour Opening", artist: "Haitham Yousif", genre: "Pop", duration: 180, image: "https://via.placeholder.com/40", album: "Auston 2020 Tour" },
-        { id: 105, title: "Auston Nights", artist: "Haitham Yousif", genre: "R&B", duration: 225, image: "https://via.placeholder.com/40", album: "Auston 2020 Tour" },
+        { id: 105, title: "Auston Nights", artist: "Haitham Yousif", genre: "RnB", duration: 225, image: "https://via.placeholder.com/40", album: "Auston 2020 Tour" },
         { id: 106, title: "City Lights", artist: "Haitham Yousif", genre: "Pop", duration: 198, image: "https://via.placeholder.com/40", album: "Auston 2020 Tour" }
       ]
     },
@@ -94,9 +205,9 @@ const UserPage = ({ onSongSelect }) => {
       name: "Break Up",
       image: "https://via.placeholder.com/100",
       songs: [
-        { id: 107, title: "The End", artist: "Haitham Yousif", genre: "R&B", duration: 240, image: "https://via.placeholder.com/40", album: "Break Up" },
+        { id: 107, title: "The End", artist: "Haitham Yousif", genre: "RnB", duration: 240, image: "https://via.placeholder.com/40", album: "Break Up" },
         { id: 108, title: "Missing You", artist: "Haitham Yousif", genre: "Pop", duration: 205, image: "https://via.placeholder.com/40", album: "Break Up" },
-        { id: 109, title: "Better Days", artist: "Haitham Yousif", genre: "R&B", duration: 215, image: "https://via.placeholder.com/40", album: "Break Up" }
+        { id: 109, title: "Better Days", artist: "Haitham Yousif", genre: "RnB", duration: 215, image: "https://via.placeholder.com/40", album: "Break Up" }
       ]
     },
     { 
@@ -119,22 +230,187 @@ const UserPage = ({ onSongSelect }) => {
         { id: 115, title: "Big Dreams", artist: "Haitham Yousif", genre: "Rap", duration: 195, image: "https://via.placeholder.com/40", album: "Ballin'" }
       ]
     }
-  ]);
+  ]);/*/
   
   // Set the default album as initially selected
   const [selectedAlbum, setSelectedAlbum] = useState(albums[0]);
   const [selectedGenre, setSelectedGenre] = useState(null);
   
+  useEffect(() => {
+    // If songs are loaded and "My Songs" is selected, refresh the view
+    if (albums[0]?.songs?.length > 0 && selectedAlbum?.id === defaultAlbumId) {
+      setSelectedAlbum(albums[0]);
+    }
+  }, [albums]);
+  
+  const GetUserPlaylists = (UserID) => {
+    console.log("Fetching playlists for user ID:", UserID);
+  
+    fetch(`${API_URL}/api/database/GetUserPlaylists?UserID=${UserID}`, {
+      method: "GET",
+    })
+    .then(res => res.json())
+    .then(result => {
+      console.log("API returned playlists:", result);
+      
+      
+      if (result && result.length > 0) {
+        const formattedPlaylists = result.map(playlist => ({
+          id: playlist.PlaylistID,
+          name: playlist.Title || "Untitled",
+          image: playlist.PlaylistPicture || "pic.png",
+          songs: playlist.Songs || []
+        }));
+        
+        console.log("Formatted playlists:", formattedPlaylists);
+        setPlaylists(formattedPlaylists);
+
+        GetPlaylistSongs(formattedPlaylists[0].id); 
+      } else {
+        console.log("No playlists returned from API");
+      }
+    })
+  }
+  const GetUserAlbums = (userId) => {
+    console.log("Fetching albums for user ID:", userId);
+  
+    fetch(`${API_URL}/api/database/GetUserAlbums?UserID=${userId}`, {
+      method: "GET",
+    })
+    .then(res => res.json())
+    .then(result => {
+      console.log("API returned albums:", result);
+      
+      if (result && result.length > 0) {
+        // Create formatted album objects from API response
+        const userAlbums = result.map(album => ({
+          id: album.AlbumID,
+          name: album.Title || "Untitled Album",
+          image: album.AlbumCoverArtFileName || "/likedsongs.jpg",
+          songs: [] // Initially empty, will load songs when album is clicked
+        }));
+        
+        console.log("Formatted user albums:", userAlbums);
+        
+        // Add the "My Songs" album at the beginning, followed by user albums
+        setAlbums(prevAlbums => {
+          // Keep only the first album (My Songs)
+          const mySongsAlbum = prevAlbums.find(album => album.id === defaultAlbumId);
+          return [mySongsAlbum, ...userAlbums];
+        });
+        
+        // Load songs for the first album
+        if (userAlbums.length > 0) {
+          GetAlbumSongs(userAlbums[0].id);
+        }
+      } else {
+        console.log("No albums returned from API");
+      }
+    })
+    .catch(error => console.error("Error fetching user albums:", error));
+  };
+
+  const GetAlbumSongs = (albumId) => {
+    console.log("Fetching songs for album ID:", albumId);
+    
+    fetch(`${API_URL}/api/database/GetAlbumSongs?AlbumID=${albumId}`, {
+      method: "GET",
+    })
+    .then(res => res.json())
+    .then(result => {
+      console.log("API returned album songs:", result);
+      
+      if (result && result.length > 0) {
+        const formattedSongs = result.map(song => ({
+          id: song.SongID,
+          title: song.SongName || "Untitled",
+          artist: song.Username || currentUsername,
+          genre: genreMap[song.GenreCode] || "Unknown Genre",
+          duration: song.Duration || 0,
+          image: song.CoverArtFileName || "/likedsongs.jpg",
+          album: song.AlbumTitle || "Unknown Album",
+          songFile: song.SongFileName
+        }));
+        
+        // Update the albums array first
+        setAlbums(prevAlbums => {
+          const updatedAlbums = prevAlbums.map(album => {
+            if (album.id === albumId) {
+              return {
+                ...album,
+                songs: formattedSongs
+              };
+            }
+            return album;
+          });
+          
+          // IMPORTANT: Find the updated album and set it as selected
+          const updatedAlbum = updatedAlbums.find(album => album.id === albumId);
+          if (updatedAlbum) {
+            setSelectedAlbum(updatedAlbum);
+          }
+          
+          return updatedAlbums;
+        });
+      } else {
+        // Similar update for empty results
+        // ...
+      }
+    })
+    .catch(error => console.error("Error fetching album songs:", error));
+  };
+
+  const GetPlaylistSongs = (playlistId) => {
+    console.log("Getting songs for playlist ID:", playlistId);
+    fetch(`${API_URL}/api/database/GetPlaylistSongs?PlaylistID=${playlistId}`, {
+      method: "GET",
+    })
+    .then(res => res.json())
+    .then(result => {
+      console.log("API returned playlist songs:", result);
+      if (result && result.length > 0) {
+        const formattedSongs = result.map(song => ({
+          id: song.SongID,
+          title: song.SongName || "Untitled",
+          artist: song.Username || currentUsername,
+          genre: genreMap[song.GenreCode] || "Unknown Genre",
+          duration: song.Duration || 0,
+          image: song.CoverArtFileName || "pic.png",
+          album: "My Songs",
+          songFile: song.SongFileName
+        }));
+        console.log("Formatted playlist songs:", formattedSongs);
+        setPlaylists(prevPlaylists => {
+          const updatedPlaylists = prevPlaylists.map(playlist => {
+            if (playlist.id === playlistId) {
+              console.log("Updating playlist with", formattedSongs.length, "songs");
+              return {
+                ...playlist,
+                songs: formattedSongs
+              };
+            }
+            return playlist;
+          });
+          return updatedPlaylists;
+        });
+      } else {
+        console.log("No songs returned for playlist");
+      }
+    })
+    .catch(error => console.error("Error fetching playlist songs:", error));
+  }
+
+  const [playlists, setPlaylists] = useState([]);
   // Playlist drag and drop state
-  const [playlists, setPlaylists] = useState([
+  /*/const [playlists, setPlaylists] = useState([
     { 
       id: 1, 
-      name: "Liked Songs", 
+      name: "Chill Vibes", 
       image: "https://via.placeholder.com/100",
       songs: [
-        { id: 1, title: "Summer Breeze", artist: "Haitham Yousif", genre: "R&B", duration: 213, image: "https://via.placeholder.com/40", album: "Summer Hits" },
+        { id: 1, title: "Summer Breeze", artist: "Haitham Yousif", genre: "RnB", duration: 213, image: "https://via.placeholder.com/40", album: "Summer Hits" },
         { id: 2, title: "Ocean Waves", artist: "Haitham Yousif", genre: "Pop", duration: 184, image: "https://via.placeholder.com/40", album: "Summer Hits" },
-        { id: 3, title: "Sunset Melody", artist: "Haitham Yousif", genre: "R&B", duration: 245, image: "https://via.placeholder.com/40", album: "Summer Hits" }
+        { id: 3, title: "Sunset Melody", artist: "Haitham Yousif", genre: "RnB", duration: 245, image: "https://via.placeholder.com/40", album: "Summer Hits" }
       ]
     },
     { 
@@ -153,7 +429,7 @@ const UserPage = ({ onSongSelect }) => {
       name: "Late Night", 
       image: "https://via.placeholder.com/100",
       songs: [
-        { id: 8, title: "Midnight Blues", artist: "Haitham Yousif", genre: "R&B", duration: 267, image: "https://via.placeholder.com/40", album: "Midnight Moods" },
+        { id: 8, title: "Midnight Blues", artist: "Haitham Yousif", genre: "RnB", duration: 267, image: "https://via.placeholder.com/40", album: "Midnight Moods" },
         { id: 9, title: "Starry Sky", artist: "Haitham Yousif", genre: "Pop", duration: 198, image: "https://via.placeholder.com/40", album: "Midnight Moods" }
       ]
     },
@@ -163,7 +439,7 @@ const UserPage = ({ onSongSelect }) => {
       image: "https://via.placeholder.com/100",
       songs: [
         { id: 10, title: "Good Mood", artist: "Haitham Yousif", genre: "Pop", duration: 210, image: "https://via.placeholder.com/40", album: "Positive Vibes" },
-        { id: 11, title: "Feeling Good", artist: "Haitham Yousif", genre: "R&B", duration: 223, image: "https://via.placeholder.com/40", album: "Positive Vibes" },
+        { id: 11, title: "Feeling Good", artist: "Haitham Yousif", genre: "RnB", duration: 223, image: "https://via.placeholder.com/40", album: "Positive Vibes" },
         { id: 12, title: "Positive Energy", artist: "Haitham Yousif", genre: "Pop", duration: 195, image: "https://via.placeholder.com/40", album: "Positive Vibes" }
       ]
     },
@@ -177,23 +453,23 @@ const UserPage = ({ onSongSelect }) => {
         { id: 15, title: "Rhythm & Poetry", artist: "Haitham Yousif", genre: "Rap", duration: 256, image: "https://via.placeholder.com/40", album: "Street Flow" }
       ]
     }
-  ]);
+  ]);/*/
   
   // Genre song mapping - songs by genre
   const [genreSongs, setGenreSongs] = useState({
-    'R&B': {
-      name: 'R&B',
+    'Rnb': {
+      name: 'RnB',
       image: 'https://via.placeholder.com/100',
       songs: [
-        { id: 1, title: "Summer Breeze", artist: "Haitham Yousif", genre: "R&B", duration: 213, image: "https://via.placeholder.com/40", album: "Summer Hits" },
-        { id: 3, title: "Sunset Melody", artist: "Haitham Yousif", genre: "R&B", duration: 245, image: "https://via.placeholder.com/40", album: "Summer Hits" },
-        { id: 8, title: "Midnight Blues", artist: "Haitham Yousif", genre: "R&B", duration: 267, image: "https://via.placeholder.com/40", album: "Midnight Moods" },
-        { id: 11, title: "Feeling Good", artist: "Haitham Yousif", genre: "R&B", duration: 223, image: "https://via.placeholder.com/40", album: "Positive Vibes" },
-        { id: 101, title: "Album Intro", artist: "Haitham Yousif", genre: "R&B", duration: 120, image: "https://via.placeholder.com/40", album: "First Album" },
-        { id: 103, title: "New Sound", artist: "Haitham Yousif", genre: "R&B", duration: 210, image: "https://via.placeholder.com/40", album: "First Album" },
-        { id: 105, title: "Auston Nights", artist: "Haitham Yousif", genre: "R&B", duration: 225, image: "https://via.placeholder.com/40", album: "Auston 2020 Tour" },
-        { id: 107, title: "The End", artist: "Haitham Yousif", genre: "R&B", duration: 240, image: "https://via.placeholder.com/40", album: "Break Up" },
-        { id: 109, title: "Better Days", artist: "Haitham Yousif", genre: "R&B", duration: 215, image: "https://via.placeholder.com/40", album: "Break Up" }
+        { id: 1, title: "Summer Breeze", artist: "Haitham Yousif", genre: "RnB", duration: 213, image: "https://via.placeholder.com/40", album: "Summer Hits" },
+        { id: 3, title: "Sunset Melody", artist: "Haitham Yousif", genre: "RnB", duration: 245, image: "https://via.placeholder.com/40", album: "Summer Hits" },
+        { id: 8, title: "Midnight Blues", artist: "Haitham Yousif", genre: "RnB", duration: 267, image: "https://via.placeholder.com/40", album: "Midnight Moods" },
+        { id: 11, title: "Feeling Good", artist: "Haitham Yousif", genre: "RnB", duration: 223, image: "https://via.placeholder.com/40", album: "Positive Vibes" },
+        { id: 101, title: "Album Intro", artist: "Haitham Yousif", genre: "RnB", duration: 120, image: "https://via.placeholder.com/40", album: "First Album" },
+        { id: 103, title: "New Sound", artist: "Haitham Yousif", genre: "RnB", duration: 210, image: "https://via.placeholder.com/40", album: "First Album" },
+        { id: 105, title: "Auston Nights", artist: "Haitham Yousif", genre: "RnB", duration: 225, image: "https://via.placeholder.com/40", album: "Auston 2020 Tour" },
+        { id: 107, title: "The End", artist: "Haitham Yousif", genre: "RnB", duration: 240, image: "https://via.placeholder.com/40", album: "Break Up" },
+        { id: 109, title: "Better Days", artist: "Haitham Yousif", genre: "RnB", duration: 215, image: "https://via.placeholder.com/40", album: "Break Up" }
       ]
     },
     'Rap': {
@@ -295,6 +571,7 @@ const UserPage = ({ onSongSelect }) => {
     }
   };
   
+  
   // Handle playlist drag end
   const handlePlaylistDragEnd = (e) => {
     e.currentTarget.classList.remove('dragging');
@@ -347,6 +624,11 @@ const UserPage = ({ onSongSelect }) => {
     setSelectedAlbum(album);
     setSelectedPlaylist(null); // Clear selected playlist when opening an album
     setSelectedGenre(null); // Clear selected genre when opening an album
+
+    if (album.id !== defaultAlbumId) { // Skip for "My Songs" which is loaded differently
+      console.log("Fetching songs for album ID:", album.id);
+      GetAlbumSongs(album.id);
+    }
   };
   
   const handleGenreClick = (genreName) => {
@@ -359,7 +641,6 @@ const UserPage = ({ onSongSelect }) => {
       console.log("No songs found for genre:", genreName);
     }
   };
-
   const handleBackFromPlaylist = () => {
     console.log("Back button clicked from playlist");
     setSelectedPlaylist(null);
@@ -372,6 +653,7 @@ const UserPage = ({ onSongSelect }) => {
     setSelectedAlbum(albums[0]); // Set back to "My Songs" album
   };
   
+ 
   const handleBackFromAlbum = (album) => {
     console.log("Back button clicked from album");
     // Only go back to "My Songs" if it's not the "My Songs" album itself
@@ -380,201 +662,91 @@ const UserPage = ({ onSongSelect }) => {
     }
   };
 
-  // Add Song function
   const handleAddSong = (songData) => {
     console.log('Adding new song:', songData);
     // Here you would typically make an API call to save the song
     // and then update your albums state with the new song
-    
+   
     // For now, let's add it to the selected album as an example
-    const newSong = {
-      id: Date.now(), // temporary ID
-      title: songData.name,
-      artist: "Haitham Yousif", // Hardcoded for example
-      genre: songData.genre || "Unknown", // You might want to add genre to your form
-      duration: 180, // Default duration
-      image: songData.image ? URL.createObjectURL(songData.image) : "https://via.placeholder.com/40",
-      album: "My Songs"
+    if (currentUserId) {
+      // Short delay to ensure the API has processed the upload
+      setTimeout(() => {
+        console.log("Refreshing songs from API after adding new song");
+        GetSongs(currentUserId);
+      }, 1000);
+    }
+  
+  }
+
+ 
+
+  const AddPlaylistComponent = (playlistData) => {
+    console.log("Making a new playlist: ", playlistData);
+    const formData = new FormData();
+    formData.append('PlaylistName', playlistData.name);
+    formData.append('PlaylistPicture', playlistData.image);
+    formData.append('UserID', currentUserId); 
+    if(playlistData.image){
+      formData.append('PlaylistPicture', playlistData.image); 
+    }
+    else{
+      alert("Please select a picture for the playlist");
+      return;
+    }
+    fetch(`${API_URL}/api/database/AddPlaylist`, {
+      method: 'POST',
+      body: formData,
+    })
+    .then(response =>{
+      if(!response.ok){
+        throw new Error(`Upload failed with status ${response.status}`);
+      }
+      return response.json();
+
+    })
+    .then(data => {
+      console.log('Upload successful:', data);
+    // Close the add playlist form
+      setShowAPwindow(false);
+    
+    // Show success message
+    const newPlaylist = {
+      id: Date.now(), // Temporary ID since your API doesn't return the ID
+      name: playlistData.name,
+      image: data, // The API returns the image URL
+      songs: []
     };
     
-    // Update albums state with the new song
-    const updatedAlbums = albums.map(album => {
-      if (album.id === parseInt(songData.albumId)) {
-        return {
-          ...album,
-          songs: [...album.songs, newSong]
-        };
-      }
-      return album;
-    });
+    // Add to playlists state
+    setPlaylists(prevPlaylists => [newPlaylist, ...prevPlaylists]);
     
-    setAlbums(updatedAlbums);
-  };
+    
+    // Refresh playlists
+    if (currentUserId) {
+      GetUserPlaylists(currentUserId);
+    }
+  })
+  .catch(error => {
+    console.error('Error creating playlist:', error);
+    alert('Failed to create playlist: ' + error.message);
+  });
+};
 
-  // Handle song deletion
-  const handleDeleteSong = (song, isFromMyAlbum) => {
-    console.log("Deleting song:", song.title, "From My Album:", isFromMyAlbum);
-    
-    if (isFromMyAlbum) {
-      // Delete from all playlists and albums
-      // 1. Remove from albums
-      const updatedAlbums = albums.map(album => ({
-        ...album,
-        songs: album.songs.filter(s => s.id !== song.id)
-      }));
-      setAlbums(updatedAlbums);
-      
-      // 2. Remove from playlists
-      const updatedPlaylists = playlists.map(playlist => ({
-        ...playlist,
-        songs: playlist.songs.filter(s => s.id !== song.id)
-      }));
-      setPlaylists(updatedPlaylists);
-      
-      // 3. Remove from genre songs
-      const updatedGenreSongs = { ...genreSongs };
-      Object.keys(updatedGenreSongs).forEach(genre => {
-        updatedGenreSongs[genre] = {
-          ...updatedGenreSongs[genre],
-          songs: updatedGenreSongs[genre].songs.filter(s => s.id !== song.id)
-        };
-      });
-      setGenreSongs(updatedGenreSongs);
-      
-      // Show confirmation notification (optional)
-      console.log(`"${song.title}" removed from your library`);
-    } else {
-      // Only remove from current context (album, playlist, or genre)
-      if (selectedPlaylist) {
-        // Remove from current playlist
-        const updatedPlaylists = playlists.map(playlist => {
-          if (playlist.id === selectedPlaylist.id) {
-            return {
-              ...playlist,
-              songs: playlist.songs.filter(s => s.id !== song.id)
-            };
-          }
-          return playlist;
-        });
-        
-        setPlaylists(updatedPlaylists);
-        setSelectedPlaylist(updatedPlaylists.find(p => p.id === selectedPlaylist.id));
-      } else if (selectedAlbum && selectedAlbum.id !== defaultAlbumId) {
-        // Remove from current album
-        const updatedAlbums = albums.map(album => {
-          if (album.id === selectedAlbum.id) {
-            return {
-              ...album,
-              songs: album.songs.filter(s => s.id !== song.id)
-            };
-          }
-          return album;
-        });
-        
-        setAlbums(updatedAlbums);
-        setSelectedAlbum(updatedAlbums.find(a => a.id === selectedAlbum.id));
-      } else if (selectedGenre) {
-        // Remove from current genre
-        const updatedGenreSongs = { ...genreSongs };
-        if (updatedGenreSongs[selectedGenre.name]) {
-          updatedGenreSongs[selectedGenre.name] = {
-            ...updatedGenreSongs[selectedGenre.name],
-            songs: updatedGenreSongs[selectedGenre.name].songs.filter(s => s.id !== song.id)
-          };
-          setGenreSongs(updatedGenreSongs);
-          setSelectedGenre(updatedGenreSongs[selectedGenre.name]);
-        }
-      }
-      
-      // Show confirmation notification (optional)
-      console.log(`"${song.title}" removed from ${selectedPlaylist ? 'playlist' : selectedAlbum ? 'album' : 'genre'}`);
-    }
-  };
-
-  // Handle playlist deletion
-  const handleDeletePlaylist = (e, playlistId) => {
-    e.stopPropagation(); // Prevent triggering the click event on the playlist button
-    
-    // Find the playlist to be deleted
-    const playlistToDelete = playlists.find(p => p.id === playlistId);
-    
-    // Don't allow deletion of "Liked Songs" playlist
-    if (playlistToDelete.name === "Liked Songs") {
-      console.log("Cannot delete the Liked Songs playlist");
-      return;
-    }
-    
-    setConfirmModal({
-      isOpen: true,
-      message: `Are you sure you want to delete "${playlistToDelete.name}" playlist? This action cannot be undone.`,
-      onConfirm: () => {
-        // Remove the playlist from the playlists array
-        const updatedPlaylists = playlists.filter(playlist => playlist.id !== playlistId);
-        setPlaylists(updatedPlaylists);
-        
-        // If the deleted playlist was selected, set selected to null
-        if (selectedPlaylist && selectedPlaylist.id === playlistId) {
-          setSelectedPlaylist(null);
-          setSelectedAlbum(albums[0]); // Go back to "My Songs" album
-        }
-        
-        console.log(`Playlist "${playlistToDelete.name}" deleted`);
-        setConfirmModal({ isOpen: false, message: '', onConfirm: null });
-      }
-    });
-  };
-  
-  // Handle album deletion
-  const handleDeleteAlbum = (e, albumId) => {
-    e.stopPropagation(); // Prevent triggering the click event on the album button
-    
-    // Don't allow deletion of "My Songs" album
-    if (albumId === defaultAlbumId) {
-      console.log("Cannot delete the My Songs album");
-      return;
-    }
-    
-    // Find the album to be deleted
-    const albumToDelete = albums.find(a => a.id === albumId);
-    
-    setConfirmModal({
-      isOpen: true,
-      message: `Are you sure you want to delete "${albumToDelete.name}" album? This action cannot be undone.`,
-      onConfirm: () => {
-        // Remove the album from the albums array
-        const updatedAlbums = albums.filter(album => album.id !== albumId);
-        setAlbums(updatedAlbums);
-        
-        // If the deleted album was selected, set selected to My Songs
-        if (selectedAlbum && selectedAlbum.id === albumId) {
-          setSelectedAlbum(albums[0]); // Go back to "My Songs" album
-        }
-        
-        console.log(`Album "${albumToDelete.name}" deleted`);
-        setConfirmModal({ isOpen: false, message: '', onConfirm: null });
-      }
-    });
-  };
-  
-  // Close confirmation modal
-  const closeConfirmModal = () => {
-    setConfirmModal({ isOpen: false, message: '', onConfirm: null });
-  };
 
   return (
     <div className="profile-container">
       <div className="profile-card">
         <img
-          src="https://via.placeholder.com/150"
+        src={userProfile.profileImage || "https://via.placeholder.com/150"}
           alt="Profile"
           className="profile-image"
         />
-        <h1 className="profile-name">Haitham yousif</h1>{/* Profile Name  */}
+        <h1 className="profile-name">{userProfile.name} </h1>{/* Profile Name  */}
         {/*  Optional Pronouns */}
         <h3 style={{textAlign:"left",margin:"30px 0px -10px 0px"}}>Profile Description</h3>
         <Editable
             title="Edit Bio"
-            value="Small Creator that focuses on R&B and Rap style of music. "
+            value={userProfile.bio}
             div_width="100%"
             div_height="200px"
             backgroundColor="none"
@@ -587,7 +759,7 @@ const UserPage = ({ onSongSelect }) => {
         </div>
         
         <div className="music-container">
-          <button className="music-genre" onClick={() => handleGenreClick('R&B')}>R&B</button>
+          <button className="music-genre" onClick={() => handleGenreClick('Rnb')}>Rnb</button>
           <button className="music-genre" onClick={() => handleGenreClick('Rap')}>Rap</button>
           <button className="music-genre" onClick={() => handleGenreClick('Country')}>Country</button>
           <button className="music-genre" onClick={() => handleGenreClick('HipHop')}>HipHop</button>
@@ -595,17 +767,17 @@ const UserPage = ({ onSongSelect }) => {
           <button className="music-genre" onClick={() => handleGenreClick('Rock')}>Rock</button>
         </div>
        
+
         {role === 'artist' && (
-          <div className="add-song-container">
-            <button className="add-song-btn" onClick={() => setIsAddSongModalOpen(true)}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path>
-              </svg>
-              <span>Add Song</span>
-            </button>
-          </div>
-        )}
-        
+  <div className="add-song-container">
+    <button className="add-song-btn" onClick={() => setIsAddSongModalOpen(true)}>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path>
+      </svg>
+      <span>Add Song</span>
+    </button>
+  </div>
+)}
         <div className="playlist-container">
           <div className="section-header">
             <h1>Playlists</h1>
@@ -616,39 +788,30 @@ const UserPage = ({ onSongSelect }) => {
           </div>
           
           {role === 'artist' && (
-            <button className="playlist-button add-btn" onClick={() => setShowAPwindow(true)}>
+            <button className="playlist-button add-btn" onClick={() => {setShowAPwindow(true)}}>
               <img
-                src="https://via.placeholder.com/100"
+                src={playlistIcon}
                 alt="Playlist Cover"
                 className="playlist-image"
               />
               <span className="playlist-name"><strong>+ Add Playlist</strong></span>
             </button>
           )}
+          
+          {showAPwindow && (
+            <>
+              <AddPlaylist/>
+              <button 
+                className="add-playlist-btn" 
+                style={{marginTop:"-20px",marginLeft:"30px"}} 
+                onSubmit={AddPlaylistComponent}
 
-          {/* Playlist Modal */}
-          <AddPlaylist
-            isOpen={showAPwindow}
-            onClose={() => setShowAPwindow(false)}
-            onSubmit={(playlistData) => {
-              // Handle new playlist creation
-              console.log("Creating new playlist:", playlistData);
-              
-              // Create a new playlist object
-              const newPlaylist = {
-                id: Date.now(), // Generate a unique ID
-                name: playlistData.name,
-                image: playlistData.image ? URL.createObjectURL(playlistData.image) : "https://via.placeholder.com/100",
-                songs: []
-              };
-              
-              // Add the new playlist to the playlists array
-              setPlaylists([...playlists, newPlaylist]);
-              
-              // Close the modal
-              setShowAPwindow(false);
-            }}
-          />
+                onCancel={() => setShowAPwindow(false)}
+                >
+                CLOSE
+              </button>
+            </>
+          )}
           
           {playlists.map(playlist => (
             <div 
@@ -669,19 +832,6 @@ const UserPage = ({ onSongSelect }) => {
                 className="playlist-image"
               />
               <span className="playlist-name">{playlist.name}</span>
-              
-              {/* Only show delete button if not "Liked Songs" playlist */}
-              {playlist.name !== "Liked Songs" && (
-                <button 
-                  className="delete-button"
-                  onClick={(e) => handleDeletePlaylist(e, playlist.id)}
-                  title="Delete playlist"
-                >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path>
-                  </svg>
-                </button>
-              )}
             </div>
           ))}
         </div>
@@ -698,38 +848,22 @@ const UserPage = ({ onSongSelect }) => {
               </div>
             </div>
             
-            <button className="playlist-button add-btn" onClick={() => setShowAddAlbum(true)}>
-              <img
-                src="https://via.placeholder.com/100"
-                alt="Album Cover"
-                className="playlist-image"
-              />
+            <button className="playlist-button add-btn" onClick={() => {setShowAddAlbum(true)}}>
               <span className="playlist-name"><strong>+ Add Album</strong></span>
             </button>
             
-            {/* Album Modal */}
-            <AddAlbum
-              isOpen={showAddAlbum}
-              onClose={() => setShowAddAlbum(false)}
-              onSubmit={(albumData) => {
-                // Handle new album creation
-                console.log("Creating new album:", albumData);
-                
-                // Create a new album object
-                const newAlbum = {
-                  id: Date.now(), // Generate a unique ID
-                  name: albumData.name,
-                  image: albumData.image ? URL.createObjectURL(albumData.image) : "https://via.placeholder.com/100",
-                  songs: []
-                };
-                
-                // Add the new album to the albums array
-                setAlbums([...albums, newAlbum]);
-                
-                // Close the modal
-                setShowAddAlbum(false);
-              }}
-            />
+            {showAddAlbum && (
+              <>
+                <AddAlbum/>
+                <button 
+                  className="add-playlist-btn" 
+                  style={{marginTop:"-20px",marginLeft:"30px"}} 
+                  onClick={() => {setShowAddAlbum(false)}}
+                >
+                  CLOSE
+                </button>
+              </>
+            )}
             
             {albums.map(album => (
               <div 
@@ -744,114 +878,90 @@ const UserPage = ({ onSongSelect }) => {
                 <div className="drag-handle">
                   <span className="drag-dots">⋮⋮</span>
                 </div>
-                <img
-                  src={album.image}
-                  alt={`${album.name} Cover`}
-                  className="playlist-image"
-                />
                 <span className="playlist-name">{album.name}</span>
-                
-                {/* Only show delete button if not "My Songs" album */}
-                {album.id !== defaultAlbumId && (
-                  <button 
-                    className="delete-button"
-                    onClick={(e) => handleDeleteAlbum(e, album.id)}
-                    title="Delete album"
-                  >
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path>
-                    </svg>
-                  </button>
-                )}
               </div>
             ))}
           </div>
         )}
+
+        {/*<MusicPlayer song="Why Cant You" artist="Bryant Barnes" />*/}
       </div>
       
       {/* Playlist Songs Display */}
       {selectedPlaylist && (
-        <>
-          {/* Place the back button inside the PlaylistSongList or right before it */}
-          <div className="playlist-content-area">
-            <div className="styled-back-button" onClick={handleBackFromPlaylist}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
-              </svg>
-              <span>Back to My Songs</span>
-            </div>
-            
-            <PlaylistSongList 
-              songs={selectedPlaylist.songs} 
-              playlistName={selectedPlaylist.name}
-              playlistImage={selectedPlaylist.image}
-              onSongSelect={onSongSelect}
-              onDeleteSong={handleDeleteSong}
-            />
-          </div>
-        </>
-      )}
+  <>
+    <div 
+      className="styled-back-button"
+      onClick={handleBackFromPlaylist}
+    >
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
+      </svg>
+      <span>Back to playlists</span>
+    </div>
+    
+    <PlaylistSongList 
+      songs={selectedPlaylist.songs} 
+      playlistName={selectedPlaylist.name}
+      playlistImage={selectedPlaylist.image}
+      onSongSelect={onSongSelect}
+    />
+  </>
+)}
 
-      {selectedAlbum && (
-        <>
-          {/* Only show back button if not the "My Songs" album */}
-          {selectedAlbum.id !== defaultAlbumId && (
-            <div 
-              className="styled-back-button"
-              onClick={() => handleBackFromAlbum(selectedAlbum)}
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
-              </svg>
-              <span>Back to My Songs</span>
-            </div>
-          )}
-          
-          <AlbumSongList 
-            songs={selectedAlbum.songs} 
-            playlistName={selectedAlbum.name}
-            playlistImage={selectedAlbum.image}
-            onSongSelect={onSongSelect}
-            onDeleteSong={handleDeleteSong}
-            isMyAlbum={selectedAlbum.id === defaultAlbumId}
-          />
-        </>
-      )}
-        
+{selectedAlbum && (
+  <>
+    {/* Only show back button if not the "My Songs" album */}
+    {selectedAlbum.id !== defaultAlbumId && (
+      <div 
+        className="styled-back-button"
+        onClick={() => handleBackFromAlbum(selectedAlbum)}
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
+        </svg>
+        <span>Back to albums</span>
+      </div>
+    )}
+    
+    <AlbumSongList 
+      songs={selectedAlbum.songs} 
+      playlistName={selectedAlbum.name}
+      playlistImage={selectedAlbum.image}
+      onSongSelect={onSongSelect}
+    />
+  </>
+)}
+      
       {/* Genre Songs Display */}
       {selectedGenre && (
-        <>
-        {/* Place the back button inside the PlaylistSongList or right before it */}
-        <div className="playlist-content-area">
-          <div className="styled-back-button" onClick={handleBackFromGenre}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
-            </svg>
-            <span>Back to My Songs</span>
-          </div>
-          <GenreSongList 
-            songs={selectedGenre.songs} 
-            playlistName={selectedGenre.name}
-            playlistImage={selectedGenre.image}
-            onSongSelect={onSongSelect}
-          />
-        </div>
-        </>
-      )}
-      
-      {/* Add Song Modal */}
-      <AddSongModal 
+  <>
+    <div 
+      className="styled-back-button"
+      onClick={handleBackFromGenre}
+    >
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
+      </svg>
+      <span>Back to genres</span>
+    </div>
+    
+    <GenreSongList 
+      songs={selectedGenre.songs} 
+      playlistName={selectedGenre.name}
+      playlistImage={selectedGenre.image}
+      onSongSelect={onSongSelect}
+    />
+  </>
+)}
+
+
+{}
+<AddSongModal 
         isOpen={isAddSongModalOpen}
         onClose={() => setIsAddSongModalOpen(false)}
         onSubmit={handleAddSong}
-      />
-      
-      {/* Confirmation Modal */}
-      <ConfirmationModal
-        isOpen={confirmModal.isOpen}
-        message={confirmModal.message}
-        onCancel={closeConfirmModal}
-        onConfirm={confirmModal.onConfirm}
+        albums={albums}
       />
     </div>
   );
