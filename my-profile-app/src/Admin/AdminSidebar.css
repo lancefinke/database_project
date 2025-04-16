@@ -1,0 +1,25 @@
+@import url('../ProfilePage/Components/SideBar.css');
+
+/* Any admin-specific overrides can go here */
+.sidebar.admin {
+  background-color: #121212;
+}
+
+/* Admin logo can be added if needed */
+.admin-logo {
+  padding: 20px;
+  margin-bottom: 30px;
+  text-align: center;
+  color: #b91d1d;
+}
+
+/* Adjust content margin for admin sidebar */
+.admin-content {
+  margin-left: 120px;
+}
+
+@media (max-width: 768px) {
+  .admin-content {
+    margin-left: 60px;
+  }
+}

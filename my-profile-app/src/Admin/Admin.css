@@ -1,89 +1,304 @@
-.statName,.stat{
-    text-align: left;
-}
-.admin-page{
+/* Admin.css */
+/* Main container styling */
+.admin-container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    color: #ffffff;
+  }
+  
+  .admin-title {
+    margin-bottom: 2rem;
+    font-size: 2rem;
+    color: #ffffff;
+  }
+  
+  /* Loading and error states */
+  .admin-loading,
+  .admin-error {
     display: flex;
-}
-.statName{
-    font-size: 200%;
-    margin-top: 55px;
-}
-.stat{
-    font-size:150%;
-    margin-bottom: 45px;
-}
-.admin-label{
-    font-size: 225%;
-}
-.statistics{
-    border-right: 2px solid white;
-    
-}
-.flagged-songs,.statistics{
-    width: 45%;
-    height: 100%;
-    margin:20px;
-}
-.divider{
-    width:90%;
-    border-radius: 50%;
-}
-
-.reported-song{
-    width:105%;
-    height:250px;
-    border: 4px solid white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    background-color: #8E1616;
-    margin: 25px auto;
-    border-radius: 15px;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+    font-size: 1.2rem;
+    color: #ffffff;
+  }
+  
+  .admin-error {
+    color: #e53935;
+  }
+  
+  .admin-error-message {
+    margin-top: 2rem;
+    padding: 1rem;
+    background-color: rgba(229, 57, 53, 0.2);
+    border-left: 4px solid #e53935;
+    border-radius: 4px;
+    color: #ffffff;
+  }
+  
+  /* Tab navigation */
+  .admin-tabs {
     display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-}
-.reported-item{
-    margin: 5% 20px;
-}
-.report-info{
-    width: 35%;
-}
-.report-img{
-    width:250px;
-    height: 200px;
-    aspect-ratio: 5/3;
-    border-radius: 10px;
-    margin: auto 0px;
-}
-.report-icons{
-    scale: 1.5;
-    height: 10%;
-    margin:auto;
-    transition: transform 0.3s ease;
-}
-.report-icons:hover{
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    margin-bottom: 2rem;
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+  
+  .admin-tab {
+    padding: 0.75rem 1.25rem;
+    background: none;
+    border: none;
+    color: #aaa;
+    font-size: 1rem;
+    font-weight: 500;
     cursor: pointer;
-    transform: scale(1.1);
-}
-.admin-btn{
+    transition: all 0.3s ease;
+    white-space: nowrap;
+  }
+  
+  .admin-tab:hover {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+  
+  .admin-tab.active {
+    color: #ffffff;
+    border-bottom: 3px solid #b91d1d;
+  }
+  
+  /* Panel content */
+  .admin-panel {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Statistics cards */
+  .admin-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .stat-card {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+  }
+  
+  .stat-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .stat-card h2 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    color: #ffffff;
+  }
+  
+  .stat-value {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #b91d1d;
+  }
+  
+  /* Table controls */
+  .admin-table-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .admin-search input {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    width: 300px;
+  }
+  
+  .admin-search input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+  }
+  
+  /* Table container */
+  .admin-table-container {
+    overflow-x: auto;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+  
+  /* Table styling */
+  .admin-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .admin-table th {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    text-align: left;
+    cursor: pointer;
+    position: relative;
+    white-space: nowrap;
+    color: #ffffff;
+  }
+  
+  .admin-table th:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+  }
+  
+  .admin-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+  }
+  
+  .admin-table tr:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+  
+  /* Action buttons */
+  .admin-action-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    border: none;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-right: 0.5rem;
     color: white;
-    font-family: 'Roboto Mono', monospace;
-    border: 4px solid white;
-    background-color: #101010;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    border-radius: 15px;
-    width: 70%;
-    margin: 10px auto;
-    padding: 5px 10px;
-}
-.admin-btn:hover{
-    color: #101010;
-    background-color: white;
-    border-color: #101010;
-}
-.admin-btns{
-    width: 25%;
-    height: 50%;
+    background-color: #b91d1d;
+  }
+  
+  .admin-action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    background-color: #d42222;
+  }
+  
+  .admin-action-btn.ban {
+    background-color: #e53935;
+  }
+  
+  .admin-action-btn.unban {
+    background-color: #43a047;
+  }
+  
+  .admin-action-btn.approve {
+    background-color: #ffa000;
+  }
+  
+  /* Song cards */
+  .song-cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .song-card {
+    display: flex;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    height: 200px;
+  }
+  
+  .song-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .song-card.banned {
+    border-left: 4px solid #e53935;
+  }
+  
+  .song-card.reported {
+    border-left: 4px solid #ffa000;
+  }
+  
+  .song-card-image {
+    width: 180px;
+    min-width: 180px;
+    height: 100%;
+    overflow: hidden;
+  }
+  
+  .song-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .song-card-content {
+    padding: 1rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .song-title {
+    font-size: 1.2rem;
+    margin: 0 0 0.5rem;
+    color: #ffffff;
+  }
+  
+  .song-artist {
+    font-size: 0.9rem;
+    margin: 0 0 0.5rem;
+    color: #aaa;
+  }
+  
+  .song-reported-date,
+  .song-banned-date,
+  .song-reporter,
+  .song-reason {
+    font-size: 0.8rem;
+    margin: 0 0 0.5rem;
+    color: #ddd;
+  }
+  
+  .song-reason {
+    font-weight: 500;
+    color: #e53935;
+  }
+  
+  .song-actions {
     margin-top: auto;
-    margin-bottom: auto;
-    margin-right:-20px;
-}
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .admin-stats {
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+    
+    .song-cards-container {
+      grid-template-columns: 1fr;
+    }
+    
+    .song-card {
+      height: auto;
+      flex-direction: column;
+    }
+    
+    .song-card-image {
+      width: 100%;
+      height: 150px;
+    }
+    
+    .admin-tab {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.9rem;
+    }
+  }

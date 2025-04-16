@@ -8,20 +8,21 @@ const LoginPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [isAdmin, setIsAdmin] = useState(false);
+    const [redirectReady, setRedirectReady] = useState(false);
 
     const { isLoggedIn, setLoggedIn } = useLoginContext();
     const { user, setUser } = useUserContext();
 
-    const storeToken = (token, adminStatus)=>{
-        // Store token in localStorage instead of cookie
+    const storeToken = (token, adminStatus) => {
+        // Store token in localStorage
         localStorage.setItem('userToken', token);
-        // Store admin status in localStorage
-        localStorage.setItem('isAdmin', adminStatus);
+        // Store admin status as a string
+        localStorage.setItem('isAdmin', adminStatus.toString());
         setIsAdmin(adminStatus);
         setLoggedIn(true);
     }
 
-    const getUserInfo = async()=>{
+    const getUserInfo = async() => {
         try {
             const response = await fetch(
                 `http://localhost:5142/api/Users/GetUserByName?name=${encodeURIComponent(username)}`
@@ -38,7 +39,7 @@ const LoginPage = () => {
         }
     }
 
-    const loginUser = async()=>{
+    const loginUser = async() => {
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -108,7 +109,8 @@ const LoginPage = () => {
                     <Link className="signup-link" to="/signup">Sign up</Link>
                 </p>
             </div>
-            {isLoggedIn && (
+            {/* Only redirect when redirectReady is true to ensure all states are set */}
+            {isLoggedIn && redirectReady && (
                 isAdmin 
                     ? <Navigate to='/admin' /> 
                     : <Navigate to='/home' />

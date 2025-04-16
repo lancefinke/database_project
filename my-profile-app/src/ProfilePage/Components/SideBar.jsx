@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLoginContext } from '../../LoginContext/LoginContext';
 import './SideBar.css';
 
 const Sidebar = () => {
@@ -8,6 +9,7 @@ const Sidebar = () => {
   const isProfilePage = location.pathname === '/profile';
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const { setLoggedIn } = useLoginContext(); // Import login context
   
   // Check if the current path matches to set active state
   const isActive = (path) => location.pathname === path;
@@ -53,6 +55,10 @@ const Sidebar = () => {
     // Clear the authentication token and admin status
     localStorage.removeItem('userToken');
     localStorage.removeItem('isAdmin');
+    
+    // Update the login context state
+    setLoggedIn(false);
+    
     // Redirect to login page
     navigate('/login');
   };
