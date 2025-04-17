@@ -11,11 +11,9 @@ import AlbumSongList from '../Components/AlbumSongList';
 import GenreSongList from '../Components/GenreSongList';
 import AddSongModal from './AddSongModal';
 import PlaylistSelectionPopup from '../Components/PlaylistSelectionPopup';
-<<<<<<< HEAD
 import AlbumSelectionPopup from '../Components/AlbumSelectionPopup';
-=======
-import albumAddIcon from './playlist.png'
->>>>>>> 612df888a7aabf294b969872ee49f2b2bd6e1962
+import albumAddIcon from './playlist.png';
+
 
 const ConfirmationModal = ({ isOpen, message, onCancel, onConfirm }) => {
   if (!isOpen) return null;
@@ -944,15 +942,11 @@ const UserPage = ({ onSongSelect }) => {
           
            
             <button className="playlist-button add-btn" onClick={() => setShowAPwindow(true)}>
-<<<<<<< HEAD
-             
-=======
               <img
                 src={albumAddIcon}
                 alt="Playlist Cover"
                 className="playlist-image"
               />
->>>>>>> 612df888a7aabf294b969872ee49f2b2bd6e1962
               <span className="playlist-name"><strong>+ Add Playlist</strong></span>
             </button>
           
@@ -1036,15 +1030,11 @@ const UserPage = ({ onSongSelect }) => {
             </div>
             
             <button className="playlist-button add-btn" onClick={() => setShowAddAlbum(true)}>
-<<<<<<< HEAD
-              
-=======
               <img
                 src={albumAddIcon}
                 alt="Album Cover"
                 className="playlist-image"
               />
->>>>>>> 612df888a7aabf294b969872ee49f2b2bd6e1962
               <span className="playlist-name"><strong>+ Add Album</strong></span>
             </button>
             
