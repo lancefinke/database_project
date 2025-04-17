@@ -49,7 +49,7 @@ const LoginPage = () => {
     const getUserInfo = async() => {
         try {
             const response = await fetch(
-                `https://localhost:7152/api/Users/GetUserByName?name=${encodeURIComponent(username)}`
+                `http://localhost:5142/api/Users/GetUserByName?name=${encodeURIComponent(username)}`
             );
 
             if (!response.ok) {
@@ -82,7 +82,7 @@ const LoginPage = () => {
                 })
             };
             
-            const response = await fetch('https://localhost:7152/api/Auth/login', requestOptions);
+            const response = await fetch('http://localhost:5142/api/Auth/login', requestOptions);
             const data = await response.json();
             
             console.log("API response:", data);
@@ -102,7 +102,7 @@ const LoginPage = () => {
             console.error('Login error:', error);
             
             // TEMPORARY: For development/testing when API isn't available
-          /*/  if (forcedAdminUsernames.includes(username.toLowerCase()) && password === 'admin') {
+            if (forcedAdminUsernames.includes(username.toLowerCase()) && password === 'admin') {
                 console.log("Using test admin login");
                 // Mock token for testing
                 const mockToken = "test_token_" + Math.random().toString(36).substring(2);
@@ -114,7 +114,7 @@ const LoginPage = () => {
                 storeToken(mockToken, false);
             } else {
                 alert('An error occurred during login');
-            }/*/
+            }
         }
     }
 

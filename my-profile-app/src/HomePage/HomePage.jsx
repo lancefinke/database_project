@@ -3,8 +3,8 @@ import SongIcon from "../ProfilePage/Components/SongIcon";
 import "./HomePage.css";
 
 // Sample songs for the home page
-/*/const homeSongs = [
-  { 
+const homeSongs = [
+  {
     name: "Lost in the Echo",
     creator: "Linkin Park",
     duration: "3:31",
@@ -53,80 +53,17 @@ import "./HomePage.css";
     songSrc:"./FF Violin II - Clash On The Big Bridge By TAMUSIC.mp3",
   }
 ];
-/*/
-
-const API_URL = "https://localhost:7152";
-
-const formatDuration = (duration) => {
-
-
-  const minutes = Math.floor(duration / 60);
-  const seconds = duration % 60;
-  
-
-  
-  return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-};
 
 const HomePage = () => {
   const carouselRef = useRef(null);
   const itemsRef = useRef([]);
   const [centerIndex, setCenterIndex] = useState(1); // Start with second item centered
   const [playingSongIndex, setPlayingSongIndex] = useState(null); // Track which song is playing
-  const [homeSongs, setSongs] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null); 
 
-  
-
-  useEffect(() => {
-    setLoading(true);
-    
-    fetch(`${API_URL}/api/database/GetSongsByRating`)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Failed to fetch top songs');
-        }
-        return response.json();
-      })
-      .then(data => {
-        console.log("API returned songs:", data);
-        const formattedSongs = data.map(song => ({
-          name: song.SongName,
-          creator: song.Username,
-          duration: formatDuration(song.Duration),
-          flags: ["Top Rated"], 
-          iconImage: song.CoverArtFileName,
-          songSrc: song.SongFileName,
-          songID: song.SongID,
-          totalRatings: song.TotalRatings
-        }));
-        
-        setSongs(formattedSongs);
-      })
-      .catch(err => {
-        console.error("Error fetching top songs:", err);
-        setError(err.message);
-        
-        // fills with sample songs
-        setSongs([
-          {
-            name: "Lost in the Echo",
-            creator: "Linkin Park",
-            duration: "3:31",
-            flags: ["Rock", "Popular"],
-            iconImage: "/images/lost-in-the-echo.jpg",
-            songSrc: "./FF Violin II - Clash On The Big Bridge By TAMUSIC.mp3",
-          }
-        ]);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
   // Handle layout adjustments when component mounts
   useEffect(() => {
     // Add class to body to signal we're on home page
+    document.body.classList.add('on-home-page');
     
     // Only apply style overrides to the app container for the home page
     const appContainer = document.querySelector('.app-container');
@@ -239,11 +176,8 @@ const HomePage = () => {
 
   // Function to scroll to a specific item and play it
   const scrollToItem = (index) => {
-    // First stop any currently playing song by setting to null
+    // First stop any currently playing song
     setPlayingSongIndex(null);
-    
-    // Update center index immediately
-    setCenterIndex(index);
     
     // Scroll to the desired item
     if (itemsRef.current[index]) {
@@ -252,15 +186,10 @@ const HomePage = () => {
         inline: 'center'
       });
       
-      // This is critical: After stopping playback, wait before starting the new song
-      // This gives the audio element time to fully reset
+      // After a short delay to allow scrolling to complete, start playing the new song
       setTimeout(() => {
-        console.log("Setting playing index to:", index);
-        console.log("Song that will play:", homeSongs[index]?.name);
-        console.log("Song source:", homeSongs[index]?.songSrc);
-        
         setPlayingSongIndex(index);
-      }, 500); // Increased timeout to ensure complete reset
+      }, 300);
     }
   };
 
@@ -280,13 +209,11 @@ const HomePage = () => {
                 creator={song.creator}
                 duration={song.duration}
                 flags={song.flags}
-                iconImage={song.iconImage || "https://upload.wikimedia.org/wikipedia/commons/e/e7/Everest_North_Face_toward_Base_Camp_Tibet_Luca_Galuzzi_2006.jpg"}
+                iconImage="https://upload.wikimedia.org/wikipedia/commons/e/e7/Everest_North_Face_toward_Base_Camp_Tibet_Luca_Galuzzi_2006.jpg"
                 isHomePage={true}
                 isCenter={index === centerIndex}
                 shouldPlay={playingSongIndex === index}
                 songSrc={song.songSrc}
-                AverageRating = {song.totalRatings}
-                songID = {song.songID}
               />
             </div>
           ))}
