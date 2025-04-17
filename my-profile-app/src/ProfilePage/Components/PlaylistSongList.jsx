@@ -10,8 +10,12 @@ const PlaylistSongList = ({ songs, playlistName, playlistImage, onSongSelect, on
   };
 
   const handleSongClick = (song) => {
+    console.log(song);
     if (onSongSelect) {
       onSongSelect({
+        songSrc: song.songFile,
+        songImage: song.image,     
+        duration: song.duration,
         name: song.title,
         creator: song.artist
       });

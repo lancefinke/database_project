@@ -13,7 +13,7 @@ const PlaylistSelectionPopup = ({ onClose, playlists, onAddToPlaylist, currentSo
         
         <div className="playlist-selection-song-info">
           <img 
-            src={currentSong?.image || "https://via.placeholder.com/40"} 
+            src={currentSong.songImage || "https://via.placeholder.com/40"} 
             alt="Song cover" 
           />
           <div>

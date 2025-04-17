@@ -10,9 +10,13 @@ const AlbumSongList = ({ songs, playlistName, playlistImage, onSongSelect, onDel
   };
 
   const handleSongClick = (song) => {
+    console.log(song)
     if (onSongSelect) {
       onSongSelect({
+        songImage: song.image,
+        songSrc: song.songFile,
         name: song.title,
+        duration: song.duration,
         creator: song.artist
       });
     }
