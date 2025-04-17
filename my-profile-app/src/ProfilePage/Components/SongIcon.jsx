@@ -14,7 +14,7 @@ const FlagIcon = ({ onClose, SongID }) => {
   const [currentUserId, setCurrentUserId] = useState("");
   
 
-  const API_URL = "http://localhost:5142";
+  const API_URL = "http://localhost:7152";
 
   useEffect(() => {
     // Get token from localStorage

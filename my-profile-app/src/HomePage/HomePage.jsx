@@ -55,7 +55,7 @@ import "./HomePage.css";
 ];
 /*/
 
-const API_URL = "http://localhost:5142"; // Replace with your actual API URL
+const API_URL = "https://localhost:7152"; // Replace with your actual API URL
 
 const formatDuration = (duration) => {
 
@@ -90,7 +90,7 @@ const HomePage = () => {
         return response.json();
       })
       .then(data => {
-        console.log("Raw data from API:", data); // 👈 Log raw response here
+        console.log("Raw data from API:", data); //  Log raw response here
   
         const formattedSongs = data.map(song => ({
           name: song.SongName,

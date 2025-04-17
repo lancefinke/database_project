@@ -11,6 +11,7 @@ import AlbumSongList from '../Components/AlbumSongList';
 import GenreSongList from '../Components/GenreSongList';
 import AddSongModal from './AddSongModal';
 import PlaylistSelectionPopup from '../Components/PlaylistSelectionPopup';
+import albumAddIcon from './playlist.png'
 
 const ConfirmationModal = ({ isOpen, message, onCancel, onConfirm }) => {
   if (!isOpen) return null;
@@ -822,16 +823,16 @@ const UserPage = ({ onSongSelect }) => {
             </div>
           </div>
           
-          {role === 'artist' && (
+           
             <button className="playlist-button add-btn" onClick={() => setShowAPwindow(true)}>
               <img
-                src="https://via.placeholder.com/100"
+                src={albumAddIcon}
                 alt="Playlist Cover"
                 className="playlist-image"
               />
               <span className="playlist-name"><strong>+ Add Playlist</strong></span>
             </button>
-          )}
+          
 
           {/* Playlist Modal */}
           <AddPlaylist
@@ -907,7 +908,7 @@ const UserPage = ({ onSongSelect }) => {
             
             <button className="playlist-button add-btn" onClick={() => setShowAddAlbum(true)}>
               <img
-                src="https://via.placeholder.com/100"
+                src={albumAddIcon}
                 alt="Album Cover"
                 className="playlist-image"
               />
