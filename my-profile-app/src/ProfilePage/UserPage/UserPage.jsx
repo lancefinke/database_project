@@ -11,6 +11,7 @@ import AlbumSongList from '../Components/AlbumSongList';
 import GenreSongList from '../Components/GenreSongList';
 import AddSongModal from './AddSongModal';
 import PlaylistSelectionPopup from '../Components/PlaylistSelectionPopup';
+import AlbumSelectionPopup from '../Components/AlbumSelectionPopup';
 
 const ConfirmationModal = ({ isOpen, message, onCancel, onConfirm }) => {
   if (!isOpen) return null;
@@ -46,6 +47,9 @@ const UserPage = ({ onSongSelect }) => {
   const [role, setRole] = useState('artist');
   const [selectedPlaylist, setSelectedPlaylist] = useState(null);
   const [isAddSongModalOpen, setIsAddSongModalOpen] = useState(false);
+  const [showPlaylistSelection, setShowPlaylistSelection] = useState(false);
+  const [showAlbumSelection, setShowAlbumSelection] = useState(false);
+  const [currentSongForAction, setCurrentSongForAction] = useState(null);
   const [userProfile, setUserProfile] = useState({
     name: "User",
     bio: "No bio available",
@@ -85,7 +89,7 @@ const UserPage = ({ onSongSelect }) => {
     11: "Alternative",
     12: "Indie"
   };
-  
+
   // Album state - with "My Songs" as the first album
   const [albums, setAlbums] = useState([
     { 
@@ -113,9 +117,185 @@ const UserPage = ({ onSongSelect }) => {
     'Rock': { name: 'Rock', image: 'https://via.placeholder.com/100', songs: [] }
   });
   
+  const handleAddToPlaylist = (songToAdd) => {
+    setCurrentSongForAction(songToAdd);
+    setShowPlaylistSelection(true);
+  };
+  
+  const handleAddToAlbum = (songToAdd) => {
+    setCurrentSongForAction(songToAdd);
+    setShowAlbumSelection(true);
+  };
+  
+  const handleAddSongToPlaylist = (playlistId) => {
+    console.log(`Adding song "${currentSongForAction.title}" to playlist ID: ${playlistId}`);
+    
+    // Here you would make an API call to add the song to the playlist
+    
+    // For now, just update the state locally
+    setPlaylists(prevPlaylists => {
+      return prevPlaylists.map(playlist => {
+        if (playlist.id === playlistId) {
+          // Check if the song already exists in the playlist
+          const songExists = playlist.songs.some(song => song.id === currentSongForAction.id);
+          if (!songExists) {
+            return {
+              ...playlist,
+              songs: [...playlist.songs, currentSongForAction]
+            };
+          }
+        }
+        return playlist;
+      });
+    });
+    
+    setShowPlaylistSelection(false);
+    setCurrentSongForAction(null);
+  };
+
+  const handleAddSongToAlbum = (albumId) => {
+    console.log(`Adding song "${currentSongForAction.title}" to album ID: ${albumId}`);
+    
+    // Here you would make an API call to add the song to the album
+    
+    // For now, just update the state locally
+    setAlbums(prevAlbums => {
+      return prevAlbums.map(album => {
+        if (album.id === albumId) {
+          // Check if the song already exists in the album
+          const songExists = album.songs.some(song => song.id === currentSongForAction.id);
+          if (!songExists) {
+            return {
+              ...album,
+              songs: [...album.songs, currentSongForAction]
+            };
+          }
+        }
+        return album;
+      });
+    });
+    
+    setShowAlbumSelection(false);
+    setCurrentSongForAction(null);
+  };
+  
   // Drag state
   const [draggedPlaylist, setDraggedPlaylist] = useState(null);
   const [draggedAlbum, setDraggedAlbum] = useState(null);
+
+  // Handler for playlist drag start
+  const handlePlaylistDragStart = (e, playlist) => {
+    // Don't allow dragging the "Liked Songs" or "Saved Songs" playlist
+    if (playlist.name === "Liked Songs" || playlist.name === "Saved Songs") {
+      e.preventDefault();
+      return;
+    }
+  
+    setDraggedPlaylist(playlist);
+  // Set transparent drag image
+  const img = new Image();
+  img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+  e.dataTransfer.setDragImage(img, 0, 0);
+  e.currentTarget.classList.add('dragging');
+};
+  
+  // Handler for playlist drag over
+  const handlePlaylistDragOver = (e, playlistOver) => {
+    e.preventDefault();
+    if (draggedPlaylist && draggedPlaylist.id !== playlistOver.id) {
+      // Don't allow dropping near protected playlists
+      if (playlistOver.name === "Liked Songs" || playlistOver.name === "Saved Songs") {
+        return;
+      }
+      
+      const playlistsCopy = [...playlists];
+      const draggedIndex = playlistsCopy.findIndex(p => p.id === draggedPlaylist.id);
+      const targetIndex = playlistsCopy.findIndex(p => p.id === playlistOver.id);
+      
+      if (draggedIndex !== -1 && targetIndex !== -1) {
+        // Remove the dragged item
+        const [draggedItem] = playlistsCopy.splice(draggedIndex, 1);
+        
+        // Insert at new position
+        playlistsCopy.splice(targetIndex, 0, draggedItem);
+        
+        // Ensure protected playlists stay at the top
+        const likedSongsPlaylist = playlistsCopy.find(p => p.name === "Liked Songs");
+        const savedSongsPlaylist = playlistsCopy.find(p => p.name === "Saved Songs");
+        const protectedPlaylists = [likedSongsPlaylist, savedSongsPlaylist].filter(Boolean);
+        const otherPlaylists = playlistsCopy.filter(p => 
+          p.name !== "Liked Songs" && p.name !== "Saved Songs"
+        );
+        
+        setPlaylists([...protectedPlaylists, ...otherPlaylists]);
+      }
+    }
+  };
+  
+  // Handler for playlist drag end
+  const handlePlaylistDragEnd = () => {
+    if (draggedPlaylist) {
+      document.querySelectorAll('.dragging').forEach(el => el.classList.remove('dragging'));
+      setDraggedPlaylist(null);
+    }
+  };
+  
+  // Handler for album drag start
+  const handleAlbumDragStart = (e, album) => {
+    // Don't allow "My Songs" album to be dragged
+    if (album.id === defaultAlbumId) {
+      e.preventDefault();
+      return;
+    }
+  
+    setDraggedAlbum(album);
+    // Set transparent drag image
+    const img = new Image();
+    img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+    e.dataTransfer.setDragImage(img, 0, 0);
+    e.currentTarget.classList.add('dragging');
+  };
+  
+  // Handler for album drag over
+  const handleAlbumDragOver = (e, albumOver) => {
+    e.preventDefault();
+    if (draggedAlbum && draggedAlbum.id !== albumOver.id) {
+      // Don't allow dropping on "My Songs" album
+      if (albumOver.id === defaultAlbumId) {
+        return;
+      }
+      
+      const albumsCopy = [...albums];
+      const draggedIndex = albumsCopy.findIndex(a => a.id === draggedAlbum.id);
+      const targetIndex = albumsCopy.findIndex(a => a.id === albumOver.id);
+      
+      if (draggedIndex !== -1 && targetIndex !== -1) {
+        // Remove the dragged item
+        const [draggedItem] = albumsCopy.splice(draggedIndex, 1);
+        
+        // Insert at new position
+        albumsCopy.splice(targetIndex, 0, draggedItem);
+        
+        // Ensure "My Songs" album is always first
+        const myAlbum = albumsCopy.find(a => a.id === defaultAlbumId);
+        const otherAlbums = albumsCopy.filter(a => a.id !== defaultAlbumId);
+        
+        if (myAlbum) {
+          setAlbums([myAlbum, ...otherAlbums]);
+        } else {
+          setAlbums(albumsCopy);
+        }
+      }
+    }
+  };
+  
+  // Handler for album drag end
+  const handleAlbumDragEnd = () => {
+    if (draggedAlbum) {
+      document.querySelectorAll('.dragging').forEach(el => el.classList.remove('dragging'));
+      setDraggedAlbum(null);
+    }
+  };
 
   // API Integration - Get User Data
   useEffect(() => {
@@ -441,72 +621,8 @@ const UserPage = ({ onSongSelect }) => {
     setUserGenres(userGenres.filter((genre) => genre !== e.target.value));
   };
   
-  // Handle playlist drag start
-  const handlePlaylistDragStart = (e, playlist) => {
-    setDraggedPlaylist(playlist);
-    // Set transparent drag image
-    const img = new Image();
-    img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
-    e.dataTransfer.setDragImage(img, 0, 0);
-    e.currentTarget.classList.add('dragging');
-  };
-  
-  // Handle playlist drag over
-  const handlePlaylistDragOver = (e, playlistOver) => {
-    e.preventDefault();
-    if (draggedPlaylist && draggedPlaylist.id !== playlistOver.id) {
-      const playlistsCopy = [...playlists];
-      const draggedIndex = playlistsCopy.findIndex(p => p.id === draggedPlaylist.id);
-      const targetIndex = playlistsCopy.findIndex(p => p.id === playlistOver.id);
-      
-      if (draggedIndex !== -1 && targetIndex !== -1) {
-        // Reorder the playlists
-        const [draggedItem] = playlistsCopy.splice(draggedIndex, 1);
-        playlistsCopy.splice(targetIndex, 0, draggedItem);
-        setPlaylists(playlistsCopy);
-      }
-    }
-  };
-  
-  // Handle playlist drag end
-  const handlePlaylistDragEnd = (e) => {
-    e.currentTarget.classList.remove('dragging');
-    setDraggedPlaylist(null);
-  };
-  
-  // Handle album drag start
-  const handleAlbumDragStart = (e, album) => {
-    setDraggedAlbum(album);
-    // Set transparent drag image
-    const img = new Image();
-    img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
-    e.dataTransfer.setDragImage(img, 0, 0);
-    e.currentTarget.classList.add('dragging');
-  };
-  
-  // Handle album drag over
-  const handleAlbumDragOver = (e, albumOver) => {
-    e.preventDefault();
-    if (draggedAlbum && draggedAlbum.id !== albumOver.id) {
-      const albumsCopy = [...albums];
-      const draggedIndex = albumsCopy.findIndex(a => a.id === draggedAlbum.id);
-      const targetIndex = albumsCopy.findIndex(a => a.id === albumOver.id);
-      
-      if (draggedIndex !== -1 && targetIndex !== -1) {
-        // Reorder the albums
-        const [draggedItem] = albumsCopy.splice(draggedIndex, 1);
-        albumsCopy.splice(targetIndex, 0, draggedItem);
-        setAlbums(albumsCopy);
-      }
-    }
-  };
-  
   // Handle album drag end
-  const handleAlbumDragEnd = (e) => {
-    e.currentTarget.classList.remove('dragging');
-    setDraggedAlbum(null);
-  };
-
+  
   // Handle playlist click
   const handlePlaylistClick = (playlist) => {
     console.log("Playlist clicked:", playlist.name);
@@ -824,11 +940,7 @@ const UserPage = ({ onSongSelect }) => {
           
           {role === 'artist' && (
             <button className="playlist-button add-btn" onClick={() => setShowAPwindow(true)}>
-              <img
-                src="https://via.placeholder.com/100"
-                alt="Playlist Cover"
-                className="playlist-image"
-              />
+             
               <span className="playlist-name"><strong>+ Add Playlist</strong></span>
             </button>
           )}
@@ -857,40 +969,46 @@ const UserPage = ({ onSongSelect }) => {
             }}
           />
           
-          {playlists.map(playlist => (
-            <div 
-              key={playlist.id} 
-              className={`playlist-button ${selectedPlaylist && selectedPlaylist.id === playlist.id ? 'selected' : ''}`}
-              draggable
-              onDragStart={(e) => handlePlaylistDragStart(e, playlist)}
-              onDragOver={(e) => handlePlaylistDragOver(e, playlist)}
-              onDragEnd={handlePlaylistDragEnd}
-              onClick={() => handlePlaylistClick(playlist)}
-            >
-              <div className="drag-handle">
-                <span className="drag-dots">⋮⋮</span>
-              </div>
-              <img
-                src={playlist.image}
-                alt={`${playlist.name} Cover`}
-                className="playlist-image"
-              />
-              <span className="playlist-name">{playlist.name}</span>
-              
-              {/* Only show delete button if not "Liked Songs" playlist */}
-              {playlist.name !== "Liked Songs" && (
-                <button 
-                  className="delete-button"
-                  onClick={(e) => handleDeletePlaylist(e, playlist.id)}
-                  title="Delete playlist"
-                >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path>
-                  </svg>
-                </button>
-              )}
-            </div>
-          ))}
+          {playlists.map(playlist => {
+  const isProtectedPlaylist = playlist.name === "Liked Songs" || playlist.name === "Saved Songs";
+  
+  return (
+    <div 
+      key={playlist.id} 
+      className={`playlist-button ${selectedPlaylist && selectedPlaylist.id === playlist.id ? 'selected' : ''} ${isProtectedPlaylist ? 'protected-item' : ''}`}
+      draggable={!isProtectedPlaylist}
+      onDragStart={(e) => handlePlaylistDragStart(e, playlist)}
+      onDragOver={(e) => handlePlaylistDragOver(e, playlist)}
+      onDragEnd={handlePlaylistDragEnd}
+      onClick={() => handlePlaylistClick(playlist)}
+    >
+      {!isProtectedPlaylist && (
+        <div className="drag-handle">
+          <span className="drag-dots">⋮⋮</span>
+        </div>
+      )}
+      <img
+        src={playlist.image}
+        alt={`${playlist.name} Cover`}
+        className="playlist-image"
+      />
+      <span className="playlist-name">{playlist.name}</span>
+      
+      {/* Only show delete button if not "Liked Songs" playlist */}
+      {!isProtectedPlaylist && (
+        <button 
+          className="delete-button"
+          onClick={(e) => handleDeletePlaylist(e, playlist.id)}
+          title="Delete playlist"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path>
+          </svg>
+        </button>
+      )}
+    </div>
+  );
+})}
         </div>
 
         <hr style={{backgroundColor:"white", width:"100%"}}></hr>
@@ -906,11 +1024,7 @@ const UserPage = ({ onSongSelect }) => {
             </div>
             
             <button className="playlist-button add-btn" onClick={() => setShowAddAlbum(true)}>
-              <img
-                src="https://via.placeholder.com/100"
-                alt="Album Cover"
-                className="playlist-image"
-              />
+              
               <span className="playlist-name"><strong>+ Add Album</strong></span>
             </button>
             
@@ -938,40 +1052,46 @@ const UserPage = ({ onSongSelect }) => {
               }}
             />
             
-            {albums.map(album => (
-              <div 
-                key={album.id} 
-                className={`playlist-button ${selectedAlbum && selectedAlbum.id === album.id ? 'selected' : ''}`}
-                draggable
-                onDragStart={(e) => handleAlbumDragStart(e, album)}
-                onDragOver={(e) => handleAlbumDragOver(e, album)}
-                onDragEnd={handleAlbumDragEnd}
-                onClick={() => handleAlbumClick(album)}
-              >
-                <div className="drag-handle">
-                  <span className="drag-dots">⋮⋮</span>
-                </div>
-                <img
-                  src={album.image}
-                  alt={`${album.name} Cover`}
-                  className="playlist-image"
-                />
-                <span className="playlist-name">{album.name}</span>
-                
-                {/* Only show delete button if not "My Songs" album */}
-                {album.id !== defaultAlbumId && (
-                  <button 
-                    className="delete-button"
-                    onClick={(e) => handleDeleteAlbum(e, album.id)}
-                    title="Delete album"
-                  >
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path>
-                  </svg>
-                  </button>
-                )}
-              </div>
-            ))}
+            {albums.map(album => {
+  const isMyAlbum = album.id === defaultAlbumId;
+  
+  return (
+    <div 
+      key={album.id} 
+      className={`playlist-button ${selectedAlbum && selectedAlbum.id === album.id ? 'selected' : ''} ${isMyAlbum ? 'protected-item' : ''}`}
+      draggable={!isMyAlbum}
+      onDragStart={(e) => handleAlbumDragStart(e, album)}
+      onDragOver={(e) => handleAlbumDragOver(e, album)}
+      onDragEnd={handleAlbumDragEnd}
+      onClick={() => handleAlbumClick(album)}
+    >
+      {!isMyAlbum && (
+        <div className="drag-handle">
+          <span className="drag-dots">⋮⋮</span>
+        </div>
+      )}
+      <img
+        src={album.image}
+        alt={`${album.name} Cover`}
+        className="playlist-image"
+      />
+      <span className="playlist-name">{album.name}</span>
+      
+      {/* Only show delete button if not "My Songs" album */}
+      {!isMyAlbum && (
+        <button 
+          className="delete-button"
+          onClick={(e) => handleDeleteAlbum(e, album.id)}
+          title="Delete album"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path>
+          </svg>
+        </button>
+      )}
+    </div>
+  );
+})}
           </div>
         )}
       </div>
@@ -989,12 +1109,14 @@ const UserPage = ({ onSongSelect }) => {
             </div>
             
             <PlaylistSongList 
-              songs={selectedPlaylist.songs} 
-              playlistName={selectedPlaylist.name}
-              playlistImage={selectedPlaylist.image}
-              onSongSelect={onSongSelect}
-              onDeleteSong={handleDeleteSong}
-            />
+  songs={selectedPlaylist.songs} 
+  playlistName={selectedPlaylist.name}
+  playlistImage={selectedPlaylist.image}
+  onSongSelect={onSongSelect}
+  onDeleteSong={handleDeleteSong}
+  onAddToPlaylist={handleAddToPlaylist}
+  // No onAddToAlbum prop for playlists
+/>
           </div>
         </>
       )}
@@ -1015,13 +1137,15 @@ const UserPage = ({ onSongSelect }) => {
           )}
           
           <AlbumSongList 
-            songs={selectedAlbum.songs} 
-            playlistName={selectedAlbum.name}
-            playlistImage={selectedAlbum.image}
-            onSongSelect={onSongSelect}
-            onDeleteSong={handleDeleteSong}
-            isMyAlbum={selectedAlbum.id === defaultAlbumId}
-          />
+  songs={selectedAlbum.songs} 
+  playlistName={selectedAlbum.name}
+  playlistImage={selectedAlbum.image}
+  onSongSelect={onSongSelect}
+  onDeleteSong={handleDeleteSong}
+  isMyAlbum={selectedAlbum.id === defaultAlbumId}
+  onAddToPlaylist={handleAddToPlaylist}
+  onAddToAlbum={handleAddToAlbum}
+/>
         </>
       )}
         
@@ -1060,7 +1184,26 @@ const UserPage = ({ onSongSelect }) => {
         onCancel={closeConfirmModal}
         onConfirm={confirmModal.onConfirm}
       />
+      {showPlaylistSelection && (
+        <PlaylistSelectionPopup 
+          onClose={() => setShowPlaylistSelection(false)}
+          playlists={playlists}
+          onAddToPlaylist={handleAddSongToPlaylist}
+          currentSong={currentSongForAction}
+        />
+      )}
+
+      {showAlbumSelection && (
+        <AlbumSelectionPopup 
+          onClose={() => setShowAlbumSelection(false)}
+          albums={albums.filter(album => album.id !== defaultAlbumId)}
+          onAddToAlbum={handleAddSongToAlbum}
+          currentSong={currentSongForAction}
+        />
+      )}
     </div>
+
+    
   );
 };
 

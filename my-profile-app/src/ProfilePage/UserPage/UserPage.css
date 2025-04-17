@@ -764,3 +764,25 @@ hr {
 .drag-handle {
   flex-shrink: 0;
 }
+
+.protected-item {
+  border-left: 3px solid #8E1616; /* Add a visual indicator */
+  cursor: pointer !important; /* Always use pointer cursor */
+  position: relative;
+}
+
+/* Remove the drag handle space for protected items */
+.protected-item .playlist-name {
+  margin-left: 10px;
+}
+
+/* Make sure protected items are always at the top */
+.playlist-container > div:first-of-type.playlist-button.protected-item {
+  order: -1;
+}
+
+/* Ensure ordering in flex container */
+.playlist-container {
+  display: flex;
+  flex-direction: column;
+}
