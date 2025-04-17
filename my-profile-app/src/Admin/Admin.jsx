@@ -484,7 +484,7 @@ const AdminPage = () => {
                                         )}
                                     </th>
                                     <th>Reason</th>
-                                    <th>Actions</th>
+                                   
                                 </tr>
                             </thead>
                             <tbody>
@@ -495,9 +495,7 @@ const AdminPage = () => {
                                         <td>{new Date(user.BannedAt).toLocaleDateString()}</td>
                                         <td>{user.Reason}</td>
                                         <td>
-                                            <button className="admin-action-btn unban" onClick={() => handleUserAction(user.Username, 'unban')}>
-                                                Unban User
-                                            </button>
+                                            
                                         </td>
                                     </tr>
                                 ))}
@@ -535,12 +533,7 @@ const AdminPage = () => {
                                     <p className="song-banned-date">Banned on: {song.bannedAt}</p>
                                     <p className="song-reason">Reason: {song.reason}</p>
                                     <div className="song-actions">
-                                        <button 
-                                            className="admin-action-btn unban" 
-                                            onClick={() => handleSongAction(song.id, 'unban', 'banned')}
-                                        >
-                                            Unban Song
-                                        </button>
+                                      
                                     </div>
                                 </div>
                             </div>
