@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Flag } from "lucide-react";
 import ReactDOM from 'react-dom'; // Import ReactDOM for portal
 
+
 const ModalPortal = ({ children }) => {
   // Create a portal container if it doesn't exist
   const [portalContainer, setPortalContainer] = useState(null);
@@ -45,7 +46,7 @@ const FlagIcon = ({ onClose, SongID }) => {
   const [isClickingCancel, setIsClickingCancel] = useState(false);
   const [isHoveringSubmit, setIsHoveringSubmit] = useState(false);
   const [isClickingSubmit, setIsClickingSubmit] = useState(false);
-  const [reportErrorDialog, setReportErrorDialog] = useState("");
+  
   
   const reportReasons = [
     "Select a reason",
@@ -121,21 +122,45 @@ const FlagIcon = ({ onClose, SongID }) => {
     fetch(`${API_URL}/api/database/ReportSongs?SongID=${SongID}&UserID=${currentUserId}&Reason=${encodeURIComponent(finalReason)}`, {
       method: 'POST',
     })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status} ${response.statusText}`);
-      }
-      return response.json();
-    })
-    .then(data => {
-      console.log("Report submitted successfully:", data);
-      setSuccess("Report submitted successfully");
+    // REMEMBER THIS JUST IN CASE!!!!!!!!!
+    // .then(response => {
+    //   if (!response.ok) {
+    //     throw new Error(`Error: ${response.status} ${response.statusText}`);
+    //   }
+    //   return response.json();
+    // })
+    // .then(data => {
+    //   console.log("Report submitted successfully:", data);
+    //   setSuccess("Report submitted successfully");
       
-      // Close the modal after a short delay
-      setTimeout(() => {
-        onClose();
-      }, 1500);
-    })
+    //   // Close the modal after a short delay
+    //   setTimeout(() => {
+    //     onClose();
+    //   }, 1500);
+    // })
+    .then(response => response.json())
+.then(data => {
+  const message = typeof data === "string" ? data : JSON.stringify(data);
+
+  if (message.toLowerCase().includes("already reported")) {
+    setError("Report has already been submitted.");
+    setTimeout(() => {
+      setError("");
+      onClose(); // closes the modal
+    }, 2000);
+    return;
+    
+  }
+
+  console.log("Report submitted successfully:", message);
+  setSuccess("Report submitted successfully");
+
+  setTimeout(() => {
+    onClose();
+  }, 1500);
+})
+
+
     .catch(error => {
       console.error("Error submitting report:", error);
       setError("Error submitting report: " + error.message);

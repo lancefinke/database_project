@@ -8,7 +8,7 @@ import "./SongIcon.css";
 import ReactHowler from 'react-howler';
 import FlagIcon from "./FlagIcon"; // Import the FlagIcon component
 
-const SongIcon = ({ name, creator, duration, flags, iconImage, isHomePage, isCenter, likes, shouldPlay = false, songSrc, onPlayStatusChange, AverageRating, songID }) => {
+const SongIcon = ({ name, creator, duration, flags, iconImage, isHomePage, isCenter, likes, shouldPlay = false, songSrc, onPlayStatusChange, AverageRating, songID,onRate }) => {
   // State management
   const [isPlaying, setIsPlaying] = useState(false);
   const [showReport, setShowReport] = useState(false);
