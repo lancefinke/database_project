@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import { Play, Plus, Forward, Pause, Flag, Heart, Check } from "lucide-react";
 import Editable from "./Editable";
+import ErrorDialog from "./ErrorDialog"; 
+
 import UserLink from "../../UserLink/UserLink";
 import "./SongIcon.css";
 import ReactHowler from 'react-howler'
@@ -12,6 +14,7 @@ const FlagIcon = ({ onClose, SongID }) => {
   const[error,setError] = useState("");
   const[success,setSuccess] = useState("");
   const [currentUserId, setCurrentUserId] = useState("");
+  const [reportErrorDialog, setReportErrorDialog] = useState("");
   
 
   const API_URL = "http://localhost:5142";
@@ -64,19 +67,32 @@ const FlagIcon = ({ onClose, SongID }) => {
     
     setIsSubmitting(true);
     setError("");
+    setSuccess("");
     fetch(`${API_URL}/api/database/ReportSongs?SongID=${SongID}&UserID=${currentUserId}&Reason=${reportReason}`, {
       method: 'POST',
       })
+    // .then(response => {
+    //   if (!response.ok) {
+    //     throw new Error(`Error: ${response.status} ${response.statusText}`);
+    //   }
+    //   return response.json();
+    // })
+    // .then(data => {
+    //   console.log("Report submitted successfully:", data);
+    //   setSuccess("Report submitted successfully");
     .then(response => {
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status} ${response.statusText}`);
-      }
-      return response.json();
+      return response.json(); // even if not ok, still get the message body
     })
     .then(data => {
-      console.log("Report submitted successfully:", data);
+      const message = typeof data === "string" ? data : JSON.stringify(data);
+
+      if (message.toLowerCase().includes("already reported")) {
+        setReportErrorDialog("You’ve already reported this song.");
+        return;
+      }
+
+      console.log("Report submitted successfully:", message);
       setSuccess("Report submitted successfully");
-      
       // Close the modal after a short delay
       setTimeout(() => {
         onClose();
@@ -135,17 +151,21 @@ const FlagIcon = ({ onClose, SongID }) => {
    disabled = {isSubmitting} >REPORT SONG</button>
           <button onClick={onClose} className="cancel-report-btn">CANCEL</button>
         </div>
+        <ErrorDialog 
+  message={reportErrorDialog} 
+  onClose={() => setReportErrorDialog("")}
+/>
       </div>
     </>
   );
 };
 
-const SongIcon = ({ name, creator, duration, flags, iconImage, isHomePage, isCenter, likes, shouldPlay = false, songSrc, onPlayStatusChange,AverageRating,songID }) => {
+const SongIcon = ({ name, creator, duration, flags, iconImage, isHomePage, isCenter, likes, shouldPlay = false, songSrc, onPlayStatusChange,AverageRating,songID,onRate }) => {
   // Keep existing state
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [showReport, setShowReport] = useState(false);
-  const [rating, setRating] = useState(false);
+  const [rating, setRating] = useState("");
   const [liked, setLiked] = useState(false);
   const [userControlled, setUserControlled] = useState(false);
   const [addedToPlaylist, setAddedToPlaylist] = useState(false); // New state for tracking plus/check toggle
@@ -221,14 +241,22 @@ const SongIcon = ({ name, creator, duration, flags, iconImage, isHomePage, isCen
         </div>
         <div className="rating-wrapper">
           {location.pathname !== '/profile' && (
-            <select 
-              className="rating-select"
-              value={rating}
-              onChange={(e) => setRating(e.target.value)} //changes this so you can send the ratings  /api/Ratings gets back average rating so you can update it 
-              onClick={(e) => e.stopPropagation()}
-              onFocus={(e) => e.stopPropagation()}
-              onMouseDown={(e) => e.stopPropagation()}
-            >
+            <select
+            className="rating-select"
+            value={rating || ""} // Avoid "false" here
+            onChange={(e) => {
+              const selectedRating = parseInt(e.target.value);
+              setRating(selectedRating);
+          
+              if (onRate && songID && !isNaN(selectedRating)) {
+                
+                onRate(songID, selectedRating);
+              }
+            }}
+            onClick={(e) => e.stopPropagation()}
+            onFocus={(e) => e.stopPropagation()}
+            onMouseDown={(e) => e.stopPropagation()}
+          >
               <option value="">Rate</option>
               <option value="1">1</option>
               <option value="2">2</option>

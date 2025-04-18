@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 import SongIcon from "../ProfilePage/Components/SongIcon";
+import { useUserContext } from "../LoginContext/UserContext"; // testing for rating
 import "./HomePage.css";
 
 // Sample songs for the home page
@@ -77,7 +78,8 @@ const HomePage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null); 
 
-  
+  const { user } = useUserContext(); // get user info
+  const userId = user?.UserID;
 
   useEffect(() => {
     setLoading(true);
@@ -267,6 +269,31 @@ const HomePage = () => {
       }, 500); // Increased timeout to ensure complete reset
     }
   };
+  //rating song
+  const handleRateSong = async (songID, rating) => {
+    if (!userId){
+      console.warn("User ID is missing, cannot submit rating.");
+      return;
+    }
+    
+    try {
+      const response = await fetch(`${API_URL}/api/Ratings/PostRating`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ songId: songID, userId, rating }),
+      });
+
+      const data = await response.json();
+
+      setSongs(prev =>
+        prev.map(song =>
+          song.songID === songID ? { ...song, totalRatings: data.AverageRating } : song
+        )
+      );
+    } catch (err) {
+      console.error("Rating error:", err);
+    }
+  };
 
   return (
     <div className="home-container">
@@ -291,6 +318,7 @@ const HomePage = () => {
                 songSrc={song.songSrc}
                 AverageRating = {song.totalRatings}
                 songID = {song.songID}
+                onRate ={handleRateSong}
               />
             </div>
           ))}
