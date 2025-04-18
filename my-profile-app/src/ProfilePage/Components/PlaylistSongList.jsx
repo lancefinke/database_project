@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './PlaylistSongList.css';
 
-const PlaylistSongList = ({ songs, playlistName, playlistImage, onSongSelect, onDeleteSong }) => {
+const PlaylistSongList = ({ songs, playlistName, playlistImage, onSongSelect, onDeleteSong, onAddToPlaylist }) => {
   // Function to format seconds to mm:ss
   const formatDuration = (seconds) => {
     const minutes = Math.floor(seconds / 60);
@@ -10,8 +10,12 @@ const PlaylistSongList = ({ songs, playlistName, playlistImage, onSongSelect, on
   };
 
   const handleSongClick = (song) => {
+    console.log(song);
     if (onSongSelect) {
       onSongSelect({
+        songSrc: song.songFile,
+        songImage: song.image,     
+        duration: song.duration,
         name: song.title,
         creator: song.artist
       });
@@ -32,6 +36,15 @@ const PlaylistSongList = ({ songs, playlistName, playlistImage, onSongSelect, on
     e.stopPropagation(); // Prevent row click event
     if (onDeleteSong) {
       onDeleteSong(song, false);
+      setActiveMenu(null); // Close menu after action
+    }
+  };
+  
+  // Handle add to playlist
+  const handleAddToPlaylist = (e, song) => {
+    e.stopPropagation(); // Prevent row click event
+    if (onAddToPlaylist) {
+      onAddToPlaylist(song);
       setActiveMenu(null); // Close menu after action
     }
   };
@@ -78,7 +91,6 @@ const PlaylistSongList = ({ songs, playlistName, playlistImage, onSongSelect, on
           <div className="song-actions-header"></div>
         </div>
         
-        {/* Removed the songs-list div wrapper to eliminate the nested scrolling */}
         {songs.length > 0 ? (
           songs.map((song, index) => (
             <div key={song.id} className="song-row" onClick={() => handleSongClick(song)}>
@@ -123,6 +135,16 @@ const PlaylistSongList = ({ songs, playlistName, playlistImage, onSongSelect, on
                 
                 {activeMenu === song.id && (
                   <div className="song-actions-menu">
+                    <div 
+                      className="song-actions-menu-item"
+                      onClick={(e) => handleAddToPlaylist(e, song)}
+                    >
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M14 10H3v2h11v-2zm0-4H3v2h11V6zm4 8v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM3 16h7v-2H3v2z"></path>
+                      </svg>
+                      Add to playlist
+                    </div>
+                    
                     <div 
                       className="song-actions-menu-item delete"
                       onClick={(e) => handleDeleteSong(e, song)}

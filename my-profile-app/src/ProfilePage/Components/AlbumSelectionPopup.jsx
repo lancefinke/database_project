@@ -1,19 +1,19 @@
 import React from "react";
-import "./PlaylistSelectionPopup.css";
+import "./PlaylistSelectionPopup.css"; // We'll reuse the same styling
 
-const PlaylistSelectionPopup = ({ onClose, playlists, onAddToPlaylist, currentSong }) => {
+const AlbumSelectionPopup = ({ onClose, albums, onAddToAlbum, currentSong }) => {
   return (
     <>
       <div className="playlist-selection-overlay" onClick={onClose}></div>
       <div className="playlist-selection-popup">
         <div className="playlist-selection-header">
-          <h3>Add to Playlist</h3>
+          <h3>Add to Album</h3>
           <button className="playlist-selection-close-btn" onClick={onClose}>×</button>
         </div>
         
         <div className="playlist-selection-song-info">
           <img 
-            src={currentSong.songImage || "https://via.placeholder.com/40"} 
+            src={currentSong?.image || "https://via.placeholder.com/40"} 
             alt="Song cover" 
           />
           <div>
@@ -23,20 +23,20 @@ const PlaylistSelectionPopup = ({ onClose, playlists, onAddToPlaylist, currentSo
         </div>
         
         <div className="playlist-selection-list">
-          {playlists.length === 0 ? (
-            <p className="no-playlists-message">No playlists available</p>
+          {albums.length === 0 ? (
+            <p className="no-playlists-message">No albums available</p>
           ) : (
-            playlists.map(playlist => (
+            albums.map(album => (
               <div 
-                key={playlist.id}
+                key={album.id}
                 className="playlist-selection-item"
-                onClick={() => onAddToPlaylist(playlist.id)}
+                onClick={() => onAddToAlbum(album.id)}
               >
                 <img 
-                  src={playlist.image} 
-                  alt={`${playlist.name} cover`} 
+                  src={album.image} 
+                  alt={`${album.name} cover`} 
                 />
-                <span>{playlist.name}</span>
+                <span>{album.name}</span>
               </div>
             ))
           )}
@@ -46,4 +46,4 @@ const PlaylistSelectionPopup = ({ onClose, playlists, onAddToPlaylist, currentSo
   );
 };
 
-export default PlaylistSelectionPopup;
+export default AlbumSelectionPopup;

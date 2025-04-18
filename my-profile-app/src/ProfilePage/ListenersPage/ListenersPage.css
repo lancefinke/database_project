@@ -1,0 +1,55 @@
+/* ListenerPage.css - extends UserPage.css with listener-specific styling */
+
+/* Use a different color scheme for listeners versus artists */
+.music-genre {
+    background-color: #1E3A8A; /* Blue instead of red for listeners */
+  }
+  
+  .music-genre:hover {
+    background-color: #2563EB;
+  }
+  
+  /* Different highlight color for protected items */
+  .protected-item {
+    border-left: 3px solid #1E3A8A; /* Blue instead of red */
+  }
+  
+  /* Selected playlist styling */
+  .playlist-button.selected {
+    border-left: 4px solid #1E3A8A;
+  }
+  
+  .playlist-button.selected::after {
+    background-color: #1E3A8A;
+  }
+  
+  /* Confirmation button */
+  .confirmation-confirm-btn {
+    background-color: #3B82F6;
+  }
+  
+  .confirmation-confirm-btn:hover {
+    background-color: #2563EB;
+  }
+  
+  /* Change title to reflect listener vs artist perspective */
+  .playlist-title::after {
+    content: " (Listener)";
+    font-size: 0.8em;
+    color: #93C5FD;
+    margin-left: 10px;
+  }
+  
+  /* Back button styling */
+  .styled-back-button {
+    color: #93C5FD;
+  }
+  
+  .styled-back-button:hover {
+    color: #3B82F6;
+  }
+  
+  /* Make sure Saved Songs is properly labeled */
+  .playlist-song-list-container h1.playlist-title:contains("Saved Songs")::after {
+    content: "";
+  }

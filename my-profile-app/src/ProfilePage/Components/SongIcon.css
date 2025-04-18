@@ -457,3 +457,189 @@
     background-color: rgba(0, 0, 0, 0.7);
     z-index: 1100;
   }
+
+  
+
+/* Fix the modal overlay to cover the entire screen */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 999999;
+    backdrop-filter: blur(3px);
+    /* Ensure it's always visible and covers everything */
+   
+  }
+  
+  /* Make sure the modal content has proper z-index and stays on top */
+  .modal-content {
+    background-color: #1e1e1e;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    color: white;
+    font-family: 'Roboto Mono', monospace;
+    animation: modal-appear 0.3s ease;
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+    z-index: 100000;
+    padding: 20px;
+  }
+  
+  /* Add a keyframe animation for modal appearance */
+  @keyframes modal-appear {
+    0% { opacity: 0; transform: scale(0.9); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  
+  /* Style the modal header */
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #343434;
+  }
+  
+  .modal-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+  
+  .close-button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+  }
+  
+  /* Better form styling */
+  .form-group {
+    margin-bottom: 20px;
+    width: 100%;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+  
+  .report-select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #343434;
+    background-color: #282828;
+    color: white;
+    font-family: "'Roboto Mono', monospace";
+    margin-bottom: 10px;
+  }
+  
+  .custom-reason-textarea {
+    width: 100%;
+    min-height: 100px;
+    background-color: #282828;
+    color: white;
+    border: 1px solid #343434;
+    border-radius: 5px;
+    padding: 10px;
+    resize: none;
+    outline: none;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 14px;
+    box-sizing: border-box;
+  }
+  
+  /* Make error messages more prominent */
+  .error-message {
+    color: #ff5252;
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: rgba(255, 82, 82, 0.1);
+    border-radius: 4px;
+    font-size: 0.9rem;
+  }
+  
+  /* Add success message styling */
+  .success-message {
+    color: #4CAF50;
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: rgba(76, 175, 80, 0.1);
+    border-radius: 4px;
+    font-size: 0.9rem;
+  }
+  
+  /* Style the form action buttons */
+  .form-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .cancel-btn {
+    background-color: transparent;
+    border: 1px solid white;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-family: 'Roboto Mono', monospace;
+    transition: all 0.3s ease;
+  }
+  
+  .cancel-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .submit-btn {
+    background-color: #8E1616;
+    border: 1px solid #8E1616;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-family: 'Roboto Mono', monospace;
+    transition: all 0.3s ease;
+  }
+  
+  .submit-btn:hover {
+    background-color: #a01c1c;
+  }
+  
+  .submit-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+  
+  /* Responsive design for smaller screens */
+  @media (max-width: 600px) {
+    .modal-content {
+      width: 95%;
+      padding: 15px;
+    }
+    
+    .form-actions {
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .cancel-btn, .submit-btn {
+      width: 100%;
+    }
+  }
