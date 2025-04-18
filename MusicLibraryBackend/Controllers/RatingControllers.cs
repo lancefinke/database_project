@@ -16,6 +16,7 @@ namespace MusicLibraryBackend.Controllers
         }
 
         [HttpPost]
+        [Route("PostRating")]
         public IActionResult PostRating([FromBody] RatingRequest request)
         {
             if (request.Rating < 1 || request.Rating > 5)

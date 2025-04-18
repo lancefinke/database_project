@@ -400,7 +400,7 @@
   {
     "ContainingType": "MusicLibraryBackend.Controllers.RatingsController",
     "Method": "PostRating",
-    "RelativePath": "api/Ratings",
+    "RelativePath": "api/Ratings/PostRating",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -653,7 +653,7 @@
       },
       {
         "Name": "newPictureURL",
-        "Type": "System.String",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
         "IsRequired": false
       },
       {

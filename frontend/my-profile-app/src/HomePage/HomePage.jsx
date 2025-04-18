@@ -81,7 +81,7 @@ const HomePage = () => {
 
   useEffect(() => {
     setLoading(true);
-    
+  
     fetch(`${API_URL}/api/database/GetSongsByRating`)
       .then(response => {
         if (!response.ok) {
@@ -90,25 +90,28 @@ const HomePage = () => {
         return response.json();
       })
       .then(data => {
-        console.log("API returned songs:", data);
+        console.log("Raw data from API:", data); // 👈 Log raw response here
+  
         const formattedSongs = data.map(song => ({
           name: song.SongName,
           creator: song.Username,
           duration: formatDuration(song.Duration),
-          flags: ["Top Rated"], 
+          flags: ["Top Rated"],
           iconImage: song.CoverArtFileName,
           songSrc: song.SongFileName,
           songID: song.SongID,
           totalRatings: song.TotalRatings
         }));
-        
+  
+        console.log("Formatted songs:", formattedSongs); // Optional, to compare
+  
         setSongs(formattedSongs);
       })
       .catch(err => {
         console.error("Error fetching top songs:", err);
         setError(err.message);
-        
-        // fills with sample songs
+  
+        // Fill with sample fallback data
         setSongs([
           {
             name: "Lost in the Echo",
@@ -124,6 +127,7 @@ const HomePage = () => {
         setLoading(false);
       });
   }, []);
+  
   // Handle layout adjustments when component mounts
   useEffect(() => {
     // Add class to body to signal we're on home page

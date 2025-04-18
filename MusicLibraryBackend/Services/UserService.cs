@@ -1,25 +1,35 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
+﻿using Azure.Storage.Blobs;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using MusicLibraryBackend.Models;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
+
 using System.Data;
+
 
 namespace MusicLibraryBackend.Services
 
 {
     public class UserService
     {
+
         private readonly IConfiguration _configuration;
         private const string ConnectionStringKey = "DatabaseConnection";
+        private BlobServiceClient blobServiceClient;
 
         public UserService(IConfiguration configuration)
         {
             _configuration = configuration;
+            string blobConnectionString = _configuration["ConnectionStrings:blobDB"];
+
+            blobServiceClient = new BlobServiceClient(blobConnectionString);
         }
         public List<User> GetAllUsers()
         {
             List<User> users = new List<User>();
-            string query = "select * from dbo.USERS where";
+            string query = "select * from dbo.USERS where isDeactivated = 0";
 
             // access the database
             string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
@@ -64,10 +74,10 @@ namespace MusicLibraryBackend.Services
             }
             return users;
         }
-        public string CreateUser(
+        public async Task<IActionResult> CreateUser(
             string newUserName,
             string newEmail,
-            string newPictureURL,
+            IFormFile newPictureURL,
             string newBio,
             string newPassword,
             bool role)
@@ -75,7 +85,19 @@ namespace MusicLibraryBackend.Services
             string query = "insert into dbo.USERS(Username, Email, ProfilePicture, Bio, UserPassword, CreatedAt, isArtist) values(@newUserName,@newEmail,@newPictureURL,@newBio,@newPassword,@newDateCreation,@role)";
 
             // access the database
-            string sqlDatasource = _configuration.GetConnectionString("DefaultConnection");
+            string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
+
+            BlobContainerClient blobcontainer = blobServiceClient.GetBlobContainerClient("profileimagecontainer");
+
+            string uniqueID = Guid.NewGuid().ToString();
+            string uniquePhoto = $"uploads/" + uniqueID + ".png";
+            BlobClient blobclient = blobcontainer.GetBlobClient(uniquePhoto);
+
+            using (var stream = newPictureURL.OpenReadStream())
+            {
+                await blobclient.UploadAsync(stream, true);
+            }
+            string profilepictureurl = "https://blobcontainer2005.blob.core.windows.net/profileimagecontainer/uploads/" + uniqueID + ".png";
 
             // creates the connection
             using (SqlConnection myCon = new SqlConnection(sqlDatasource))
@@ -91,7 +113,7 @@ namespace MusicLibraryBackend.Services
                     // parameters for the queries
                     myCommand.Parameters.AddWithValue("@newUserName", newUserName);
                     myCommand.Parameters.AddWithValue("@newEmail", newEmail);
-                    myCommand.Parameters.AddWithValue("@newPictureURL", newPictureURL);
+                    myCommand.Parameters.AddWithValue("@newPictureURL", profilepictureurl);
                     myCommand.Parameters.AddWithValue("@newBio", newBio);
                     myCommand.Parameters.AddWithValue("@newPassword", newPassword);
                     myCommand.Parameters.AddWithValue("@newDateCreation", currentDate.ToDateTime(TimeOnly.MinValue));
@@ -99,7 +121,9 @@ namespace MusicLibraryBackend.Services
                     myCommand.ExecuteNonQuery();
                 }
             }
-            return "Added Succesfully";
+
+            return new JsonResult($"User with name {newUserName} added successfully");
+
         }
 
         public List<Follower> GetUserFollowers(int userId)
@@ -136,7 +160,7 @@ namespace MusicLibraryBackend.Services
         public User GetUserByName(string name)
         {
             var user = new User();
-            string query = "SELECT * FROM USERS WHERE USERS.Username=@Username";
+            string query = "SELECT * FROM USERS WHERE USERS.Username=@Username AND isDeactivated = 0";
 
             string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
 

@@ -140,7 +140,38 @@ namespace database.Controllers
         {
             var songs = new List<Song>();
 
-            string query = "select * from dbo.songs,dbo.users,dbo.artists WHERE users.UserID=@UserId AND songs.AuthorID = artists.ArtistID AND artists.UserID = users.UserID";
+            //string query = "select * from dbo.songs,dbo.users,dbo.artists WHERE users.UserID=@UserId AND songs.AuthorID = artists.ArtistID AND artists.UserID = users.UserID";
+            string query = @"
+        SELECT 
+            s.SongID,
+            s.GenreCode,
+            s.SongFileName,
+            s.ReleaseDate,
+            s.CoverArtFileName,
+            s.Duration,
+            s.AuthorID,
+            s.TotalRatings,
+            s.IsReported,
+            s.SongName,
+            s.IsDeleted,
+            s.Listens,
+            u.UserID,
+            u.Username,
+            u.Email,
+            u.Bio,
+            u.CreatedAt,
+            u.isArtist,
+            u.ProfilePicture,
+            u.isDeactivated,
+            a.ArtistID,
+            a.StrikeCount
+        FROM Songs s
+        INNER JOIN Artists a ON s.AuthorID = a.ArtistID
+        INNER JOIN Users u ON a.UserID = u.UserID
+        WHERE u.UserID = @UserID
+          AND s.IsDeleted = 0
+          AND u.isDeactivated = 0";
+
             DataTable table = new DataTable();
             string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
             using (SqlConnection myCon = new SqlConnection(sqlDatasource))
@@ -169,7 +200,7 @@ namespace database.Controllers
         {
             var songs = new List<Song>();
 
-            string query = "select * from dbo.songs,dbo.users,dbo.artists WHERE users.Username=@Username AND songs.AuthorID=artists.artistID AND artists.UserID = users.UserID";
+            string query = "select * from dbo.songs,dbo.users,dbo.artists WHERE users.Username=@Username AND songs.AuthorID=artists.artistID AND artists.UserID = users.UserID AND songs.IsDeleted = 0 AND users.isDeactivated = 0";
             DataTable table = new DataTable();
             string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
             using (SqlConnection myCon = new SqlConnection(sqlDatasource))
@@ -197,7 +228,7 @@ namespace database.Controllers
         {
             var songs = new List<Song>();
 
-            string query = "select TOP 10 songs.SongName,songs.SongID, songs.SongFileName,songs.Duration,users.Username, songs.TotalRatings,songs.CoverArtFileName from dbo.songs,dbo.users,dbo.artists WHERE songs.AuthorID=artists.artistID AND users.UserID = artists.UserID order by songs.TotalRatings desc ";
+            string query = "select TOP 10 songs.SongName,songs.SongID, songs.SongFileName,songs.Duration,users.Username, songs.TotalRatings,songs.CoverArtFileName from dbo.songs,dbo.users,dbo.artists WHERE songs.AuthorID=artists.artistID AND users.UserID = artists.UserID AND songs.IsDeleted = 0 AND users.isDeactivated = 0 order by songs.TotalRatings desc ";
             DataTable table = new DataTable();
             string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
             using (SqlConnection myCon = new SqlConnection(sqlDatasource))
@@ -229,7 +260,7 @@ namespace database.Controllers
         {
             var songs = new List<Song>();
 
-            string query = "SELECT * FROM SONGS,GENRECODING WHERE SONGS.GenreCode = GENRECODING.GenreCode AND SONGS.GenreCode=@GenreCode";
+            string query = "SELECT * FROM SONGS,GENRECODING WHERE SONGS.GenreCode = GENRECODING.GenreCode AND SONGS.GenreCode=@GenreCode AND SONGS.IsDeleted = 0";
             DataTable table = new DataTable();
             string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
             using (SqlConnection myCon = new SqlConnection(sqlDatasource))
@@ -289,7 +320,7 @@ namespace database.Controllers
         {
 
 
-            string query = "SELECT DISTINCT SONGS.SongID,SONGS.GenreCode,SONGS.SongFileName,SONGS.SongName,SONGS.ReleaseDate,SONGS.CoverArtFileName,SONGS.Duration,SONGS.TotalRatings,USERS.Username,ALBUM.AlbumID,ALBUM.Title FROM SONGS JOIN  USERS ON USERS.UserID = SONGS.AuthorID JOIN  ALBUMSONGS ON ALBUMSONGS.SongID = SONGS.SongID JOIN ALBUM ON ALBUM.AlbumID = ALBUMSONGS.AlbumID WHERE SONGS.SongName LIKE @SearchQuery  OR USERS.Username LIKE @SearchQuery OR ALBUM.Title LIKE @SearchQuery";
+            string query = "SELECT DISTINCT SONGS.SongID,SONGS.GenreCode,SONGS.SongFileName,SONGS.SongName,SONGS.ReleaseDate,SONGS.CoverArtFileName,SONGS.Duration,SONGS.TotalRatings,USERS.Username,ALBUM.AlbumID,ALBUM.Title FROM SONGS JOIN  USERS ON USERS.UserID = SONGS.AuthorID JOIN  ALBUMSONGS ON ALBUMSONGS.SongID = SONGS.SongID JOIN ALBUM ON ALBUM.AlbumID = ALBUMSONGS.AlbumID WHERE  SONGS.IsDeleted = 0 AND (SONGS.SongName  LIKE @SearchQuery  OR USERS.Username LIKE @SearchQuery OR ALBUM.Title LIKE @SearchQuery)";
             DataTable table = new DataTable();
             string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
             using (SqlConnection myCon = new SqlConnection(sqlDatasource))
@@ -319,7 +350,7 @@ namespace database.Controllers
         {
 
 
-            string query = "SELECT SONGS.GenreCode,SONGS.SongFileName,SONGS.SongName,SONGS.ReleaseDate,SONGS.CoverArtFileName,SONGS.Duration,SONGS.TotalRatings FROM ALBUM,SONGS,ALBUMSONGS WHERE ALBUMSONGS.SongID=SONGS.SongID AND ALBUMSONGS.AlbumID=ALBUM.AlbumID AND ALBUMSONGS.AlbumID=@AlbumID";
+            string query = "SELECT SONGS.GenreCode,SONGS.SongFileName,SONGS.SongName,SONGS.ReleaseDate,SONGS.CoverArtFileName,SONGS.Duration,SONGS.TotalRatings FROM ALBUM,SONGS,ALBUMSONGS WHERE ALBUMSONGS.SongID=SONGS.SongID AND ALBUMSONGS.AlbumID=ALBUM.AlbumID AND ALBUMSONGS.AlbumID=@AlbumID AND  SONGS.IsDeleted = 0";
             DataTable table = new DataTable();
             string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
             SqlDataReader myReader;
@@ -547,13 +578,26 @@ namespace database.Controllers
         [Route("ReportSongs")]
         public JsonResult ReportSong(int SongID, int UserID, string Reason)
         {
-            string query = "insert into reportedlogs(SongID,ReportedBy,Reason,ReportStatus, CreatedAt,AdminID) values (@SongID, @ReportedBy,@Reason,0, @CreatedAt, 1)";
+            string checkQuery = "SELECT COUNT(*) FROM reportedlogs WHERE SongID = @SongID AND ReportedBy = @UserID";
+            string query = "insert into reportedlogs(SongID,ReportedBy,Reason,ReportStatus, CreatedAt,AdminID) values (@SongID, @ReportedBy,@Reason,1, @CreatedAt, 1); UPDATE Songs SET isReported = 1  WHERE SongID = @SongID;";
+
             DataTable table = new DataTable();
             string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
 
             using (SqlConnection myCon = new SqlConnection(sqlDatasource))
             {
                 myCon.Open();
+                using (SqlCommand checkCommand = new SqlCommand(checkQuery, myCon))
+                {
+                    checkCommand.Parameters.AddWithValue("@SongID", SongID);
+                    checkCommand.Parameters.AddWithValue("@UserID", UserID);
+
+                    int existingReports = (int)checkCommand.ExecuteScalar();
+                    if (existingReports > 0)
+                    {
+                        return new JsonResult($"User {UserID} has already reported Song {SongID}.");
+                    }
+                }
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
                     myCommand.Parameters.AddWithValue("@SongID", SongID);
@@ -578,7 +622,7 @@ namespace database.Controllers
         {
 
 
-            string query = "SELECT SONGS.GenreCode,SONGS.SongFileName,SONGS.SongName,SONGS.ReleaseDate,SONGS.CoverArtFileName,SONGS.Duration,SONGS.TotalRatings FROM PLAYLIST,SONGS, PLAYLISTSONGS WHERE PLAYLISTSONGS.SongID=SONGS.SongID AND PLAYLISTSONGS.PlaylistID=PLAYLIST.PlaylistID AND PLAYLISTSONGS.PlaylistID=@PlaylistID";
+            string query = "SELECT SONGS.GenreCode,SONGS.SongFileName,SONGS.SongName,SONGS.ReleaseDate,SONGS.CoverArtFileName,SONGS.Duration,SONGS.TotalRatings FROM PLAYLIST,SONGS, PLAYLISTSONGS WHERE PLAYLISTSONGS.SongID=SONGS.SongID AND  SONGS.IsDeleted = 0 AND PLAYLISTSONGS.PlaylistID=PLAYLIST.PlaylistID AND PLAYLISTSONGS.PlaylistID=@PlaylistID";
             DataTable table = new DataTable();
             string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
             SqlDataReader myReader;

@@ -56,17 +56,41 @@ namespace MusicLibraryBackend.Controllers
         // WORK IN PROGRESS
         // POST api/CreateUsers
         // Sends all data from create new users page to the database
+        //[HttpPost]
+        //[Route("CreateUsers")]
+        //public JsonResult CreateUsers([FromForm] 
+        //  //int newUserID, WILL BE ADDED LATER
+        //  string newUserName,
+        //  string newEmail,
+        //  string newPictureURL,
+        //  string newBio,
+        //  string newPassword,
+        //  //DateOnly newDateCreation, 
+        //  bool role)
+        //{
+        //    var result = _userService.CreateUser(
+        //    newUserName,
+        //    newEmail,
+        //    newPictureURL,
+        //    newBio,
+        //    newPassword,
+        //    role
+        //    );
+        //    return new JsonResult(result);
+
+        //}
         [HttpPost]
         [Route("CreateUsers")]
-        public JsonResult CreateUsers([FromForm] 
+        [Consumes("multipart/form-data")]
+        public Task<IActionResult> CreateUsers([FromForm] 
           //int newUserID, WILL BE ADDED LATER
           string newUserName,
-          string newEmail,
-          string newPictureURL,
-          string newBio,
-          string newPassword,
-          //DateOnly newDateCreation, 
-          bool role)
+         string newEmail,
+         IFormFile newPictureURL,
+         string newBio,
+         string newPassword,
+         //DateOnly newDateCreation, 
+         bool role)
         {
             var result = _userService.CreateUser(
             newUserName,
@@ -76,7 +100,7 @@ namespace MusicLibraryBackend.Controllers
             newPassword,
             role
             );
-            return new JsonResult(result);
+            return result;
 
         }
 
