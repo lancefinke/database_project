@@ -551,6 +551,7 @@ namespace database.Controllers
         [Route("AddSongPlaylist")]
         public JsonResult AddSongPlaylist(int SongID, int PlaylistID)
         {
+            string checkQuery = "SELECT COUNT(*) FROM PLAYLISTSONGS WHERE SongID = @SongID AND PlaylistID = @PlaylistID";
             string query = "insert into dbo.PLAYLISTSONGS(SongID, PlaylistID) VALUES (@SongID, @PlaylistID)";
             DataTable table = new DataTable();
             string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
@@ -558,6 +559,18 @@ namespace database.Controllers
             using (SqlConnection myCon = new SqlConnection(sqlDatasource))
             {
                 myCon.Open();
+                using (SqlCommand checkCommand = new SqlCommand(checkQuery, myCon))
+                {
+                    checkCommand.Parameters.AddWithValue("@SongID", SongID);
+                    checkCommand.Parameters.AddWithValue("@PlaylistID", PlaylistID);
+
+                    int count = (int)checkCommand.ExecuteScalar();
+
+                    if (count > 0)
+                    {
+                        return new JsonResult(new { success = false, message = "This song is already in the playlist." });
+                    }
+                }
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
                     myCommand.Parameters.AddWithValue("@SongID", SongID);
