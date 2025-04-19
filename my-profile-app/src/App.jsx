@@ -29,8 +29,28 @@ const AppLayout = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [selectedSong, setSelectedSong] = useState(null);
-  const { isLoggedIn, setLoggedIn } = useLoginContext(); // Get full context
+  const { isLoggedIn, setLoggedIn, currentRoute, setCurrentRoute } = useLoginContext();
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+  
+  // Update current route when location changes
+  useEffect(() => {
+    if (location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/reset') {
+      setCurrentRoute(location.pathname);
+      localStorage.setItem('currentRoute', location.pathname);
+    }
+  }, [location.pathname, setCurrentRoute]);
+
+  // Handle initial load and route
+  useEffect(() => {
+    if (isInitialLoad && isLoggedIn) {
+      const savedRoute = localStorage.getItem('currentRoute');
+      if (savedRoute && savedRoute !== '/' && savedRoute !== '/home') {
+        navigate(savedRoute, { replace: true });
+      }
+      setIsInitialLoad(false);
+    }
+  }, [isLoggedIn, isInitialLoad, navigate]);
   
   console.log("AppLayout rendering, path:", location.pathname);
   
@@ -117,6 +137,11 @@ const AppLayout = () => {
       )}
       <main className={`main-content ${isAdmin ? 'admin-content' : ''}`}>
         <Routes>
+          <Route path="/" element={
+            isLoggedIn 
+              ? (isAdmin ? <Navigate to="/admin" replace /> : <Navigate to={currentRoute || '/home'} replace />)
+              : <Navigate to="/login" replace />
+          } />
           <Route path="/home" element={
             isLoggedIn 
               ? (isAdmin ? <Navigate to="/admin" replace /> : <HomePage />) 
@@ -168,11 +193,6 @@ const AppLayout = () => {
               : <SignupPage />
           } />
           <Route path='/reset' element={<ResetPassword />} />
-          <Route path="/" element={
-            isLoggedIn 
-              ? (isAdmin ? <Navigate to="/admin" replace /> : <Navigate to="/home" replace />)
-              : <Navigate to="/login" replace />
-          } />
         </Routes>
       </main>
       

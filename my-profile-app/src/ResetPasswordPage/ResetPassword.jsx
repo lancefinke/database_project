@@ -35,7 +35,7 @@ const ResetPassword = () => {
         const newPasswordEncoded = encodeURIComponent(newPassword);
         const emailEncoded = encodeURIComponent(email);
 
-        const url = `http://localhost:7152/api/Auth/ResetPassword?NewPassword=${newPasswordEncoded}&Email=${emailEncoded}`;
+        const url = `http://localhost:5142/api/Auth/ResetPassword?NewPassword=${newPasswordEncoded}&Email=${emailEncoded}`;
 
         try {
             const response = await fetch(url, {

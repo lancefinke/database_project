@@ -36,10 +36,11 @@
 }
 
 .welcome-message {
-    font-size: 40px;
+    font-size: 24px;
     font-weight: 700;
-    margin-bottom: 40px;
     color: #b91d1d;
+    text-align: center;
+    width: 100%;
 }
 
 .login-input {
