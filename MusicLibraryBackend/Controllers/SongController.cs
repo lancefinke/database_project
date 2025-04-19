@@ -140,7 +140,7 @@ namespace database.Controllers
         {
             var songs = new List<Song>();
 
-            //string query = "select * from dbo.songs,dbo.users,dbo.artists WHERE users.UserID=@UserId AND songs.AuthorID = artists.ArtistID AND artists.UserID = users.UserID";
+            
             string query = @"
         SELECT 
             s.SongID,
@@ -270,7 +270,7 @@ namespace database.Controllers
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 //parse the data received from the query
                 {
-                    myCommand.Parameters.AddWithValue("@GenreCode", GenreCode );
+                    myCommand.Parameters.AddWithValue("@GenreCode", GenreCode);
                     using (SqlDataReader reader = myCommand.ExecuteReader())
                     {
                         table.Load(reader);
@@ -286,7 +286,7 @@ namespace database.Controllers
         [HttpGet]
         [Route("GetGenre")]
         public JsonResult GetGenre(string GenreCode)
-        {   
+        {
 
 
             string query = "select genrecoding.GenreText from genrecoding where genrecoding.GenreCode = @GenreCode";
@@ -393,7 +393,7 @@ namespace database.Controllers
                 }
                 int artistID = 0;
                 string bloburl = "https://blobcontainer2005.blob.core.windows.net/albumimagecontainer/uploads/" + uniqueID + ".png";
-                
+
 
                 string query = "INSERT INTO dbo.album(Title, ArtistID, AlbumDescription, AlbumCoverArtFileName) VALUES (@albumName, @artistID, @albumDescription, @bloburl)";
                 string getArtistQuery = "SELECT ArtistID FROM artists WHERE UserID = @userID";
@@ -662,26 +662,208 @@ namespace database.Controllers
         [Route("GetReportedSongs")]
         public JsonResult GetReportedSongs()
         {
-            var songs = new List<Song>();
-
-            string query = "SELECT * FROM dbo.SONGS WHERE SONGS.IsReported=1";
             DataTable table = new DataTable();
             string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
+
+            string query = "SELECT * FROM ReportedSongsView WHERE ReportStatus = 1";
+
             using (SqlConnection myCon = new SqlConnection(sqlDatasource))
             {
                 myCon.Open();
-                // queries the database
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
-                //parse the data received from the query
                 using (SqlDataReader reader = myCommand.ExecuteReader())
                 {
                     table.Load(reader);
-                    reader.Close();
-                    myCon.Close();
                 }
-
+                myCon.Close();
             }
+
+
             return new JsonResult(table);
         }
+
+        [HttpPost]
+        [Route("UpdateReportStatus")]
+        public IActionResult UpdateReportStatus([FromBody] ReportUpdateRequest request)
+        {
+            string connectionString = _configuration.GetConnectionString("DatabaseConnection");
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                con.Open();
+                SqlTransaction transaction = con.BeginTransaction();
+
+                try
+                {
+                    int songId;
+
+                    // Step 1: Get the SongID for the provided ReportID
+                    using (SqlCommand getSongCmd = new SqlCommand("SELECT SongID FROM ReportedLogs WHERE ID = @ReportID", con, transaction))
+                    {
+                        getSongCmd.Parameters.AddWithValue("@ReportID", request.ReportID);
+                        object result = getSongCmd.ExecuteScalar();
+
+                        if (result == null)
+                        {
+                            transaction.Rollback();
+                            return NotFound("No report found with the provided ID.");
+                        }
+
+                        songId = Convert.ToInt32(result);
+                    }
+
+                    // Step 2: Update the specific report's status
+                    using (SqlCommand updateCmd = new SqlCommand(
+                        "UPDATE ReportedLogs SET ReportStatus = @NewStatus WHERE ID = @ReportID", con, transaction))
+                    {
+                        updateCmd.Parameters.AddWithValue("@NewStatus", request.Status);
+                        updateCmd.Parameters.AddWithValue("@ReportID", request.ReportID);
+                        updateCmd.ExecuteNonQuery();
+                    }
+
+                    if (request.Status == 3) // Accepted/Banned
+                    {
+                        // Step 3a: Set all other reports for the same song to accepted
+                        using (SqlCommand updateAllCmd = new SqlCommand(
+                            "UPDATE ReportedLogs SET ReportStatus = 3 WHERE SongID = @SongID", con, transaction))
+                        {
+                            updateAllCmd.Parameters.AddWithValue("@SongID", songId);
+                            updateAllCmd.ExecuteNonQuery();
+                        }
+
+                        // IsDeleted will be handled by the trigger
+                    }
+                    else if (request.Status == 2) // Dismissed
+                    {
+                        // Step 3b: Check if there are still pending reports
+                        using (SqlCommand checkCmd = new SqlCommand(
+                            "SELECT COUNT(*) FROM ReportedLogs WHERE SongID = @SongID AND ReportStatus = 1", con, transaction))
+                        {
+                            checkCmd.Parameters.AddWithValue("@SongID", songId);
+                            int pendingCount = (int)checkCmd.ExecuteScalar();
+
+                            if (pendingCount == 0)
+                            {
+                                // No more pending reports, unflag the song
+                                using (SqlCommand updateSongCmd = new SqlCommand(
+                                    "UPDATE Songs SET IsReported = 0 WHERE SongID = @SongID", con, transaction))
+                                {
+                                    updateSongCmd.Parameters.AddWithValue("@SongID", songId);
+                                    updateSongCmd.ExecuteNonQuery();
+                                }
+                            }
+                        }
+                    }
+
+                    transaction.Commit();
+                    return Ok(new { message = "Report status updated successfully." });
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    return StatusCode(500, $"Internal server error: {ex.Message}");
+                }
+            }
+        }
+
+        [HttpGet]
+        [Route("GetBannedSongs")]
+        public IActionResult GetBannedSongs()
+        {
+            var bannedSongs = new List<BannedSong>();
+
+            string query = @"
+            WITH RankedReports AS (
+            SELECT *, 
+            ROW_NUMBER() OVER (PARTITION BY SongID ORDER BY ReportedOn ASC) AS RowNum
+            FROM vw_AdminReportedSongsDashboard
+            WHERE ReportStatus = 3
+            )
+            SELECT *
+            FROM RankedReports
+            WHERE RowNum = 1";
+            string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
+
+            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+            {
+                myCon.Open();
+                using (SqlCommand cmd = new SqlCommand(query, myCon))
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        bannedSongs.Add(new BannedSong
+                        {
+                            ReportID = Convert.ToInt32(reader["ReportID"]),
+                            SongID = Convert.ToInt32(reader["SongID"]),
+                            SongName = reader["SongName"].ToString(),
+                            Duration = reader["Duration"].ToString(),
+                            CoverArtFileName = reader["CoverArtFileName"].ToString(),
+                            SongFileName = reader["SongFileName"].ToString(),
+                            AuthorID = Convert.ToInt32(reader["AuthorID"]),
+                            ArtistID = Convert.ToInt32(reader["ArtistID"]),
+                            ArtistUsername = reader["ArtistUsername"].ToString(),
+                            ReportedBy = reader["ReportedBy"].ToString(),
+                            Reason = reader["Reason"].ToString(),
+                            ReportedOn = Convert.ToDateTime(reader["ReportedOn"]),
+                            IsReported = Convert.ToBoolean(reader["IsReported"]),
+                            IsDeleted = Convert.ToBoolean(reader["IsDeleted"])
+                        });
+                    }
+                }
+            }
+
+            return Ok(bannedSongs);
+        }
+
+        [HttpGet]
+        [Route("GetStrikeDetailsByArtist")]
+        public IActionResult GetStrikeDetailsByArtist(int artistId)
+        {
+            var results = new List<object>();
+            string query = @"
+                SELECT 
+                    s.SongName,
+                    rl.Reason,
+                    rl.CreatedAt AS StrikeDate
+                FROM Songs s
+                OUTER APPLY (
+                    SELECT TOP 1 r.Reason, r.CreatedAt
+                    FROM ReportedLogs r
+                    WHERE r.SongID = s.SongID AND r.ReportStatus = 3
+                    ORDER BY r.CreatedAt ASC
+                ) rl
+                WHERE s.IsDeleted = 1 AND s.IsReported = 1 AND s.AuthorID = @ArtistID;
+            ";
+
+            string conn = _configuration.GetConnectionString("DatabaseConnection");
+
+            using (SqlConnection con = new SqlConnection(conn))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@ArtistID", artistId);
+                    con.Open();
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            results.Add(new
+                            {
+                                SongName = reader["SongName"].ToString(),
+                                Reason = reader["Reason"].ToString(),
+                                StrikeDate = Convert.ToDateTime(reader["StrikeDate"])
+                            });
+                        }
+                    }
+                }
+            }
+
+            return Ok(results);
+        }
+
+
+
     }
 }

@@ -29,7 +29,14 @@ namespace MusicLibraryBackend.Services
         public List<User> GetAllUsers()
         {
             List<User> users = new List<User>();
-            string query = "select * from dbo.USERS where isDeactivated = 0";
+            string query = @"
+            SELECT 
+            u.UserID, u.Username, u.Email, u.ProfilePicture, u.Bio, 
+            u.UserPassword, u.CreatedAt, u.isArtist, 
+            a.StrikeCount,a.ArtistID
+            FROM dbo.USERS u
+            LEFT JOIN dbo.ARTISTS a ON u.UserID = a.UserID
+            WHERE u.isDeactivated = 0 AND u.isAdmin = 0";
 
             // access the database
             string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
@@ -54,17 +61,10 @@ namespace MusicLibraryBackend.Services
                             Bio = myReader["Bio"] != DBNull.Value ? myReader["Bio"].ToString() : null,
                             UserPassword = myReader["UserPassword"] != DBNull.Value ? myReader["UserPassword"].ToString() : null,
                             CreatedAt = myReader["CreatedAt"] != DBNull.Value ? Convert.ToDateTime(myReader["CreatedAt"]) : DateTime.MinValue,
-                            isArtist = myReader["isArtist"] != DBNull.Value ? Convert.ToBoolean(myReader["isArtist"]) : false
-                            //    users.Add(new User
-                            //{
-                            //    UserID = Convert.ToInt32(myReader["UserID"]),
-                            //    Username = myReader["Username"].ToString(),
-                            //    Email = myReader["Email"].ToString(),
-                            //    ProfilePicture = myReader["ProfilePicture"].ToString(),
-                            //    Bio = myReader["Bio"].ToString(),
-                            //    UserPassword = myReader["UserPassword"].ToString(),
-                            //    CreatedAt = Convert.ToDateTime(myReader["CreatedAt"]),
-                            //    isArtist = Convert.ToBoolean(myReader["isArtist"])
+                            isArtist = myReader["isArtist"] != DBNull.Value ? Convert.ToBoolean(myReader["isArtist"]): false,
+                            StrikeCount = myReader["StrikeCount"] != DBNull.Value ? Convert.ToInt32(myReader["StrikeCount"]) : 0,
+                            ArtistID = myReader["ArtistID"] != DBNull.Value ? Convert.ToInt32(myReader["ArtistID"]) : 0,
+
 
                         });
 
@@ -191,55 +191,90 @@ namespace MusicLibraryBackend.Services
             }
             return user;
         }
-        public bool BanUser(
-           string userName,
-            string email,
-            string reason)
+        public bool BanUser(BanUserRequest request)
         {
-            User user = GetUserByName(userName);
-
-            if (user == null || user.UserID == 0)
-            {
-                return false; // User not found
-            }
-            string updatequery = "UPDATE USERS SET isDeactivated = 1 WHERE ID = @userID";
-            string bannedquery = "INSERT INTO dbo.BANNEDUSERS(UserID,UserEmail,DateBanned,Reason) VALUES(@UserID,@Email,@DateBanned,@Reason)";
-
-            // access the database
             string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
 
-            // creates the connection
             using (SqlConnection myCon = new SqlConnection(sqlDatasource))
             {
                 myCon.Open();
-                // queries the database
-                using (SqlCommand updateCommand = new SqlCommand(updatequery, myCon))
+                SqlTransaction transaction = myCon.BeginTransaction();
+
+                try
                 {
-
-                    updateCommand.Parameters.AddWithValue("@UserId", user.UserID);
-                    int rowsAffected = updateCommand.ExecuteNonQuery();
-
-                    if (rowsAffected == 0)
+                    if (request.ArtistID.HasValue)
                     {
-                        return false;
+                        int userIdFromArtist = -1;
+
+                        // Fetch UserID from Artist table
+                        string getUserIdQuery = "SELECT UserID FROM Artists WHERE ArtistID = @ArtistID";
+                        using (SqlCommand getUserCmd = new SqlCommand(getUserIdQuery, myCon, transaction))
+                        {
+                            getUserCmd.Parameters.AddWithValue("@ArtistID", request.ArtistID.Value);
+                            var result = getUserCmd.ExecuteScalar();
+
+                            if (result == null)
+                                throw new Exception("No user found for provided ArtistID.");
+
+                            userIdFromArtist = Convert.ToInt32(result);
+                        }
+
+                        // Update Artist table
+                        string updateArtist = @"
+                    UPDATE Artists 
+                    SET IsDeactivated = 1 
+                    WHERE ArtistID = @ArtistID";
+
+                        using (SqlCommand cmd = new SqlCommand(updateArtist, myCon, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@ArtistID", request.ArtistID.Value);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        // Update Users table using the fetched UserID
+                        string updateUser = @"
+                    UPDATE Users 
+                    SET IsDeactivated = 1, BannedAt = GETDATE()
+                    WHERE UserID = @UserID";
+
+                        using (SqlCommand cmd = new SqlCommand(updateUser, myCon, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@UserID", userIdFromArtist);
+                            cmd.ExecuteNonQuery();
+                        }
                     }
+                    else if (request.UserID.HasValue)
+                    {
+                        // Update only Users table
+                        string updateUser = @"
+                    UPDATE Users 
+                    SET IsDeactivated = 1, BannedAt = GETDATE()
+                    WHERE UserID = @UserID";
+
+                        using (SqlCommand cmd = new SqlCommand(updateUser, myCon, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@UserID", request.UserID.Value);
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                    else
+                    {
+                        throw new ArgumentException("Either ArtistID or UserID must be provided.");
+                    }
+
+                    transaction.Commit();
+                    return true;
                 }
-                using (SqlCommand myCommand = new SqlCommand(bannedquery, myCon))
+                catch (Exception ex)
                 {
-
-                    // gets current date instead of having to input 
-                    DateTime currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, 0);
-
-                    myCommand.Parameters.AddWithValue("@UserID", user.UserID);
-                    // parameters for the queries
-                    myCommand.Parameters.AddWithValue("@Email", email);
-                    myCommand.Parameters.AddWithValue("@Reason", reason);
-                    myCommand.Parameters.AddWithValue("@DateBanned", currentDate);
-                    myCommand.ExecuteNonQuery();
+                    transaction.Rollback();
+                    Console.WriteLine("Error during ban process: " + ex.ToString());
+                    throw;
                 }
             }
-            return true;
         }
+
+
 
         /// <summary>
         /// Retrieves all banned users from the database
@@ -249,14 +284,15 @@ namespace MusicLibraryBackend.Services
         {
             List<BannedUser> bannedUsers = new List<BannedUser>();
             string query = @"
-                SELECT 
-                    u.Username,
-                    u.Email,
-                    b.Reason as BanReason,
-                    b.DateBanned
-                FROM USERS u
-                INNER JOIN BANNEDUSERS b ON u.UserID = b.UserID
-                ORDER BY b.DateBanned DESC";
+        SELECT 
+            Username,
+            Email,
+            CreatedAt,
+            BannedAt,
+            isArtist
+        FROM USERS
+        WHERE IsDeactivated = 1
+        ORDER BY BannedAt DESC";
 
             string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
 
@@ -272,10 +308,14 @@ namespace MusicLibraryBackend.Services
                         {
                             bannedUsers.Add(new BannedUser
                             {
-                                Username = myReader["Username"] != DBNull.Value ? myReader["Username"].ToString() : null,
-                                Email = myReader["Email"] != DBNull.Value ? myReader["Email"].ToString() : null,
-                                BanReason = myReader["BanReason"] != DBNull.Value ? myReader["BanReason"].ToString() : null,
-                                DateBanned = myReader["DateBanned"] != DBNull.Value ? Convert.ToDateTime(myReader["DateBanned"]) : DateTime.MinValue
+                                Username = myReader["Username"].ToString(),
+                                Email = myReader["Email"].ToString(),
+                                CreatedAt = Convert.ToDateTime(myReader["CreatedAt"]),
+                                BannedAt = myReader["BannedAt"] != DBNull.Value
+                                ? (DateTime?)Convert.ToDateTime(myReader["BannedAt"]): null,
+                                isArtist = Convert.ToBoolean(myReader["isArtist"])
+
+
                             });
                         }
                     }

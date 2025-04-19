@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 using MusicLibraryBackend.Models;
 using MusicLibraryBackend.Services;
 
@@ -53,32 +54,7 @@ namespace MusicLibraryBackend.Controllers
 
         }
 
-        // WORK IN PROGRESS
-        // POST api/CreateUsers
-        // Sends all data from create new users page to the database
-        //[HttpPost]
-        //[Route("CreateUsers")]
-        //public JsonResult CreateUsers([FromForm] 
-        //  //int newUserID, WILL BE ADDED LATER
-        //  string newUserName,
-        //  string newEmail,
-        //  string newPictureURL,
-        //  string newBio,
-        //  string newPassword,
-        //  //DateOnly newDateCreation, 
-        //  bool role)
-        //{
-        //    var result = _userService.CreateUser(
-        //    newUserName,
-        //    newEmail,
-        //    newPictureURL,
-        //    newBio,
-        //    newPassword,
-        //    role
-        //    );
-        //    return new JsonResult(result);
-
-        //}
+        
         [HttpPost]
         [Route("CreateUsers")]
         [Consumes("multipart/form-data")]
@@ -105,28 +81,31 @@ namespace MusicLibraryBackend.Controllers
         }
 
         [HttpPost]
-        [Route("banUser")]
-        public IActionResult BanUser([FromForm] 
-          
-          
-          string userName,
-          string email,
-          string reason)
+        [Route("BanUser")]
+        public IActionResult BanUser([FromBody] BanUserRequest request)
         {
-            bool result = _userService.BanUser(
-            
-            userName,
-            email,
-            reason
-            );
-            if (!result)
+            Console.WriteLine($"BanUser Request: ArtistID={request.ArtistID}, UserID={request.UserID}");
+
+            try
             {
-                return NotFound(new { message = "User not found or already deactivated." });
+                bool result = _userService.BanUser(request);
+
+                if (result)
+                    return Ok(new { message = "User has been banned successfully." });
+
+                return StatusCode(500, "Failed to ban user.");
             }
-
-            return Ok(new { message = "User successfully banned and deactivated." });
-
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
+
+
 
 
         [HttpGet]
@@ -135,9 +114,10 @@ namespace MusicLibraryBackend.Controllers
         {
             // This should be a method that fetches all users
             List<User> users = _userService.GetAllUsers();
-
+            List<BannedUser> bannedUsers = _userService.GetBannedUsers();
             var artists = users.Where(u => u.isArtist).ToList();
             var listeners = users.Where(u => !u.isArtist).ToList();
+            
 
             Console.WriteLine("=== Artists ===");
             foreach (var user in artists)
@@ -151,12 +131,10 @@ namespace MusicLibraryBackend.Controllers
                 Console.WriteLine($"Username: {user.Username}, Email: {user.Email}, CreatedAt: {user.CreatedAt}, IsArtist: {user.isArtist}");
             }
 
-            List<BannedUser> bannedUsers = _userService.GetBannedUsers();
-
             Console.WriteLine("\n=== Banned Users ===");
             foreach (var user in bannedUsers)
             {
-                Console.WriteLine($"Username: {user.Username}, Email: {user.Email}, CreatedAt: {user.CreatedAt}, IsArtist: {user.isArtist}, BanReason: {user.BanReason}, DateBanned: {user.DateBanned}");
+                Console.WriteLine($"Username: {user.Username}, Email: {user.Email}, CreatedAt: {user.CreatedAt}, IsArtist: {user.isArtist}, BannedAt: {user.BannedAt}");
             }
 
             var report = new
@@ -165,19 +143,23 @@ namespace MusicLibraryBackend.Controllers
                     u.Username,
                     u.Email,
                     u.CreatedAt,
-                    u.isArtist
+                    u.isArtist,
+                    u.StrikeCount,
+                    u.ArtistID
                 }),
                 Listeners = listeners.Select(u => new {
                     u.Username,
                     u.Email,
                     u.CreatedAt,
-                    u.isArtist
+                    u.isArtist,
+                    u.UserID
                 }),
                 BannedUsers = bannedUsers.Select(u => new {
                     u.Username,
                     u.Email,
-                    u.BanReason,
-                    u.DateBanned
+                    u.CreatedAt,
+                    u.BannedAt,
+                    Role = u.isArtist ? "Artist" : "Listener"
                 })
             };
 

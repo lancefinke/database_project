@@ -101,6 +101,16 @@
   },
   {
     "ContainingType": "database.Controllers.databaseController",
+    "Method": "GetBannedSongs",
+    "RelativePath": "api/database/GetBannedSongs",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "database.Controllers.databaseController",
     "Method": "GetGenre",
     "RelativePath": "api/database/GetGenre",
     "HttpMethod": "GET",
@@ -201,6 +211,22 @@
   },
   {
     "ContainingType": "database.Controllers.databaseController",
+    "Method": "GetStrikeDetailsByArtist",
+    "RelativePath": "api/database/GetStrikeDetailsByArtist",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "artistId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "database.Controllers.databaseController",
     "Method": "GetUserAlbums",
     "RelativePath": "api/database/GetUserAlbums",
     "HttpMethod": "GET",
@@ -269,6 +295,22 @@
         "Name": "SearchQuery",
         "Type": "System.String",
         "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "database.Controllers.databaseController",
+    "Method": "UpdateReportStatus",
+    "RelativePath": "api/database/UpdateReportStatus",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "MusicLibraryBackend.Models.ReportUpdateRequest",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []
@@ -610,25 +652,15 @@
   {
     "ContainingType": "MusicLibraryBackend.Controllers.UsersController",
     "Method": "BanUser",
-    "RelativePath": "api/Users/banUser",
+    "RelativePath": "api/Users/BanUser",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "userName",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "email",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "reason",
-        "Type": "System.String",
-        "IsRequired": false
+        "Name": "request",
+        "Type": "MusicLibraryBackend.Models.BanUserRequest",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []

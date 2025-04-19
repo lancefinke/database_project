@@ -8,7 +8,12 @@ namespace MusicLibraryBackend.Models;
     public string ProfilePicture { get; set; } = string.Empty;
     public string Bio { get; set; } = string.Empty;
     public string UserPassword { get; set; } = string.Empty;
-        public DateTime CreatedAt { get; set; }
-        public bool isArtist { get; set; }
-    }
+    public DateTime CreatedAt { get; set; }
+    public DateTime BannedAt { get; set; }
+    public bool isArtist { get; set; }
+    public bool IsDeactivated { get; set; }
+    public int StrikeCount { get; set; } = 0;
+    public int ArtistID { get; set; } 
+
+}
 
