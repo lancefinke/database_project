@@ -102,7 +102,7 @@ const LoginPage = () => {
             console.error('Login error:', error);
             
             // TEMPORARY: For development/testing when API isn't available
-            if (forcedAdminUsernames.includes(username.toLowerCase()) && password === 'admin') {
+          /*/  if (forcedAdminUsernames.includes(username.toLowerCase()) && password === 'admin') {
                 console.log("Using test admin login");
                 // Mock token for testing
                 const mockToken = "test_token_" + Math.random().toString(36).substring(2);
@@ -114,7 +114,7 @@ const LoginPage = () => {
                 storeToken(mockToken, false);
             } else {
                 alert('An error occurred during login');
-            }
+            }/*/
         }
     }
 
@@ -123,8 +123,8 @@ const LoginPage = () => {
 
     return (
         <div className="login-container">
-            <h1 className="welcome-message">Log in to continue</h1>
             <div className="login-option">
+                <h1 className="welcome-message">Log in to Coog Music</h1>
                 <form onSubmit={(e) => {
                     e.preventDefault();
                     loginUser();

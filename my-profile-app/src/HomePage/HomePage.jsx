@@ -56,7 +56,7 @@ import "./HomePage.css";
 ];
 /*/
 
-const API_URL = "https://localhost:7152"; // Replace with your actual API URL
+const API_URL = "http://localhost:5142"; // Replace with your actual API URL //remove s if needed if songs do not show up in Explore page
 
 const formatDuration = (duration) => {
 

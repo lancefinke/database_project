@@ -205,17 +205,17 @@ const SearchPage = ({ onSongSelect }) => {
         <div className="search-bar-wrapper">
           <div className="search-icon"><span className="icon-align">🔎︎</span></div>
           <input 
-  className="search-bar" 
-  type="search" 
-  value={searchQuery} 
-  placeholder="Search for Artist, song, or Album" 
-  onChange={(e) => {setSearchQuery(e.target.value)}}
-  onKeyDown={(e) => {
-    if (e.key === 'Enter') {
-      handleSearch(e);
-    }
-  }}
-/>
+            className="search-bar" 
+            type="search" 
+            value={searchQuery} 
+            placeholder="Search for Artist, song, or Album" 
+            onChange={(e) => {setSearchQuery(e.target.value)}}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleSearch(e);
+              }
+            }}
+          />
           <button className="search-button" onClick={handleSearch}>Search</button>
         </div>
       </div>
@@ -234,15 +234,7 @@ const SearchPage = ({ onSongSelect }) => {
         // SHOW GENRE SONGS LIST VIEW
         <div className="searchpage-container">
           <SearchGenreSongList 
-            songs={genreSongs.map(song => ({
-              id: song.id,
-              title: song.title,
-              artist: song.author,
-              duration: convertTimeToSeconds(song.duration),
-              image: song.image,
-              album: song.album,
-              genre: song.genre || "Unknown"
-            }))}
+            songs={genreSongs}
             playlistName={activeGenre}
             onBackClick={() => {
               setShowGenreSongs(false);
@@ -254,7 +246,7 @@ const SearchPage = ({ onSongSelect }) => {
       ) : (
         // SHOW NORMAL SEARCH RESULTS AND GENRE GRID
         <>
-          <div className="searchpage-container">
+          <div className="section-container">
             <h2 className="search-results-title">Featured Playlists</h2>
             <div className="search-results">
               {users.length > 0 ? (
@@ -276,7 +268,7 @@ const SearchPage = ({ onSongSelect }) => {
             </div>
           </div>
           
-          <div className="search-genres-container">
+          <div className="section-container">
             <h2 className="search-genres-title">Browse All Genres</h2>
             <div className="search-genres-list">
               <button 
