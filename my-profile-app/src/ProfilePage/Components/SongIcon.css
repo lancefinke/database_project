@@ -227,7 +227,9 @@
     padding: 4px; /* Reduce padding */
     transition: all 0.2s ease;
     position: relative;
+    
     z-index: 2;
+
 }
 
 .control-icon:hover {
@@ -245,8 +247,8 @@
 
 /* HOME PAGE STYLES */
 .home-song-wrapper {
-    width: 300px;
-    height: 300px;
+    width: 350px;
+    height: 375px;
     transform: scale(1.8);
     transition: all 0.4s ease;
 }

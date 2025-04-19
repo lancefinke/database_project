@@ -44,7 +44,7 @@ const AdminPage = () => {
     const [selectedArtist, setSelectedArtist] = useState(null);
 
     // Your existing API URL
-    const API_URL = "http://coogmusic-g2dcaubsabgtfycy.centralus-01.azurewebsites.net/";
+    const API_URL = "https://localhost:7152/";
 
     useEffect(() => {
         const fetchAdminData = async () => {
