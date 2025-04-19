@@ -326,12 +326,16 @@
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+  overflow: visible;
 }
 
 .song-title {
-  font-size: 1.2rem;
-  margin: 0 0 0.5rem;
+  font-size: 1.0rem;
+  margin:  0 0.5rem;
   color: #ffffff;
+  line-height: .8; /* Add this for better vertical spacing */
+  
+  display: block;
 }
 
 .song-artist {

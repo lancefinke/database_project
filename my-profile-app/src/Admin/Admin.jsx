@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useRef } from 'react';
+
 import { Play, Pause, ArrowUp, ArrowDown, Filter, ChevronDown } from "lucide-react";
 import UserLink from "../UserLink/UserLink";
 import "./Admin.css"; // Using your existing Admin.css
+import ReactHowler from 'react-howler';
 
 const AdminPage = () => {
     const [adminData, setAdminData] = useState({
@@ -39,115 +42,162 @@ const AdminPage = () => {
 
     // Active tab for song reports
     const [activeTab, setActiveTab] = useState('statistics');
+    const [hasFetchedReportedSongs, setHasFetchedReportedSongs] = useState(false);
 
     // Add a new state to track the selected artist for strike details
     const [selectedArtist, setSelectedArtist] = useState(null);
+    
+    // Play song inside reported songs
+    const [playingSongId, setPlayingSongId] = useState(null);
+    // to see strike details of songs for artist
+    const [strikeDetails, setStrikeDetails] = useState([]);
+
+    const togglePlay = (songId) => {
+    setPlayingSongId((prevId) => (prevId === songId ? null : songId));
+    };
+    const audioRefs = useRef({}); // Store audio refs for each ReportID
+
+    const handleTogglePlay = (song) => {
+    const id = song.ReportID;
+
+    if (!audioRefs.current[id]) {
+        audioRefs.current[id] = new Audio(song.SongFileName);
+    }
+
+    const currentAudio = audioRefs.current[id];
+
+    if (playingSongId === id) {
+        currentAudio.pause();
+        setPlayingSongId(null);
+    } else {
+        // Pause any currently playing audio
+        Object.keys(audioRefs.current).forEach((key) => {
+        if (parseInt(key) !== id) {
+            audioRefs.current[key].pause();
+            audioRefs.current[key].currentTime = 0;
+        }
+        });
+
+        currentAudio.play();
+        setPlayingSongId(id);
+    }
+    };
+
 
     // Your existing API URL
     const API_URL = "https://localhost:7152/";
-
-    useEffect(() => {
-        const fetchAdminData = async () => {
-            try {
-                // Try to fetch data, but handle CORS errors gracefully
-                try {
-                    const userReportResponse = await fetch(API_URL + "api/Users/GenerateUserReport", {
-                        method: "GET",
-                        headers: {
-                            'Accept': 'application/json'
-                        },
-                        // Add a mode property to handle CORS issues
-                        mode: 'cors' // Try with explicit cors mode
-                    });
-
-                    if (!userReportResponse.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-
-                    const userReportResult = await userReportResponse.json();
-                    
-                    // If we successfully got data, use it
-                    setAdminData({
-                        artists: userReportResult.Artists || [],
-                        listeners: userReportResult.Listeners || [],
-                        bannedUsers: [],
-                        bannedSongs: [],
-                        reportedSongs: [],
-                        loading: false,
-                        error: null
-                    });
-                    
-                    return; // Exit early if the API call succeeds
-                } catch (fetchError) {
-                    // If API call fails (likely due to CORS), continue with mock data
-                    console.warn("API call failed, using mock data:", fetchError);
-                }
-
-                // Mock data as fallback when API call fails
-                const mockArtists = [
-                    { Username: "JohnDoe", Email: "john@example.com", CreatedAt: "2024-10-15T12:00:00", StrikeCount: 1 },
-                    { Username: "AliceSmith", Email: "alice@example.com", CreatedAt: "2024-11-22T09:15:00", StrikeCount: 0 },
-                    { Username: "MusicMaster", Email: "master@music.com", CreatedAt: "2025-01-05T14:30:00", StrikeCount: 2 },
-                    { Username: "SongWriter", Email: "writer@example.com", CreatedAt: "2025-02-10T08:45:00", StrikeCount: 3 },
-                    { Username: "BeatProducer", Email: "beats@example.com", CreatedAt: "2025-03-15T17:20:00", StrikeCount: 0 }
-                ];
-                
-                const mockListeners = [
-                    { Username: "FanUser1", Email: "fan1@example.com", CreatedAt: "2024-09-10T10:20:00" },
-                    { Username: "MusicLover", Email: "lover@music.com", CreatedAt: "2024-12-18T16:45:00" },
-                    { Username: "RhythmFan", Email: "rhythm@example.com", CreatedAt: "2025-02-28T08:30:00" },
-                    { Username: "JazzEnthusiast", Email: "jazz@example.com", CreatedAt: "2025-03-05T14:10:00" },
-                    { Username: "ClassicalFan", Email: "classic@example.com", CreatedAt: "2025-04-01T11:55:00" }
-                ];
-                
-                const mockBannedUsers = [
-                    { Username: "bannedUser1", Email: "banned1@example.com", CreatedAt: "2024-08-15T12:00:00", BannedAt: "2025-03-10T09:30:00", Reason: "Terms of Service violation" },
-                    { Username: "bannedUser2", Email: "banned2@example.com", CreatedAt: "2024-10-22T14:22:00", BannedAt: "2025-03-28T16:45:00", Reason: "Inappropriate content" },
-                    { Username: "bannedUser3", Email: "banned3@example.com", CreatedAt: "2025-01-18T09:35:00", BannedAt: "2025-04-05T13:20:00", Reason: "Repeated copyright violations" }
-                ];
-                
-                const mockBannedSongs = [
-                    { id: 1, title: "Inappropriate Song", artist: "bannedArtist1", image: "/path/to/image1.jpg", bannedAt: "2025-03-15", reason: "Explicit content" },
-                    { id: 2, title: "Copyright Violation", artist: "bannedArtist2", image: "/path/to/image2.jpg", bannedAt: "2025-04-01", reason: "Copyright infringement" }
-                ];
-                
-                const mockReportedSongs = [
-                    { id: 1, title: "Controversial Song", artist: "reportedArtist1", image: "/path/to/image3.jpg", reportedAt: "2025-04-10", reason: "Potentially harmful content", reporter: "concerned_user" },
-                    { id: 2, title: "Questionable Lyrics", artist: "reportedArtist2", image: "/path/to/image4.jpg", reportedAt: "2025-04-12", reason: "Inappropriate language", reporter: "content_moderator" }
-                ];
-
-                setAdminData({
-                    artists: mockArtists,
-                    listeners: mockListeners,
-                    bannedUsers: mockBannedUsers,
-                    bannedSongs: mockBannedSongs,
-                    reportedSongs: mockReportedSongs,
-                    loading: false,
-                    error: null
-                });
-
-            } catch (error) {
-                console.error("Error fetching admin data:", error);
-                setAdminData(prev => ({
-                    ...prev,
-                    loading: false,
-                    error: error.message
-                }));
+    const fetchAdminData = async (setAdminData, API_URL) => {
+        try {
+            const userReportResponse = await fetch(API_URL + "api/Users/GenerateUserReport", {
+                method: "GET",
+                headers: {
+                    'Accept': 'application/json'
+                },
+                mode: 'cors'
+            });
+    
+            if (!userReportResponse.ok) {
+                throw new Error('User report API failed');
             }
-        };
-
-        fetchAdminData();
-    }, []);
-
-    // Add this function to handle clicking on an artist
-    const handleArtistClick = (artist) => {
-        // Toggle selection - if same artist is clicked, clear selection
-        if (selectedArtist && selectedArtist.Username === artist.Username) {
-            setSelectedArtist(null);
-        } else {
-            setSelectedArtist(artist);
+    
+            const userReportResult = await userReportResponse.json();
+            console.log("Fetched user report:", userReportResult);
+    
+            setAdminData(prev => ({
+                ...prev,
+                artists: userReportResult.Artists || [],
+                listeners: userReportResult.Listeners || [],
+                bannedUsers: userReportResult.BannedUsers || [],
+                loading: false,
+                error: null
+            }));
+        } catch (error) {
+            console.error("Error fetching user report:", error);
+            setAdminData(prev => ({
+                ...prev,
+                loading: false,
+                error: error.message
+            }));
         }
     };
+    
+    // Inside your component
+    useEffect(() => {
+        fetchAdminData(setAdminData, API_URL);
+    }, []);
+    
+    useEffect(() => {
+        const fetchReportedAndBannedSongs = async () => {
+            try {
+                const [reportedRes, bannedRes] = await Promise.all([
+                fetch(`${API_URL}api/database/GetReportedSongs`, {
+                    method: "GET",
+                    headers: { Accept: "application/json" },
+                    mode: "cors"
+                }),
+                fetch(`${API_URL}api/database/GetBannedSongs`, {
+                    method: "GET",
+                    headers: { Accept: "application/json" },
+                    mode: "cors"
+                })
+                ]);
+        
+                if (!reportedRes.ok || !bannedRes.ok) {
+                throw new Error("Failed to fetch reported or banned songs");
+                }
+        
+                const [reportedSongs, bannedSongs] = await Promise.all([
+                reportedRes.json(),
+                bannedRes.json()
+                ]);
+        
+                setAdminData(prev => ({
+                ...prev,
+                reportedSongs,
+                bannedSongs
+                }));
+        
+                setHasFetchedReportedSongs(true);
+            } catch (err) {
+                console.error("Error fetching reported/banned songs:", err);
+            }
+            };
+        
+            fetchReportedAndBannedSongs();
+        }, []);
+        
+    
+
+    // Add this function to handle clicking on an artist
+    const handleArtistClick = async (artist) => {
+        console.log("Clicked artist:", artist);
+    
+        if (selectedArtist && selectedArtist.Username === artist.Username) {
+            setSelectedArtist(null);
+            setStrikeDetails([]);
+        } else {
+            setSelectedArtist(artist);
+    
+            try {
+                const res = await fetch(`${API_URL}api/database/GetStrikeDetailsByArtist?artistId=${artist.ArtistID}`, {
+                    method: "GET",
+                    headers: {
+                        'Accept': 'application/json'
+                    },
+                    mode: 'cors'
+                });
+    
+                if (!res.ok) throw new Error("Failed to fetch strike details");
+    
+                const data = await res.json();
+                console.log("Fetched strike details:", data);
+                setStrikeDetails(data);
+            } catch (error) {
+                console.error("Error fetching strike details:", error);
+            }
+        }
+    };
+    
 
     // Calculate statistics from the data
     const calculateStats = () => {
@@ -275,72 +325,99 @@ const AdminPage = () => {
     };
 
     // Handle song action (approve/ban for reported songs)
-    const handleSongAction = (id, action, songType, artistUsername) => {
-        // In a real implementation, this would make an API call
-        console.log(`${action} song with ID: ${id} by artist: ${artistUsername}`);
-        
-        // Update local state for UI feedback
-        if (songType === 'reported' && action === 'approve') {
+    const handleSongAction = async (reportId, action) => {
+        const newStatus = action === 'approve' ? 2 : 3;
+    
+        try {
+            const response = await fetch(`${API_URL}api/database/UpdateReportStatus`, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    reportID: reportId,
+                    status: newStatus
+                })
+            });
+    
+            if (!response.ok) throw new Error("Failed to update report status.");
+    
+            // Refresh reported songs after update
+            const reportedRes = await fetch(`${API_URL}api/database/GetReportedSongs`);
+            const updatedReportedSongs = await reportedRes.json();
+    
             setAdminData(prev => ({
                 ...prev,
-                reportedSongs: prev.reportedSongs.filter(song => song.id !== id)
+                reportedSongs: updatedReportedSongs
             }));
-        } else if (songType === 'reported' && action === 'ban') {
-            // Move from reported to banned
-            const songToBan = adminData.reportedSongs.find(song => song.id === id);
-            if (songToBan) {
-                // Find the artist and update their strike count
-                setAdminData(prev => {
-                    // Update artist strike count
-                    const updatedArtists = prev.artists.map(artist => 
-                        artist.Username === songToBan.artist 
-                            ? { ...artist, StrikeCount: (artist.StrikeCount || 0) + 1 } 
-                            : artist
-                    );
-                    
-                    return {
-                        ...prev,
-                        artists: updatedArtists,
-                        reportedSongs: prev.reportedSongs.filter(song => song.id !== id),
-                        bannedSongs: [...prev.bannedSongs, { ...songToBan, bannedAt: new Date().toISOString().split('T')[0] }]
-                    };
-                });
-            }
-        } 
-    };
-
-    // Handle user action
-    const handleUserAction = (username, action) => {
-        // In a real implementation, this would make an API call
-        console.log(`${action} user: ${username}`);
-        
-        // Update local state for UI feedback
-        if (action === 'ban') {
-            // Find user in either artists or listeners
-            const artistToBan = adminData.artists.find(user => user.Username === username);
-            const listenerToBan = adminData.listeners.find(user => user.Username === username);
-            const userToBan = artistToBan || listenerToBan;
-            
-            if (userToBan) {
-                setAdminData(prev => ({
-                    ...prev,
-                    artists: prev.artists.filter(user => user.Username !== username),
-                    listeners: prev.listeners.filter(user => user.Username !== username),
-                    bannedUsers: [...prev.bannedUsers, { 
-                        ...userToBan, 
-                        BannedAt: new Date().toISOString(), 
-                        Reason: "Admin action" 
-                    }]
-                }));
-            }
+    
+            console.log("Reported songs updated.");
+        } catch (error) {
+            console.error("Error updating report status:", error);
         }
     };
+    
+    
+    // Handle user action
+    const handleUserAction = async (username, action) => {
+        console.log(`${action} user: ${username}`);
+    
+        let user = adminData.artists.find(u => u.Username === username);
+        let isArtist = true;
+    
+        if (!user) {
+            user = adminData.listeners.find(u => u.Username === username);
+            isArtist = false;
+        }
+    
+        if (!user) {
+            console.error("User not found.");
+            return;
+        }
+    
+        try {
+            const response = await fetch(`${API_URL}api/Users/BanUser`, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    ArtistID: isArtist ? user.ArtistID : null,
+                    UserID: isArtist ? null : user.UserID
+                })
+            });
+    
+            if (!response.ok) throw new Error("Failed to ban user");
+    
+            console.log("User successfully banned.");
+    
+            // Update state
+            setAdminData(prev => ({
+                ...prev,
+                artists: prev.artists.filter(u => u.Username !== username),
+                listeners: prev.listeners.filter(u => u.Username !== username),
+                bannedUsers: [
+                    ...prev.bannedUsers,
+                    {
+                        ...user,
+                        BannedAt: new Date().toISOString(),
+                        Role: isArtist ? "Artist" : "Listener"
+                    }
+                ]
+            }));
+        } catch (error) {
+            console.error("Error banning user:", error);
+        }
+    };
+    
 
-    // Toggle between tabs
     const handleTabChange = (tab) => {
         setActiveTab(tab);
-        // Reset selected artist when changing tabs
         setSelectedArtist(null);
+    
+        if (tab === 'artists') {
+            fetchAdminData(setAdminData, API_URL);
+        }
     };
 
     // Render loading state
@@ -501,33 +578,32 @@ const AdminPage = () => {
                     
                     {/* Strike Details Section */}
                     {selectedArtist && (
-                        <div className="strike-details-container">
-                            <h3>Strike Details for {selectedArtist.Username}</h3>
-                            {selectedArtist.StrikeCount > 0 ? (
-                                <table className="admin-table strike-details-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Strike Date</th>
-                                            <th>Reason</th>
-                                            <th>Song</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {/* Mock strike data - in real app, you'd fetch this from API */}
-                                        {Array.from({ length: selectedArtist.StrikeCount || 0 }).map((_, index) => (
-                                            <tr key={index}>
-                                                <td>{new Date(Date.now() - (index * 30 * 24 * 60 * 60 * 1000)).toLocaleDateString()}</td>
-                                                <td>{["Inappropriate content", "Copyright violation", "Terms of service violation"][index % 3]}</td>
-                                                <td>{`Banned Song ${index + 1}`}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            ) : (
-                                <p className="no-strikes-message">This artist has no strikes.</p>
-                            )}
-                        </div>
-                    )}
+    <div className="strike-details-container">
+        <h3>Strike Details for {selectedArtist.Username}</h3>
+        {strikeDetails.length > 0 ? (
+            <table className="admin-table strike-details-table">
+                <thead>
+                    <tr>
+                        <th>Strike Date</th>
+                        <th>Reason</th>
+                        <th>Song</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {strikeDetails.map((strike, index) => (
+                        <tr key={index}>
+                            <td>{new Date(strike.StrikeDate).toLocaleDateString()}</td>
+                            <td>{strike.Reason}</td>
+                            <td>{strike.SongName}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        ) : (
+            <p className="no-strikes-message">No strike details found for this artist.</p>
+        )}
+    </div>
+)}
                 </div>
             )}
             
@@ -607,158 +683,185 @@ const AdminPage = () => {
             
             {/* Banned Users Panel */}
             {activeTab === 'banned-users' && (
-                <div className="admin-panel">
-                    <div className="admin-table-controls">
-                        <div className="admin-search">
-                            <input
-                                type="text"
-                                placeholder="Search banned users..."
-                                value={filterConfig.bannedUsers}
-                                onChange={(e) => handleFilterChange('bannedUsers', e.target.value)}
-                            />
-                        </div>
-                        <div className="admin-filter-dropdown">
-                            <select 
-                                value={timePeriodFilter.bannedUsers}
-                                onChange={(e) => handleTimePeriodChange('bannedUsers', e.target.value)}
-                                className="admin-dropdown"
-                            >
-                                {timePeriodOptions.map(option => (
-                                    <option key={option.value} value={option.value}>
-                                        {option.label}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div className="admin-table-container">
-                        <table className="admin-table">
-                            <thead>
-                                <tr>
-                                    <th onClick={() => requestSort('bannedUsers', 'Username')}>
-                                        Username
-                                        {sortConfig.bannedUsers.key === 'Username' && (
-                                            sortConfig.bannedUsers.direction === 'ascending' ? <ArrowUp size={14} /> : <ArrowDown size={14} />
-                                        )}
-                                    </th>
-                                    <th onClick={() => requestSort('bannedUsers', 'Email')}>
-                                        Email
-                                        {sortConfig.bannedUsers.key === 'Email' && (
-                                            sortConfig.bannedUsers.direction === 'ascending' ? <ArrowUp size={14} /> : <ArrowDown size={14} />
-                                        )}
-                                    </th>
-                                    <th onClick={() => requestSort('bannedUsers', 'BannedAt')}>
-                                        Banned At
-                                        {sortConfig.bannedUsers.key === 'BannedAt' && (
-                                            sortConfig.bannedUsers.direction === 'ascending' ? <ArrowUp size={14} /> : <ArrowDown size={14} />
-                                        )}
-                                    </th>
-                                    <th>Reason</th>
-                                    {/* Actions column removed */}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {getFilteredData(getSortedData(adminData.bannedUsers, 'bannedUsers'), 'bannedUsers').map((user, index) => (
-                                    <tr key={index}>
-                                        <td>{user.Username}</td>
-                                        <td>{user.Email}</td>
-                                        <td>{new Date(user.BannedAt).toLocaleDateString()}</td>
-                                        <td>{user.Reason}</td>
-                                        {/* Actions column removed */}
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+            <div className="admin-panel">
+                <div className="admin-table-controls">
+                <div className="admin-search">
+                    <input
+                    type="text"
+                    placeholder="Search banned users..."
+                    value={filterConfig.bannedUsers}
+                    onChange={(e) => handleFilterChange('bannedUsers', e.target.value)}
+                    />
                 </div>
+                <div className="admin-filter-dropdown">
+                    <select 
+                    value={timePeriodFilter.bannedUsers}
+                    onChange={(e) => handleTimePeriodChange('bannedUsers', e.target.value)}
+                    className="admin-dropdown"
+                    >
+                    {timePeriodOptions.map(option => (
+                        <option key={option.value} value={option.value}>
+                        {option.label}
+                        </option>
+                    ))}
+                    </select>
+                </div>
+                </div>
+
+                <div className="admin-table-container">
+                <table className="admin-table">
+                    <thead>
+                    <tr>
+                        <th onClick={() => requestSort('bannedUsers', 'Username')}>
+                        Username
+                        {sortConfig.bannedUsers.key === 'Username' && (
+                            sortConfig.bannedUsers.direction === 'ascending' ? <ArrowUp size={14} /> : <ArrowDown size={14} />
+                        )}
+                        </th>
+                        <th onClick={() => requestSort('bannedUsers', 'Email')}>
+                        Email
+                        {sortConfig.bannedUsers.key === 'Email' && (
+                            sortConfig.bannedUsers.direction === 'ascending' ? <ArrowUp size={14} /> : <ArrowDown size={14} />
+                        )}
+                        </th>
+                        <th onClick={() => requestSort('bannedUsers', 'BannedAt')}>
+                        Banned At
+                        {sortConfig.bannedUsers.key === 'BannedAt' && (
+                            sortConfig.bannedUsers.direction === 'ascending' ? <ArrowUp size={14} /> : <ArrowDown size={14} />
+                        )}
+                        </th>
+                        <th onClick={() => requestSort('bannedUsers', 'Role')}>
+                        Role
+                        {sortConfig.bannedUsers.key === 'Role' && (
+                            sortConfig.bannedUsers.direction === 'ascending' ? <ArrowUp size={14} /> : <ArrowDown size={14} />
+                        )}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {getFilteredData(getSortedData(adminData.bannedUsers, 'bannedUsers'), 'bannedUsers').map((user, index) => (
+                        <tr key={index}>
+                        <td>{user.Username}</td>
+                        <td>{user.Email}</td>
+                        <td>{new Date(user.BannedAt).toLocaleDateString()}</td>
+                        <td>{user.Role}</td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
+                </div>
+            </div>
             )}
             
             {/* Banned Songs Panel */}
             {activeTab === 'banned-songs' && (
-                <div className="admin-panel">
-                    <div className="admin-table-controls">
-                        <div className="admin-search">
-                            <input
-                                type="text"
-                                placeholder="Search banned songs..."
-                                value={filterConfig.bannedSongs}
-                                onChange={(e) => handleFilterChange('bannedSongs', e.target.value)}
-                            />
-                        </div>
-                    </div>
-                    
-                    <div className="song-cards-container">
-                        {getFilteredData(adminData.bannedSongs, 'bannedSongs').map(song => (
-                            <div className="song-card banned" key={song.id}>
-                                <div className="song-card-image">
-                                    <img src={song.image} alt={song.title} onError={(e) => {
-                                        e.target.src = "/api/placeholder/180/200"; // Fallback image
-                                    }} />
-                                </div>
-                                <div className="song-card-content">
-                                    <h3 className="song-title">{song.title}</h3>
-                                    <p className="song-artist">{song.artist}</p>
-                                    <p className="song-banned-date">Banned on: {song.bannedAt}</p>
-                                    <p className="song-reason">Reason: {song.reason}</p>
-                                    <div className="song-actions">
-                                        {/* No unban button as requested */}
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+            <div className="admin-panel">
+                <div className="admin-table-controls">
+                <div className="admin-search">
+                    <input
+                    type="text"
+                    placeholder="Search banned songs..."
+                    value={filterConfig.bannedSongs}
+                    onChange={(e) => handleFilterChange('bannedSongs', e.target.value)}
+                    />
                 </div>
+                </div>
+
+                <div className="song-cards-container">
+                {getFilteredData(adminData.bannedSongs, 'bannedSongs').map(song => (
+                    <div className="song-card banned" key={song.SongID}>
+                    <div className="song-card-image">
+                        <img
+                        src={song.CoverArtFileName}
+                        alt={song.SongName}
+                        onError={(e) => {
+                            e.target.src = "/api/placeholder/180/200";
+                        }}
+                        />
+                    </div>
+                    <div className="song-card-content">
+                        <h3 className="song-title">{song.SongName}</h3>
+                        <p className="song-artist">Artist: {song.ArtistUsername}</p>
+                        <p className="song-banned-date">
+                        Banned on: {new Date(song.ReportedOn).toLocaleDateString()}
+                        </p>
+                        <p className="song-reason">Reason: {song.Reason}</p>
+                    </div>
+                    </div>
+                ))}
+                </div>
+            </div>
             )}
-            
+                        
             {/* Reported Songs Panel */}
             {activeTab === 'reported-songs' && (
-                <div className="admin-panel">
-                    <div className="admin-table-controls">
-                        <div className="admin-search">
-                            <input
-                                type="text"
-                                placeholder="Search reported songs..."
-                                value={filterConfig.reportedSongs}
-                                onChange={(e) => handleFilterChange('reportedSongs', e.target.value)}
-                            />
+            <div className="admin-panel">
+                <div className="admin-table-controls">
+                <div className="admin-search">
+                    <input
+                    type="text"
+                    placeholder="Search reported songs..."
+                    value={filterConfig.reportedSongs}
+                    onChange={(e) => handleFilterChange('reportedSongs', e.target.value)}
+                    />
+                </div>
+                </div>
+
+                <div className="song-cards-container">
+                {getFilteredData(adminData.reportedSongs, 'reportedSongs').map((song) => (
+                    <div className="song-card reported" key={song.ReportID}>
+                    <div className="song-card-image">
+                        <img
+                        src={song.CoverArtFileName}
+                        alt={song.SongName}
+                        onError={(e) => {
+                            e.target.src = "/api/placeholder/180/200";
+                        }}
+                        />
+                    </div>
+
+                    <div className="song-card-content">
+                        <h3 className="song-title">{song.SongName}</h3>
+                        <p className="song-artist">Artist: {song.ArtistUsername}</p>
+                        <p className="song-reporter">Reported By: {song.ReporterUsername}</p>
+                        <p className="song-reason">Reason: {song.Reason}</p>
+                        <p className="song-reported-date">
+                        Reported On: {new Date(song.CreatedAt).toLocaleDateString()}
+                        </p>
+
+                        <div className="song-actions">
+                        <button
+                            className="admin-action-btn play"
+                            onClick={() => handleTogglePlay(song)}
+                        >
+                            {playingSongId === song.ReportID ? 'Pause' : 'Play'}
+                        </button>
+
+                        <button
+                            className="admin-action-btn approve"
+                            onClick={() =>
+                            handleSongAction(song.ReportID, 'approve', 'reported', song.ArtistUsername)
+                            }
+                        >
+                            Dismiss
+                        </button>
+
+                        <button
+                            className="admin-action-btn ban"
+                            onClick={() =>
+                            handleSongAction(song.ReportID, 'ban', 'reported', song.ArtistUsername)
+                            }
+                        >
+                            Ban
+                        </button>
                         </div>
                     </div>
-                    
-                    <div className="song-cards-container">
-                        {getFilteredData(adminData.reportedSongs, 'reportedSongs').map(song => (
-                            <div className="song-card reported" key={song.id}>
-                                <div className="song-card-image">
-                                    <img src={song.image} alt={song.title} onError={(e) => {
-                                        e.target.src = "/api/placeholder/180/200"; // Fallback image
-                                    }} />
-                                </div>
-                                <div className="song-card-content">
-                                    <h3 className="song-title">{song.title}</h3>
-                                    <p className="song-artist">{song.artist}</p>
-                                    <p className="song-reported-date">Reported on: {song.reportedAt}</p>
-                                    <p className="song-reporter">Reported by: {song.reporter}</p>
-                                    <p className="song-reason">Reason: {song.reason}</p>
-                                    <div className="song-actions">
-                                        <button 
-                                            className="admin-action-btn approve" 
-                                            onClick={() => handleSongAction(song.id, 'approve', 'reported')}
-                                        >
-                                            Dismiss Report
-                                        </button>
-                                        <button 
-                                            className="admin-action-btn ban" 
-                                            onClick={() => handleSongAction(song.id, 'ban', 'reported', song.artist)}
-                                        >
-                                            Ban Song
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
                     </div>
+                ))}
                 </div>
+            </div>
             )}
+
             
             {/* Error message if there was an error loading data */}
             {adminData.error && (
