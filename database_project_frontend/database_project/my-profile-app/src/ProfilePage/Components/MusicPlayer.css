@@ -18,6 +18,35 @@
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+/* IMPORTANT: These are the critical styles to fix the play button */
+.music-player-container .control-button.play-button {
+  background: rgba(255, 255, 255, 0.2) !important;
+  height: 32px !important; /* Increased size for better visibility */
+  width: 32px !important; /* Increased size for better visibility */
+  border-radius: 50% !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+  position: relative !important; /* Not absolute */
+  z-index: 100 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: white !important;
+  margin: 0 12px !important;
+  opacity: 1 !important; /* Force visibility */
+  visibility: visible !important;
+}
+
+/* Make sure the SVG icon is visible */
+.music-player-container .control-button.play-button svg {
+  color: white !important;
+  height: 24px !important;
+  width: 24px !important;
+  margin-left: 2px !important; /* Slight offset for play icon */
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
 /* Music Info Section */
 .music-info-section {
   display: flex;
@@ -85,7 +114,6 @@
   align-items: center;
   gap: 0.75rem;
   width: 100%;
-  ;
 }
 
 .progress-wrapper {
@@ -94,11 +122,27 @@
   height: 4px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 4px;
-  overflow: hidden;
+  overflow: visible; /* Changed from hidden to visible */
+}
+
+/* This creates the fill effect for the progress bar */
+.progress-wrapper::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: var(--progress-percentage, 0%); /* Default to 0% */
+  background: #ff4136; /* Red color for the fill - same as volume slider */
+  border-radius: 4px;
+  transition: width 0.1s ease;
+  z-index: 1;
+  pointer-events: none;
 }
 
 .progress-bar {
   -webkit-appearance: none;
+  appearance: none;
   width: 100%;
   height: 4px;
   background: transparent;
@@ -109,44 +153,78 @@
   margin: 0;
   padding: 0;
   cursor: pointer;
+  z-index: 2;
 }
 
+/* Webkit (Chrome, Safari, newer Edge) */
 .progress-bar::-webkit-slider-runnable-track {
-  -webkit-appearance: none;
+  width: 100%;
   height: 4px;
   background: transparent;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 .progress-bar::-webkit-slider-thumb {
   -webkit-appearance: none;
+  appearance: none;
   width: 12px;
   height: 12px;
   border-radius: 50%;
   background: #fff;
   cursor: pointer;
-  margin-top: -4px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  margin-top: -4px; /* Centers the thumb on the track */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 3;
 }
 
+/* Firefox */
 .progress-bar::-moz-range-track {
+  width: 100%;
   height: 4px;
   background: transparent;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.progress-bar::-moz-range-progress {
+  background: #ff4136;
+  height: 4px;
+  border-radius: 4px;
 }
 
 .progress-bar::-moz-range-thumb {
   width: 12px;
   height: 12px;
+  border: none;
   border-radius: 50%;
   background: #fff;
   cursor: pointer;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
+/* Microsoft Edge and IE */
 .progress-bar::-ms-track {
+  width: 100%;
   height: 4px;
   background: transparent;
   border: none;
+  border-radius: 4px;
+  cursor: pointer;
   color: transparent;
+}
+
+.progress-bar::-ms-fill-lower {
+  background: #ff4136;
+  border-radius: 4px;
+}
+
+.progress-bar::-ms-fill-upper {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
 }
 
 .progress-bar::-ms-thumb {
@@ -155,7 +233,8 @@
   border-radius: 50%;
   background: #fff;
   cursor: pointer;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  margin-top: 0;
 }
 
 .current-time, .total-duration {
@@ -171,29 +250,13 @@
   justify-content: center;
   width: 100%;
   padding: 0 2rem;
-  position: relative; /* Add this */
-}
-.control-button {
-  margin: 0 8px;
-  position: relative; /* Add this */
-}
-.control-group {
-  display: flex;
-  align-items: center;
+  position: relative;
 }
 
 /* Ensure proper spacing between control buttons */
 .control-button {
   margin: 0 8px;
-}
-
-.additional-controls {
-  display: flex;
-  gap: 0.75rem;
-  margin-left: 0.5rem;
-}
-
-.control-button {
+  position: relative;
   background: none;
   border: none;
   color: white;
@@ -204,8 +267,20 @@
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
-  width: 32px !important; /* Increased from 32px */
-  height: 32px !important; /* Increased from 32px */
+  width: 32px !important;
+  height: 32px !important;
+  opacity: 1 !important;
+}
+
+.control-group {
+  display: flex;
+  align-items: center;
+}
+
+.additional-controls {
+  display: flex;
+  gap: 0.75rem;
+  margin-left: 0.5rem;
 }
 
 .control-button:hover {
@@ -213,27 +288,11 @@
   transform: scale(1.05);
 }
 
+/* Explicitly override any .play-button with opacity: 0 */
 .play-button {
-  background: rgba(255, 255, 255, 0.2); /* Increase contrast */
-  height: 46px;
-  width: 46px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.2); /* Make border more visible */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4); /* Stronger shadow for depth */
-  position: relative;
-  z-index: 100; /* Higher z-index to ensure it's on top */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white; /* Ensure icon color is white */
-  margin: 0 12px; /* Add more horizontal margin to separate from other buttons */
-}
-
-.play-button svg {
-  color: white;
-  height: 24px;
-  width: 24px;
-  margin-left: 2px; /* Slight offset for play icon */
+  opacity: 1 !important;
+  position: relative !important;
+  visibility: visible !important;
 }
 
 .play-button:hover {
@@ -258,7 +317,7 @@
   color: #f44336;
 }
 
-/* Volume Control */
+/* Volume Control with colored fill effect */
 .volume-control {
   display: flex;
   align-items: center;
@@ -274,10 +333,27 @@
   background: rgba(255, 255, 255, 0.1);
   border-radius: 4px;
   position: relative;
+  overflow: visible; /* Changed from hidden to visible to show the thumb */
+}
+
+/* This creates the fill effect */
+.volume-slider-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: var(--volume-percentage, 50%); /* Default to 50% */
+  background: #ff4136; /* Red color for the fill */
+  border-radius: 4px;
+  transition: width 0.1s ease;
+  z-index: 1;
+  pointer-events: none; /* Ensures clicks pass through to the slider */
 }
 
 .volume-slider {
   -webkit-appearance: none;
+  appearance: none;
   width: 100%;
   height: 4px;
   background: transparent;
@@ -287,37 +363,88 @@
   cursor: pointer;
   margin: 0;
   padding: 0;
+  z-index: 2;
 }
 
+/* Webkit (Chrome, Safari, newer Edge) */
 .volume-slider::-webkit-slider-runnable-track {
+  width: 100%;
   height: 4px;
   background: transparent;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 .volume-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 10px;
-  height: 10px;
+  appearance: none;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   background: #fff;
   cursor: pointer;
-  margin-top: -3px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  margin-top: -4px; /* Centers the thumb on the track */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 3;
 }
 
+/* Firefox */
 .volume-slider::-moz-range-track {
+  width: 100%;
   height: 4px;
   background: transparent;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.volume-slider::-moz-range-progress {
+  background: #ff4136;
+  height: 4px;
+  border-radius: 4px;
 }
 
 .volume-slider::-moz-range-thumb {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
+  border: none;
   border-radius: 50%;
   background: #fff;
-  border: none;
   cursor: pointer;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Microsoft Edge and IE */
+.volume-slider::-ms-track {
+  width: 100%;
+  height: 4px;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  color: transparent;
+}
+
+.volume-slider::-ms-fill-lower {
+  background: #ff4136;
+  border-radius: 4px;
+}
+
+.volume-slider::-ms-fill-upper {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.volume-slider::-ms-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  margin-top: 0;
 }
 
 /* Page-specific styles */

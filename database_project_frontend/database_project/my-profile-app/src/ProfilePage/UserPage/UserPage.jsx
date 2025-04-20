@@ -72,7 +72,7 @@ const UserPage = ({ onSongSelect }) => {
   });
 
   // API constants and user data
-  const API_URL = "https://localhost:7152";
+  const API_URL = "http://localhost:5142";
   const [currentUsername, setCurrentUsername] = useState("");
   const [currentUserId, setCurrentUserId] = useState("");
 

@@ -261,22 +261,7 @@
   margin-top: 0.3rem;
 }
 
-.play-button {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: #444;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  transition: all 0.2s;
-}
 
-.play-button:hover {
-  background-color: #666;
-  transform: scale(1.1);
-}
 
 /* Responsive adjustments */
 @media (max-width: 700px) {

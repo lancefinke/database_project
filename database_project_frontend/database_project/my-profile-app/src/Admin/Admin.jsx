@@ -85,7 +85,7 @@ const AdminPage = () => {
 
 
     // Your existing API URL
-    const API_URL = "https://localhost:7152/";
+    const API_URL = "http://localhost:5142/";
     const fetchAdminData = async (setAdminData, API_URL) => {
         try {
             const userReportResponse = await fetch(API_URL + "api/Users/GenerateUserReport", {

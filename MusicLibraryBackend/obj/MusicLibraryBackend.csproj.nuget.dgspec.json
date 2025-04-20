@@ -1,28 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Jose\\Desktop\\NewCombinedFullStack\\database_project\\MusicLibraryBackend\\MusicLibraryBackend.csproj": {}
+    "B:\\Music2.0\\database_project\\MusicLibraryBackend\\MusicLibraryBackend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Jose\\Desktop\\NewCombinedFullStack\\database_project\\MusicLibraryBackend\\MusicLibraryBackend.csproj": {
+    "B:\\Music2.0\\database_project\\MusicLibraryBackend\\MusicLibraryBackend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Jose\\Desktop\\NewCombinedFullStack\\database_project\\MusicLibraryBackend\\MusicLibraryBackend.csproj",
+        "projectUniqueName": "B:\\Music2.0\\database_project\\MusicLibraryBackend\\MusicLibraryBackend.csproj",
         "projectName": "MusicLibraryBackend",
-        "projectPath": "C:\\Users\\Jose\\Desktop\\NewCombinedFullStack\\database_project\\MusicLibraryBackend\\MusicLibraryBackend.csproj",
-        "packagesPath": "C:\\Users\\Jose\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Jose\\Desktop\\NewCombinedFullStack\\database_project\\MusicLibraryBackend\\obj\\",
+        "projectPath": "B:\\Music2.0\\database_project\\MusicLibraryBackend\\MusicLibraryBackend.csproj",
+        "packagesPath": "C:\\Users\\haith\\.nuget\\packages\\",
+        "outputPath": "B:\\Music2.0\\database_project\\MusicLibraryBackend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Jose\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\haith\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -102,7 +99,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "c:\\program files\\dotnet\\sdk\\8.0.407/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

@@ -13,6 +13,7 @@ import SideBar from "./ProfilePage/Components/SideBar";
 import AdminSidebar from "./Admin/AdminSidebar"; // Admin-specific sidebar
 import FollowingPage from "./FollowingPage/FollowingPage";
 import Dashboard from "./ProfilePage/UserPage/Dashboard";
+import PlaylistPage from "./ProfilePage/Components/PlaylistPage";
 
 import { BrowserRouter as Router, Routes, Route, useLocation, Link, Navigate, useNavigate } from "react-router-dom";
 import "./ProfilePage/ProfilePage.css";
@@ -178,6 +179,11 @@ const AppLayout = () => {
           <Route path="/dashboard" element={
             isLoggedIn 
               ? (isAdmin ? <Navigate to="/admin" replace /> : <Dashboard />)
+              : <Navigate to="/login" replace />
+          } />
+          <Route path="/playlist/:playlistId" element={
+            isLoggedIn 
+              ? (isAdmin ? <Navigate to="/admin" replace /> : <PlaylistPage onSongSelect={handleSongSelect} />)
               : <Navigate to="/login" replace />
           } />
           <Route path='/admin' element={

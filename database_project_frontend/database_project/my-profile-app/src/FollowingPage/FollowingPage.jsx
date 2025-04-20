@@ -7,7 +7,7 @@ const FollowingPage = () => {
   const navigate = useNavigate();
   const { user } = useUserContext();
   const userId = user?.UserID;
-  const API_URL = "https://localhost:7152";
+  const API_URL = "http://localhost:5142";
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -72,7 +72,7 @@ const FollowingPage = () => {
         <h1 className="following-title">Following</h1>
       </div>
       <p className="following-subtitle">These are the users you are following</p>
-{/* SEARCH BOX MIGHT READD LATER */}
+      {/* SEARCH BOX MIGHT READD LATER */}
       {/* <div className="search-container">
         <input
           type="text"
@@ -90,7 +90,6 @@ const FollowingPage = () => {
         <button className={`category-tab ${selectedCategory === 'Artist' ? 'active' : ''}`} onClick={() => setSelectedCategory('Artist')}>
           Artists
         </button>
-
       </div>
 
       <div className="following-stats">
@@ -98,7 +97,6 @@ const FollowingPage = () => {
           <span className="stat-number">{followedUsers.length}</span>
           <span className="stat-label">Following</span>
         </div>
-        
       </div>
 
       <h2 className="section-title">All Following</h2>
@@ -119,9 +117,7 @@ const FollowingPage = () => {
                   <span className="user-details">{user.followers} followers</span>
                   <span className="user-category">{user.category}</span>
                 </div>
-                <div className="play-button">
-                  <span>▶</span>
-                </div>
+                {/* Play button removed from here */}
               </button>
             </div>
           ))
