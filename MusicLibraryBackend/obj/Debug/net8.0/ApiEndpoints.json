@@ -48,6 +48,38 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "MusicLibraryBackend.Controllers.DashboardController",
+    "Method": "GetReportedSongsByArtist",
+    "RelativePath": "api/Dashboard/GetReportedSongsByArtist",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "artistId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MusicLibraryBackend.Controllers.DashboardController",
+    "Method": "GetSongPerformance",
+    "RelativePath": "api/Dashboard/GetSongPerformance",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "artistId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "database.Controllers.databaseController",
     "Method": "AddPlaylist",
     "RelativePath": "api/database/AddPlaylist",
