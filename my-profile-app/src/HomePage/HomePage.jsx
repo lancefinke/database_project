@@ -93,7 +93,7 @@ const HomePage = () => {
       })
       .then(data => {
         console.log("Raw data from API:", data); //  Log raw response here
-  
+        
         const formattedSongs = data.map(song => ({
           name: song.SongName,
           creator: song.Username,
