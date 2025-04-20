@@ -1,46 +1,42 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Play, Pause, SkipForward, SkipBack, Shuffle, Plus, Check, Volume2, Flag } from "lucide-react";
-import Editable from "./Editable"; // Import Editable component
-import PlaylistSelectionPopup from "./PlaylistSelectionPopup"; // Import the new component
+import Editable from "./Editable";
+import PlaylistSelectionPopup from "./PlaylistSelectionPopup";
+import ReactHowler from 'react-howler';
 import "./MusicPlayer.css";
-import ReactHowler from 'react-howler';  // Add this import
-import { useUserContext } from "../../LoginContext/UserContext"; 
 
-
-
-
-
-// Create FlagReport component for the reporting feature
+// Report form component with cleaner design
 const FlagReport = ({ onClose }) => {
   return (
     <>
       <div className="music-player-overlay"></div>
       <div className="music-player-flag-wrapper">
-        <label style={{margin:"0 auto", textAlign:"center"}}>REASON FOR REPORT</label>
-        <div className="editable-div-flag" style={{border:"3px solid white", borderRadius:"10px", width:"85%", margin:"auto", height:"60%"}}>
+        <h3 className="report-title">REPORT SONG</h3>
+        <div className="editable-div-flag">
           <Editable
             className="flag-editable"
             title="Enter the reason for the report"
             value=""
-            div_width="90%"
-            div_height="90%"
-            backgroundColor="#8E1616"
+            div_width="100%"
+            div_height="100%"
+            backgroundColor="#111"
             textColor="white"
             placeholder="Example: Racism, hate speech promotes violence, etc."
           />
         </div>
-        <button className="submit-report-btn">REPORT SONG</button>
-        <button onClick={onClose} className="cancel-report-btn">CANCEL</button>
+        <div className="report-buttons">
+          <button className="submit-report-btn">SUBMIT</button>
+          <button onClick={onClose} className="cancel-report-btn">CANCEL</button>
+        </div>
       </div>
     </>
   );
 };
 
-
-const MusicPlayer = ({ id ,songSrc, songImage,song, artist, pageName, playlist,duration}) => {
+const MusicPlayer = ({ songSrc, songImage, song, artist, pageName, playlist, duration }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isShuffling, setIsShuffling] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0); 
+  const [currentTime, setCurrentTime] = useState(0);
   const [volume, setVolume] = useState(0.5);
   const [songAdded, setSongAdded] = useState(false);
   const [prevPressed, setPrevPressed] = useState(false);
@@ -48,44 +44,30 @@ const MusicPlayer = ({ id ,songSrc, songImage,song, artist, pageName, playlist,d
   const [isReporting, setIsReporting] = useState(false);
   const [showReportForm, setShowReportForm] = useState(false);
   const [showPlaylistSelection, setShowPlaylistSelection] = useState(false);
-  const [availablePlaylists, setAvailablePlaylists] = useState([]);
   const playerRef = useRef(null);
- 
-  // Mock data for available playlists - in a real app, this would be passed as props or fetched
-  /*/const [availablePlaylists, setAvailablePlaylists] = useState([
+
+  // Mock data for available playlists
+  const [availablePlaylists, setAvailablePlaylists] = useState([
     { id: 1, name: "Chill Vibes", image: "https://via.placeholder.com/100" },
     { id: 2, name: "Workout Hits", image: "https://via.placeholder.com/100" },
     { id: 3, name: "Late Night", image: "https://via.placeholder.com/100" },
     { id: 4, name: "Vibe", image: "https://via.placeholder.com/100" },
     { id: 5, name: "Rap", image: "https://via.placeholder.com/100" }
-  ]);/*/
- 
-  // Current song information - would typically come from props
+  ]);
+
+  // Current song information
   const currentSong = {
-    
-    id: id,
+    id: 101,
     title: song || "Song Title",
     artist: artist || "Artist Name",
     image: songImage || "https://via.placeholder.com/150"
   };
-  console.log("THIS IS THE CURRENT SONG", currentSong);
 
-
-
-  const { user } = useUserContext(); // get user info
-  console.log("ALL USER RETRIEVED DATA:" , user);
-
-  // Apply page-specific class if provided - this will handle the styling
+  // Apply page-specific class if provided
   const playerClassName = `music-player-container ${pageName ? `music-player-${pageName}` : ""}`;
 
-
   const togglePlayPause = () => {
-    
-    if (!isPlaying) {
-      setIsPlaying(true);
-    } else {
-      setIsPlaying(false);
-    }
+    setIsPlaying(!isPlaying);
   };
 
   const formatDuration = (seconds) => {
@@ -100,9 +82,7 @@ const MusicPlayer = ({ id ,songSrc, songImage,song, artist, pageName, playlist,d
     setIsShuffling(!isShuffling);
   };
 
-
   const toggleAddToPlaylist = () => {
-    // Show the playlist selection popup instead of just toggling the state
     setShowPlaylistSelection(true);
   };
 
@@ -110,7 +90,7 @@ const MusicPlayer = ({ id ,songSrc, songImage,song, artist, pageName, playlist,d
     // Only fetch if user exists and has a UserID
     if (user && user.UserID) {
       // Fixed URL syntax - removed extra quote
-      fetch(`https://localhost:7152/api/database/GetUserPlaylists?UserID=${user.UserID}`)
+      fetch(`http://localhost:5142/api/database/GetUserPlaylists?UserID=${user.UserID}`)
         .then(response => {
           if (!response.ok) throw new Error("Failed to fetch playlists");
           return response.json();
@@ -142,7 +122,7 @@ const MusicPlayer = ({ id ,songSrc, songImage,song, artist, pageName, playlist,d
     });
     
     // Change to this URL parameter approach
-    fetch(`https://localhost:7152/api/database/AddSongPlaylist?SongID=${currentSong.id}&PlaylistID=${playlistId}`, {
+    fetch(`http://localhost:5142/api/database/AddSongPlaylist?SongID=${currentSong.id}&PlaylistID=${playlistId}`, {
       method: "POST"
     })
     .then(response => {
@@ -161,24 +141,20 @@ const MusicPlayer = ({ id ,songSrc, songImage,song, artist, pageName, playlist,d
     .catch(error => console.error("Error adding song:", error));
   };
 
-
   const toggleReporting = () => {
     setIsReporting(!isReporting);
     setShowReportForm(true);
   };
-
 
   const handleCloseReport = () => {
     setShowReportForm(false);
     setIsReporting(false);
   };
 
-
   const handlePrevious = () => {
     setPrevPressed(true);
     setTimeout(() => setPrevPressed(false), 200);
   };
-
 
   const handleNext = () => {
     setNextPressed(true);
@@ -187,7 +163,7 @@ const MusicPlayer = ({ id ,songSrc, songImage,song, artist, pageName, playlist,d
 
   useEffect(() => {
     setCurrentTime(0);
-    setIsPlaying(false); // Optional: auto-play when song changes: setIsPlaying(true)
+    setIsPlaying(false);
   }, [songSrc]);
 
   useEffect(() => {
@@ -203,15 +179,10 @@ const MusicPlayer = ({ id ,songSrc, songImage,song, artist, pageName, playlist,d
     return () => clearInterval(interval);
   }, [isPlaying]);
 
-  useEffect(() => {
-    console.log("Song source:", songSrc);
-    console.log("Is song source valid?", typeof songSrc === 'string' && songSrc.length > 0);
-  }, [songSrc]);
-
   return (
     <>
       {showReportForm && <FlagReport onClose={handleCloseReport} />}
-     
+      
       {showPlaylistSelection && (
         <PlaylistSelectionPopup
           onClose={() => setShowPlaylistSelection(false)}
@@ -220,152 +191,140 @@ const MusicPlayer = ({ id ,songSrc, songImage,song, artist, pageName, playlist,d
           currentSong={currentSong}
         />
       )}
-
-
-   
-     
+      
       <div className={playerClassName}>
-        {/* Left section with image and song info */}
+        {/* Song info section */}
         <div className="music-info-section">
-  <img
-      src = {songImage}
-    alt="music cover"
-    className="music-image"
-  />
-  <div className="music-info">
-    <p className="music-name" title={song || "Song Title"}>{song || "Song Title"}</p>
-    <p className="music-artist" title={artist || "Artist Name"}>{artist || "Artist Name"}</p>
-  </div>
-</div>
-
-
-        <div className="player-main-section">
-          <div className="progress-container">
-  <span className="current-time">{formatDuration(currentTime)}</span>
-  <input 
-    type="range" 
-    className="progress-bar" 
-    min="0" 
-    max={duration || 100} 
-    value={currentTime || 0} 
-    onChange={(e) => {
-      const newTime = parseFloat(e.target.value);
-      setCurrentTime(newTime);
-      if (playerRef.current) {
-        playerRef.current.seek(newTime);
-      }
-    }} 
-  />
-  <span className="total-duration">{formatDuration(duration)}</span>
-</div>
-
-
-          <div className="controls-container">
-            <div className="tooltip-container">
-              <button
-                onClick={toggleShuffle}
-                className={`control-button ${isShuffling ? "active" : ""}`}
-              >
-                <Shuffle size={20} color={isShuffling ? "black" : "white"} />
-              </button>
-              <span className="tooltip">Shuffle</span>
-            </div>
-           
-            <div className="tooltip-container">
-              <button
-                onClick={handlePrevious}
-                className={`control-button ${prevPressed ? "pressed" : ""}`}
-              >
-                <SkipBack size={20} color="white" />
-              </button>
-              <span className="tooltip">Previous</span>
-            </div>
-           
-            <div className="tooltip-container">
-              <button
-                onClick={togglePlayPause}
-                className="control-button play-button"
-              >
-                {isPlaying ? (
-                  <Pause size={24} color="white" />
-                ) : (
-                  <div className="play-icon-wrapper">
-                    <Play size={24} color="white" fill="white" />
-                  </div>
-                )}
-              </button>
-              <span className="tooltip">{isPlaying ? "Pause" : "Play"}</span>
-            </div>
-           
-            <div className="tooltip-container">
-              <button
-                onClick={handleNext}
-                className={`control-button ${nextPressed ? "pressed" : ""}`}
-              >
-                <SkipForward size={20} color="white" />
-              </button>
-              <span className="tooltip">Next</span>
-            </div>
-           
-            <div className="tooltip-container">
-              <button
-                onClick={toggleAddToPlaylist}
-                className={`control-button ${songAdded ? "added" : ""}`}
-              >
-                {songAdded ?
-                  <Check size={20} color="black" /> :
-                  <Plus size={20} color="white" />
-                }
-              </button>
-              <span className="tooltip">{songAdded ? "Added to Playlist" : "Add to Playlist"}</span>
-            </div>
-           
-            <div className="tooltip-container">
-              <button
-                onClick={toggleReporting}
-                className={`control-button ${isReporting ? "reporting" : ""}`}
-              >
-                <Flag size={20} color={isReporting ? "black" : "white"} />
-              </button>
-              <span className="tooltip">Report Song</span>
-            </div>
+          <img
+            src={songImage || "https://via.placeholder.com/150"}
+            alt="Album cover"
+            className="music-image"
+          />
+          <div className="music-info">
+            <p className="music-name">{song || "Song Title"}</p>
+            <p className="music-artist">{artist || "Artist Name"}</p>
           </div>
         </div>
-
-
-        <div className="volume-control tooltip-container">
-  <Volume2 size={20} color="white" />
-  <input
-    type="range"
-    min="0"
-    max="1"
-    step="0.01"
-    value={volume}
-    style={{ "--volume-percentage": `${volume * 100}%` }}
-    onChange={(e) => {
-      const newVolume = e.target.value;
-      setVolume(newVolume);
-      e.target.style.setProperty('--volume-percentage', `${newVolume * 100}%`);
-    }}
-  />
-  <span className="tooltip tooltip-volume">Volume</span>
-</div>
-
-   {songSrc && (
-        <ReactHowler
-          src={songSrc}
-          playing={isPlaying}
-          volume={volume}
-          ref={playerRef}
-          onPlay={() => console.log("Playing audio")}
-          onEnd={() => setIsPlaying(false)}
-          onLoadError={(err) => console.error("Failed to load audio:", err)}
-        />
-      )}
+        
+        {/* Main player section with progress bar and controls */}
+        <div className="player-main-section">
+          {/* Progress bar */}
+          <div className="progress-container">
+            <span className="current-time">{formatDuration(currentTime)}</span>
+            <div className="progress-wrapper">
+              <input 
+                type="range" 
+                className="progress-bar" 
+                min="0" 
+                max={duration || 100} 
+                value={currentTime || 0} 
+                onChange={(e) => {
+                  const newTime = parseFloat(e.target.value);
+                  setCurrentTime(newTime);
+                  if (playerRef.current) {
+                    playerRef.current.seek(newTime);
+                  }
+                }}
+              />
+            </div>
+            <span className="total-duration">{formatDuration(duration)}</span>
+          </div>
+          
+          {/* Controls */}
+          <div className="controls-container">
+            {/* Shuffle button */}
+            <button
+              onClick={toggleShuffle}
+              className={`control-button ${isShuffling ? "active" : ""}`}
+              aria-label="Shuffle"
+            >
+              <Shuffle size={18} />
+            </button>
+            
+            {/* Previous button */}
+            <button
+              onClick={handlePrevious}
+              className={`control-button ${prevPressed ? "pressed" : ""}`}
+              aria-label="Previous"
+            >
+              <SkipBack size={20} />
+            </button>
+            
+            {/* Play/Pause button - centered between skip buttons */}
+            <button
+              onClick={togglePlayPause}
+              className="control-button play-button"
+              aria-label={isPlaying ? "Pause" : "Play"}
+            >
+              {isPlaying ? (
+                <Pause size={24} />
+              ) : (
+                <Play size={24} />
+              )}
+            </button>
+            
+            {/* Next button */}
+            <button
+              onClick={handleNext}
+              className={`control-button ${nextPressed ? "pressed" : ""}`}
+              aria-label="Next"
+            >
+              <SkipForward size={20} />
+            </button>
+            
+            {/* Add to playlist button */}
+            <button
+              onClick={toggleAddToPlaylist}
+              className={`control-button ${songAdded ? "added" : ""}`}
+              aria-label="Add to Playlist"
+            >
+              {songAdded ? <Check size={18} /> : <Plus size={18} />}
+            </button>
+            
+            {/* Report button */}
+            <button
+              onClick={toggleReporting}
+              className={`control-button ${isReporting ? "reporting" : ""}`}
+              aria-label="Report"
+            >
+              <Flag size={18} />
+            </button>
+          </div>
+        </div>
+        
+        {/* Volume control */}
+        <div className="volume-control">
+          <Volume2 size={18} />
+          <div className="volume-slider-container">
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.01"
+              value={volume}
+              className="volume-slider"
+              onChange={(e) => {
+                const newVolume = e.target.value;
+                setVolume(newVolume);
+              }}
+              aria-label="Volume"
+            />
+          </div>
+        </div>
+        
+        {/* Audio player */}
+        {songSrc && (
+          <ReactHowler
+            src={songSrc}
+            playing={isPlaying}
+            volume={volume}
+            ref={playerRef}
+            onEnd={() => setIsPlaying(false)}
+          />
+        )}
       </div>
     </>
   );
 };
-
 
 export default MusicPlayer;

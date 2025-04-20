@@ -1,0 +1,242 @@
+/* SearchGenreSongList.css - Namespaced styling for the genre song list */
+
+.search-page .search-genre-list-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    color: white;
+    background-color: #121212;
+  }
+  
+  /* Back button styling */
+  .search-page .search-genre-list-container .back-button {
+    background-color: rgba(0, 0, 0, 0.3);
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    margin-bottom: 24px;
+    width: fit-content;
+    transition: background-color 0.2s ease;
+  }
+  
+  .search-page .search-genre-list-container .back-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  /* Genre header styling */
+  .search-page .search-genre-list-container .playlist-header {
+    margin-bottom: 30px;
+  }
+  
+  .search-page .search-genre-list-container .playlist-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .search-page .search-genre-list-container .playlist-title {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: white;
+  }
+  
+  .search-page .search-genre-list-container .song-count {
+    font-size: 0.9rem;
+    color: #b3b3b3;
+  }
+  
+  /* Songs table styling */
+  .search-page .search-genre-list-container .songs-table {
+    width: 100%;
+    margin-top: 20px;
+  }
+  
+  .search-page .search-genre-list-container .songs-table-header {
+    display: grid;
+    grid-template-columns: 60px minmax(300px, 4fr) minmax(150px, 2fr) 100px;
+    padding: 0 20px;
+    margin-bottom: 16px;
+    color: #b3b3b3;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 8px;
+  }
+  
+  /* Song rows styling */
+  .search-page .search-genre-list-container .songs-list .song-row {
+    display: grid;
+    grid-template-columns: 60px minmax(300px, 4fr) minmax(150px, 2fr) 100px;
+    padding: 12px 20px;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+    height: 110px;
+    margin-bottom: 8px;
+  }
+  
+  .search-page .search-genre-list-container .song-row:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  /* Song number cell styling */
+  .search-page .search-genre-list-container .song-number-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 30px;
+  }
+  
+  .search-page .search-genre-list-container .song-number {
+    color: #b3b3b3;
+    font-size: 0.95rem;
+  }
+  
+  .search-page .search-genre-list-container .play-button {
+    position: absolute;
+    background: transparent;
+    border: none;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+    color: white;
+  }
+  
+  .search-page .search-genre-list-container .song-row:hover .song-number {
+    opacity: 0;
+  }
+  
+  .search-page .search-genre-list-container .song-row:hover .play-button {
+    opacity: 1;
+  }
+  
+  /* Song title cell styling */
+  .search-page .search-genre-list-container .song-title-cell {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+  
+  .search-page .search-genre-list-container .song-title-container {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    overflow: hidden;
+    width: 100%;
+  }
+  
+  .search-page .search-genre-list-container .song-thumbnail {
+    width: 80px !important;
+    height: 80px !important;
+    border-radius: 6px;
+    object-fit: cover;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  .search-page .search-genre-list-container .song-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .search-page .search-genre-list-container .song-title {
+    font-size: 1.2rem !important;
+    font-weight: 500 !important;
+    line-height: 1.4 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    text-align: left !important;
+  }
+  
+  .search-page .search-genre-list-container .song-artist {
+    font-size: 0.9rem !important;
+    line-height: 1.2 !important;
+    color: #b3b3b3 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    text-align: left !important;
+  }
+  
+  .search-page .search-genre-list-container .song-title,
+  .search-page .search-genre-list-container .song-artist {
+    position: relative !important;
+    left: 0 !important;
+    width: 100% !important;
+  }
+  
+  /* Album column styling */
+  .search-page .search-genre-list-container .song-album {
+    font-size: 0.95rem;
+    color: #b3b3b3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: 10px;
+  }
+  
+  /* Duration column styling */
+  .search-page .search-genre-list-container .song-duration {
+    font-size: 0.95rem;
+    color: #b3b3b3;
+    text-align: right;
+  }
+  
+  /* Empty playlist message */
+  .search-page .search-genre-list-container .empty-playlist-message {
+    text-align: center;
+    padding: 40px 0;
+    color: #b3b3b3;
+    font-size: 1.1rem;
+  }
+  
+  /* Fix the title header padding to align with image + gap */
+  .search-page .search-genre-list-container .song-title-header {
+    padding-left: 96px;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .search-page .search-genre-list-container .songs-table-header,
+    .search-page .search-genre-list-container .song-row {
+      grid-template-columns: 60px minmax(200px, 4fr) minmax(100px, 1fr) 80px;
+    }
+  
+    .search-page .search-genre-list-container .song-thumbnail {
+      width: 50px !important;
+      height: 50px !important;
+    }
+  
+    .search-page .search-genre-list-container .song-title-container {
+      gap: 12px;
+    }
+  
+    .search-page .search-genre-list-container .playlist-title {
+      font-size: 2rem;
+    }
+  
+    .search-page .search-genre-list-container .song-title-header {
+      padding-left: 62px;
+    }
+  }
+  

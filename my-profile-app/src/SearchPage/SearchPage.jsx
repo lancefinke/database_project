@@ -1,17 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Play, Pause } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import "./SearchPage.css";
 import UserLink from "../UserLink/UserLink";
 import SearchGenreSongList from './SearchGenreSongList';
 
-const SearchResult = ({title, author, image, onPlaylistSelect}) => {
+const SearchResult = ({title, author, image, onPlaylistSelect, playlistId}) => {
+  const navigate = useNavigate();
+
   const handlePlaylistClick = () => {
     console.log(`Clicked on playlist: ${title}`);
-    if (onPlaylistSelect) {
-      onPlaylistSelect({
-        name: title,
-        creator: author
+    if (title === "Saved Songs") {
+      const token = localStorage.getItem('userToken');
+      if (token) {
+        try {
+          const payload = JSON.parse(atob(token.split('.')[1]));
+          const username = payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
+          navigate(`/profile/${username}/saved-songs`);
+        } catch (error) {
+          console.error("Error parsing JWT token:", error);
+        }
+      }
+    } else {
+      navigate(`/playlist/${playlistId}`, {
+        state: {
+          playlistTitle: title,
+          playlistImage: image,
+          playlistDescription: author
+        }
       });
     }
   }
@@ -25,7 +41,7 @@ const SearchResult = ({title, author, image, onPlaylistSelect}) => {
         <div className="result-content">
           <div className="result-info">
             <p className="result-title">{title}</p>
-            {author && <p className="result-author"><UserLink text={author} userName={author}/></p>}
+            <p className="result-author">{author}</p>
           </div>
         </div>
       </div>
@@ -41,10 +57,45 @@ const SearchPage = ({ onSongSelect }) => {
   const [genreSongs, setGenreSongs] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [showSearchResults, setShowSearchResults] = useState(false);
+  const [currentUsername, setCurrentUsername] = useState("");
+  const [playlists, setPlaylists] = useState([]);
   const navigate = useNavigate();
 
-  const API_URL = "https:localhost:7152/";
+  const API_URL = "https://coogmusic-g2dcaubsabgtfycy.centralus-01.azurewebsites.net/";
   
+  // Get current user's username and fetch their playlists
+  useEffect(() => {
+    const token = localStorage.getItem('userToken');
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        const username = payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
+        const userId = payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
+        if (username) {
+          setCurrentUsername(username);
+          // Fetch user's playlists
+          fetch(`${API_URL}api/database/GetUserPlaylists?userId=${userId}`)
+            .then(response => {
+              if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+              }
+              return response.json();
+            })
+            .then(data => {
+              console.log("Fetched playlists:", data);
+              setPlaylists(data);
+            })
+            .catch(error => {
+              console.error("Error fetching playlists:", error);
+              setPlaylists([]);
+            });
+        }
+      } catch (error) {
+        console.error("Error parsing JWT token:", error);
+      }
+    }
+  }, []);
+
   const handleSearch = (e) => {
     e.preventDefault();
     console.log("Searching for:", searchQuery);
@@ -163,12 +214,12 @@ const SearchPage = ({ onSongSelect }) => {
 
   // Sample data for search results
   const samplePlaylistResults = [
-    { 
+    {   
       id: 1, 
-      title: "Chill Vibes", 
-      author: "Various Artists",
+      title: "Saved Songs", 
+      author: currentUsername || "Your Library",
       duration: "5:20",
-      image: "https://i.scdn.co/image/ab67706f0000000291f511334d761a18891e3d5f" 
+      image: "https://blobcontainer2005.blob.core.windows.net/playlistimagecontainer/uploads/f7de905d-99cd-427f-a11c-27453f0e83a7.png"
     },
     { 
       id: 2, 
@@ -221,7 +272,7 @@ const SearchPage = ({ onSongSelect }) => {
       </div>
       
       {showSearchResults ? (
-        // SHOW SEARCH RESULTS VIEW
+        // Search results view
         <div className="searchpage-container">
           <SearchGenreSongList 
             songs={searchResults}
@@ -231,7 +282,7 @@ const SearchPage = ({ onSongSelect }) => {
           />
         </div>
       ) : showGenreSongs ? (
-        // SHOW GENRE SONGS LIST VIEW
+        // Genre songs list view
         <div className="searchpage-container">
           <SearchGenreSongList 
             songs={genreSongs}
@@ -244,26 +295,23 @@ const SearchPage = ({ onSongSelect }) => {
           />
         </div>
       ) : (
-        // SHOW NORMAL SEARCH RESULTS AND GENRE GRID
         <>
           <div className="section-container">
             <h2 className="search-results-title">Featured Playlists</h2>
             <div className="search-results">
-              {users.length > 0 ? (
-                users.map(user => <h1 key={user.Username} style={{color:"white"}}>{user.Username}</h1>)
-              ) : (
-                // Display sample results when no users are returned from API
-                samplePlaylistResults.map(result => (
+              {playlists.length > 0 ? (
+                playlists.map(playlist => (
                   <SearchResult 
-                    key={result.id}
-                    title={result.title}
-                    author={result.author}
-                    duration={result.duration}
-                    image={result.image}
-                    rating={result.rating}
-                    onSongSelect={onSongSelect}
+                    key={playlist.PlaylistID}
+                    title={playlist.Title}
+                    author={playlist.PlaylistDescription}
+                    image={playlist.PlaylistPicture}
+                    playlistId={playlist.PlaylistID}
+                    onPlaylistSelect={onSongSelect}
                   />
                 ))
+              ) : (
+                <p className="no-results">No playlists available</p>
               )}
             </div>
           </div>

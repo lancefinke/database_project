@@ -124,7 +124,7 @@ const UserPage = ({ onSongSelect }) => {
   });
 
   // API constants and user data
-  const API_URL = "https://localhost:7152";
+  const API_URL = "http://localhost:5142";
   const [currentUsername, setCurrentUsername] = useState("");
   const [currentUserId, setCurrentUserId] = useState("");
 
@@ -210,7 +210,9 @@ const UserPage = ({ onSongSelect }) => {
   const handleAddSongToAlbum = (albumId) => {
     console.log(`Adding song "${currentSongForAction.title}" to album ID: ${albumId}`);
     
-
+    // Here you would make an API call to add the song to the album
+    
+    // For now, just update the state locally
     setAlbums(prevAlbums => {
       return prevAlbums.map(album => {
         if (album.id === albumId) {
@@ -966,24 +968,14 @@ const UserPage = ({ onSongSelect }) => {
         <h1 className="profile-name">{userProfile.name}</h1>{/* Profile Name  */}
         {/*  Optional Pronouns */}
         <h3 style={{textAlign:"left",margin:"30px 0px -10px 0px"}}>Profile Description</h3>
-
-        <div 
-            className="profile-bio"
-            style={{
-                width: "100%",
-                minHeight: "100px",
-                color: "white",
-                padding: "12px",
-                backgroundColor: "transparent",
-                border: "1px solid #444",
-                borderRadius: "4px",
-                marginTop: "15px",
-                overflow: "auto",
-                wordBreak: "break-word"
-            }}
-        >
-            {userProfile.bio || "No bio available"}
-        </div>
+        <Editable
+            title="Edit Bio"
+            value={userProfile.bio}
+            div_width="100%"
+            div_height="200px"
+            backgroundColor="none"
+            textColor="white"
+            placeholder="Add a Description for your profile..."/>
         
         <div className="stats-container">
           <p className="follower-count">Followers: {userProfile.followers}</p>

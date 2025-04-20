@@ -18,7 +18,8 @@ const SongIcon = ({
   onPlayStatusChange,
   AverageRating,
   songID,
-  onRate
+  onRate,
+  onSaveSong
 }) => {
   const [showReport, setShowReport] = useState(false);
   const [rating, setRating] = useState("");
@@ -56,9 +57,19 @@ const SongIcon = ({
     setShowReport(false);
   };
 
-  const toggleAddToPlaylist = (e) => {
+  // Modified function to save song to user's saved songs playlist
+  const handleSaveSong = (e) => {
     e.stopPropagation();
-    setAddedToPlaylist(prev => !prev);
+    
+    // Call the passed in handler from parent
+    if (onSaveSong && songID) {
+      onSaveSong(songID);
+      // Toggle the visual state for user feedback
+      setAddedToPlaylist(prev => !prev);
+    } else {
+      // Fallback for older implementation
+      setAddedToPlaylist(prev => !prev);
+    }
   };
 
   const handleFlagClick = (e) => {
@@ -110,8 +121,8 @@ const SongIcon = ({
 
             <button
               className={`control-button add-button ${addedToPlaylist ? "added" : ""}`}
-              onClick={toggleAddToPlaylist}
-              title={addedToPlaylist ? "Remove from Playlist" : "Add to Playlist"}
+              onClick={handleSaveSong}
+              title={addedToPlaylist ? "Remove from Saved Songs" : "Save Song"}
             >
               {addedToPlaylist ? <Check size={28} color="white" /> : <Plus size={28} color="white" />}
             </button>
