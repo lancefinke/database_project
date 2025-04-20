@@ -182,11 +182,12 @@
 .playlist-song-list-container .song-text {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  justify-content: center; /* Changed from align-items: flex-start to justify-content: center */
   gap: 5px;
   width: 100%;
   overflow: hidden;
 }
+
 
 .playlist-song-list-container .song-title {
   font-size: 1.2rem;
@@ -197,7 +198,12 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-  padding-right: 1000px; /* Added padding to prevent text overflow */
+  padding-right: 0;
+  margin: 0;
+  line-height: 1.4;
+  text-align: left;
+  position: relative;
+  left: 0;
 }
 
 .playlist-song-list-container .song-artist {
@@ -208,6 +214,12 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+  margin: 0;
+  padding-left: 10px;
+  text-align: left;
+  line-height: 1.2;
+  position: relative;
+  left: 0;
 }
 
 /* Force our styles to override any conflicting styles */

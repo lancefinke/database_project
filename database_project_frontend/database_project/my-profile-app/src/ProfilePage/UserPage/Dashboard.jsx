@@ -15,7 +15,7 @@ const Dashboard = () => {
 
   const { user } = useUserContext(); 
   const artistID = user?.ArtistID;
-  const API_URL = "https://localhost:7152";
+  const API_URL = "http://localhost:5142";
 
   useEffect(() => {
     const fetchDashboardData = async () => {
