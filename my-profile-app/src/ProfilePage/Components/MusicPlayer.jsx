@@ -4,6 +4,8 @@ import Editable from "./Editable"; // Import Editable component
 import PlaylistSelectionPopup from "./PlaylistSelectionPopup"; // Import the new component
 import "./MusicPlayer.css";
 import ReactHowler from 'react-howler';  // Add this import
+import { useUserContext } from "../../LoginContext/UserContext"; 
+
 
 
 
@@ -35,7 +37,7 @@ const FlagReport = ({ onClose }) => {
 };
 
 
-const MusicPlayer = ({ songSrc, songImage,song, artist, pageName, playlist,duration}) => {
+const MusicPlayer = ({ id ,songSrc, songImage,song, artist, pageName, playlist,duration}) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isShuffling, setIsShuffling] = useState(false);
   const [currentTime, setCurrentTime] = useState(0); 
@@ -46,25 +48,32 @@ const MusicPlayer = ({ songSrc, songImage,song, artist, pageName, playlist,durat
   const [isReporting, setIsReporting] = useState(false);
   const [showReportForm, setShowReportForm] = useState(false);
   const [showPlaylistSelection, setShowPlaylistSelection] = useState(false);
+  const [availablePlaylists, setAvailablePlaylists] = useState([]);
   const playerRef = useRef(null);
  
   // Mock data for available playlists - in a real app, this would be passed as props or fetched
-  const [availablePlaylists, setAvailablePlaylists] = useState([
+  /*/const [availablePlaylists, setAvailablePlaylists] = useState([
     { id: 1, name: "Chill Vibes", image: "https://via.placeholder.com/100" },
     { id: 2, name: "Workout Hits", image: "https://via.placeholder.com/100" },
     { id: 3, name: "Late Night", image: "https://via.placeholder.com/100" },
     { id: 4, name: "Vibe", image: "https://via.placeholder.com/100" },
     { id: 5, name: "Rap", image: "https://via.placeholder.com/100" }
-  ]);
+  ]);/*/
  
   // Current song information - would typically come from props
   const currentSong = {
-    id: 101,
+    
+    id: id,
     title: song || "Song Title",
     artist: artist || "Artist Name",
-    image: "https://via.placeholder.com/150"
+    image: songImage || "https://via.placeholder.com/150"
   };
+  console.log("THIS IS THE CURRENT SONG", currentSong);
 
+
+
+  const { user } = useUserContext(); // get user info
+  console.log("ALL USER RETRIEVED DATA:" , user);
 
   // Apply page-specific class if provided - this will handle the styling
   const playerClassName = `music-player-container ${pageName ? `music-player-${pageName}` : ""}`;
@@ -96,21 +105,60 @@ const MusicPlayer = ({ songSrc, songImage,song, artist, pageName, playlist,durat
     // Show the playlist selection popup instead of just toggling the state
     setShowPlaylistSelection(true);
   };
+
+  useEffect(() => {
+    // Only fetch if user exists and has a UserID
+    if (user && user.UserID) {
+      // Fixed URL syntax - removed extra quote
+      fetch(`https://localhost:7152/api/database/GetUserPlaylists?UserID=${user.UserID}`)
+        .then(response => {
+          if (!response.ok) throw new Error("Failed to fetch playlists");
+          return response.json();
+        })
+        .then(data => {
+          console.log("Fetched playlists:", data);
+          
+          // Transform API response to match expected format
+          // Adjust the property names based on your actual API response
+          const formattedPlaylists = data.map(playlist => ({
+            id: playlist.PlaylistID || playlist.Id,
+            name: playlist.Title || playlist.Name,
+            image: playlist.PlaylistPicture || playlist.PlaylistImage || playlist.ImageURL || "https://via.placeholder.com/100"
+          }));
+          
+          setAvailablePlaylists(formattedPlaylists);
+        })
+        .catch(error => {
+          console.error("Error fetching playlists:", error);
+          // Keep mock data as fallback if API fails
+        });
+    }
+  }, [user]); // Add user as dependency
  
   const handleAddToPlaylist = (playlistId) => {
-    console.log(`Adding song to playlist with ID: ${playlistId}`);
-    // Here you would typically make an API call to add the song to the selected playlist
-   
-    // For now, just update the UI to show the song was added
-    setSongAdded(true);
-    setShowPlaylistSelection(false);
-   
-    // Optional: Show a success message or toast notification
-   
-    // Reset the "added" state after a few seconds for visual feedback
-    setTimeout(() => {
-      setSongAdded(false);
-    }, 3000);
+    console.log("Adding song to playlist:", { 
+      songId: currentSong.id, 
+      playlistId: playlistId 
+    });
+    
+    // Change to this URL parameter approach
+    fetch(`https://localhost:7152/api/database/AddSongPlaylist?SongID=${currentSong.id}&PlaylistID=${playlistId}`, {
+      method: "POST"
+    })
+    .then(response => {
+      if (!response.ok) throw new Error("Failed to add song");
+      return response.json();
+    })
+    .then(data => {
+      console.log("API response:", data);
+      setSongAdded(true);
+      setShowPlaylistSelection(false);
+      console.log("Song", currentSong.id, "was added to playlist", playlistId);
+      setTimeout(() => {
+        setSongAdded(false);
+      }, 3000);
+    })
+    .catch(error => console.error("Error adding song:", error));
   };
 
 

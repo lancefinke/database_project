@@ -199,8 +199,10 @@ const AppLayout = () => {
         </Routes>
       </main>
       
+      
       {showMusicPlayer && selectedSong && (
         <MusicPlayer
+          id = {selectedSong.id}
           duration = {selectedSong.duration}
           songSrc = {selectedSong.songSrc}
           songImage = {selectedSong.songImage}
