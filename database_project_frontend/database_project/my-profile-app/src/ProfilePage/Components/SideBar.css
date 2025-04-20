@@ -1,0 +1,391 @@
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh; /* Full height of the viewport */
+  width: 100px; /* Width of the sidebar */
+  background-color: #121212;
+  z-index: 1050;
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  align-items: center;
+  padding-top: 40px; /* Space at the top */
+}
+
+/* Sidebar width variations based on page */
+.sidebar.profile-page {
+  width: 120px;
+}
+
+.sidebar.full-width {
+  width: 120px;
+}
+
+.sidebar-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  align-items: center;
+  justify-content: flex-start; /* Start from the top */
+}
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  align-items: center;
+  width: 100%;
+}
+
+.sidebar-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  align-items: center;
+  width: 100%;
+  gap: 40px; /* Spacing between items */
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+  position: relative;
+}
+
+.sidebar-link {
+  color: white;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 1.125rem;
+  font-weight: 500;
+  padding: 12px 0;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  transition: all 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Enhanced hover effect with animation */
+.sidebar-link:hover {
+  color: #ffffff;
+  text-decoration: none;
+  transform: translateY(-2px);
+}
+
+.sidebar-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background-color: #ff0000;
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.sidebar-link:hover::after {
+  width: 60%;
+}
+
+.sidebar-link:active {
+  transform: translateY(1px);
+}
+
+/* Style for active links */
+.sidebar-link.active {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.sidebar-link.active::after {
+  width: 60%;
+  background-color: #ff0000;
+}
+
+/* Dropdown styling */
+.profile-dropdown {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-dropdown.active-parent > .sidebar-link {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.profile-dropdown.active-parent > .sidebar-link::after {
+  width: 60%;
+  background-color: #ffffff;
+}
+
+.dropdown-arrow {
+  margin-left: 8px;
+  font-size: 0.7rem;
+  transition: transform 0.3s ease;
+}
+
+/* Modified dropdown menu to appear below instead of to the right */
+.dropdown-menu {
+  position: absolute;
+  top: 100%; /* Position below the parent */
+  left: 0; /* Align with parent */
+  list-style: none;
+  padding: 8px 0;
+  margin-top: 8px; /* Space between button and dropdown */
+  background-color: #121212;
+  width: 120px; /* Same width as sidebar */
+  border-radius: 4px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px); /* Appear from above */
+  transition: all 0.3s ease;
+  z-index: 1060;
+}
+
+/* Show dropdown on hover for desktop */
+@media (min-width: 769px) {
+  .profile-dropdown:hover .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  
+  .profile-dropdown:hover .dropdown-arrow {
+    transform: rotate(180deg);
+  }
+}
+
+/* Show dropdown when open class is applied for mobile */
+.dropdown-menu.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Updated dropdown item styling to match sidebar links */
+.dropdown-item {
+  color: white;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 10px 0;
+  display: block;
+  text-align: center;
+  position: relative;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+/* Match the hover effect of sidebar links */
+.dropdown-item:hover {
+  color: #ffffff;
+  text-decoration: none;
+  transform: translateY(-2px);
+  background-color: transparent;
+}
+
+.dropdown-item::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background-color: #ff0000;
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.dropdown-item:hover::after {
+  width: 60%;
+}
+
+.dropdown-item:active {
+  transform: translateY(1px);
+}
+
+/* Match the active state of sidebar links */
+.dropdown-item.active {
+  color: #ffffff;
+  font-weight: 700;
+  background-color: transparent;
+}
+
+.dropdown-item.active::after {
+  width: 60%;
+  background-color: #ff0000;
+}
+
+/* Mobile menu toggle */
+.sidebar-toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  width: 30px;
+  height: 30px;
+  padding: 5px;
+  cursor: pointer;
+  position: relative;
+}
+
+.sidebar-icon,
+.sidebar-icon::before,
+.sidebar-icon::after {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 3px;
+  background-color: white;
+  position: absolute;
+  transition: all 0.3s ease;
+}
+
+.sidebar-icon {
+  top: 13px;
+}
+
+.sidebar-icon::before {
+  top: -8px;
+}
+
+.sidebar-icon::after {
+  bottom: -8px;
+}
+
+/* Logout button styling */
+.logout-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+  font-family: inherit;
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: white;
+  text-transform: uppercase;
+  margin-top: auto;
+  position: absolute;
+  bottom: 60px;
+  left: 0;
+  text-decoration: underline;
+}
+
+.logout-button:hover {
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 60px; /* Collapsed width on mobile */
+    padding-top: 20px;
+  }
+  
+  .sidebar-toggle {
+    display: block;
+    z-index: 1060;
+    margin-bottom: 20px;
+  }
+  
+  .sidebar-menu {
+    overflow: hidden;
+    max-width: 0;
+    transition: max-width 0.3s ease;
+  }
+  
+  .sidebar-menu.open {
+    max-width: 250px;
+    width: 250px;
+    position: fixed;
+    left: 60px;
+    top: 0;
+    height: 100vh;
+    background-color: #8E1616;
+    padding: 40px 0;
+  }
+  
+  .sidebar-list {
+    gap: 30px;
+  }
+  
+  /* When sidebar is collapsed, only show icons or abbreviated content */
+  .sidebar:not(.open) .sidebar-link {
+    font-size: 0;
+  }
+  
+  .sidebar:not(.open) .sidebar-link::before {
+    /* Show first letter as fallback when no icons */
+    content: attr(data-initial);
+    font-size: 1.25rem;
+  }
+  
+  /* Mobile dropdown styles - keep dropdown below parent instead of to the side */
+  .dropdown-menu {
+    position: static;
+    box-shadow: none;
+    background-color: rgba(0, 0, 0, 0.2);
+    width: 100%;
+    padding: 0;
+    margin-top: 5px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease, visibility 0s linear 0.3s;
+  }
+  
+  .dropdown-menu.open {
+    max-height: 200px;
+    transition: max-height 0.3s ease, opacity 0.3s ease, visibility 0s linear 0s;
+  }
+  
+  .dropdown-item {
+    padding: 8px 0;
+    margin: 0;
+  }
+  
+  .dropdown-item::after {
+    bottom: -2px;
+  }
+  
+  /* Make sure active styles remain consistent on mobile */
+  .dropdown-item.active,
+  .dropdown-item:hover {
+    background-color: transparent;
+  }
+  
+  .profile-dropdown {
+    width: 100%;
+  }
+  
+  .sidebar.profile-page {
+    width: 60px;
+  }
+  
+  .sidebar.profile-page.open {
+    width: 250px;
+  }
+}
+
+/* Add margin to your main content to prevent overlap */
+.sidebar ~ main, 
+.sidebar ~ .main-content {
+  margin-left: 120px; /* Same as sidebar width */
+}
+
+@media (max-width: 768px) {
+  .sidebar ~ main, 
+  .sidebar ~ .main-content {
+    margin-left: 60px; /* Same as collapsed sidebar width */
+  }
+}

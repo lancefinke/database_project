@@ -1,0 +1,448 @@
+/* Playlist Song List Container */
+.playlist-song-list-container {
+  position: fixed;
+  left: 120px; /* Match the sidebar width (from SideBar.css) */
+  top: 0;
+  width: calc(100% - 24rem - 210px); /* Total width minus profile card width minus sidebar width */
+  height: calc(100vh - 80px); /* Full height minus music player height */
+  padding: 20px 30px; /* Increased horizontal padding */
+  color: white;
+  background-color: #101010;
+  overflow-y: auto; /* This is the only scrollbar we want */
+}
+
+/* Playlist Header */
+.playlist-header {
+  margin-bottom: 30px; /* Increased bottom margin */
+  padding: 30px 0; /* Increased vertical padding */
+  position: sticky;
+  top: 0;
+  background-color: #101010;
+  z-index: 10;
+}
+
+.playlist-info {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  width: 100%;
+}
+.playlist-header-image {
+  width: 220px;
+  height: 220px;
+  min-width: 220px; /* Add min-width to prevent shrinking */
+  border-radius: 8px;
+  box-shadow: 0 4px 60px rgba(0, 0, 0, 0.5);
+  flex-shrink: 0;
+}
+
+.playlist-header-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Changed from flex-end to center */
+  padding-bottom: 0; /* Removed bottom padding */
+  height: auto; /* Let it size to content instead of fixed height */
+  max-width: calc(100% - 250px); /* Give it space to breathe */
+}
+
+.playlist-title {
+  font-size: 2.8rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  line-height: 1.2;
+  width: 100%;
+  /* Proper text truncation */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  /* Remove any positioning that could be causing issues */
+  margin-left: 0;
+  margin-right: 0;
+  position: static;
+  /* Add proper padding */
+  padding: 0;
+}
+.song-count {
+  color: #b3b3b3;
+  font-size: 1rem;
+  /* Keep it aligned with the title */
+  margin-left: 0;
+  margin-top: 0;
+}
+
+/* Songs Table */
+.songs-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px; /* Added margin-top */
+}
+
+.songs-table-header {
+  display: grid;
+  grid-template-columns: 60px 90px 4fr 2fr 80px 50px; /* Adjusted for new image size */
+  padding: 0 20px;
+  margin-bottom: 16px;
+  color: #b3b3b3;
+  font-weight: normal;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 12px;
+}
+
+.song-number-header {
+  text-align: center;
+}
+
+.song-info-header {
+  padding-left: 15px;
+  grid-column: 3; /* Explicitly set column position */
+}
+
+.song-row {
+  display: grid;
+  grid-template-columns: 60px 90px 4fr 2fr 80px 50px; /* Adjusted to match header columns */
+  padding: 12px 20px;
+  align-items: center;
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  margin-bottom: 8px;
+}
+
+.song-row:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.song-number-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 30px;
+}
+
+.song-number {
+  color: #b3b3b3;
+  font-size: 0.95rem; /* Increased from 0.9rem */
+}
+
+.play-button {
+  position: absolute;
+  background: transparent;
+  border: none;
+  width: 32px; /* Increased from 30px */
+  height: 32px; /* Increased from 30px */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.song-row:hover .song-number {
+  opacity: 0;
+}
+
+.song-row:hover .play-button {
+  opacity: 1;
+}
+
+/* Image cell */
+/* Renamed classes for song images to avoid conflicts */
+.playlist-song-thumbnail-cell {
+  width: 90px !important;
+  height: 90px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 0;
+  box-sizing: border-box;
+}
+
+.playlist-song-thumbnail {
+  width: 80px !important;
+  height: 80px !important;
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Song title and artist with improved specificity */
+.playlist-song-list-container .song-info {
+  display: flex;
+  align-items: center;
+  padding-left: 15px;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+.playlist-song-list-container .song-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.playlist-song-list-container .song-title {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: white;
+  display: block;
+  width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  padding-right: 1000px; /* Added padding to prevent text overflow */
+}
+
+.playlist-song-list-container .song-artist {
+  font-size: 0.90rem;
+  color: #b3b3b3;
+  display: block;
+  width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+/* Force our styles to override any conflicting styles */
+.playlist-song-list-container .song-genre {
+  color: #b3b3b3;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 10px;
+}
+
+.playlist-song-list-container .song-duration {
+  font-size: 0.95rem;
+  color: #b3b3b3;
+  text-align: right;
+}
+
+.genre-header {
+  padding: 30px 0;
+}
+
+.genre-info {
+  justify-content: flex-start;
+}
+
+.genre-header-text {
+  padding-left: 20px;
+  max-width: 100%;
+}
+
+.genre-header-text .playlist-title {
+  font-size: 2.8rem;
+  text-transform: capitalize;
+}
+
+
+.songs-table-header, .song-row {
+  display: grid;
+  grid-template-columns: 60px 90px 4fr 2fr 80px 50px;
+}
+
+.genre-song-list .song-actions {
+  visibility: hidden;
+}
+.genre-song-list .empty-playlist-message {
+  text-align: center;
+  padding: 40px 0;
+  color: #b3b3b3;
+  font-size: 1.1rem;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .song-text {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 3px; /* Increased from 2px */
+  }
+  
+  .song-artist {
+    padding-left: 0;
+  }
+  
+  .song-artist:before {
+    content: none;
+  }
+}
+
+/* REMOVED: Scrollable song list - this is what was causing the double scrollbar
+.songs-list {
+  max-height: calc(100vh - 450px);
+  overflow-y: auto;
+}
+*/
+
+/* Empty playlist message styling */
+.empty-playlist-message {
+  text-align: center;
+  padding: 40px 0;
+  color: #b3b3b3;
+  font-size: 1.1rem;
+}
+
+/* Custom scrollbar styling - REMOVED for songs-list, kept for container */
+.playlist-song-list-container::-webkit-scrollbar {
+  width: 10px; /* Increased from 8px */
+}
+
+.playlist-song-list-container::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.playlist-song-list-container::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 5px; /* Increased from 4px */
+}
+
+.playlist-song-list-container::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .playlist-song-list-container {
+    width: calc(100% - 120px);
+    left: 120px;
+  }
+}
+
+@media (max-width: 768px) {
+  .playlist-song-list-container .songs-table-header,
+  .playlist-song-list-container .song-row {
+    grid-template-columns: 60px 60px 3fr 1fr 80px 50px;
+  }
+  
+  .playlist-header-image {
+    width: 150px;
+    height: 150px;
+  }
+  
+  .playlist-title {
+    font-size: 2rem;
+  }
+  
+  .playlist-song-thumbnail {
+    width: 50px !important;
+    height: 50px !important;
+  }
+  
+  .playlist-song-thumbnail-cell {
+    width: 60px !important;
+    height: 60px !important;
+  }
+}
+
+.emergency-back-button {
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  color: white;
+  padding: 10px 18px; /* Increased from 8px 16px */
+  border-radius: 24px; /* Increased from 20px */
+  cursor: pointer;
+  margin-bottom: 20px; /* Increased from 16px */
+  transition: background-color 0.2s ease;
+}
+
+.emergency-back-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.emergency-back-button svg {
+  margin-right: 10px; /* Increased from 8px */
+}
+
+.back-text {
+  font-weight: 500;
+}
+
+/* Styles for the action menu */
+.song-actions {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.song-actions-button {
+  background: none;
+  border: none;
+  color: #b3b3b3;
+  cursor: pointer;
+  width: 36px; /* Increased from 32px */
+  height: 36px; /* Increased from 32px */
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  opacity: 0.4;
+}
+
+.song-row:hover .song-actions-button {
+  opacity: 1;
+}
+
+.song-actions-button:hover {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.song-actions-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 100;
+  background-color: #282828;
+  border-radius: 6px; /* Increased from 4px */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  min-width: 180px; /* Increased from 160px */
+  padding: 6px 0; /* Increased from 4px 0 */
+  animation: fadeIn 0.15s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.song-actions-menu-item {
+  padding: 14px 18px; /* Increased from 12px 16px */
+  color: #b3b3b3;
+  font-size: 15px; /* Increased from 14px */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.song-actions-menu-item:hover {
+  background-color: #333333;
+  color: white;
+}
+
+.song-actions-menu-item.delete {
+  color: #ff5252;
+}
+
+.song-actions-menu-item.delete:hover {
+  background-color: rgba(255, 82, 82, 0.1);
+}
+
+.song-actions-menu-item svg {
+  margin-right: 10px; /* Increased from 8px */
+}

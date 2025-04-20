@@ -1,0 +1,311 @@
+.signup-container {
+    height: 100vh;
+    width: 100%;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Ubuntu', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #121212;
+    color: white;
+    padding-top: 20px;
+}
+
+.back-button-container {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+}
+
+.back-button {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s ease;
+}
+
+.back-button:hover {
+    color: #b91d1d;
+}
+
+.signup-block {
+    width: 450px;
+    max-width: 95%;
+    padding: 25px;
+    background-color: #1a1a1a;
+    border: 1px solid #282828;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.signup-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #b91d1d;
+    text-align: center;
+}
+
+.text {
+    height: 40px;
+    width: 100%;
+    margin: 4px 0;
+    padding: 0 12px;
+    font-size: 14px;
+    border: 1px solid #727272;
+    border-radius: 4px;
+    background-color: #121212;
+    color: white;
+    box-sizing: border-box;
+}
+
+.text:focus, .text:hover {
+    outline: none;
+    border: 2px solid #b91d1d;
+    box-shadow: 0 0 0 2px rgba(185, 29, 29, 0.1);
+    border-radius: 4px;
+}
+
+.bio {
+    width: 100%;
+    height: 70px;
+    margin: 4px 0;
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 1px solid #727272;
+    border-radius: 4px;
+    background-color: #121212;
+    color: white;
+    box-sizing: border-box;
+    font-family: inherit;
+    resize: none;
+}
+
+.bio:focus, .bio:hover {
+    outline: none;
+    border: 2px solid #b91d1d;
+    box-shadow: 0 0 0 2px rgba(185, 29, 29, 0.1);
+    border-radius: 4px;
+}
+
+.roles {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin: 4px 0;
+}
+
+.roles label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+#artist:after, #listener:after {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    position: relative;
+    background-color: #121212;
+    content: '';
+    display: inline-block;
+    border: 2px solid #727272;
+    transition: all 0.2s ease;
+}
+
+#artist:checked:after, #listener:checked:after {
+    background-color: #b91d1d;
+    border-color: #b91d1d;
+}
+
+#artist:hover:after, #listener:hover:after {
+    border-color: #b91d1d;
+}
+
+.signup-btn {
+    width: 100%;
+    height: 40px;
+    margin: 8px 0;
+    color: white;
+    font-weight: 700;
+    font-size: 16px;
+    border: none;
+    background-color: #b91d1d;
+    border-radius: 24px;
+    transition: transform 0.1s ease, background-color 0.1s ease;
+    cursor: pointer;
+}
+
+.signup-btn:hover {
+    transform: scale(1.02);
+    background-color: #d42222;
+}
+
+label {
+    font-size: 13px;
+    font-weight: 600;
+    margin: 0;
+    display: block;
+    color: #fff;
+}
+
+.image-btn {
+    width: 100%;
+    height: 40px;
+    margin: 4px 0;
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    border: 1px solid #727272;
+    background-color: #121212;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.image-btn:hover {
+    border-color: #b91d1d;
+    background-color: rgba(185, 29, 29, 0.1);
+}
+
+.signup-img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 8px auto;
+    display: block;
+    border: 2px solid #282828;
+}
+
+.form-section {
+    border: 1px solid white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background-color: #8E1616;
+    width:30%;
+    margin: 5vh auto;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    gap:25px 0px;
+    min-width: 380px;
+}
+
+.signup-pfp {
+    width:80%;
+    display: none;
+}
+
+.song-file-btn,.song-image {
+    width:60%;
+    height: 50px;
+    margin-top:10px;
+    border: 4px solid white;
+    background-color: #101010;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    transition: transform 0.3s ease;
+    font-size: large;
+}
+
+.song-file-btn:hover {
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+.add-playlist-btn {
+    width: 70%;
+    height: 50px;
+    margin: 10px auto;
+}
+
+.add-song-btn {
+    width: 50%;
+    height: 60px;
+    margin: 20px auto;
+}
+
+.add-btn,.submit-report-btn {
+    color: white;
+    font-family: 'Roboto Mono', monospace;
+    border: 4px solid white;
+    background-color: #101010;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    transition: transform 0.3s ease;
+    font-size: large;
+}
+
+.add-btn:hover,.submit-report-btn:hover {
+    cursor: pointer;
+}
+
+.playlist-text {
+    font-size: medium;
+    transition: border-radius 0.35s ease;
+}
+
+.playlist-text:focus,.playlist-text:hover {
+    outline: none;
+    border: 4px solid white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+}
+
+h3,h2 {
+    text-align: center;
+    width: 90%;
+}
+
+#public:after,#private:after {
+    width: 12px;
+    height: 12px;
+    border-radius: 15px;
+    position: relative;
+    background-color: white;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 2px solid white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.4s ease;
+}
+
+#public:checked:after,#private:checked:after {
+    width: 12px;
+    height: 12px;
+    border-radius: 15px;
+    position: relative;
+    background-color: #101010;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 2px solid white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#public:hover:after,#private:hover:after {
+    transform: scale(1.15);
+    cursor: pointer;
+}
+
+.pfp-label {
+    height: 100px;
+    width: 180px;
+}

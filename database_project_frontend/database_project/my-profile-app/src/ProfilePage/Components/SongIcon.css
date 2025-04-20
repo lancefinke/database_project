@@ -1,0 +1,836 @@
+:root {
+  --background: #1D1616;
+  --brick: #101010;
+  --brick-hover: #343434;
+  --brick-active: #343434;
+  --slate: #54585a;
+}
+
+.song-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  padding: 10px;
+  margin: 10px;
+}
+
+/* Record styles */
+.record-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  position: relative;
+  width: 440px;
+  height: 440px;
+  transition: transform 0.1s ease;
+}
+
+.record-button:active {
+  transform: scale(0.95);
+}
+
+.record {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #2a2a2a 0%, #171717 100%);
+  position: relative;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5),
+              inset 0 -2px 2px rgba(255, 255, 255, 0.1),
+              inset 0 2px 2px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  transition: transform 0.1s ease;
+}
+
+.record:hover {
+  transform: scale(1.05);
+}
+
+/* Removed animation keyframes since we're using JavaScript for rotation */
+.record.playing {
+  transition: none; /* Remove transition for smoother animation */
+}
+
+.record-grooves {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  background: repeating-radial-gradient(
+      circle at 50% 50%,
+      transparent 0%,
+      transparent 2.8%,
+      rgba(255, 255, 255, 0.05) 3%,
+      transparent 3.2%
+  );
+}
+
+.record-inner {
+  position: absolute;
+  top: 15%;
+  left: 15%;
+  right: 15%;
+  bottom: 15%;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.record-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #333;
+}
+
+.record-label img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Song details below record */
+.song-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 100%;
+  max-width: 1000px;
+}
+
+.song-info {
+  text-align: center;
+  color: white;
+}
+
+.song-title {
+  font-size: 1.3rem;
+  font-weight: bold;
+  line-height: 1.6; /* Increased line height */              
+  padding: 0 10px;                
+  text-align: center;
+  width: 100%;                
+  margin: 0 auto 8px auto; /* Added bottom margin */               
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 400px;
+  min-height: 30px; /* Ensure enough height for descenders */
+}
+
+
+
+.flags {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin-top: 5px;
+}
+
+
+
+/* Controls */
+.song-controls {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin: 5px 0;
+}
+
+.control-button {
+  background-color: rgba(0, 0, 0, 0.3);
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.control-button:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+  transform: scale(1.1);
+}
+
+.control-button.added {
+  background-color: var(--brick-active);
+}
+
+/* Rating */
+.rating-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2px;
+}
+.rating-row {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* space between dropdown and text */
+}
+.rating-select {
+  height: 28px;
+  padding: 4px 8px;
+  font-size: 0.85rem;
+  width: 90px;
+}
+
+.average-rating {
+  font-size: 1rem;
+  color: white;
+  opacity: 0.85;
+}
+
+/* Home page specific styles */
+.home-song .record-button {
+  width: 460px;
+  height: 460px;
+}
+
+.home-song .record-label {
+  width: 170px;
+  height: 170px;
+}
+
+.center-song .record {
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.3),
+              0 4px 15px rgba(0, 0, 0, 0.5),
+              inset 0 -2px 2px rgba(255, 255, 255, 0.1),
+              inset 0 2px 2px rgba(0, 0, 0, 0.3);
+}
+
+.center-song .song-details {
+  width: 100% !important;
+  max-width: 500px !important; /* Match wider carousel item width */
+}
+.center-song .song-title {
+  font-size: 1.8rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 420px !important; /* Force a wider max-width */
+  width: 420px !important; /* Force a specific width */
+  padding: 0;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.center-song .song-creator {
+  font-size: 1.5rem;
+  color: white;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .record-button {
+      width: 220px;
+      height: 220px;
+  }
+  
+  .record-label {
+      width: 80px;
+      height: 80px;
+  }
+  
+  .home-song .record-button {
+      width: 240px;
+      height: 240px;
+  }
+  
+  .home-song .record-label {
+      width: 85px;
+      height: 85px;
+  }
+}
+
+
+.song-icon-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1100;
+}
+
+.song-icon {
+    width: 100%;
+    height: 60%;
+    overflow: hidden;
+}
+
+.song-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.content-container {
+    height: 30%;
+    padding: 8px 16px 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.song-info {
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    
+}
+
+.text-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0px; /* Remove gap between text elements */
+    width: 100%;
+}
+
+
+
+.song-creator {
+    font-size: 0.5rem; /* Reduce font size */
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.1; /* Reduce line height */
+    margin: 0 0 1px 0; /* Add a tiny bottom margin */
+    text-align: center;
+    width: 100%;
+}
+
+.song-duration {
+  font-size: 1.1rem !important;
+  opacity: 0.75;
+  margin: 2px 0;
+}
+
+
+.flag-icon-wrapper{
+    background-color: #8E1616;
+    position: relative;
+    bottom: 60%;
+    height:120px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: -50px;
+    padding: 10px 0px;
+}
+.flag-icon{
+    color:white;
+    margin: auto;
+}
+.flag-btn{
+    z-index: 10;
+    transition: background-color 0.3s ease;
+    width:15%;
+    margin:2px auto;
+    border-radius: 25px;
+}
+.flag-btn:hover{
+    background-color: rgba(165,165,165,0.4);
+}
+
+
+.flags {
+    display: flex;
+    justify-content: center;
+    gap: 2px; /* Reduce gap */
+    margin-top: 2px; /* Reduce margin */
+    flex-wrap: wrap;
+}
+
+.flag-item {
+  font-size: 1rem !important;
+  padding: 1px;
+  border-radius: 12px;
+}
+
+.controls-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    margin-top: 0px;
+    padding: 0;
+    max-width: 220px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.liked{
+    color:#bc1010;
+}
+.like-btn{
+    z-index: 20;
+}
+
+.control-icon {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px; /* Reduce padding */
+    transition: all 0.2s ease;
+    position: relative;
+    
+    z-index: 2;
+
+}
+
+.control-icon:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+    transform: scale(1.1);
+}
+
+.play-icon {
+    padding: 5px;
+}
+
+.song-post-wrapper:hover .play-icon {
+    transform: scale(1.1);
+}
+
+/* HOME PAGE STYLES */
+.home-song-wrapper {
+    width: 350px;
+    height: 375px;
+    transform: scale(1.8);
+    transition: all 0.4s ease;
+}
+
+
+/* CENTER SONG STYLES - for the song in the center of the carousel */
+.center-song-wrapper .song-title {
+  font-size: 1.6rem; /* Slightly smaller to fit better */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 460px !important; /* Increase max-width significantly */
+  width: auto !important; /* Let it size based on content with a max */
+  padding: 0 5px;
+  margin: 5px auto 10px auto; /* Add bottom margin for descenders */
+  box-sizing: border-box;
+  line-height: 1.8; /* Increase line height to prevent cutting off descenders */
+  min-height: 42px; /* Ensure enough height for descenders */
+}
+
+.center-song-wrapper .song-creator {
+    color: white; /* Changed from blue to white */
+    font-weight: bold;
+}
+
+.center-song-wrapper .flag-item {
+    font-size: 0.8rem;
+    padding: 3px 5px;
+    background-color: #1D1616;
+    border-radius: 8px;
+    line-height: 1.2;
+    margin: 0 2px; /* Adjusted margin for better spacing */
+}
+.rating-value {
+    text-align: center;
+    margin-top: 12px;
+    position: relative;
+    top: 5px;
+    color: white;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+
+
+.rating-select:focus {
+    width: 90px; /* Keep consistent width */
+}
+
+/* Fix the average rating positioning */
+.avg-rating {
+    width: auto; /* Adjust width to content */
+    color: white;
+    font-size: 50%;
+    text-align: center;
+    margin: 0; /* Remove margin */
+    position: static; /* Remove positioning */
+    line-height: 25px; /* Match height to select */
+}
+/* Update the rating wrapper to properly position both elements */
+.rating-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 1px; /* Increased space below the image to move it down */
+    gap: 70px; /* Reduced gap between elements */
+    position: relative;
+    z-index: 5;
+    padding: 0;
+}
+
+/* Media queries */
+@media (max-width: 400px) {
+    .content-container {
+        padding: 4px 14px;
+    }
+    
+    .song-title {
+        font-size: 0.8rem;
+    }
+    
+    .song-creator {
+        font-size: 0.65rem;
+    }
+    
+    .song-duration {
+        font-size: 0.55rem;
+    }
+    
+    .flag-item {
+        font-size: 0.5rem;
+    }
+    
+    .controls-container {
+        gap: 10px;
+        max-width: 180px;
+    }
+
+    .home-song-wrapper {
+        width: 250px;
+        height: 250px;
+    }
+}
+
+.song-icon-flag-wrapper {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    height: 350px;
+    background-color: #8E1616;
+    border-radius: 15px;
+    padding: 20px;
+    z-index: 1200;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    border: 4px solid white;
+    font-family: 'Roboto Mono', monospace;
+    color: white;
+  }
+  
+  /* Remove the old flag-icon-wrapper styling if not used elsewhere */
+  .flag-icon-wrapper {
+    /* This style is now replaced by song-icon-flag-wrapper */
+    display: none;
+  }
+  
+  .song-icon-flag-wrapper label {
+    font-weight: bold;
+    font-size: 1rem;
+    margin: 10px auto;
+    text-align: center;
+  }
+  
+  .editable-div-flag {
+    min-height: 180px;
+    margin-bottom: 15px;
+  }
+  
+  .report-buttons {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+    width: 100%;
+  }
+  
+  .submit-report-btn, .cancel-report-btn {
+    background-color: #101010;
+    color: white;
+    padding: 5px 10px;
+    border: 4px solid white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 45%;
+    text-align: center;
+  }
+  
+  .submit-report-btn:hover, .cancel-report-btn:hover {
+    background-color: #343434;
+  }
+  
+  .cancel-report-btn {
+    background-color: #333;
+  }
+  
+  /* Responsive design for the report form */
+  @media (max-width: 600px) {
+    .song-icon-flag-wrapper {
+      width: 90%;
+      height: auto;
+      min-height: 320px;
+    }
+    
+    .report-buttons {
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .submit-report-btn, .cancel-report-btn {
+      width: 80%;
+      margin: 5px 0;
+    }
+  }
+  .song-icon-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1100;
+  }
+
+  
+
+/* Fix the modal overlay to cover the entire screen */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 999999;
+    backdrop-filter: blur(3px);
+    /* Ensure it's always visible and covers everything */
+   
+  }
+  
+  /* Make sure the modal content has proper z-index and stays on top */
+  .modal-content {
+    background-color: #1e1e1e;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    color: white;
+    font-family: 'Roboto Mono', monospace;
+    animation: modal-appear 0.3s ease;
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+    z-index: 100000;
+    padding: 20px;
+  }
+  
+  /* Add a keyframe animation for modal appearance */
+  @keyframes modal-appear {
+    0% { opacity: 0; transform: scale(0.9); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  
+  /* Style the modal header */
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #343434;
+  }
+  
+  .modal-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+  
+  .close-button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+  }
+  
+  /* Better form styling */
+  .form-group {
+    margin-bottom: 20px;
+    width: 100%;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+  
+  .report-select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #343434;
+    background-color: #282828;
+    color: white;
+    font-family: "'Roboto Mono', monospace";
+    margin-bottom: 10px;
+  }
+  
+  .custom-reason-textarea {
+    width: 100%;
+    min-height: 100px;
+    background-color: #282828;
+    color: white;
+    border: 1px solid #343434;
+    border-radius: 5px;
+    padding: 10px;
+    resize: none;
+    outline: none;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 14px;
+    box-sizing: border-box;
+  }
+  
+  /* Make error messages more prominent */
+  .error-message {
+    color: #ff5252;
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: rgba(255, 82, 82, 0.1);
+    border-radius: 4px;
+    font-size: 0.9rem;
+  }
+  
+  /* Add success message styling */
+  .success-message {
+    color: #4CAF50;
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: rgba(76, 175, 80, 0.1);
+    border-radius: 4px;
+    font-size: 0.9rem;
+  }
+  
+  /* Style the form action buttons */
+  .form-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .cancel-btn {
+    background-color: transparent;
+    border: 1px solid white;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-family: 'Roboto Mono', monospace;
+    transition: all 0.3s ease;
+  }
+  
+  .cancel-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .submit-btn {
+    background-color: #8E1616;
+    border: 1px solid #8E1616;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-family: 'Roboto Mono', monospace;
+    transition: all 0.3s ease;
+  }
+  
+  .submit-btn:hover {
+    background-color: #a01c1c;
+  }
+  
+  .submit-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+  
+  /* Responsive design for smaller screens */
+  @media (max-width: 600px) {
+    .modal-content {
+      width: 95%;
+      padding: 15px;
+    }
+    
+    .form-actions {
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .cancel-btn, .submit-btn {
+      width: 100%;
+    }
+  }
+
+
+  .meta-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 150px;
+    margin: 0 0;
+    gap: 0;
+  }
+  
+  .meta-row .flags {
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+  }
+  
+  .meta-row .flag-item {
+    font-size: 0.9rem;
+    padding: 0px 0px;
+    white-space: nowrap;
+  }
+  
+  .meta-row .song-duration {
+    font-size: 1rem;
+    opacity: 0.75;
+    white-space: nowrap;
+  }

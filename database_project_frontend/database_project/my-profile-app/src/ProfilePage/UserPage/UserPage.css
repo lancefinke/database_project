@@ -1,0 +1,788 @@
+.app-container {
+  min-height: 100vh;
+  background-color: #101010;
+  position: relative;
+}
+
+.main-content {
+  padding-bottom: 100px; /* Add space for the music player */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Song list layout next to profile card */
+.song-list {
+  width: calc(100% - 28rem);
+  position: absolute;
+  top: 0px;
+  left: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 50%;
+  overflow-y: auto;
+}
+
+/* Container for the dice layout */
+.dice-five-layout {
+  position: relative;
+  width: 800px;  /* Increased width for larger icons */
+  height: 2000px; /* Increased height for larger icons */
+  margin: 20px auto;
+}
+
+/* Position each song in the dice pattern */
+.song-position-1 {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.song-position-2 {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.song-position-3 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.song-position-4 {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.song-position-5 {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+/* Styling for the song icons - LARGER SIZE */
+.dice-five-layout .song-post-wrapper {
+  width: 275px;  /* Increased size */
+  height: 275px; /* Increased size */
+}
+
+/* Override hover effects for corner positions */
+.song-position-1 .song-post-wrapper:hover,
+.song-position-2 .song-post-wrapper:hover,
+.song-position-4 .song-post-wrapper:hover,
+.song-position-3 .song-post-wrapper:hover,
+.song-position-5 .song-post-wrapper:hover {
+  transform: scale(1.1);
+}
+
+/* Custom scrollbar styling */
+.song-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.song-list::-webkit-scrollbar-track {
+  background: #101010;
+  border-radius: 10px;
+}
+
+.song-list::-webkit-scrollbar-thumb {
+  background: #343434;
+  border-radius: 10px;
+}
+
+.song-list::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+body {
+  background-color: #101010;
+  margin: 0;
+  font-family: 'Roboto Mono', monospace;
+  height: 100%;
+}
+
+/* Profile Layout */
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  background-color: #101010;
+  min-height: 100vh;
+}
+
+.profile-card {
+  background-color: #101010;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(to bottom, #343434 10%, #101010 30%);
+  padding: 1.5rem;
+  width: 24rem;
+  text-align: center;
+  min-height: 100vh;
+}
+
+/* Profile Elements */
+.profile-image {
+  width: 8rem;
+  height: 8rem;
+  border-radius: 50%;
+  margin-bottom: 50px;
+  margin-top: 40px;
+}
+
+.profile-name {
+  color: #ffffff;
+  margin-top: 10px;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.profile-bio {
+  color: #ffffff;
+  margin-top: 20px;
+  font-size: .9rem;
+  font-weight: bold;
+}
+
+/* Stats Section */
+.stats-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.stats-container p {
+  font-size: .9rem;
+  color: #999999;
+  font-weight: bold;
+  margin-top: 50px;
+}
+
+/* Follow Button */
+.follow-button {
+  font-family: 'Roboto Mono', monospace;
+  margin-top: 1.5rem;
+  background-color: #101010;
+  color: white;
+  padding: 0.3rem 1.4rem;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border: 1px solid white;
+}
+
+.follow-button:hover {
+  background-color: #343434;
+  transform: scale(1.02);
+  background-color: var(--brick-hover);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.follow-button:active {
+  transform: scale(0.98);
+  background-color: var(--brick-active);
+}
+
+.follow-button.following {
+  background-color: #343434;
+  transform: scale(1.02);
+  background-color: var(--brick-hover);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.follow-button.following:hover {
+  background-color: #343434;
+}
+
+/* Music Genre Section */
+.music-container {
+  display: flex;
+  flex-direction: row;
+  padding: 1rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+.music-genre {
+  font-family: 'Roboto Mono', monospace;
+  color: white;
+  font-size: .8rem;
+  background-color: #8E1616;
+  padding: 0.3rem 1.4rem;
+  border-radius: 50px;
+  cursor: pointer;
+  border: 1.5px solid white;
+  transition: background-color 0.3s ease;
+}
+
+.music-genre:hover {
+  background-color: #343434;
+  transform: scale(1.02);
+  background-color: var(--brick-hover);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.music-genre:active {
+  transform: scale(0.98);
+  background-color: var(--brick-active);
+}
+
+/* Playlist Section */
+.playlist-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .5rem;
+  margin-top: 0.5rem;
+  padding-left: 1.02rem; 
+  
+}
+
+.playlist-button {
+  background-color: #101010;
+  border: none;
+  border-radius: 10px;
+  padding: 0.75rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: left;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  width: 100%;
+  font-size: 24px;
+  position: relative;
+}
+
+.playlist-button:hover {
+  background-color: #343434;
+}
+
+.playlist-button:active {
+  transform: scale(0.98);
+  background-color: var(--brick-active);
+}
+
+.playlist-image {
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
+  margin-right: 1rem;
+}
+
+.playlist-name {
+  color: white;
+  font-family: 'Roboto Mono', monospace;
+}
+
+/* Genre dropdown styling */
+.genre-drop-down {
+  margin: 10px 0;
+  padding: 5px;
+  background-color: #101010;
+  color: white;
+  border: 1px solid #343434;
+  border-radius: 5px;
+  width: 80%;
+}
+
+.add-genre-btn {
+  background-color: #343434;
+}
+
+/* Section Header for Playlists and Albums */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 0.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Drag instructions */
+.drag-instructions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.drag-icon {
+  color: #ffffff;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.drag-text {
+  color: #999;
+  font-size: 0.8rem;
+}
+
+/* Drag handle */
+.drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+  cursor: grab;
+}
+
+.drag-dots {
+  color: #ffffff;
+  font-size: 1.5rem;
+  user-select: none;
+}
+
+/* Dragging state */
+.dragging {
+  opacity: 0.5;
+  background-color: #343434 !important;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* Prevent add buttons from being draggable */
+.add-btn {
+  cursor: pointer;
+}
+
+/* Add playlist button styling */
+.add-playlist-btn {
+  font-family: 'Roboto Mono', monospace;
+  background-color: #101010;
+  color: white;
+  padding: 0.3rem 1.4rem;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border: 1px solid white;
+}
+
+.add-playlist-btn:hover {
+  background-color: #343434;
+}
+
+/* Animation for drag and drop */
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(142, 22, 22, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(142, 22, 22, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(142, 22, 22, 0); }
+}
+
+/* Add these styles to your existing UserPage.css file */
+
+/* Selected playlist styling */
+.playlist-button.selected {
+  background-color: #343434;
+  position: relative;
+  border-left: 4px solid #8E1616;
+}
+
+.playlist-button.selected::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 4px;
+  background-color: #8E1616;
+}
+
+/* Add a back button to return from song list to playlists */
+.back-button {
+  background-color: transparent;
+  border: none;
+  color: #b3b3b3;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 10px 0;
+  margin-bottom: 20px;
+}
+
+.back-button:hover {
+  color: white;
+}
+
+.back-button svg {
+  margin-right: 5px;
+}
+
+/* Adjust the layout when song list is showing */
+.profile-container.showing-songs {
+  display: grid;
+  grid-template-columns: 24rem 1fr;
+}
+hr {
+  max-width: 21rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+/* Make the profile card fixed when scrolling through songs */
+@media (min-height: 800px) {
+  .profile-card {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+}
+
+/* Keeping the fixed position but adjusting placement for the styled-back-button */
+.styled-back-button {
+  position: fixed;
+  top: 20px;
+  left: 130px;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  color: #b3b3b3;
+  background-color: transparent;
+  border: none;
+  padding: 10px 0;
+  margin: 0;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: 'Roboto Mono', monospace;
+  transition: color 0.2s ease;
+}
+
+.styled-back-button:hover {
+  color: white;
+}
+
+.styled-back-button svg {
+  margin-right: 8px;
+}
+
+/* Hide the built-in back button in PlaylistSongList */
+.playlist-song-list-container .back-button {
+  display: none;
+}
+.playlist-header {
+  margin-top: 40px; /* Increase this value to add more space */
+}
+
+@media (min-height: 800px) {
+  .profile-card {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden; /* Add this to hide horizontal scrollbar */
+  }
+}
+
+/* Fix for horizontal scrollbar */
+.playlist-container {
+  max-width: 21rem; /* Slightly narrower than the container */
+}
+
+/* Fix for horizontal rule */
+hr {
+  max-width: 21rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Make sure content doesn't overflow */
+.profile-container {
+  overflow-x: hidden;
+}
+
+/* Prevent text overflow in playlist names */
+.playlist-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 14rem; /* Adjust based on your layout */
+}
+
+/* Add these styles to fix scrolling performance in song lists */
+
+/* Improve scrolling performance for all song lists */
+.playlist-song-list-container {
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  will-change: transform; /* Hardware acceleration hint */
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  z-index: 10; /* Higher z-index to ensure it captures scroll events */
+  padding-bottom: 60px; /* Extra space at the bottom */
+  scrollbar-gutter: stable; /* Prevents layout shift when scrollbar appears */
+  contain: content; /* Improves scrolling performance */
+
+}
+
+/* Apply smoother scrolling to the songs list */
+.songs-list {
+  overflow-y: auto;
+  height: calc(100vh - 160px); /* Adjust based on header height */
+  will-change: transform;
+  scrollbar-width: thin; /* For Firefox */
+}
+
+/* Ensure the songs table has proper sizing */
+.songs-table {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* Custom scrollbar styling for better performance */
+.playlist-song-list-container::-webkit-scrollbar,
+.songs-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.playlist-song-list-container::-webkit-scrollbar-track,
+.songs-list::-webkit-scrollbar-track {
+  background: #101010;
+  border-radius: 10px;
+}
+
+.playlist-song-list-container::-webkit-scrollbar-thumb,
+.songs-list::-webkit-scrollbar-thumb {
+  background: #343434;
+  border-radius: 10px;
+}
+
+.playlist-song-list-container::-webkit-scrollbar-thumb:hover,
+.songs-list::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Ensure content doesn't cause horizontal overflow */
+.profile-container {
+  overflow-x: hidden;
+}
+
+/* Add Song Button styling */
+.add-song-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 1.5rem 0;
+}
+
+.add-song-btn {
+  font-family: 'Roboto Mono', monospace;
+  background-color: #8E1616;
+  color: white;
+  padding: 0.5rem 1.5rem;
+  border-radius: 50px;
+  cursor: pointer;
+  border: 1.5px solid white;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.add-song-btn:hover {
+  background-color: #343434;
+  transform: scale(1.02);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.add-song-btn svg {
+  margin-right: 4px;
+}
+
+.add-song-btn:active {
+  transform: scale(0.96);
+  background-color: #721212;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  transition: all 0.1s ease;
+}
+
+/* Style for when the song add form is visible (if applicable) */
+.add-song-btn.active {
+  background-color: #343434;
+  transform: scale(1.02);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.delete-button {
+  background: none;
+  border: none;
+  color: #999;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin-left: auto;
+  opacity: 0;
+  transition: all 0.2s ease;
+}
+
+.playlist-button:hover .delete-button {
+  opacity: 1;
+}
+
+.delete-button:hover {
+  color: #ff5252;
+  background-color: rgba(255, 82, 82, 0.1);
+}
+
+.delete-button:active {
+  transform: scale(0.9);
+}
+
+/* Confirmation modal styling */
+.confirmation-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1200;
+}
+
+.confirmation-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 350px;
+  background-color: #343434;
+  border-radius: 12px;
+  padding: 20px;
+  z-index: 1300;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  font-family: 'Roboto', sans-serif;
+}
+
+.confirmation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 10px;
+}
+
+.confirmation-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.confirmation-close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  width: 25px;
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.confirmation-close-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.confirmation-content {
+  padding: 10px 0;
+}
+
+.confirmation-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.confirmation-cancel-btn, 
+.confirmation-confirm-btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.confirmation-cancel-btn {
+  background-color: transparent;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.confirmation-cancel-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.confirmation-confirm-btn {
+  background-color: #ff5252;
+  color: white;
+}
+
+.confirmation-confirm-btn:hover {
+  background-color: #ff3333;
+}
+
+/* Adjust layout to accommodate delete button */
+.playlist-button {
+  padding-right: 8px;
+  justify-content: space-between;
+}
+
+.playlist-button .playlist-name {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0 8px;
+}
+
+.playlist-button .playlist-image {
+  flex-shrink: 0;
+}
+
+/* Adjust drag handle */
+.drag-handle {
+  flex-shrink: 0;
+}
+
+.protected-item {
+  border-left: 3px solid #8E1616; /* Add a visual indicator */
+  cursor: pointer !important; /* Always use pointer cursor */
+  position: relative;
+}
+
+/* Remove the drag handle space for protected items */
+.protected-item .playlist-name {
+  margin-left: 10px;
+}
+
+/* Make sure protected items are always at the top */
+.playlist-container > div:first-of-type.playlist-button.protected-item {
+  order: -1;
+}
+
+/* Ensure ordering in flex container */
+.playlist-container {
+  display: flex;
+  flex-direction: column;
+}
