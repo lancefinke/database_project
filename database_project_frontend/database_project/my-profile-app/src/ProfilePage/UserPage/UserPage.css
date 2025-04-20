@@ -115,13 +115,12 @@ body {
 }
 
 .profile-card {
-  background-color: #101010;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  background: linear-gradient(to bottom, #343434 10%, #101010 30%);
-  padding: 1.5rem;
-  width: 24rem;
-  text-align: center;
-  min-height: 100vh;
+  /* … */
+  overflow: visible;    /* allow it to expand, no scrollbar */
+  position: sticky;
+  top: 0;
+  /* remove any fixed height so it just sizes to its content */
+  height: auto;
 }
 
 /* Profile Elements */
@@ -430,9 +429,11 @@ hr {
     position: sticky;
     top: 0;
     height: 100vh;
-    overflow-y: auto;
+    overflow-y: auto; /* Back to standard auto instead of overlay */
+    overflow-x: hidden;
   }
 }
+
 
 /* Keeping the fixed position but adjusting placement for the styled-back-button */
 .styled-back-button {
@@ -493,9 +494,11 @@ hr {
 
 /* Make sure content doesn't overflow */
 .profile-container {
-  overflow-x: hidden;
+  display: flex;
+  overflow: hidden; /* Remove container scrolling completely */
+  min-height: 100vh;
+  height: auto;
 }
-
 /* Prevent text overflow in playlist names */
 .playlist-name {
   white-space: nowrap;
@@ -558,6 +561,14 @@ hr {
   background: #555;
 }
 
+.playlist-song-list-container,
+.album-song-list-container,
+.genre-song-list-container {
+  flex: 1;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
 /* Ensure content doesn't cause horizontal overflow */
 .profile-container {
   overflow-x: hidden;

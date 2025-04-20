@@ -2,25 +2,51 @@
 .playlist-song-list-container {
   position: fixed;
   left: 120px; /* Match the sidebar width (from SideBar.css) */
-  top: 0;
+  top: 0; /* Keep at top of viewport */
   width: calc(100% - 24rem - 210px); /* Total width minus profile card width minus sidebar width */
-  height: calc(100vh - 80px); /* Full height minus music player height */
-  padding: 20px 30px; /* Increased horizontal padding */
+  height: 100vh; /* Full viewport height */
+  padding: 0 30px 20px 30px; /* Remove top padding, keep sides and bottom */
   color: white;
   background-color: #101010;
   overflow-y: auto; /* This is the only scrollbar we want */
 }
 
-/* Playlist Header */
 .playlist-header {
-  margin-bottom: 30px; /* Increased bottom margin */
-  padding: 30px 0; /* Increased vertical padding */
+  margin-bottom: 30px;
+  /* Add negative margin to counter the container's padding */
+  margin-top: -20px;
+  margin-left: -30px;
+  margin-right: -30px;
+  /* Add padding to compensate for the negative margins */
+  padding: 30px;
   position: sticky;
   top: 0;
   background-color: #101010;
   z-index: 10;
+  /* Remove fixed height that might be causing issues */
+  height: auto;
+  width: calc(100% + 60px); /* Width plus left and right padding */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
 
+.playlist-header::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 30px; /* Shadow gradient height */
+  background: linear-gradient(to bottom, #101010, rgba(16, 16, 16, 0));
+  pointer-events: none;
+  z-index: -1;
+}
+
+.songs-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  padding-top: 10px; /* Add padding at the top of the songs table */
+}
 .playlist-info {
   display: flex;
   align-items: center;

@@ -63,7 +63,7 @@ const UserPage = ({ onSongSelect }) => {
   
   // Create a default album ID for "My Songs"
   const defaultAlbumId = 0;
-  
+  const savedSongsName = "Saved Songs";
   // Confirmation modal state
   const [confirmModal, setConfirmModal] = useState({
     isOpen: false,
@@ -434,8 +434,17 @@ const UserPage = ({ onSongSelect }) => {
         }));
         
         console.log("Formatted playlists:", formattedPlaylists);
-        setPlaylists(formattedPlaylists);
-
+        
+        // Sort playlists to ensure protected ones are at the top
+        const protectedPlaylists = formattedPlaylists.filter(p => 
+          p.name === "Liked Songs" || p.name === savedSongsName
+        );
+        const regularPlaylists = formattedPlaylists.filter(p => 
+          p.name !== "Liked Songs" && p.name !== savedSongsName
+        );
+        
+        setPlaylists([...protectedPlaylists, ...regularPlaylists]);
+  
         // Get songs for first playlist
         if (formattedPlaylists[0]?.id) {
           GetPlaylistSongs(formattedPlaylists[0].id);
