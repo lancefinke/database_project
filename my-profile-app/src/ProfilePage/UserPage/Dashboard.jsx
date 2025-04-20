@@ -12,102 +12,63 @@ const Dashboard = () => {
     loading: true,
     error: null
   });
-
-  const { user } = useUserContext(); 
-  const artistID = user?.ArtistID;
-  const API_URL = "http://localhost:5142";
-
-  useEffect(() => {
-    const fetchDashboardData = async () => {
-      console.log("👤 User from context:", user);
-      console.log("🎨 Artist ID:", artistID);
-
-      if (!artistID || artistID === 0) {
-        console.warn("⚠️ ArtistID is missing or 0. Skipping fetch.");
-        setDashboardData(prev => ({
-          ...prev,
-          loading: false,
-          error: "Artist ID not available."
-        }));
-        return;
-      }
-
-      try {
-        const [overviewRes, songPerfRes,reportedRes] = await Promise.all([
-          fetch(`${API_URL}/api/Dashboard/GetArtistOverview?artistId=${artistID}`),
-          fetch(`${API_URL}/api/Dashboard/GetSongPerformance?artistId=${artistID}`),
-          fetch(`${API_URL}/api/Dashboard/GetReportedSongsByArtist?artistId=${artistID}`)
-        ]);
-
-        if (!overviewRes.ok || !songPerfRes.ok || !reportedRes.ok) throw new Error("One or more API calls failed");
-
-      const overview = await overviewRes.json();
-      const songs = await songPerfRes.json();
-      const reports = await reportedRes.json();
-
-        
-
-        const mappedSongs = songs.map(song => ({
-          SongID: song.SongID,
-          Title: song.Title,
-          Rating: song.Rating,
-          plays: song.Listens,
-          releaseDate: new Date(song.ReleaseDate).toLocaleDateString()
-        }));
-        const mappedReports = reports.map(report => ({
-          SongID: report.SongID,
-          Title: report.Title,
-          Reason: report.Reason,
-          ReportDate: new Date(report.ReportDate).toLocaleDateString(),
-          ReportStatus: report.ReportStatus
-        }));
-
-        setDashboardData(prev => ({
-          ...prev,
-          AverageRating: overview.AverageRating || 0,
-          TotalListens: overview.TotalListens || 0,
-          isReported: overview.TotalStrikes > 0,
-          allSongs: mappedSongs,
-          reportedSongs: mappedReports,
-          topSong: mappedSongs.length > 0 ? {
-            Title: mappedSongs[0].Title,
-            artist: user?.Username || "You",
-            plays: mappedSongs[0].plays
-          } : null,
-          loading: false,
-          error: null
-        }));
-
-      } catch (err) {
-        console.error(" Error fetching dashboard data:", err);
-        setDashboardData(prev => ({
-          ...prev,
-          loading: false,
-          error: "Failed to load dashboard data."
-        }));
-      }
-    };
-
-    fetchDashboardData();
-  }, [artistID, user]);
-  const getStatusLabel = (status) => {
-    switch (status) {
-      case 1: return "Pending";
-      case 2: return "Dismissed";
-      case 3: return "Banned";
-      default: return "Unknown";
-    }
-  };
-
-  const getStatusClass = (status) => {
-    switch (status) {
-      case 1: return "status-badge pending";
-      case 2: return "status-badge dismissed";
-      case 3: return "status-badge banned";
-      default: return "status-badge";
-    }
-  };
-
+   const { user } = useUserContext(); // get user info
+    const artistID = user?.ArtistID;
+    const API_URL = "http://localhost:5142";
+    useEffect(() => {
+      const fetchDashboardData = async () => {
+        console.log("Starting fetch for dashboard data...");
+        console.log("Artist ID from context:", artistID);
+  
+        if (!artistID) {
+          console.warn("ArtistID is not defined.");
+          setDashboardData(prev => ({
+            ...prev,
+            loading: false,
+            error: "Artist ID not available."
+          }));
+          return;
+        }
+  
+        try {
+          const response = await fetch(`${API_URL}/api/Dashboard/GetArtistOverview?artistId=${artistID}`, {
+            method: "GET",
+            headers: {
+              'Accept': 'application/json'
+            },
+            mode: 'cors'
+          });
+  
+          if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`API error ${response.status}: ${errorText}`);
+          }
+  
+          const result = await response.json();
+          console.log("Fetched artist overview result:", result);
+  
+          setDashboardData(prev => ({
+            ...prev,
+            averageRating: result.AverageRating || 0,
+            totalListeners: result.TotalListens || 0,
+            isReported: result.TotalStrikes > 0,
+            loading: false,
+            error: null
+          }));
+        } catch (error) {
+          console.error("Error fetching dashboard data:", error);
+          setDashboardData(prev => ({
+            ...prev,
+            loading: false,
+            error: 'Failed to load dashboard data. Please try again later.'
+          }));
+        }
+      };
+  
+      fetchDashboardData();
+    }, [artistID]);
+    
+  
   if (dashboardData.loading) {
     return <div className="dashboard-loading">Loading dashboard data...</div>;
   }

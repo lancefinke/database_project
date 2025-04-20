@@ -86,15 +86,59 @@ const MusicPlayer = ({ songSrc, songImage, song, artist, pageName, playlist, dur
     setShowPlaylistSelection(true);
   };
 
+  useEffect(() => {
+    // Only fetch if user exists and has a UserID
+    if (user && user.UserID) {
+      // Fixed URL syntax - removed extra quote
+      fetch(`http://localhost:5142/api/database/GetUserPlaylists?UserID=${user.UserID}`)
+        .then(response => {
+          if (!response.ok) throw new Error("Failed to fetch playlists");
+          return response.json();
+        })
+        .then(data => {
+          console.log("Fetched playlists:", data);
+          
+          // Transform API response to match expected format
+          // Adjust the property names based on your actual API response
+          const formattedPlaylists = data.map(playlist => ({
+            id: playlist.PlaylistID || playlist.Id,
+            name: playlist.Title || playlist.Name,
+            image: playlist.PlaylistPicture || playlist.PlaylistImage || playlist.ImageURL || "https://via.placeholder.com/100"
+          }));
+          
+          setAvailablePlaylists(formattedPlaylists);
+        })
+        .catch(error => {
+          console.error("Error fetching playlists:", error);
+          // Keep mock data as fallback if API fails
+        });
+    }
+  }, [user]); // Add user as dependency
+ 
   const handleAddToPlaylist = (playlistId) => {
-    console.log(`Adding song to playlist with ID: ${playlistId}`);
+    console.log("Adding song to playlist:", { 
+      songId: currentSong.id, 
+      playlistId: playlistId 
+    });
     
-    setSongAdded(true);
-    setShowPlaylistSelection(false);
-    
-    setTimeout(() => {
-      setSongAdded(false);
-    }, 3000);
+    // Change to this URL parameter approach
+    fetch(`http://localhost:5142/api/database/AddSongPlaylist?SongID=${currentSong.id}&PlaylistID=${playlistId}`, {
+      method: "POST"
+    })
+    .then(response => {
+      if (!response.ok) throw new Error("Failed to add song");
+      return response.json();
+    })
+    .then(data => {
+      console.log("API response:", data);
+      setSongAdded(true);
+      setShowPlaylistSelection(false);
+      console.log("Song", currentSong.id, "was added to playlist", playlistId);
+      setTimeout(() => {
+        setSongAdded(false);
+      }, 3000);
+    })
+    .catch(error => console.error("Error adding song:", error));
   };
 
   const toggleReporting = () => {
