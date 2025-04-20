@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "xxVrID88to4=",
+  "dgSpecHash": "0uhmPB2sQ24=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Jose\\Desktop\\CombinedFrontEndBackEnd\\database_project\\MusicLibraryBackend\\MusicLibraryBackend.csproj",
+  "projectFilePath": "C:\\Users\\Jose\\Desktop\\NewCombinedFullStack\\database_project\\MusicLibraryBackend\\MusicLibraryBackend.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Jose\\.nuget\\packages\\azure.core\\1.44.1\\azure.core.1.44.1.nupkg.sha512",
     "C:\\Users\\Jose\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Jose\\Desktop\\CombinedFrontEndBackEnd\\database_project\\MusicLibraryBackend\\MusicLibraryBackend.csproj": {}
+    "C:\\Users\\Jose\\Desktop\\NewCombinedFullStack\\database_project\\MusicLibraryBackend\\MusicLibraryBackend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Jose\\Desktop\\CombinedFrontEndBackEnd\\database_project\\MusicLibraryBackend\\MusicLibraryBackend.csproj": {
+    "C:\\Users\\Jose\\Desktop\\NewCombinedFullStack\\database_project\\MusicLibraryBackend\\MusicLibraryBackend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Jose\\Desktop\\CombinedFrontEndBackEnd\\database_project\\MusicLibraryBackend\\MusicLibraryBackend.csproj",
+        "projectUniqueName": "C:\\Users\\Jose\\Desktop\\NewCombinedFullStack\\database_project\\MusicLibraryBackend\\MusicLibraryBackend.csproj",
         "projectName": "MusicLibraryBackend",
-        "projectPath": "C:\\Users\\Jose\\Desktop\\CombinedFrontEndBackEnd\\database_project\\MusicLibraryBackend\\MusicLibraryBackend.csproj",
+        "projectPath": "C:\\Users\\Jose\\Desktop\\NewCombinedFullStack\\database_project\\MusicLibraryBackend\\MusicLibraryBackend.csproj",
         "packagesPath": "C:\\Users\\Jose\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Jose\\Desktop\\CombinedFrontEndBackEnd\\database_project\\MusicLibraryBackend\\obj\\",
+        "outputPath": "C:\\Users\\Jose\\Desktop\\NewCombinedFullStack\\database_project\\MusicLibraryBackend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Jose\\AppData\\Roaming\\NuGet\\NuGet.Config",
