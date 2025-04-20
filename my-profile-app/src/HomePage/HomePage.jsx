@@ -124,13 +124,64 @@ const HomePage = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ songId: songID, userId, rating })
       });
+      
+      if (!response.ok) {
+        throw new Error("Failed to post rating");
+      }
+      
       const data = await response.json();
-      setSongs(prev => prev.map(song => song.songID === songID ? { ...song, totalRatings: data.AverageRating } : song));
+      console.log("Rating response:", data); // Keep this to see the full response
+      
+      // Check what the property is actually called
+      const newRating = data.AverageRating || data.averageRating || data.average_rating || null;
+      console.log("New rating value:", newRating);
+      
+      if (newRating !== null) {
+        setSongs(prev => prev.map(song => 
+          song.songID === songID ? { ...song, totalRatings: newRating } : song
+        ));
+      } else {
+        console.error("Could not find rating value in response:", data);
+      }
     } catch (err) {
       console.error("Rating error:", err);
     }
   };
 
+  const handleSaveSong = async (songID) => {
+    if (!userId) {
+      // If user is not logged in, show a message or redirect to login
+      alert("Please log in to save songs");
+      return;
+    }
+  
+    try {
+      // Make an API call to save the song to the user's "Saved Songs" playlist
+      const response = await fetch(`${API_URL}/api/database/SaveSong`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          userId: userId,
+          songId: songID 
+        })
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to save song");
+      }
+  
+      // If successful, you could show a notification or update UI
+      console.log(`Song ${songID} saved successfully`);
+      
+      // Optional: Show a notification
+      // toast.success("Song saved to your library");
+      
+    } catch (err) {
+      console.error("Error saving song:", err);
+      // Optional: Show an error notification
+      // toast.error("Could not save song. Please try again.");
+    }
+  };
   return (
     <div className="home-container">
       <div className="carousel-container">
@@ -155,6 +206,8 @@ const HomePage = () => {
     }
   }}
   onRate={handleRateSong}
+  onSaveSong={handleSaveSong}
+  AverageRating={song.totalRatings} // Add this line to pass the rating
 />
             </div>
           ))}
