@@ -4,60 +4,7 @@ import SongIcon from "../ProfilePage/Components/SongIcon";
 import { useUserContext } from "../LoginContext/UserContext";
 import "./HomePage.css";
 
-// Sample songs for the home page
-/*/const homeSongs = [
-  { 
-    name: "Lost in the Echo",
-    creator: "Linkin Park",
-    duration: "3:31",
-    flags: ["Rock", "Popular"],
-    iconImage: "/images/lost-in-the-echo.jpg",
-    songSrc:"./FF Violin II - Clash On The Big Bridge By TAMUSIC.mp3",
-  },
-  {
-    name: "Blinding Lights",
-    creator: "The Weeknd",
-    duration: "3:20",
-    flags: ["Pop", "Hit"],
-    iconImage: "/images/blinding-lights.jpg",
-    songSrc:"./FF Violin II - Clash On The Big Bridge By TAMUSIC.mp3",
-  },
-  {
-    name: "Bohemian Rhapsody",
-    creator: "Queen",
-    duration: "5:55",
-    flags: ["Rock"],
-    iconImage: "/images/bohemian-rhapsody.jpg",
-    songSrc:"./FF Violin II - Clash On The Big Bridge By TAMUSIC.mp3",
-  },
-  {
-    name: "Shape of You",
-    creator: "Ed Sheeran",
-    duration: "3:53",
-    flags: ["Pop", "Dance"],
-    iconImage: "/images/shape-of-you.jpg",
-    songSrc:"./FF Violin II - Clash On The Big Bridge By TAMUSIC.mp3",
-  },
-  {
-    name: "Starboy",
-    creator: "The Weeknd",
-    duration: "3:50",
-    flags: ["Pop", "R&B"],
-    iconImage: "/images/starboy.jpg",
-    songSrc:"./FF Violin II - Clash On The Big Bridge By TAMUSIC.mp3",
-  },
-  {
-    name: "Uptown Funk",
-    creator: "Mark Ronson ft. Bruno Mars",
-    duration: "4:30",
-    flags: ["Funk", "Dance"],
-    iconImage: "/images/uptown-funk.jpg",
-    songSrc:"./FF Violin II - Clash On The Big Bridge By TAMUSIC.mp3",
-  }
-];
-/*/
-
-const API_URL = "https://localhost:7152"; // Replace with your actual API URL //remove s if needed if songs do not show up in Explore page
+const API_URL = "http://localhost:5142";
 
 const formatDuration = (duration) => {
   const minutes = Math.floor(duration / 60);

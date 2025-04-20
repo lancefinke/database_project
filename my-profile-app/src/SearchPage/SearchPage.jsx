@@ -43,7 +43,7 @@ const SearchPage = ({ onSongSelect }) => {
   const [showSearchResults, setShowSearchResults] = useState(false);
   const navigate = useNavigate();
 
-  const API_URL = "https:localhost:7152/";
+  const API_URL = "https://coogmusic-g2dcaubsabgtfycy.centralus-01.azurewebsites.net/";
   
   const handleSearch = (e) => {
     e.preventDefault();

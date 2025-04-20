@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useUserContext } from "../../LoginContext/UserContext"; 
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -13,63 +12,116 @@ const Dashboard = () => {
     loading: true,
     error: null
   });
-   const { user } = useUserContext(); // get user info
-    const artistID = user?.ArtistID;
-    const API_URL = "https://localhost:7152";
-    useEffect(() => {
-      const fetchDashboardData = async () => {
-        console.log("Starting fetch for dashboard data...");
-        console.log("Artist ID from context:", artistID);
-  
-        if (!artistID) {
-          console.warn("ArtistID is not defined.");
-          setDashboardData(prev => ({
-            ...prev,
-            loading: false,
-            error: "Artist ID not available."
-          }));
-          return;
-        }
-  
-        try {
-          const response = await fetch(`${API_URL}/api/Dashboard/GetArtistOverview?artistId=${artistID}`, {
-            method: "GET",
-            headers: {
-              'Accept': 'application/json'
+
+  useEffect(() => {
+    // Simulate API fetch with mock data
+    const fetchDashboardData = async () => {
+      try {
+        // Simulate API delay
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // Mock data for testing until your API is ready
+        const mockData = {
+          topSong: {
+            title: "Example Song",
+            artist: "Example Artist",
+            plays: 142
+          },
+          averageRating: 4.2,
+          isReported: false,
+          totalListeners: 328,
+          reportedSongs: [
+            { 
+              id: 1, 
+              title: "Controversial Song", 
+              reportReason: "Inappropriate content", 
+              reportDate: "2025-03-15" 
             },
-            mode: 'cors'
-          });
-  
-          if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`API error ${response.status}: ${errorText}`);
+            { 
+              id: 2, 
+              title: "Copyright Issue", 
+              reportReason: "Copyright violation", 
+              reportDate: "2025-04-02" 
+            }
+          ],
+          allSongs: [
+            {
+              id: 101,
+              title: "Summer Vibes",
+              plays: 142,
+              rating: 4.7,
+              releaseDate: "2024-06-15"
+            },
+            {
+              id: 102,
+              title: "Midnight Drive",
+              plays: 98,
+              rating: 4.3,
+              releaseDate: "2024-08-22"
+            },
+            {
+              id: 103,
+              title: "Lost in Thought",
+              plays: 65,
+              rating: 3.9,
+              releaseDate: "2024-10-05"
+            },
+            {
+              id: 104,
+              title: "New Beginnings",
+              plays: 112,
+              rating: 4.5,
+              releaseDate: "2025-01-10"
+            },
+            {
+              id: 105,
+              title: "Rainy Day",
+              plays: 78,
+              rating: 4.1,
+              releaseDate: "2025-02-28"
+            }
+          ]
+        };
+        
+        setDashboardData({
+          ...mockData,
+          loading: false,
+          error: null
+        });
+        
+        /* Uncomment this when your API is ready
+        const token = localStorage.getItem('userToken');
+        
+        const response = await axios.get('/api/user/dashboard', {
+          headers: {
+            Authorization: `Bearer ${token}`
           }
-  
-          const result = await response.json();
-          console.log("Fetched artist overview result:", result);
-  
-          setDashboardData(prev => ({
-            ...prev,
-            averageRating: result.AverageRating || 0,
-            totalListeners: result.TotalListens || 0,
-            isReported: result.TotalStrikes > 0,
-            loading: false,
-            error: null
-          }));
-        } catch (error) {
-          console.error("Error fetching dashboard data:", error);
-          setDashboardData(prev => ({
-            ...prev,
-            loading: false,
-            error: 'Failed to load dashboard data. Please try again later.'
-          }));
-        }
-      };
-  
-      fetchDashboardData();
-    }, [artistID]);
-    
-  
+        });
+        
+        setDashboardData({
+          topSong: response.data.topSong,
+          averageRating: response.data.averageRating,
+          isReported: response.data.isReported,
+          totalListeners: response.data.totalListeners,
+          reportedSongs: response.data.reportedSongs || [],
+          allSongs: response.data.allSongs || [],
+          loading: false,
+          error: null
+        });
+        */
+      } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+        setDashboardData(prev => ({
+          ...prev,
+          loading: false,
+          error: 'Failed to load dashboard data. Please try again later.'
+        }));
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
+
   if (dashboardData.loading) {
     return <div className="dashboard-loading">Loading dashboard data...</div>;
   }

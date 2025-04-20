@@ -14,7 +14,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  height: 100px;
+  height: 80px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -31,11 +31,12 @@
   padding: 0.5rem;
   border-radius: 8px;
   overflow: hidden;
+  height: 40px; /* Match the height of the progress area */
 }
 
 .music-image {
-  width: 50px;
-  height: 50px;
+  width: 34px;
+  height: 34px;
   border-radius: 6px;
   object-fit: cover;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
@@ -85,7 +86,6 @@
   align-items: center;
   gap: 0.75rem;
   width: 100%;
-  ;
 }
 
 .progress-wrapper {
@@ -171,12 +171,8 @@
   justify-content: center;
   width: 100%;
   padding: 0 2rem;
-  position: relative; /* Add this */
 }
-.control-button {
-  margin: 0 8px;
-  position: relative; /* Add this */
-}
+
 .control-group {
   display: flex;
   align-items: center;
@@ -204,8 +200,6 @@
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
-  width: 32px !important; /* Increased from 32px */
-  height: 32px !important; /* Increased from 32px */
 }
 
 .control-button:hover {
@@ -214,26 +208,16 @@
 }
 
 .play-button {
-  background: rgba(255, 255, 255, 0.2); /* Increase contrast */
+  background: rgba(255, 255, 255, 0.15);
   height: 46px;
   width: 46px;
   border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.2); /* Make border more visible */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4); /* Stronger shadow for depth */
-  position: relative;
-  z-index: 100; /* Higher z-index to ensure it's on top */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white; /* Ensure icon color is white */
-  margin: 0 12px; /* Add more horizontal margin to separate from other buttons */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .play-button svg {
-  color: white;
-  height: 24px;
-  width: 24px;
-  margin-left: 2px; /* Slight offset for play icon */
+  margin-left: 2px;
 }
 
 .play-button:hover {
@@ -265,7 +249,6 @@
   gap: 0.75rem;
   width: 110px;
   flex-shrink: 0;
-  margin-bottom: 40px;
 }
 
 .volume-slider-container {
@@ -424,11 +407,77 @@
   border-color: #f44336;
 }
 
-.submit-report-btn:hover {
-  background-color: #d32f2f;
+.control-button.rated {
+  color: #FFC107;
 }
 
-.cancel-report-btn:hover {
+/* Rating dropdown styling */
+.rating-dropdown {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  background-color: #111;
+  border-radius: 12px;
+  padding: 20px;
+  z-index: 1200;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.rating-title {
+  font-weight: bold;
+  font-size: 1rem;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.rating-stars {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+.rating-star {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.rating-star span {
+  margin-top: 5px;
+  font-size: 0.9rem;
+}
+
+.rating-star:hover {
+  transform: scale(1.1);
+}
+
+.rating-star.active svg {
+  filter: drop-shadow(0 0 3px rgba(255, 193, 7, 0.6));
+}
+
+.rating-close-btn {
+  background: none;
+  color: white;
+  padding: 0.5rem 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.rating-close-btn:hover {
   background-color: rgba(255, 255, 255, 0.1);
 }
 

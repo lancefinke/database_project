@@ -49,7 +49,7 @@ const LoginPage = () => {
     const getUserInfo = async() => {
         try {
             const response = await fetch(
-                `https://localhost:7152/api/Users/GetUserByName?name=${encodeURIComponent(username)}`
+                `http://localhost:5142/api/Users/GetUserByName?name=${encodeURIComponent(username)}`
             );
 
             if (!response.ok) {
@@ -82,7 +82,7 @@ const LoginPage = () => {
                 })
             };
             
-            const response = await fetch('https://localhost:7152/api/Auth/login', requestOptions);
+            const response = await fetch('http://localhost:5142/api/Auth/login', requestOptions);
             const data = await response.json();
             
             console.log("API response:", data);
