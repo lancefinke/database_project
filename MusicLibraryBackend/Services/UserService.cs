@@ -160,7 +160,14 @@ namespace MusicLibraryBackend.Services
         public User GetUserByName(string name)
         {
             var user = new User();
-            string query = "SELECT * FROM USERS WHERE USERS.Username=@Username AND isDeactivated = 0";
+
+            string query = @"
+        SELECT 
+            u.*, 
+            a.ArtistID
+        FROM Users u
+        LEFT JOIN Artists a ON u.UserID = a.UserID
+        WHERE u.Username = @Username AND u.IsDeactivated = 0";
 
             string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
 
@@ -175,22 +182,25 @@ namespace MusicLibraryBackend.Services
                     {
                         while (myReader.Read())
                         {
-
                             user.UserID = myReader["UserID"] != DBNull.Value ? Convert.ToInt32(myReader["UserID"]) : 0;
-                            user.Username = myReader["Username"] != DBNull.Value ? myReader["Username"].ToString() : null;
-                            user.Email = myReader["Email"] != DBNull.Value ? myReader["Email"].ToString() : null;
-                            user.ProfilePicture = myReader["ProfilePicture"] != DBNull.Value ? myReader["ProfilePicture"].ToString() : null;
-                            user.Bio = myReader["Bio"] != DBNull.Value ? myReader["Bio"].ToString() : null;
-                            user.UserPassword = myReader["UserPassword"] != DBNull.Value ? myReader["UserPassword"].ToString() : null;
+                            user.Username = myReader["Username"]?.ToString();
+                            user.Email = myReader["Email"]?.ToString();
+                            user.ProfilePicture = myReader["ProfilePicture"]?.ToString();
+                            user.Bio = myReader["Bio"]?.ToString();
+                            user.UserPassword = myReader["UserPassword"]?.ToString();
                             user.CreatedAt = myReader["CreatedAt"] != DBNull.Value ? Convert.ToDateTime(myReader["CreatedAt"]) : DateTime.MinValue;
                             user.isArtist = myReader["isArtist"] != DBNull.Value ? Convert.ToBoolean(myReader["isArtist"]) : false;
 
+                            // 
+                            user.ArtistID = myReader["ArtistID"] != DBNull.Value ? Convert.ToInt32(myReader["ArtistID"]) : 0;
                         }
                     }
                 }
             }
+
             return user;
         }
+
         public bool BanUser(BanUserRequest request)
         {
             string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");

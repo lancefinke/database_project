@@ -32,6 +32,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "MusicLibraryBackend.Controllers.DashboardController",
+    "Method": "GetArtistOverview",
+    "RelativePath": "api/Dashboard/GetArtistOverview",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "artistId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "database.Controllers.databaseController",
     "Method": "AddPlaylist",
     "RelativePath": "api/database/AddPlaylist",
@@ -435,6 +451,22 @@
         "Name": "Name",
         "Type": "System.String",
         "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MusicLibraryBackend.Controllers.ListenController",
+    "Method": "AddListen",
+    "RelativePath": "api/Listen/AddListen",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "MusicLibraryBackend.Models.ListenRequest",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []
