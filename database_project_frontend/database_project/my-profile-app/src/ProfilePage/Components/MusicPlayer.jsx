@@ -4,12 +4,30 @@ import Editable from "./Editable";
 import PlaylistSelectionPopup from "./PlaylistSelectionPopup";
 import ReactHowler from 'react-howler';
 import "./MusicPlayer.css";
-import FlagIcon from "./FlagIcon"; // Update with the correct path to your FlagIcon component
+import FlagIcon from "./FlagIcon"; 
 import { useUserContext } from "../../LoginContext/UserContext";
 
-const MusicPlayer = ({ id, songSrc, songImage, song, artist, pageName, playlist, duration }) => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isShuffling, setIsShuffling] = useState(false);
+// Modified MusicPlayer component that uses external navigation state
+const MusicPlayer = ({ 
+  id, 
+  songSrc, 
+  songImage, 
+  song, 
+  artist, 
+  pageName, 
+  playlist, 
+  duration,
+  // Navigation props - these come from the useSongNavigation hook
+  isPlaying,
+  isShuffling,
+  togglePlayPause,
+  toggleShuffle,
+  playPreviousSong,
+  playNextSong,
+  handleSongEnd,
+  setIsPlaying,
+  playlistSongs = []
+}) => {
   const [currentTime, setCurrentTime] = useState(0);
   const [volume, setVolume] = useState(0.5);
   const [songAdded, setSongAdded] = useState(false);
@@ -21,43 +39,27 @@ const MusicPlayer = ({ id, songSrc, songImage, song, artist, pageName, playlist,
   const [availablePlaylists, setAvailablePlaylists] = useState([]);
   const playerRef = useRef(null);
  
-  // Current song information - would typically come from props
+  // Current song information
   const currentSong = {
     id: id,
     title: song || "Song Title",
     artist: artist || "Artist Name",
     image: songImage || "https://via.placeholder.com/150"
   };
-  console.log("THIS IS THE CURRENT SONG", currentSong);
 
-  const { user } = useUserContext(); // get user info
-  console.log("ALL USER RETRIEVED DATA:", user);
-
-  // Apply page-specific class if provided - this will handle the styling
+  const { user } = useUserContext();
   const playerClassName = `music-player-container ${pageName ? `music-player-${pageName}` : ""}`;
 
   // Function to update the volume slider fill effect
   const updateVolumeSliderFill = (value) => {
-    // Convert the volume value (0-1) to a percentage
     const percentage = value * 100;
-    // Update the CSS variable
     document.documentElement.style.setProperty('--volume-percentage', `${percentage}%`);
   };
 
   // Function to update the progress bar fill effect
   const updateProgressBarFill = (currentValue, maxValue) => {
-    // Calculate percentage
     const percentage = (currentValue / maxValue) * 100;
-    // Update the CSS variable
     document.documentElement.style.setProperty('--progress-percentage', `${percentage}%`);
-  };
-
-  const togglePlayPause = () => {
-    if (!isPlaying) {
-      setIsPlaying(true);
-    } else {
-      setIsPlaying(false);
-    }
   };
 
   const formatDuration = (seconds) => {
@@ -68,12 +70,21 @@ const MusicPlayer = ({ id, songSrc, songImage, song, artist, pageName, playlist,
     return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
   };
 
-  const toggleShuffle = () => {
-    setIsShuffling(!isShuffling);
-  };
-
   const toggleAddToPlaylist = () => {
     setShowPlaylistSelection(true);
+  };
+
+  // Wrapper functions for the navigation buttons
+  const handlePrevious = () => {
+    setPrevPressed(true);
+    setTimeout(() => setPrevPressed(false), 200);
+    playPreviousSong();
+  };
+
+  const handleNext = () => {
+    setNextPressed(true);
+    setTimeout(() => setNextPressed(false), 200);
+    playNextSong();
   };
 
   useEffect(() => {
@@ -101,7 +112,7 @@ const MusicPlayer = ({ id, songSrc, songImage, song, artist, pageName, playlist,
         });
     }
   }, [user]);
- 
+
   const handleAddToPlaylist = (playlistId) => {
     console.log("Adding song to playlist:", { 
       songId: currentSong.id, 
@@ -137,21 +148,12 @@ const MusicPlayer = ({ id, songSrc, songImage, song, artist, pageName, playlist,
     setIsReporting(false);
   };
 
-  const handlePrevious = () => {
-    setPrevPressed(true);
-    setTimeout(() => setPrevPressed(false), 200);
-  };
-
-  const handleNext = () => {
-    setNextPressed(true);
-    setTimeout(() => setNextPressed(false), 200);
-  };
-
+  // Reset when song changes
   useEffect(() => {
     setCurrentTime(0);
-    setIsPlaying(false);
   }, [songSrc]);
 
+  // Update time as song plays
   useEffect(() => {
     let interval;
     if (isPlaying && playerRef.current) {
@@ -178,7 +180,6 @@ const MusicPlayer = ({ id, songSrc, songImage, song, artist, pageName, playlist,
 
   return (
     <>
-      {/* Use FlagIcon component instead of the original FlagReport component */}
       {showReportForm && <FlagIcon onClose={handleCloseReport} SongID={id} />}
       
       {showPlaylistSelection && (
@@ -245,6 +246,7 @@ const MusicPlayer = ({ id, songSrc, songImage, song, artist, pageName, playlist,
               onClick={handlePrevious}
               className={`control-button ${prevPressed ? "pressed" : ""}`}
               aria-label="Previous"
+              disabled={playlistSongs.length <= 1}
             >
               <SkipBack size={20} />
             </button>
@@ -282,6 +284,7 @@ const MusicPlayer = ({ id, songSrc, songImage, song, artist, pageName, playlist,
               onClick={handleNext}
               className={`control-button ${nextPressed ? "pressed" : ""}`}
               aria-label="Next"
+              disabled={playlistSongs.length <= 1}
             >
               <SkipForward size={20} />
             </button>
@@ -295,7 +298,7 @@ const MusicPlayer = ({ id, songSrc, songImage, song, artist, pageName, playlist,
               {songAdded ? <Check size={18} /> : <Plus size={18} />}
             </button>
             
-            {/* Report button - updated to use new reporting flow */}
+            {/* Report button */}
             <button
               onClick={toggleReporting}
               className={`control-button ${isReporting ? "reporting" : ""}`}
@@ -306,7 +309,7 @@ const MusicPlayer = ({ id, songSrc, songImage, song, artist, pageName, playlist,
           </div>
         </div>
         
-        {/* Volume control - Updated with fill effect */}
+        {/* Volume control */}
         <div className="volume-control">
           <Volume2 size={18} />
           <div className="volume-slider-container">
@@ -334,7 +337,7 @@ const MusicPlayer = ({ id, songSrc, songImage, song, artist, pageName, playlist,
             playing={isPlaying}
             volume={volume}
             ref={playerRef}
-            onEnd={() => setIsPlaying(false)}
+            onEnd={handleSongEnd}
           />
         )}
       </div>
