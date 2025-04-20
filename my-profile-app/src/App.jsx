@@ -13,10 +13,11 @@ import SideBar from "./ProfilePage/Components/SideBar";
 import AdminSidebar from "./Admin/AdminSidebar"; // Admin-specific sidebar
 import FollowingPage from "./FollowingPage/FollowingPage";
 import Dashboard from "./ProfilePage/UserPage/Dashboard";
+
 import { BrowserRouter as Router, Routes, Route, useLocation, Link, Navigate, useNavigate } from "react-router-dom";
 import "./ProfilePage/ProfilePage.css";
 import { useLoginContext } from "./LoginContext/LoginContext";
-
+import { useUserContext } from "./LoginContext/UserContext";
 // Sample audio files for the music player
 const playlist = [
   "/music/song1.mp3",
@@ -30,8 +31,10 @@ const AppLayout = () => {
   const navigate = useNavigate();
   const [selectedSong, setSelectedSong] = useState(null);
   const { isLoggedIn, setLoggedIn, currentRoute, setCurrentRoute } = useLoginContext();
+  const { user } = useUserContext();
   const [isAdmin, setIsAdmin] = useState(false);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
+  
   
   // Update current route when location changes
   useEffect(() => {
@@ -196,8 +199,10 @@ const AppLayout = () => {
         </Routes>
       </main>
       
+      
       {showMusicPlayer && selectedSong && (
         <MusicPlayer
+          id = {selectedSong.id}
           duration = {selectedSong.duration}
           songSrc = {selectedSong.songSrc}
           songImage = {selectedSong.songImage}
