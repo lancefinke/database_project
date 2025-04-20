@@ -23,23 +23,20 @@
 }
 
 .search-playlist-back-button {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: none;
-  border: none;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-  padding: 8px;
-  transition: background-color 0.2s;
-  width: fit-content;
-  margin-bottom: 10px;
+    background-color: transparent;
+    border: none;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 10px 0;
+    margin-bottom: 20px;
+    color: white;
 }
 
 .search-playlist-back-button:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
+    color: #b3b3b3;
+  }
 
 .search-playlist-info {
   display: flex;
