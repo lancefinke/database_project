@@ -121,7 +121,7 @@
     color: #e53935;
   }
 
-  /* Add this to your existing Dashboard.css file */
+
 
 .reported-songs-section {
     margin-top: 3rem;
@@ -187,6 +187,30 @@
     font-weight: 500;
     text-align: center;
   }
+  .status-badge {
+    padding: 5px 12px;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 0.85rem;
+    display: inline-block;
+    text-align: center;
+  }
+  
+  .status-badge.pending {
+    background-color: #fff3cd;
+    color: #856404;
+  }
+  
+  .status-badge.dismissed {
+    background-color: #d4edda;
+    color: #155724;
+  }
+  
+  .status-badge.banned {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+  
   
   @media (max-width: 768px) {
     .reported-song-header, .reported-song-item {
@@ -221,7 +245,7 @@
     }
   }
 
-  /* Add this to your existing Dashboard.css file */
+
 
 .songs-section {
     margin-top: 3rem;
