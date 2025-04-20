@@ -36,6 +36,8 @@ const AppLayout = () => {
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   
   
+
+  
   // Update current route when location changes
   useEffect(() => {
     if (location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/reset') {

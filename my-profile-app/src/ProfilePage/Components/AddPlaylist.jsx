@@ -29,23 +29,19 @@ const AddPlaylist = ({ isOpen, onClose, onSubmit }) => {
     
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!playlistName || !playlistImage) {
-            alert("Please provide both a playlist name and image.");
+        
+        console.log("Submitting with playlistName:", playlistName);
+        
+        // Make sure name isn't empty
+        if (!playlistName || playlistName.trim() === '') {
+            alert("Please enter a playlist name");
             return;
         }
         
-        onSubmit && onSubmit({
+        onSubmit({ 
             name: playlistName,
-            image: playlistImage,
-            privacy: privacyStatus
+            image: playlistImage 
         });
-        
-        // Reset form
-        setPlaylistName('');
-        setPlaylistImage(null);
-        setImagePreview("https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=");
-        setPrivacyStatus('public');
-        onClose && onClose();
     }
 
     // Create the modal markup to be rendered with portal

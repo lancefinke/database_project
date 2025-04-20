@@ -14,7 +14,6 @@ import PlaylistSelectionPopup from '../Components/PlaylistSelectionPopup';
 import AlbumSelectionPopup from '../Components/AlbumSelectionPopup';
 import albumAddIcon from './playlist.png';
 
-
 const ConfirmationModal = ({ isOpen, message, onCancel, onConfirm }) => {
   if (!isOpen) return null;
   
@@ -37,6 +36,59 @@ const ConfirmationModal = ({ isOpen, message, onCancel, onConfirm }) => {
         </div>
       </div>
     </>
+  );
+};
+
+const SongContextMenu = ({ song, onClose, onAddToPlaylist, onRemoveFromPlaylist, onAddToAlbum, onRemoveFromAlbum }) => {
+  // Get current context from song properties
+  const inPlaylist = song.inPlaylist || false;
+  const inAlbum = song.inAlbum || false;
+  const isInMyAlbum = song.isInMyAlbum || false;
+  
+  return (
+    <div className="context-menu">
+      {/* Always show Add to playlist option */}
+      <div className="menu-item" onClick={() => {
+        onAddToPlaylist(song);
+        onClose();
+      }}>
+        <span className="icon">📝</span>
+        <span>Add to playlist</span>
+      </div>
+      
+      {/* Show Remove from playlist only if in a playlist */}
+      {inPlaylist && (
+        <div className="menu-item" onClick={() => {
+          onRemoveFromPlaylist(song, song.playlistId);
+          onClose();
+        }}>
+          <span className="icon">🗑️</span>
+          <span>Remove from playlist</span>
+        </div>
+      )}
+      
+      {/* Show Add to album option if not in My Songs album */}
+      {!isInMyAlbum && (
+        <div className="menu-item" onClick={() => {
+          onAddToAlbum(song);
+          onClose();
+        }}>
+          <span className="icon">💿</span>
+          <span>Add to album</span>
+        </div>
+      )}
+      
+      {/* Show Remove from album only if in an album (not My Songs) */}
+      {inAlbum && (
+        <div className="menu-item" onClick={() => {
+          onRemoveFromAlbum(song, song.albumId);
+          onClose();
+        }}>
+          <span className="icon">🗑️</span>
+          <span>Remove from album</span>
+        </div>
+      )}
+    </div>
   );
 };
 
@@ -851,35 +903,54 @@ const UserPage = ({ onSongSelect }) => {
   const AddPlaylistComponent = (playlistData) => {
     console.log("Making a new playlist: ", playlistData);
     const formData = new FormData();
-    formData.append('PlaylistName', playlistData.name);
-    formData.append('UserID', currentUserId);
     
-    if (playlistData.image) {
-      formData.append('PlaylistPicture', playlistData.image);
-    } else {
-      alert("Please select a picture for the playlist");
+    const userId = parseInt(currentUserId);
+    if (isNaN(userId)) {
+      console.error("Invalid UserID:", currentUserId);
+      alert("Invalid user ID. Please try again.");
       return;
     }
     
-    fetch(`${API_URL}/api/database/AddPlaylist`, {
+    if (!playlistData.image || !(playlistData.image instanceof File)) {
+      alert("Please select a valid image file");
+      return;
+    }
+    
+    // IMPORTANT: Only add the image to FormData
+    formData.append('PlaylistPicture', playlistData.image);
+    
+    // Add other parameters to URL
+    const url = `${API_URL}/api/database/AddPlaylist?UserID=${userId}&Title=${encodeURIComponent(playlistData.name)}`;
+    
+    console.log("Sending request to:", url);
+    fetch(url, {
       method: 'POST',
       body: formData,
     })
     .then(response => {
+      console.log("Response status:", response.status);
       if (!response.ok) {
-        throw new Error(`Upload failed with status ${response.status}`);
+        return response.text().then(text => {
+          console.error("Error details:", text);
+          throw new Error(`Upload failed with status ${response.status}: ${text}`);
+        });
       }
       return response.json();
     })
     .then(data => {
-      console.log("Playlist created successfully:", data);
-      // Refresh playlists
-      GetUserPlaylists(currentUserId);
+      console.log('Upload successful, image URL:', data);
+      setShowAPwindow(false);
+      
+      // IMPORTANT: Only refresh from server - don't add locally
+      // This prevents the duplicate issue
+      GetUserPlaylists(userId);
     })
     .catch(error => {
       console.error("Error creating playlist:", error);
+      alert("Failed to create playlist: " + error.message);
     });
   };
+  
   const closeConfirmModal = () => {
     setConfirmModal({ isOpen: false, message: '', onConfirm: null });
   };
@@ -963,24 +1034,7 @@ const UserPage = ({ onSongSelect }) => {
           <AddPlaylist
             isOpen={showAPwindow}
             onClose={() => setShowAPwindow(false)}
-            onSubmit={(playlistData) => {
-              // Handle new playlist creation
-              console.log("Creating new playlist:", playlistData);
-              
-              // Create a new playlist object
-              const newPlaylist = {
-                id: Date.now(), // Generate a unique ID
-                name: playlistData.name,
-                image: playlistData.image ? URL.createObjectURL(playlistData.image) : "https://via.placeholder.com/100",
-                songs: []
-              };
-              
-              // Add the new playlist to the playlists array
-              setPlaylists([...playlists, newPlaylist]);
-              
-              // Close the modal
-              setShowAPwindow(false);
-            }}
+            onSubmit={AddPlaylistComponent}  // Use this function directly
           />
           
           {playlists.map(playlist => {
@@ -1104,7 +1158,7 @@ const UserPage = ({ onSongSelect }) => {
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
             <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path>
-          </svg>
+        </svg>
         </button>
       )}
     </div>
