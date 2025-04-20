@@ -5,6 +5,7 @@ import "./SearchPage.css";
 import UserLink from "../UserLink/UserLink";
 import SearchGenreSongList from './SearchGenreSongList';
 import PlaylistSongList from '../ProfilePage/Components/PlaylistSongList';
+import SearchPlaylistView from './Components/SearchPlaylistView';
 
 const SearchResult = ({title, author, image, onPlaylistSelect, playlistId}) => {
   const navigate = useNavigate();
@@ -14,17 +15,8 @@ const SearchResult = ({title, author, image, onPlaylistSelect, playlistId}) => {
 
   const handlePlaylistClick = async () => {
     console.log(`Clicked on playlist: ${title}`);
-    if (title === "Saved Songs") {
+    if (title === "") {
       const token = localStorage.getItem('userToken');
-      if (token) {
-        try {
-          const payload = JSON.parse(atob(token.split('.')[1]));
-          const username = payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
-          navigate(`/profile/${username}/saved-songs`);
-        } catch (error) {
-          console.error("Error parsing JWT token:", error);
-        }
-      }
     } else {
       try {
         setLoading(true);
@@ -79,20 +71,13 @@ const SearchResult = ({title, author, image, onPlaylistSelect, playlistId}) => {
 
   if (selectedPlaylist) {
     return (
-      <div className="playlist-page">
-        <div className="styled-back-button" onClick={handleBack}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
-          </svg>
-          <span>Back to Playlists</span>
-        </div>
-        <PlaylistSongList 
-          songs={selectedPlaylist.songs}
-          playlistName={selectedPlaylist.name}
-          playlistImage={selectedPlaylist.image}
-          onSongSelect={onPlaylistSelect}
-        />
-      </div>
+      <SearchPlaylistView
+        songs={selectedPlaylist.songs}
+        playlistName={selectedPlaylist.name}
+        playlistImage={selectedPlaylist.image}
+        onBack={handleBack}
+        onSongSelect={onPlaylistSelect}
+      />
     );
   }
 
@@ -123,6 +108,7 @@ const SearchPage = ({ onSongSelect }) => {
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [currentUsername, setCurrentUsername] = useState("");
   const [playlists, setPlaylists] = useState([]);
+  const [selectedPlaylist, setSelectedPlaylist] = useState(null);
   const navigate = useNavigate();
 
   const API_URL = "http://localhost:5142/";
@@ -312,6 +298,29 @@ const SearchPage = ({ onSongSelect }) => {
   const convertTimeToSeconds = (timeString) => {
     const parts = timeString.split(':');
     return parseInt(parts[0]) * 60 + parseInt(parts[1]);
+  };
+
+  const handlePlaylistSelect = async (playlist) => {
+    try {
+      const response = await fetch(`${API_URL}/api/database/GetPlaylistSongs?playlistId=${playlist.id}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch playlist songs');
+      }
+      const data = await response.json();
+      setSelectedPlaylist({
+        ...playlist,
+        songs: data.map(song => ({
+          ...song,
+          duration: formatDuration(song.duration)
+        }))
+      });
+    } catch (error) {
+      console.error('Error fetching playlist songs:', error);
+    }
+  };
+
+  const handleBackFromPlaylist = () => {
+    setSelectedPlaylist(null);
   };
 
   return (

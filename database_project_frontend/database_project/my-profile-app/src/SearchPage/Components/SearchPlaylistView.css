@@ -1,0 +1,261 @@
+.search-playlist-view {
+  position: fixed;
+  top: 0;
+  left: 150px; /* Adjusted sidebar width */
+  width: calc(100vw - 200px); /* Adjusted width to match sidebar */
+  height: 100vh;
+  background-color: #121212;
+  color: white;
+  z-index: 1000;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.search-playlist-header {
+  padding: 20px 40px;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.7), #121212);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex-shrink: 0;
+  min-height: fit-content;
+}
+
+.search-playlist-back-button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 8px;
+  transition: background-color 0.2s;
+  width: fit-content;
+  margin-bottom: 10px;
+}
+
+.search-playlist-back-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.search-playlist-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 30px;
+  padding: 10px 0;
+}
+
+.search-playlist-image {
+  width: 232px;
+  height: 232px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 4px 60px rgba(0, 0, 0, 0.5);
+  flex-shrink: 0;
+}
+
+.search-playlist-text {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: flex-end;
+  padding-bottom: 10px;
+}
+
+.search-playlist-title {
+  font-size: 4rem;
+  font-weight: bold;
+  margin: 0;
+  line-height: 1.1;
+}
+
+.search-playlist-count {
+  color: #b3b3b3;
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.search-songs-table {
+  padding: 0 40px;
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 100px; /* Space for music player */
+}
+
+.search-songs-table-header {
+  display: grid;
+  grid-template-columns: 50px 50px 3fr 1fr 100px;
+  gap: 20px;
+  padding: 20px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: #b3b3b3;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.search-song-row {
+  display: grid;
+  grid-template-columns: 50px 50px 3fr 1fr 100px;
+  gap: 20px;
+  padding: 15px 0;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.search-song-row:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.search-song-number-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.search-song-number {
+  color: #b3b3b3;
+}
+
+.search-play-button {
+  position: absolute;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.search-song-row:hover .search-play-button {
+  opacity: 1;
+}
+
+.search-song-row:hover .search-song-number {
+  opacity: 0;
+}
+
+.search-song-thumbnail {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.search-song-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.search-song-title {
+  font-size: 1rem;
+  margin-bottom: 5px;
+}
+
+.search-song-artist {
+  color: #b3b3b3;
+  font-size: 0.9rem;
+}
+
+.search-song-genre {
+  display: flex;
+  align-items: center;
+  color: #b3b3b3;
+}
+
+.search-song-duration {
+  display: flex;
+  align-items: center;
+  color: #b3b3b3;
+}
+
+.search-empty-playlist-message {
+  text-align: center;
+  padding: 40px;
+  color: #b3b3b3;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .search-playlist-view {
+    left: 180px; /* Adjusted for tablet view */
+    width: calc(100vw - 180px);
+  }
+
+  .search-playlist-header {
+    padding: 15px 20px;
+  }
+
+  .search-playlist-image {
+    width: 192px;
+    height: 192px;
+  }
+
+  .search-playlist-title {
+    font-size: 2.5rem;
+  }
+
+  .search-playlist-info {
+    gap: 20px;
+  }
+
+  .search-songs-table {
+    padding: 0 20px;
+  }
+
+  .search-songs-table-header,
+  .search-song-row {
+    grid-template-columns: 40px 40px 2fr 1fr 80px;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-playlist-view {
+    left: 0;
+    width: 100vw;
+  }
+
+  .search-playlist-header {
+    padding: 10px 15px;
+  }
+
+  .search-playlist-image {
+    width: 160px;
+    height: 160px;
+  }
+
+  .search-playlist-info {
+    gap: 15px;
+  }
+
+  .search-playlist-title {
+    font-size: 2rem;
+  }
+
+  .search-songs-table {
+    padding: 0 15px;
+  }
+
+  .search-songs-table-header,
+  .search-song-row {
+    grid-template-columns: 30px 30px 2fr 1fr 60px;
+    gap: 5px;
+  }
+
+  .search-song-title {
+    font-size: 0.9rem;
+  }
+
+  .search-song-artist,
+  .search-song-genre,
+  .search-song-duration {
+    font-size: 0.8rem;
+  }
+} 
