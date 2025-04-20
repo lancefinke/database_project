@@ -1,23 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import './PlaylistSongList.css';
-import MusicPlayer from './MusicPlayer'; // Update this path if needed
-import useSongNavigation from '../../hooks/useSongNavigation'; // Update this path if needed
+import { usePlayerContext } from '../../contexts/PlayerContext'; // Import the player context
 
 const PlaylistSongList = ({ songs, playlistName, playlistImage, onDeleteSong, onAddToPlaylist }) => {
-  // Use the custom navigation hook
+  // Use the global player context instead of local navigation hook
   const {
-    currentSongIndex,
     currentSong,
     isPlaying,
     isShuffling,
-    changeSong,
-    playPreviousSong,
-    playNextSong,
-    handleSongEnd,
+    playSong,
     togglePlayPause,
-    toggleShuffle,
-    setIsPlaying
-  } = useSongNavigation(songs);
+    toggleShuffle
+  } = usePlayerContext();
 
   // Function to format seconds to mm:ss
   const formatDuration = (seconds) => {
@@ -28,12 +22,8 @@ const PlaylistSongList = ({ songs, playlistName, playlistImage, onDeleteSong, on
 
   const handleSongClick = (song) => {
     console.log(song);
-    // Find the index of the selected song
-    const index = songs.findIndex(s => s.id === song.id);
-    if (index !== -1) {
-      changeSong(index);
-      setIsPlaying(true);
-    }
+    // Use the global playSong function instead
+    playSong(song, songs);
   };
 
   // State to track which song's action menu is open
@@ -80,131 +70,107 @@ const PlaylistSongList = ({ songs, playlistName, playlistImage, onDeleteSong, on
   }, [activeMenu]);
 
   return (
-    <>
-      <div className="playlist-song-list-container">
-        <div className="playlist-header">
-          <div className="playlist-info">
-            <img 
-              src={playlistImage || "https://via.placeholder.com/220"} 
-              alt={playlistName} 
-              className="playlist-header-image" 
-            />
-            <div className="playlist-header-text">
-              <h2 className="playlist-title">{playlistName || "Playlist"}</h2>
-              <p className="song-count">{songs.length} {songs.length === 1 ? 'song' : 'songs'}</p>
-            </div>
+    <div className="playlist-song-list-container">
+      <div className="playlist-header">
+        <div className="playlist-info">
+          <img 
+            src={playlistImage || "https://via.placeholder.com/220"} 
+            alt={playlistName} 
+            className="playlist-header-image" 
+          />
+          <div className="playlist-header-text">
+            <h2 className="playlist-title">{playlistName || "Playlist"}</h2>
+            <p className="song-count">{songs.length} {songs.length === 1 ? 'song' : 'songs'}</p>
           </div>
-        </div>
-        
-        <div className="songs-table">
-          <div className="songs-table-header">
-            <div className="song-number-header">#</div>
-            <div className="song-image-header"></div>
-            <div className="song-info-header">TITLE</div>
-            <div className="song-genre-header">GENRE</div>
-            <div className="song-duration-header">DURATION</div>
-            <div className="song-actions-header"></div>
-          </div>
-          
-          {songs.length > 0 ? (
-            songs.map((song, index) => (
-              <div key={song.id} className="song-row" onClick={() => handleSongClick(song)}>
-                <div className="song-number-cell">
-                  <span className="song-number">{index + 1}</span>
-                  <button className="play-button" onClick={(e) => {
-                    e.stopPropagation();
-                    handleSongClick(song);
-                  }}>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
-                      <path d="M8 5v14l11-7z"></path>
-                    </svg>
-                  </button>
-                </div>
-                <div className="playlist-song-thumbnail-cell">
-                  <img 
-                    src={song.image || "https://via.placeholder.com/80"} 
-                    alt={song.title} 
-                    className="playlist-song-thumbnail" 
-                  />
-                </div>
-                <div className="song-info">
-                  <div className="song-text">
-                    <span className="song-title">{song.title}</span>
-                    <span className="song-artist">{song.artist}</span>
-                  </div>
-                </div>
-                <div className="song-genre">{song.genre}</div>
-                <div className="song-duration">
-                  {formatDuration(song.duration)}
-                </div>
-                <div className="song-actions" onClick={(e) => e.stopPropagation()}>
-                  <button 
-                    className="song-actions-button" 
-                    onClick={(e) => toggleMenu(e, song.id)}
-                    aria-label="Song actions"
-                  >
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
-                    </svg>
-                  </button>
-                  
-                  {activeMenu === song.id && (
-                    <div className="song-actions-menu">
-                      <div 
-                        className="song-actions-menu-item"
-                        onClick={(e) => handleAddToPlaylist(e, song)}
-                      >
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M14 10H3v2h11v-2zm0-4H3v2h11V6zm4 8v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM3 16h7v-2H3v2z"></path>
-                        </svg>
-                        Add to playlist
-                      </div>
-                      
-                      <div 
-                        className="song-actions-menu-item delete"
-                        onClick={(e) => handleDeleteSong(e, song)}
-                      >
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path>
-                        </svg>
-                        Remove from playlist
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))
-          ) : (
-            <div className="empty-playlist-message">
-              <p>This playlist is empty. Add some songs to get started!</p>
-            </div>
-          )}
         </div>
       </div>
-
-      {/* Add the MusicPlayer at the bottom */}
-      {currentSong && (
-        <MusicPlayer
-          id={currentSong.id}
-          songSrc={currentSong.songFile}
-          songImage={currentSong.image}
-          song={currentSong.title}
-          artist={currentSong.artist}
-          duration={currentSong.duration}
-          pageName="playlist"
-          // Navigation props
-          isPlaying={isPlaying}
-          isShuffling={isShuffling}
-          togglePlayPause={togglePlayPause}
-          toggleShuffle={toggleShuffle}
-          playPreviousSong={playPreviousSong}
-          playNextSong={playNextSong}
-          handleSongEnd={handleSongEnd}
-          setIsPlaying={setIsPlaying}
-          playlistSongs={songs}
-        />
-      )}
-    </>
+      
+      <div className="songs-table">
+        <div className="songs-table-header">
+          <div className="song-number-header">#</div>
+          <div className="song-image-header"></div>
+          <div className="song-info-header">TITLE</div>
+          <div className="song-genre-header">GENRE</div>
+          <div className="song-duration-header">DURATION</div>
+          <div className="song-actions-header"></div>
+        </div>
+        
+        {songs.length > 0 ? (
+          songs.map((song, index) => (
+            <div key={song.id} className="song-row" onClick={() => handleSongClick(song)}>
+              <div className="song-number-cell">
+                <span className="song-number">{index + 1}</span>
+                <button className="play-button" onClick={(e) => {
+                  e.stopPropagation();
+                  handleSongClick(song);
+                }}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
+                    <path d="M8 5v14l11-7z"></path>
+                  </svg>
+                </button>
+              </div>
+              <div className="playlist-song-thumbnail-cell">
+                <img 
+                  src={song.image || "https://via.placeholder.com/80"} 
+                  alt={song.title} 
+                  className="playlist-song-thumbnail" 
+                />
+              </div>
+              <div className="song-info">
+                <div className="song-text">
+                  <span className="song-title">{song.title}</span>
+                  <span className="song-artist">{song.artist}</span>
+                </div>
+              </div>
+              <div className="song-genre">{song.genre}</div>
+              <div className="song-duration">
+                {formatDuration(song.duration)}
+              </div>
+              <div className="song-actions" onClick={(e) => e.stopPropagation()}>
+                <button 
+                  className="song-actions-button" 
+                  onClick={(e) => toggleMenu(e, song.id)}
+                  aria-label="Song actions"
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
+                  </svg>
+                </button>
+                
+                {activeMenu === song.id && (
+                  <div className="song-actions-menu">
+                    <div 
+                      className="song-actions-menu-item"
+                      onClick={(e) => handleAddToPlaylist(e, song)}
+                    >
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M14 10H3v2h11v-2zm0-4H3v2h11V6zm4 8v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM3 16h7v-2H3v2z"></path>
+                      </svg>
+                      Add to playlist
+                    </div>
+                    
+                    <div 
+                      className="song-actions-menu-item delete"
+                      onClick={(e) => handleDeleteSong(e, song)}
+                    >
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path>
+                      </svg>
+                      Remove from playlist
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="empty-playlist-message">
+            <p>This playlist is empty. Add some songs to get started!</p>
+          </div>
+        )}
+      </div>
+    </div>
+    // Note: We removed the MusicPlayer from here since it's now in App.jsx
   );
 };
 

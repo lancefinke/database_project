@@ -5,7 +5,7 @@
   background: #111;
   box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.3);
   padding: 0.8rem 1.5rem;
-  width: 100%;
+  width: calc(100% - 110px);
   position: fixed;
   bottom: 0;
   left: 110px; /* Maintain positioning from sidebar */
@@ -449,31 +449,31 @@
 
 /* Page-specific styles */
 .music-player-profile {
-  width: 70.5% !important;
+  width: calc(100% - 110px);
   left: 110px;
   right: 0;
 }
 
 .music-player-search {
-  width: 92.6% !important;
+  width: calc(100% - 110px);
   left: 110px !important;  
   right: 0 !important;
 }
 
 .music-player-following {
-  width: 92.6% !important;
+  width: calc(100% - 110px);
   left: 110px;
   right: 0;
 }
 
 .music-player-dashboard {
-  width: 92.6% !important;
+  width: calc(100% - 110px);
   left: 110px;
   right: 0;
 }
 
 .music-player-default {
-  width: 70.5% !important;
+  width: calc(100% - 110px);
   left: 110px;
   right: 0;
 }

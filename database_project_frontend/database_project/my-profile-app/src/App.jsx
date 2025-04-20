@@ -5,37 +5,43 @@ import HomePage from "./HomePage/HomePage";
 import LoginPage from "./LoginPage/LoginPage";
 import SearchPage from "./SearchPage/SearchPage";
 import AddSong from "./ProfilePage/Components/AddSong";
-import AdminPage  from "./Admin/Admin"; 
+import AdminPage from "./Admin/Admin"; 
 import UserPage from "./ProfilePage/UserPage/UserPage";
 import SignupPage from "./SignupPage/Signuppage";
 import ResetPassword from "./ResetPasswordPage/ResetPassword";
 import SideBar from "./ProfilePage/Components/SideBar";
-import AdminSidebar from "./Admin/AdminSidebar"; // Admin-specific sidebar
+import AdminSidebar from "./Admin/AdminSidebar"; 
 import FollowingPage from "./FollowingPage/FollowingPage";
 import Dashboard from "./ProfilePage/UserPage/Dashboard";
 import PlaylistPage from "./ProfilePage/Components/PlaylistPage";
+import { PlayerProvider, usePlayerContext } from './contexts/PlayerContext';
 
 import { BrowserRouter as Router, Routes, Route, useLocation, Link, Navigate, useNavigate } from "react-router-dom";
 import "./ProfilePage/ProfilePage.css";
 import { useLoginContext } from "./LoginContext/LoginContext";
 import { useUserContext } from "./LoginContext/UserContext";
-// Sample audio files for the music player
-const playlist = [
-  "/music/song1.mp3",
-  "/music/song2.mp3",
-  "/music/song3.mp3"
-];
 
-// Layout wrapper to handle class changes based on route
 const AppLayout = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [selectedSong, setSelectedSong] = useState(null);
+  
+  const { 
+    currentSong, 
+    isPlaying, 
+    isShuffling, 
+    togglePlayPause, 
+    toggleShuffle,
+    playPreviousSong,
+    playNextSong,
+    handleSongEnd,
+    setIsPlaying,
+    playlistSongs
+  } = usePlayerContext();
+  
   const { isLoggedIn, setLoggedIn, currentRoute, setCurrentRoute } = useLoginContext();
   const { user } = useUserContext();
   const [isAdmin, setIsAdmin] = useState(false);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
-  
   
   // Update current route when location changes
   useEffect(() => {
@@ -56,30 +62,18 @@ const AppLayout = () => {
     }
   }, [isLoggedIn, isInitialLoad, navigate]);
   
-  console.log("AppLayout rendering, path:", location.pathname);
-  
   // Check admin status on initial load and whenever login status changes
   useEffect(() => {
     const checkAdminStatus = () => {
-      // Get raw value from localStorage
       const rawAdminValue = localStorage.getItem('isAdmin');
-      // Convert to boolean
       const adminStatus = rawAdminValue === 'true';
-      
-      console.log("ADMIN CHECK - localStorage 'isAdmin':", rawAdminValue);
-      console.log("ADMIN CHECK - Converted adminStatus:", adminStatus);
-      console.log("ADMIN CHECK - isLoggedIn:", isLoggedIn);
-      
-      // Update state
       setIsAdmin(adminStatus);
       
-      // Immediate redirect for admin users
       if (isLoggedIn && adminStatus && 
           location.pathname !== '/admin' && 
           location.pathname !== '/login' && 
           location.pathname !== '/signup' && 
           location.pathname !== '/reset') {
-        console.log("IMMEDIATE REDIRECT to admin page");
         navigate('/admin');
       }
     };
@@ -88,11 +82,7 @@ const AppLayout = () => {
   }, [isLoggedIn, location.pathname, navigate]);
   
   useEffect(() => {
-    console.log("Admin state changed to:", isAdmin);
-    
-    // Force redirect when isAdmin becomes true
     if (isAdmin && isLoggedIn && location.pathname !== '/admin') {
-      console.log("FORCE REDIRECTING to admin page after state change");
       navigate('/admin');
     }
   }, [isAdmin, isLoggedIn, navigate, location.pathname]);
@@ -105,26 +95,30 @@ const AppLayout = () => {
     }
   }, [location]);
 
-  const handleSongSelect = (song) => {
-    setSelectedSong(song);
-  };
+  useEffect(() => {
+    if (location.pathname === '/home') {
+      // Stop music when navigating to explore page
+      setIsPlaying(false);
+    }
+  }, [location.pathname, setIsPlaying]);
 
   const handleClosePlayer = () => {
-    setSelectedSong(null);
+    setIsPlaying(false);
   };
   
-  const showMusicPlayer = selectedSong !== null && 
-    location.pathname !== '/home' && 
-    location.pathname !== '/login' && 
-    location.pathname !== '/signup' && 
-    location.pathname !== '/reset' && 
-    location.pathname !== '/admin';
+  const showMusicPlayer = currentSong !== null && 
+  !location.pathname.startsWith('/home') &&
+  location.pathname !== '/login' &&
+  location.pathname !== '/signup' &&
+  location.pathname !== '/reset' &&
+  location.pathname !== '/admin';
   
   const getMusicPlayerPageName = () => {
     if (location.pathname === '/profile') return 'profile';
     if (location.pathname === '/search') return 'search';
     if (location.pathname === '/following') return 'following';
     if (location.pathname === '/dashboard') return 'dashboard';
+    if (location.pathname.includes('/playlist')) return 'playlist';
     return 'default';
   };
 
@@ -153,27 +147,27 @@ const AppLayout = () => {
           } />
           <Route path="/search" element={
             isLoggedIn 
-              ? (isAdmin ? <Navigate to="/admin" replace /> : <SearchPage onSongSelect={handleSongSelect} />)
+              ? (isAdmin ? <Navigate to="/admin" replace /> : <SearchPage />)
               : <Navigate to="/login" replace />
           } />
           <Route path="/profile" element={
             isLoggedIn 
-              ? (isAdmin ? <Navigate to="/admin" replace /> : <UserPage onSongSelect={handleSongSelect} />)
+              ? (isAdmin ? <Navigate to="/admin" replace /> : <UserPage />)
               : <Navigate to="/login" replace />
           } />
           <Route path="/user" element={
             isLoggedIn 
-              ? (isAdmin ? <Navigate to="/admin" replace /> : <ProfilePage onSongSelect={handleSongSelect} />)
+              ? (isAdmin ? <Navigate to="/admin" replace /> : <ProfilePage />)
               : <Navigate to="/login" replace />
           } />
           <Route path="/profile/:userId" element={
             isLoggedIn 
-              ? (isAdmin ? <Navigate to="/admin" replace /> : <ProfilePage onSongSelect={handleSongSelect} />)
+              ? (isAdmin ? <Navigate to="/admin" replace /> : <ProfilePage />)
               : <Navigate to="/login" replace />
           } />
           <Route path="/following" element={
             isLoggedIn 
-              ? (isAdmin ? <Navigate to="/admin" replace /> : <FollowingPage onSongSelect={handleSongSelect} />)
+              ? (isAdmin ? <Navigate to="/admin" replace /> : <FollowingPage />)
               : <Navigate to="/login" replace />
           } />
           <Route path="/dashboard" element={
@@ -183,7 +177,7 @@ const AppLayout = () => {
           } />
           <Route path="/playlist/:playlistId" element={
             isLoggedIn 
-              ? (isAdmin ? <Navigate to="/admin" replace /> : <PlaylistPage onSongSelect={handleSongSelect} />)
+              ? (isAdmin ? <Navigate to="/admin" replace /> : <PlaylistPage />)
               : <Navigate to="/login" replace />
           } />
           <Route path='/admin' element={
@@ -205,18 +199,26 @@ const AppLayout = () => {
         </Routes>
       </main>
       
-      
-      {showMusicPlayer && selectedSong && (
+      {showMusicPlayer && currentSong && (
         <MusicPlayer
-          id = {selectedSong.id}
-          duration = {selectedSong.duration}
-          songSrc = {selectedSong.songSrc}
-          songImage = {selectedSong.songImage}
-          playlist={playlist}
-          song={selectedSong.name}
-          artist={selectedSong.creator}
+          id={currentSong.id || currentSong.SongID}
+          duration={currentSong.duration}
+          songSrc={currentSong.songFile || currentSong.songSrc}
+          songImage={currentSong.image || currentSong.songImage}
+          song={currentSong.title || currentSong.name}
+          artist={currentSong.artist || currentSong.creator}
           pageName={getMusicPlayerPageName()}
           onClose={handleClosePlayer}
+          // Pass context props to music player
+          isPlaying={isPlaying}
+          isShuffling={isShuffling}
+          togglePlayPause={togglePlayPause}
+          toggleShuffle={toggleShuffle}
+          playPreviousSong={playPreviousSong}
+          playNextSong={playNextSong}
+          handleSongEnd={handleSongEnd}
+          setIsPlaying={setIsPlaying}
+          playlistSongs={playlistSongs || []}
         />
       )}
     </div>
@@ -225,9 +227,11 @@ const AppLayout = () => {
 
 function App() {
   return (
-    <Router>
-      <AppLayout />
-    </Router>
+    <PlayerProvider>
+      <Router>
+        <AppLayout />
+      </Router>
+    </PlayerProvider>
   );
 }
 

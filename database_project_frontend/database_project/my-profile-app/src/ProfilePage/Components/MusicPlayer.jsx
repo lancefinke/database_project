@@ -41,7 +41,7 @@ const MusicPlayer = ({
  
   // Current song information
   const currentSong = {
-    id: id,
+    id: id || songId || SongID, // Try multiple possible ID properties
     title: song || "Song Title",
     artist: artist || "Artist Name",
     image: songImage || "https://via.placeholder.com/150"
@@ -114,12 +114,13 @@ const MusicPlayer = ({
   }, [user]);
 
   const handleAddToPlaylist = (playlistId) => {
+    const songId = currentSong.id;
     console.log("Adding song to playlist:", { 
-      songId: currentSong.id, 
+      songId: songId, 
       playlistId: playlistId 
     });
     
-    fetch(`http://localhost:5142/api/database/AddSongPlaylist?SongID=${currentSong.id}&PlaylistID=${playlistId}`, {
+    fetch(`http://localhost:5142/api/database/AddSongPlaylist?SongID=${songId}&PlaylistID=${playlistId}`, {
       method: "POST"
     })
     .then(response => {
