@@ -72,7 +72,11 @@ const MusicPlayer = ({ songSrc, songImage,song, artist, pageName, playlist,durat
 
   const togglePlayPause = () => {
     
-      setIsPlaying(!isPlaying);
+    if (!isPlaying) {
+      setIsPlaying(true);
+    } else {
+      setIsPlaying(false);
+    }
   };
 
   const formatDuration = (seconds) => {
