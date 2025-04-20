@@ -45,14 +45,14 @@ namespace MusicLibraryBackend.Controllers
         }
 
         //retrive all followers of a specific user
-        [HttpGet]
-        [Route("GetFollowers")]
-        public JsonResult CreateUsers([FromQuery] int userID)
-        {
-            var result = _userService.GetUserFollowers(userID);
-            return new JsonResult(result);
+        //[HttpGet]
+        //[Route("GetFollowers")]
+        //public JsonResult CreateUsers([FromQuery] int userID)
+        //{
+        //    var result = _userService.GetUserFollowers(userID);
+        //    return new JsonResult(result);
 
-        }
+        //}
 
         
         [HttpPost]

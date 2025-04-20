@@ -488,6 +488,70 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "MusicLibraryBackend.Controllers.FollowController",
+    "Method": "AddFollow",
+    "RelativePath": "api/Follow/AddFollow",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "MusicLibraryBackend.Models.FollowRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MusicLibraryBackend.Controllers.FollowController",
+    "Method": "GetArtistFollowStats",
+    "RelativePath": "api/Follow/GetArtistFollowStats",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "artistId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MusicLibraryBackend.Controllers.FollowController",
+    "Method": "GetUserFollowStats",
+    "RelativePath": "api/Follow/GetUserFollowStats",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MusicLibraryBackend.Controllers.FollowController",
+    "Method": "Unfollow",
+    "RelativePath": "api/Follow/Unfollow",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "MusicLibraryBackend.Models.FollowRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "MusicLibraryBackend.Controllers.ListenController",
     "Method": "AddListen",
     "RelativePath": "api/Listen/AddListen",
@@ -778,22 +842,6 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "MusicLibraryBackend.Controllers.UsersController",
-    "Method": "CreateUsers",
-    "RelativePath": "api/Users/GetFollowers",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "userID",
-        "Type": "System.Int32",
-        "IsRequired": false
-      }
-    ],
     "ReturnTypes": []
   },
   {
