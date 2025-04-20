@@ -13,6 +13,7 @@ const PlaylistSongList = ({ songs, playlistName, playlistImage, onSongSelect, on
     console.log(song);
     if (onSongSelect) {
       onSongSelect({
+        id: song.id,
         songSrc: song.songFile,
         songImage: song.image,     
         duration: song.duration,

@@ -13,6 +13,7 @@ const AlbumSongList = ({ songs, playlistName, playlistImage, onSongSelect, onDel
     console.log(song)
     if (onSongSelect) {
       onSongSelect({
+        id: song.id,
         songImage: song.image,
         songSrc: song.songFile,
         name: song.title,
