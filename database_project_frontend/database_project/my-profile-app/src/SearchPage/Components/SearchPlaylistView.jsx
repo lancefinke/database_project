@@ -1,22 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import './SearchPlaylistView.css';
-import MusicPlayer from '../../ProfilePage/Components/MusicPlayer';
-import useSongNavigation from '../../hooks/useSongNavigation';
+import { usePlayerContext } from '../../contexts/PlayerContext';
 
 const SearchPlaylistView = ({ songs, playlistName, playlistImage, onBack, onSongSelect }) => {
+  // Use the global player context instead of local navigation hook
   const {
-    currentSongIndex,
     currentSong,
     isPlaying,
     isShuffling,
-    changeSong,
-    playPreviousSong,
-    playNextSong,
-    handleSongEnd,
+    playSong,
     togglePlayPause,
-    toggleShuffle,
-    setIsPlaying
-  } = useSongNavigation(songs);
+    toggleShuffle
+  } = usePlayerContext();
 
   const formatDuration = (seconds) => {
     const minutes = Math.floor(seconds / 60);
@@ -25,13 +20,11 @@ const SearchPlaylistView = ({ songs, playlistName, playlistImage, onBack, onSong
   };
 
   const handleSongClick = (song) => {
-    const index = songs.findIndex(s => s.id === song.id);
-    if (index !== -1) {
-      changeSong(index);
-      setIsPlaying(true);
-      if (onSongSelect) {
-        onSongSelect(song);
-      }
+    // Use the global playSong function instead
+    playSong(song, songs);
+    
+    if (onSongSelect) {
+      onSongSelect(song);
     }
   };
 
@@ -69,7 +62,11 @@ const SearchPlaylistView = ({ songs, playlistName, playlistImage, onBack, onSong
         
         {songs.length > 0 ? (
           songs.map((song, index) => (
-            <div key={song.id} className="search-song-row" onClick={() => handleSongClick(song)}>
+            <div 
+              key={song.id || song.SongID || `song-${index}`} 
+              className="search-song-row" 
+              onClick={() => handleSongClick(song)}
+            >
               <div className="search-song-number-cell">
                 <span className="search-song-number">{index + 1}</span>
                 <button className="search-play-button" onClick={(e) => {
@@ -106,29 +103,10 @@ const SearchPlaylistView = ({ songs, playlistName, playlistImage, onBack, onSong
           </div>
         )}
       </div>
-
-      {currentSong && (
-        <MusicPlayer
-          id={currentSong.id}
-          songSrc={currentSong.songFile}
-          songImage={currentSong.image}
-          song={currentSong.title}
-          artist={currentSong.artist}
-          duration={currentSong.duration}
-          pageName="playlist"
-          isPlaying={isPlaying}
-          isShuffling={isShuffling}
-          togglePlayPause={togglePlayPause}
-          toggleShuffle={toggleShuffle}
-          playPreviousSong={playPreviousSong}
-          playNextSong={playNextSong}
-          handleSongEnd={handleSongEnd}
-          setIsPlaying={setIsPlaying}
-          playlistSongs={songs}
-        />
-      )}
+      
+      {/* Remove the MusicPlayer component - now handled by App.jsx */}
     </div>
   );
 };
 
-export default SearchPlaylistView; 
+export default SearchPlaylistView;
