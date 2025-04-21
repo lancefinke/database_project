@@ -36,6 +36,15 @@ const ProfilePage = ({ onSongSelect }) => {
   const [albums, setAlbums] = useState([]);
   const [playlists, setPlaylists] = useState([]);
   const [genreSongs, setGenreSongs] = useState({});
+  
+  // Define isOwnProfile variable to use throughout the component - MOVED UP HERE
+  const isOwnProfile = username === user?.UserName;
+  
+  // Now define all the handler functions that depend on isOwnProfile
+  const handleDeleteSong = isOwnProfile ? undefined : () => console.log("Delete operation not allowed on other profiles");
+  const handleAddToPlaylist = isOwnProfile ? undefined : () => console.log("Add to playlist operation not allowed on other profiles");
+  const handleAddToAlbum = isOwnProfile ? undefined : () => console.log("Add to album operation not allowed on other profiles");
+  const handleRemoveFromPlaylist = isOwnProfile ? undefined : () => console.log("Remove from playlist operation not allowed on other profiles");
 
   // Check if viewing own profile and redirect if needed
   useEffect(() => {
@@ -45,33 +54,43 @@ const ProfilePage = ({ onSongSelect }) => {
     }
   }, [user, username, navigate]);
 
-  // Format duration from different formats to MM:SS display
-  const formatDuration = (input) => {
-    // If input is already in MM:SS format (string), return it
-    if (typeof input === 'string' && input.includes(':')) {
-      return input;
-    }
-    
-    // If input is a string that doesn't contain ":", try to parse it as a number
-    let seconds;
-    if (typeof input === 'string') {
-      seconds = parseFloat(input);
-    } else if (typeof input === 'number') {
-      seconds = input;
-    } else {
-      return "0:00"; // Invalid input
-    }
-    
-    // Handle numeric input (seconds)
-    if (!isNaN(seconds) && seconds > 0) {
-      const mins = Math.floor(seconds / 60);
-      const secs = Math.floor(seconds % 60);
-      return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-    }
-    
-    // Default fallback
+  // Update the formatDuration function
+const formatDuration = (input) => {
+  // Handle undefined or null
+  if (input === undefined || input === null) {
     return "0:00";
-  };
+  }
+  
+  // If input is already in MM:SS format (string), return it
+  if (typeof input === 'string' && input.includes(':')) {
+    return input;
+  }
+  
+  // If input is a string that doesn't contain ":", try to parse it as a number
+  let seconds;
+  if (typeof input === 'string') {
+    seconds = parseFloat(input);
+  } else if (typeof input === 'number') {
+    seconds = input;
+  } else {
+    return "0:00"; // Invalid input
+  }
+  
+  // Handle NaN
+  if (isNaN(seconds)) {
+    return "0:00";
+  }
+  
+  // Handle numeric input (seconds)
+  if (seconds > 0) {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+  }
+  
+  // Default fallback
+  return "0:00";
+};
 
   // Helper function for consistent song object formatting
   const formatSongObject = (song, defaultArtistName) => {
@@ -95,17 +114,21 @@ const ProfilePage = ({ onSongSelect }) => {
     }
     
     // Process duration
-    let duration = "0:00";
-    if (typeof song.Duration === 'string' && song.Duration.includes(':')) {
-      duration = song.Duration;
-    } else if (song.Duration !== undefined) {
-      duration = formatDuration(song.Duration);
-    } else if (song.duration !== undefined) {
-      duration = formatDuration(song.duration);
-    } else if (song.SongDuration !== undefined) {
-      duration = formatDuration(song.SongDuration);
-    }
-    
+let duration = "0:00";
+if (typeof song.Duration === 'string' && song.Duration.includes(':')) {
+  duration = song.Duration; // Already formatted as MM:SS
+} else if (song.Duration !== undefined) {
+  duration = formatDuration(song.Duration);
+} else if (song.duration !== undefined) {
+  // Check if it's already formatted
+  if (typeof song.duration === 'string' && song.duration.includes(':')) {
+    duration = song.duration;
+  } else {
+    duration = formatDuration(song.duration);
+  }
+} else if (song.SongDuration !== undefined) {
+  duration = formatDuration(song.SongDuration);
+}
     // Create and return the formatted song object
     return {
       id: song.SongID || song.Id || song.songId || song.id,
@@ -260,20 +283,31 @@ const ProfilePage = ({ onSongSelect }) => {
       
       // Organize songs by genre
       const songsByGenre = {};
-      formattedSongs.forEach(song => {
-        if (!song.genre || song.genre === "Unknown") return;
-        
-        if (!songsByGenre[song.genre]) {
-          songsByGenre[song.genre] = {
-            name: song.genre,
-            image: formattedSongs.find(s => s.genre === song.genre && s.image)?.image || 
-                   `https://placehold.co/100x100/101010/white?text=${encodeURIComponent(song.genre)}`,
-            songs: []
-          };
-        }
-        
-        songsByGenre[song.genre].songs.push(song);
-      });
+formattedSongs.forEach(song => {
+  if (!song.genre || song.genre === "Unknown") return;
+  
+  if (!songsByGenre[song.genre]) {
+    songsByGenre[song.genre] = {
+      name: song.genre,
+      image: formattedSongs.find(s => s.genre === song.genre && s.image)?.image || 
+             `https://placehold.co/100x100/101010/white?text=${encodeURIComponent(song.genre)}`,
+      songs: []
+    };
+  }
+  
+  // Add debug logging to check duration before adding to genreSongs
+  console.log(`Adding song "${song.title}" to genre ${song.genre} with duration: ${song.duration}`);
+  
+  // Make sure the song has valid duration
+  const songWithValidDuration = {
+    ...song,
+    duration: song.duration || "0:00" // Ensure duration exists
+  };
+  
+  songsByGenre[song.genre].songs.push(songWithValidDuration);
+});
+console.log("Final genre songs structure:", songsByGenre);
+setGenreSongs(songsByGenre);
       
       setGenreSongs(songsByGenre);
     } catch (err) {
@@ -700,11 +734,12 @@ const ProfilePage = ({ onSongSelect }) => {
           </div>
           
           <PlaylistSongList 
-            songs={selectedPlaylist.songs} 
-            playlistName={selectedPlaylist.name}
-            playlistImage={selectedPlaylist.image}
-            onSongSelect={onSongSelect}
-          />
+  songs={selectedPlaylist.songs} 
+  playlistName={selectedPlaylist.name}
+  playlistImage={selectedPlaylist.image}
+  onDeleteFromPlaylist={handleRemoveFromPlaylist}
+  isOwnProfile={isOwnProfile} // Use the variable we defined above
+/>
         </>
       )}
 
@@ -723,12 +758,16 @@ const ProfilePage = ({ onSongSelect }) => {
             </div>
           )}
           
-          <AlbumSongList 
-            songs={selectedAlbum.songs} 
-            playlistName={selectedAlbum.name}
-            playlistImage={selectedAlbum.image}
-            onSongSelect={onSongSelect}
-          />
+          <AlbumSongList
+  songs={selectedAlbum.songs}
+  playlistName={selectedAlbum.name}
+  playlistImage={selectedAlbum.image}
+  onDeleteSong={handleDeleteSong}
+  isMyAlbum={selectedAlbum.id === defaultAlbumId}
+  onAddToPlaylist={handleAddToPlaylist}
+  onAddToAlbum={handleAddToAlbum}
+  isOwnProfile={isOwnProfile} // Use the variable we defined above
+/>
         </>
       )}
       
@@ -746,11 +785,12 @@ const ProfilePage = ({ onSongSelect }) => {
           </div>
           
           <GenreSongList 
-            songs={selectedGenre.songs} 
-            playlistName={selectedGenre.name}
-            playlistImage={selectedGenre.image}
-            onSongSelect={onSongSelect}
-          />
+  songs={selectedGenre.songs} 
+  playlistName={selectedGenre.name}
+  playlistImage={selectedGenre.image}
+  onSongSelect={onSongSelect}
+  isOwnProfile={isOwnProfile} // Use the variable we defined above
+/>
         </>
       )}
     </div>

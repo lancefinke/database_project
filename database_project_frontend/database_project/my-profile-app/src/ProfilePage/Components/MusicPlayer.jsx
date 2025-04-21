@@ -37,14 +37,15 @@ const MusicPlayer = ({
   const [showReportForm, setShowReportForm] = useState(false);
   const [showPlaylistSelection, setShowPlaylistSelection] = useState(false);
   const [availablePlaylists, setAvailablePlaylists] = useState([]);
+  const [songDuration, setSongDuration] = useState(duration || 0);
   const playerRef = useRef(null);
  
   // Current song information
   const currentSong = {
-    id: id || songId || SongID, // Try multiple possible ID properties
+    id: id || 0,
     title: song || "Song Title",
     artist: artist || "Artist Name",
-    image: songImage || "https://via.placeholder.com/150"
+    image: songImage || "https://placehold.co/150x150"
   };
 
   const { user } = useUserContext();
@@ -58,18 +59,52 @@ const MusicPlayer = ({
 
   // Function to update the progress bar fill effect
   const updateProgressBarFill = (currentValue, maxValue) => {
+    if (!maxValue || maxValue <= 0) return;
     const percentage = (currentValue / maxValue) * 100;
     document.documentElement.style.setProperty('--progress-percentage', `${percentage}%`);
   };
 
+  // Improved formatDuration function that handles all edge cases
   const formatDuration = (seconds) => {
-    if (!seconds || isNaN(seconds)) return "0:00";
+    if (seconds === undefined || seconds === null || isNaN(seconds)) {
+      return "0:00";
+    }
+    
+    // Try to parse string durations
+    if (typeof seconds === 'string') {
+      if (seconds.includes(':')) {
+        return seconds; // Already formatted as MM:SS
+      }
+      // Try to parse as number
+      const parsed = parseFloat(seconds);
+      if (isNaN(parsed)) return "0:00";
+      seconds = parsed;
+    }
     
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = Math.floor(seconds % 60);
     return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
   };
 
+  // Effect to update duration when the song loads
+  useEffect(() => {
+    if (playerRef.current && playerRef.current.howler && isPlaying) {
+      // Check every 100ms until we get a valid duration
+      const durationCheck = setInterval(() => {
+        const actualDuration = playerRef.current.duration();
+        if (actualDuration && !isNaN(actualDuration) && actualDuration > 0) {
+          console.log("Got actual duration:", actualDuration);
+          setSongDuration(actualDuration);
+          updateProgressBarFill(currentTime, actualDuration);
+          clearInterval(durationCheck);
+        }
+      }, 100);
+      
+      // Clean up the interval if component unmounts or song changes
+      return () => clearInterval(durationCheck);
+    }
+  }, [isPlaying, songSrc]);
+  
   const toggleAddToPlaylist = () => {
     setShowPlaylistSelection(true);
   };
@@ -102,7 +137,7 @@ const MusicPlayer = ({
           const formattedPlaylists = data.map(playlist => ({
             id: playlist.PlaylistID || playlist.Id,
             name: playlist.Title || playlist.Name,
-            image: playlist.PlaylistPicture || playlist.PlaylistImage || playlist.ImageURL || "https://via.placeholder.com/100"
+            image: playlist.PlaylistPicture || playlist.PlaylistImage || playlist.ImageURL || "https://placehold.co/100x100"
           }));
           
           setAvailablePlaylists(formattedPlaylists);
@@ -152,22 +187,31 @@ const MusicPlayer = ({
   // Reset when song changes
   useEffect(() => {
     setCurrentTime(0);
-  }, [songSrc]);
+    // Use the provided duration or reset to 0
+    setSongDuration(duration || 0);
+  }, [songSrc, duration]);
 
   // Update time as song plays
   useEffect(() => {
     let interval;
     if (isPlaying && playerRef.current) {
       interval = setInterval(() => {
-        const current = playerRef.current.seek();
-        if (typeof current === 'number') {
-          setCurrentTime(current);
-          updateProgressBarFill(current, duration || 100);
+        try {
+          const current = playerRef.current.seek();
+          if (typeof current === 'number') {
+            setCurrentTime(current);
+            
+            // Use the dynamic songDuration instead of the prop
+            const currentDuration = songDuration || duration || 100;
+            updateProgressBarFill(current, currentDuration);
+          }
+        } catch (e) {
+          console.error("Error while updating time:", e);
         }
       }, 1000);
     }
     return () => clearInterval(interval);
-  }, [isPlaying, duration]);
+  }, [isPlaying, songDuration, duration]);
 
   // Initialize volume slider fill on component mount
   useEffect(() => {
@@ -176,8 +220,9 @@ const MusicPlayer = ({
 
   // Initialize progress bar fill when component mounts or when duration changes
   useEffect(() => {
-    updateProgressBarFill(currentTime, duration || 100);
-  }, [currentTime, duration]);
+    const currentDuration = songDuration || duration || 100;
+    updateProgressBarFill(currentTime, currentDuration);
+  }, [currentTime, songDuration, duration]);
 
   return (
     <>
@@ -196,9 +241,12 @@ const MusicPlayer = ({
         {/* Song info section */}
         <div className="music-info-section">
           <img
-            src={songImage || "https://via.placeholder.com/150"}
+            src={songImage || "https://placehold.co/150x150"}
             alt="Album cover"
             className="music-image"
+            onError={(e) => {
+              e.target.src = "https://placehold.co/150x150";
+            }}
           />
           <div className="music-info">
             <p className="music-name">{song || "Song Title"}</p>
@@ -216,19 +264,19 @@ const MusicPlayer = ({
                 type="range" 
                 className="progress-bar" 
                 min="0" 
-                max={duration || 100} 
+                max={songDuration || duration || 100} 
                 value={currentTime || 0} 
                 onChange={(e) => {
                   const newTime = parseFloat(e.target.value);
                   setCurrentTime(newTime);
-                  updateProgressBarFill(newTime, duration || 100);
+                  updateProgressBarFill(newTime, songDuration || duration || 100);
                   if (playerRef.current) {
                     playerRef.current.seek(newTime);
                   }
                 }}
               />
             </div>
-            <span className="total-duration">{formatDuration(duration)}</span>
+            <span className="total-duration">{formatDuration(songDuration || duration)}</span>
           </div>
           
           {/* Controls */}
@@ -238,6 +286,7 @@ const MusicPlayer = ({
               onClick={toggleShuffle}
               className={`control-button ${isShuffling ? "active" : ""}`}
               aria-label="Shuffle"
+              title="Shuffle"
             >
               <Shuffle size={18} />
             </button>
@@ -247,6 +296,7 @@ const MusicPlayer = ({
               onClick={handlePrevious}
               className={`control-button ${prevPressed ? "pressed" : ""}`}
               aria-label="Previous"
+              title="Previous song"
               disabled={playlistSongs.length <= 1}
             >
               <SkipBack size={20} />
@@ -257,6 +307,7 @@ const MusicPlayer = ({
               onClick={togglePlayPause}
               className="control-button play-button"
               aria-label={isPlaying ? "Pause" : "Play"}
+              title={isPlaying ? "Pause" : "Play"}
               style={{
                 background: "rgba(255, 255, 255, 0.2)",
                 height: "46px",
@@ -285,6 +336,7 @@ const MusicPlayer = ({
               onClick={handleNext}
               className={`control-button ${nextPressed ? "pressed" : ""}`}
               aria-label="Next"
+              title="Next song"
               disabled={playlistSongs.length <= 1}
             >
               <SkipForward size={20} />
@@ -295,6 +347,7 @@ const MusicPlayer = ({
               onClick={toggleAddToPlaylist}
               className={`control-button ${songAdded ? "added" : ""}`}
               aria-label="Add to Playlist"
+              title="Add to playlist"
             >
               {songAdded ? <Check size={18} /> : <Plus size={18} />}
             </button>
@@ -304,6 +357,7 @@ const MusicPlayer = ({
               onClick={toggleReporting}
               className={`control-button ${isReporting ? "reporting" : ""}`}
               aria-label="Report"
+              title="Report this song"
             >
               <Flag size={18} />
             </button>
@@ -325,6 +379,9 @@ const MusicPlayer = ({
                 const newVolume = parseFloat(e.target.value);
                 setVolume(newVolume);
                 updateVolumeSliderFill(newVolume);
+                if (playerRef.current) {
+                  playerRef.current.volume(newVolume);
+                }
               }}
               aria-label="Volume"
             />
@@ -339,6 +396,23 @@ const MusicPlayer = ({
             volume={volume}
             ref={playerRef}
             onEnd={handleSongEnd}
+            onLoad={() => {
+              // When audio loads, try to get the actual duration
+              if (playerRef.current) {
+                setTimeout(() => {
+                  try {
+                    const actualDuration = playerRef.current.duration();
+                    if (actualDuration && !isNaN(actualDuration) && actualDuration > 0) {
+                      console.log("Audio loaded, duration:", actualDuration);
+                      setSongDuration(actualDuration);
+                    }
+                  } catch (e) {
+                    console.error("Error getting duration on load:", e);
+                  }
+                }, 500); // Give it a bit of time to initialize
+              }
+            }}
+            html5={true}
           />
         )}
       </div>
