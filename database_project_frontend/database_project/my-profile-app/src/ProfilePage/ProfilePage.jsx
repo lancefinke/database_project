@@ -647,7 +647,6 @@ setGenreSongs(songsByGenre);
         
         <div className="stats-container">
           <p className="follower-count">Followers: {userProfile.followers}</p>
-          <p className="total-listens">Total Listens: {userProfile.totalListens}</p>
         </div>
         
         {user && user.UserID !== userProfile.userId && (

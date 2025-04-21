@@ -314,46 +314,66 @@ const GetUserProfile = (userId) => {
         
         console.log("Using song data to determine artist:", artistName, "ArtistID:", artistId);
         
-        // Now try to get follower count if we have an artist ID
-        if (artistId) {
-          fetch(`${API_URL}/api/Follow/GetArtistFollowStats?artistId=${artistId}`)
-            .then(res => res.json())
-            .then(followStats => {
-              // Set user profile with available data
+        // Get user data including bio
+        fetch(`${API_URL}/api/Users/GetUserByName?name=${encodeURIComponent(artistName)}`)
+          .then(res => res.json())
+          .then(userData => {
+            console.log("User data from API:", userData);
+            const bio = userData?.Bio || "No bio available";
+            
+            // Now try to get follower count if we have an artist ID
+            if (artistId) {
+              fetch(`${API_URL}/api/Follow/GetArtistFollowStats?artistId=${artistId}`)
+                .then(res => res.json())
+                .then(followStats => {
+                  // Set user profile with available data
+                  setUserProfile({
+                    name: artistName,
+                    bio: bio,
+                    profileImage: "https://placehold.co/150x150",
+                    followers: followStats?.FollowerCount || 0,
+                    totalListens: 0,
+                    artistId: artistId
+                  });
+                  console.log("Set profile with follower count:", followStats?.FollowerCount);
+                })
+                .catch(err => {
+                  // Set profile without follower count
+                  setUserProfile({
+                    name: artistName,
+                    bio: bio,
+                    profileImage: "https://placehold.co/150x150",
+                    followers: 0,
+                    totalListens: 0,
+                    artistId: artistId
+                  });
+                  console.log("Failed to get follower count, using default values");
+                });
+            } else {
+              // Set basic profile without follower count
               setUserProfile({
                 name: artistName,
-                bio: "Artist on Music App",
-                profileImage: "https://placehold.co/150x150",
-                followers: followStats?.FollowerCount || 0,
-                totalListens: 0,
-                artistId: artistId
-              });
-              console.log("Set profile with follower count:", followStats?.FollowerCount);
-            })
-            .catch(err => {
-              // Set profile without follower count
-              setUserProfile({
-                name: artistName,
-                bio: "Artist on Music App",
+                bio: bio,
                 profileImage: "https://placehold.co/150x150",
                 followers: 0,
                 totalListens: 0,
-                artistId: artistId
+                artistId: userId // Temporarily use userId as artistId
               });
-              console.log("Failed to get follower count, using default values");
+              console.log("No ArtistID found, using default values");
+            }
+          })
+          .catch(error => {
+            console.error("Failed to get user data:", error);
+            // Set profile with default bio
+            setUserProfile({
+              name: artistName,
+              bio: "No bio available",
+              profileImage: "https://placehold.co/150x150",
+              followers: 0,
+              totalListens: 0,
+              artistId: artistId || userId
             });
-        } else {
-          // Set basic profile without follower count
-          setUserProfile({
-            name: artistName,
-            bio: "Artist on Music App",
-            profileImage: "https://placehold.co/150x150",
-            followers: 0,
-            totalListens: 0,
-            artistId: userId // Temporarily use userId as artistId
           });
-          console.log("No ArtistID found, using default values");
-        }
       }
     })
     .catch(error => {
@@ -361,7 +381,7 @@ const GetUserProfile = (userId) => {
       // Set minimal profile
       setUserProfile({
         name: "User",
-        bio: "Artist on Music App",
+        bio: "No bio available",
         profileImage: "https://placehold.co/150x150",
         followers: 0,
         totalListens: 0,
@@ -1102,7 +1122,6 @@ useEffect(() => {
         
         <div className="stats-container">
           <p className="follower-count">Followers: {userProfile.followers}</p>
-          <p className="total-listens">Total Listens: {userProfile.totalListens}</p>
         </div>
         
         <div className="music-container">
