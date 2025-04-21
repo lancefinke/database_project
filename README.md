@@ -34,6 +34,16 @@ A Full Stack Project that allows users as artist to upload songs to their profil
 
 `npm install`
 
-4. Run the Project Locally
+4. Run the Front-End Locally
 
 `npm run dev`
+
+5. To run the Back-End, navigate back to the main Folder
+
+`cd ../../..`
+
+6. Navigate to the Back End Folder
+
+`cd ./MusicLibraryBackend`
+
+7. Type these 3 commands to run the backend
