@@ -215,29 +215,38 @@ const UserPage = ({ onSongSelect }) => {
   };
 
   const handleAddSongToAlbum = (albumId) => {
+    if (!currentSongForAction) return;
+    
     console.log(`Adding song "${currentSongForAction.title}" to album ID: ${albumId}`);
     
-    // Here you would make an API call to add the song to the album
-    
-    // For now, just update the state locally
-    setAlbums(prevAlbums => {
-      return prevAlbums.map(album => {
-        if (album.id === albumId) {
-          // Check if the song already exists in the album
-          const songExists = album.songs.some(song => song.id === currentSongForAction.id);
-          if (!songExists) {
-            return {
-              ...album,
-              songs: [...album.songs, currentSongForAction]
-            };
-          }
-        }
-        return album;
-      });
+    // Make API call to add the song to the album
+    fetch(`${API_URL}/api/database/AddAlbumSongs?AlbumID=${albumId}&SongID=${currentSongForAction.id}`, {
+      method: "POST"
+    })
+    .then(response => {
+      if (!response.ok) {
+        return response.text().then(text => {
+          console.error("Error details:", text);
+          throw new Error("Failed to add song to album");
+        });
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log("API response:", data);
+      
+      // Refresh the albums to show updated content
+      GetAlbumSongs(albumId);
+      
+      // Close the album selection popup
+      setShowAlbumSelection(false);
+      
+      console.log(`Song ${currentSongForAction.id} added to album ID ${albumId}`);
+    })
+    .catch(error => {
+      console.error("Error adding song to album:", error);
+      alert("Failed to add song to album. Please try again.");
     });
-    
-    setShowAlbumSelection(false);
-    setCurrentSongForAction(null);
   };
   
   // Drag state
