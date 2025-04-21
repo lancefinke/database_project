@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Play, Pause, SkipForward, SkipBack, Shuffle, Plus, Check, Volume2, Flag } from "lucide-react";
+import { Play, Pause, SkipForward, SkipBack, Shuffle, Plus, Check, Volume2, Flag, Star } from "lucide-react";
 import Editable from "./Editable";
 import PlaylistSelectionPopup from "./PlaylistSelectionPopup";
 import ReactHowler from 'react-howler';
@@ -28,7 +28,10 @@ const MusicPlayer = ({
   playNextSong,
   handleSongEnd,
   setIsPlaying,
-  playlistSongs = []
+  playlistSongs = [],
+  // Rating props
+  AverageRating,
+  onRate
 }) => {
   const [currentTime, setCurrentTime] = useState(0);
   const [volume, setVolume] = useState(0.5);
@@ -40,7 +43,11 @@ const MusicPlayer = ({
   const [showPlaylistSelection, setShowPlaylistSelection] = useState(false);
   const [availablePlaylists, setAvailablePlaylists] = useState([]);
   const [songDuration, setSongDuration] = useState(duration || 0);
+  const [rating, setRating] = useState("");
+  const [showRating, setShowRating] = useState(false);
+  const [isRating, setIsRating] = useState(false);
   const playerRef = useRef(null);
+  const controlsRef = useRef(null);
   // Add state to track if we've already counted this listen
   const [hasTrackedListen, setHasTrackedListen] = useState(false);
  
@@ -90,12 +97,28 @@ const MusicPlayer = ({
     return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
   };
 
+  // Close rating dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showRating && controlsRef.current && !controlsRef.current.contains(event.target)) {
+        setShowRating(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showRating]);
+
   // Reset tracking state when song changes
   useEffect(() => {
     setHasTrackedListen(false);
     setCurrentTime(0);
     // Use the provided duration or reset to 0
     setSongDuration(duration || 0);
+    // Reset rating when song changes
+    setRating("");
   }, [songSrc, duration, id]);
 
   // Effect to update duration when the song loads
@@ -154,6 +177,8 @@ const MusicPlayer = ({
   
   const toggleAddToPlaylist = () => {
     setShowPlaylistSelection(true);
+    // Close rating dropdown if open
+    setShowRating(false);
   };
 
   // Wrapper functions for the navigation buttons
@@ -167,6 +192,92 @@ const MusicPlayer = ({
     setNextPressed(true);
     setTimeout(() => setNextPressed(false), 200);
     playNextSong();
+  };
+
+  const toggleRating = () => {
+    // Close any other open popups
+    setShowPlaylistSelection(false);
+    
+    // Toggle rating dropdown
+    setShowRating(!showRating);
+  };
+
+  // Function to submit rating to backend API
+  
+const submitRating = (songId, rating) => {
+  // Make sure we have the necessary data
+  if (!songId || !rating || !user?.UserID) {
+    console.error("Missing required data for rating:", { songId, rating, userId: user?.UserID });
+    return Promise.reject("Missing required data for rating");
+  }
+
+  setIsRating(true);
+
+  // Using the correct API endpoint with JSON body instead of URL parameters
+  const apiUrl = `http://localhost:5142/api/Ratings/PostRating`;
+  
+  // Create rating data object
+  const ratingData = {
+    SongID: songId,
+    UserID: user.UserID,
+    Rating: rating
+  };
+  
+  console.log("Submitting rating:", { url: apiUrl, data: ratingData });
+
+  // Make the API call with JSON body
+  return fetch(apiUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(ratingData)
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`Failed to submit rating: ${response.status} ${response.statusText}`);
+    }
+    return response.json();
+  })
+  .then(data => {
+    console.log("Rating submitted successfully:", data);
+    return data;
+  })
+  .catch(error => {
+    console.error("Error submitting rating:", error);
+    throw error;
+  })
+  .finally(() => {
+    setIsRating(false);
+  });
+};
+
+  const handleRateChange = (e) => {
+    const newRating = parseInt(e.target.value);
+    if (isNaN(newRating)) return;
+    
+    setRating(newRating);
+    
+    // Submit rating to backend
+    if (id && user?.UserID) {
+      submitRating(id, newRating)
+        .then(() => {
+          // If onRate callback exists, call it (for parent component updates)
+          if (onRate) {
+            onRate(id, newRating);
+          }
+          
+          // Give visual feedback that rating was submitted
+          setTimeout(() => {
+            // Automatically close the dropdown
+            setShowRating(false);
+          }, 400);
+        })
+        .catch(error => {
+          console.error("Failed to rate song:", error);
+          // You could add error handling UI here if needed
+        });
+    }
   };
 
   useEffect(() => {
@@ -224,6 +335,8 @@ const MusicPlayer = ({
   const toggleReporting = () => {
     setShowReportForm(true);
     setIsReporting(true);
+    // Close rating dropdown if open
+    setShowRating(false);
   };
 
   const handleCloseReport = () => {
@@ -320,7 +433,31 @@ const MusicPlayer = ({
           </div>
           
           {/* Controls */}
-          <div className="controls-container">
+          <div className="controls-container" ref={controlsRef}>
+            {/* Rating dropdown (positioned absolutely above the controls) */}
+            {showRating && (
+              <div className="rating-dropdown">
+                <select
+                  className="rating-select"
+                  value={rating || ""}
+                  onChange={handleRateChange}
+                  disabled={isRating}
+                >
+                  <option value="">Rate</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                </select>
+                {AverageRating && (
+                  <div className="average-rating">
+                    Average Rating: {AverageRating}
+                  </div>
+                )}
+              </div>
+            )}
+            
             {/* Shuffle button */}
             <button
               onClick={toggleShuffle}
@@ -348,21 +485,6 @@ const MusicPlayer = ({
               className="control-button play-button"
               aria-label={isPlaying ? "Pause" : "Play"}
               title={isPlaying ? "Pause" : "Play"}
-              style={{
-                background: "rgba(255, 255, 255, 0.2)",
-                height: "46px",
-                width: "46px",
-                borderRadius: "50%",
-                border: "1px solid rgba(255, 255, 255, 0.2)",
-                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.4)",
-                position: "relative",
-                zIndex: "100",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "white",
-                margin: "0 12px"
-              }}
             >
               {isPlaying ? (
                 <Pause size={24} style={{ color: "white", opacity: 1 }} />
@@ -390,6 +512,16 @@ const MusicPlayer = ({
               title="Add to playlist"
             >
               {songAdded ? <Check size={18} /> : <Plus size={18} />}
+            </button>
+            
+            {/* Rating button */}
+            <button
+              onClick={toggleRating}
+              className={`control-button ${showRating ? "active" : ""}`}
+              aria-label="Rate Song"
+              title="Rate this song"
+            >
+              <Star size={18} />
             </button>
             
             {/* Report button */}

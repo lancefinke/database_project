@@ -434,3 +434,125 @@
     font-weight: 500;
   }
 }
+
+.refresh-indicator {
+  background-color: rgba(65, 105, 225, 0.1);
+  color: #4169e1;
+  text-align: center;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  animation: pulse 1.5s infinite;
+  border: 1px solid rgba(65, 105, 225, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.refresh-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(65, 105, 225, 0.3);
+  border-radius: 50%;
+  border-top-color: #4169e1;
+  animation: spin 1s linear infinite;
+  margin-right: 10px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.7;
+  }
+}
+
+/* Smooth transitions for numerical values */
+.listener-count,
+.rating-value,
+.analytics-value,
+.song-plays-value {
+  transition: all 0.3s ease-in-out;
+}
+
+/* Flash effect for updated values */
+@keyframes highlight-update {
+  0% {
+    background-color: rgba(65, 105, 225, 0.3);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+.value-updated {
+  animation: highlight-update 1.5s ease-out;
+}
+
+/* Hover effects for better interactivity */
+.song-item {
+  cursor: pointer;
+  position: relative;
+}
+
+.song-item:after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #4169e1;
+  transition: width 0.3s ease;
+}
+
+.song-item:hover:after {
+  width: 100%;
+}
+
+/* Improved stat cards */
+.stat-card {
+  transition: all 0.3s ease;
+  border-left: 4px solid transparent;
+}
+
+.stat-card:nth-child(1) {
+  border-left-color: #4285f4;
+}
+
+.stat-card:nth-child(2) {
+  border-left-color: #fbbc05;
+}
+
+.stat-card:nth-child(3) {
+  border-left-color: #34a853;
+}
+
+.stat-card:nth-child(4) {
+  border-left-color: #ea4335;
+}
+
+/* Mobile optimizations */
+@media (max-width: 576px) {
+  .refresh-indicator {
+    font-size: 0.8rem;
+    padding: 8px;
+  }
+  
+  .refresh-spinner {
+    width: 12px;
+    height: 12px;
+  }
+}

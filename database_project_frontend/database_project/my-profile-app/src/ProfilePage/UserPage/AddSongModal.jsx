@@ -238,7 +238,7 @@ const AddSongModal = ({ isOpen, onClose, onSubmit }) => {
 
   const fetchUserAlbums = async (userId) => {
     try {
-      const response = await fetch(`https://localhost:7152/api/database/GetUserAlbums?userID=${userId}`);
+      const response = await fetch(`http://localhost:5142/api/database/GetUserAlbums?userID=${userId}`);
       if (!response.ok) throw new Error("Failed to fetch albums");
       const data = await response.json();
       const formattedAlbums = data.map(album => ({
@@ -284,7 +284,7 @@ const AddSongModal = ({ isOpen, onClose, onSubmit }) => {
     formData.append("SongMP3", audioFile);
 
     const encodedSongName = encodeURIComponent(songName);
-    const url = `https://localhost:7152/api/database/UploadSong?songName=${encodedSongName}&userID=${currentUserId}&albumID=${selectedAlbum}&genreCode=${selectedGenres}`;
+    const url = `http://localhost:5142/api/database/UploadSong?songName=${encodedSongName}&userID=${currentUserId}&albumID=${selectedAlbum}&genreCode=${selectedGenres}`;
 
     try {
       const response = await fetch(url, {
