@@ -5,19 +5,13 @@ import { usePlayerContext } from '../contexts/PlayerContext'; // Import the play
 import UserLink from '../UserLink/UserLink'; // Import UserLink component
 
 // SearchGenreSongList component that displays songs in a genre with a back button
-const SearchGenreSongList = ({ songs, playlistName, onBackClick }) => {
-  // Use the global player context instead of local navigation hook
-  const {
-    currentSong,
-    isPlaying,
-    isShuffling,
-    playSong,
-    togglePlayPause,
-    toggleShuffle
-  } = usePlayerContext();
-
+const SearchGenreSongList = ({ songs, playlistName, onBackClick, onSongSelect }) => {
+  // Use the global player context if available
+  const playerContext = usePlayerContext ? usePlayerContext() : null;
+  
   // Function to format seconds to mm:ss
   const formatDuration = (seconds) => {
+    if (!seconds) return "0:00";
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
     return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
@@ -25,8 +19,18 @@ const SearchGenreSongList = ({ songs, playlistName, onBackClick }) => {
 
   // Handle song click to play music
   const handleSongClick = (song) => {
-    // Use the global playSong function instead
-    playSong(song, songs);
+    if (playerContext && playerContext.playSong) {
+      // Use context if available
+      playerContext.playSong(song, songs);
+    } else if (onSongSelect) {
+      // Otherwise use prop callback
+      onSongSelect({
+        name: song.title,
+        creator: song.artist,
+        songSrc: song.songSrc || song.SongFileName,
+        image: song.image
+      });
+    }
   };
 
   return (
@@ -58,7 +62,7 @@ const SearchGenreSongList = ({ songs, playlistName, onBackClick }) => {
           {songs.length > 0 ? (
             songs.map((song, index) => (
               <div 
-                key={song.id} 
+                key={song.id || index} 
                 className="song-row"
                 onClick={() => handleSongClick(song)}
               >
@@ -86,12 +90,14 @@ const SearchGenreSongList = ({ songs, playlistName, onBackClick }) => {
                     <div className="song-text">
                       <div className="song-title" style={{ paddingRight: 0 }}>{song.title}</div>
                       <div className="song-artist">
-                        <UserLink text={song.artist} userName={song.artist} />
+                        {UserLink ? (
+                          <UserLink text={song.artist} userName={song.artist} />
+                        ) : song.artist}
                       </div>
                     </div>
                   </div>
                 </div>
-                <div className="song-album">{song.album}</div>
+                <div className="song-album">{song.album || "Unknown Album"}</div>
                 <div className="song-duration">
                   {formatDuration(song.duration)}
                 </div>
@@ -105,7 +111,6 @@ const SearchGenreSongList = ({ songs, playlistName, onBackClick }) => {
         </div>
       </div>
     </div>
-    // MusicPlayer removed - now in App.jsx
   );
 };
 
