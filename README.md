@@ -19,3 +19,8 @@ A Full Stack Project that allows users as artist to upload songs to their profil
 - ASP.NET Core Web API
 - SQL Server
 - JWT Authentication
+
+---
+## Running the Project Locally
+1. Clone the reposiity
+``
