@@ -151,17 +151,17 @@ const formatDuration = (seconds) => {
               </div>
               <div className="song-genre">{song.genre}</div>
               <div className="song-duration">
-  {typeof song.duration === 'string' && song.duration.includes(':') 
-    ? song.duration 
-    : formatDuration(song.duration)}
-</div>
+                {typeof song.duration === 'string' && song.duration.includes(':') 
+                  ? song.duration 
+                  : formatDuration(song.duration)}
+              </div>
               <div className="song-actions" onClick={(e) => e.stopPropagation()}>
                 {/* Only show song actions menu if isOwnProfile is true */}
                 {isOwnProfile && (
                   <>
                     <button 
                       className="song-actions-button" 
-                      onClick={(e) => toggleMenu(e, song.id)}
+                      onClick={(e) => toggleMenu(e, song.id || index)}
                       aria-label="Song actions"
                     >
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
@@ -169,7 +169,7 @@ const formatDuration = (seconds) => {
                       </svg>
                     </button>
                     
-                    {activeMenuId === song.id && (
+                    {activeMenuId === (song.id || index) && (
                       <div className="song-actions-menu">
                         <div 
                           className="song-actions-menu-item"
