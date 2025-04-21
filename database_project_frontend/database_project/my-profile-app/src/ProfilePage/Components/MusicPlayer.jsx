@@ -6,6 +6,8 @@ import ReactHowler from 'react-howler';
 import "./MusicPlayer.css";
 import FlagIcon from "./FlagIcon"; 
 import { useUserContext } from "../../LoginContext/UserContext";
+// Import the listen tracker
+import { trackListen } from "../../listeners/ListenService";
 
 // Modified MusicPlayer component that uses external navigation state
 const MusicPlayer = ({ 
@@ -39,6 +41,8 @@ const MusicPlayer = ({
   const [availablePlaylists, setAvailablePlaylists] = useState([]);
   const [songDuration, setSongDuration] = useState(duration || 0);
   const playerRef = useRef(null);
+  // Add state to track if we've already counted this listen
+  const [hasTrackedListen, setHasTrackedListen] = useState(false);
  
   // Current song information
   const currentSong = {
@@ -86,6 +90,14 @@ const MusicPlayer = ({
     return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
   };
 
+  // Reset tracking state when song changes
+  useEffect(() => {
+    setHasTrackedListen(false);
+    setCurrentTime(0);
+    // Use the provided duration or reset to 0
+    setSongDuration(duration || 0);
+  }, [songSrc, duration, id]);
+
   // Effect to update duration when the song loads
   useEffect(() => {
     if (playerRef.current && playerRef.current.howler && isPlaying) {
@@ -104,6 +116,41 @@ const MusicPlayer = ({
       return () => clearInterval(durationCheck);
     }
   }, [isPlaying, songSrc]);
+  
+  // Monitor playback progress and track listen at 50% completion
+  useEffect(() => {
+    // We need all these conditions to proceed with tracking:
+    // 1. Player must exist and be playing
+    // 2. Song ID and title must exist
+    // 3. We need a valid duration
+    // 4. User should be logged in
+    // 5. We haven't already tracked this listen
+    if (
+      isPlaying && 
+      id && 
+      song && 
+      songDuration && 
+      currentTime > 0 && 
+      user?.UserID && 
+      !hasTrackedListen
+    ) {
+      // Check if we're past the halfway point
+      if (currentTime >= songDuration / 2) {
+        // Track this listen
+        console.log(`Tracking listen for "${song}" by ${artist} (ID: ${id})`);
+        trackListen(id, { name: song, creator: artist }, user.UserID)
+          .then(newCount => {
+            console.log(`Successfully tracked listen #${newCount} for "${song}"`);
+          })
+          .catch(err => {
+            console.error("Failed to track listen:", err);
+          });
+        
+        // Set flag to avoid tracking multiple times for the same play session
+        setHasTrackedListen(true);
+      }
+    }
+  }, [currentTime, isPlaying, songDuration, id, song, artist, user, hasTrackedListen]);
   
   const toggleAddToPlaylist = () => {
     setShowPlaylistSelection(true);
@@ -183,13 +230,6 @@ const MusicPlayer = ({
     setShowReportForm(false);
     setIsReporting(false);
   };
-
-  // Reset when song changes
-  useEffect(() => {
-    setCurrentTime(0);
-    // Use the provided duration or reset to 0
-    setSongDuration(duration || 0);
-  }, [songSrc, duration]);
 
   // Update time as song plays
   useEffect(() => {
@@ -395,7 +435,10 @@ const MusicPlayer = ({
             playing={isPlaying}
             volume={volume}
             ref={playerRef}
-            onEnd={handleSongEnd}
+            onEnd={() => {
+              setHasTrackedListen(false); // Reset tracking when song ends
+              handleSongEnd();
+            }}
             onLoad={() => {
               // When audio loads, try to get the actual duration
               if (playerRef.current) {
