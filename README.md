@@ -23,4 +23,5 @@ A Full Stack Project that allows users as artist to upload songs to their profil
 ---
 ## Running the Project Locally
 1. Clone the reposiity
+
 `git clone https://github.com/lancefinke/database_project.git`
