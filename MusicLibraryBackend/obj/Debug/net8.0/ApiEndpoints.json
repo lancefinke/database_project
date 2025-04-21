@@ -418,7 +418,7 @@
         "IsRequired": false
       },
       {
-        "Name": "authorID",
+        "Name": "userID",
         "Type": "System.Int32",
         "IsRequired": false
       },

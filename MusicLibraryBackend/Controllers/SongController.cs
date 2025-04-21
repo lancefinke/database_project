@@ -43,94 +43,204 @@ namespace database.Controllers
             }
         }
 
+        //[HttpPost]
+        //[Route("UploadSong")]
+        //[Consumes("multipart/form-data")]
+        //public async Task<IActionResult> UploadSong(string songName, IFormFile SongMP3, IFormFile SongPicture, int authorID, int albumID, int genreCode)
+        //{
+        //    try
+        //    {
+
+        //        BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient("songfilecontainer");
+
+        //        string uniqueID = Guid.NewGuid().ToString();
+        //        string uniqueSongName = $"uploads/" + uniqueID + ".mp3";
+        //        string uniquePictureName = $"uploads/" + uniqueID + ".png";
+        //        BlobClient blobClient = containerClient.GetBlobClient(uniqueSongName);
+        //        BlobClient songClient = containerClient.GetBlobClient(uniquePictureName);
+
+
+        //        // Upload the file
+        //        using (var stream = SongMP3.OpenReadStream())
+        //        {
+        //            await blobClient.UploadAsync(stream, true);
+        //        }
+        //        using (var pic = SongPicture.OpenReadStream())
+        //        {
+        //            await songClient.UploadAsync(pic, true);
+        //        }
+
+        //        string blobUrl = "https://blobcontainer2005.blob.core.windows.net/songfilecontainer/uploads/" + uniqueID + ".mp3";
+        //        string songUrl = "https://blobcontainer2005.blob.core.windows.net/songfilecontainer/uploads/" + uniqueID + ".png";
+
+        //        var ffProbe = new NReco.VideoInfo.FFProbe();
+        //        var videoInfo = ffProbe.GetMediaInfo(blobUrl);
+        //        Console.WriteLine(videoInfo.FormatName);
+        //        Console.WriteLine(videoInfo.Duration);
+        //        int duration = (int)videoInfo.Duration.TotalSeconds;
+
+        //        int songID;
+        //        DataTable table = new DataTable();
+        //        string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
+
+        //        using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+        //        {
+        //            myCon.Open();
+
+        //            // returns the song id idk got it from chat
+        //            string query = "INSERT INTO dbo.songs (SongName, SongFileName, coverArtFileName, authorID, Duration,GenreCode,ReleaseDate) " +
+        //                           "OUTPUT INSERTED.SongID " +
+        //                           "VALUES (@SongName, @BlobUrl, @SongPicture, @authorID, @Duration,@GenreCode,@ReleaseDate)";
+
+        //            using (SqlCommand myCommand = new SqlCommand(query, myCon))
+        //            {
+        //                myCommand.Parameters.AddWithValue("@SongName", songName);
+        //                myCommand.Parameters.AddWithValue("@BlobUrl", blobUrl);
+        //                myCommand.Parameters.AddWithValue("@SongPicture", songUrl);
+        //                myCommand.Parameters.AddWithValue("@authorID", authorID);
+        //                myCommand.Parameters.AddWithValue("@Duration", duration);
+        //                myCommand.Parameters.AddWithValue("@GenreCode", genreCode);
+        //                myCommand.Parameters.AddWithValue("@ReleaseDate", DateTime.Now);
+
+        //                // gets id 
+        //                songID = (int)myCommand.ExecuteScalar();
+        //            }
+
+
+        //            if (albumID > 0)
+        //            {
+        //                string albumSongQuery = "INSERT INTO dbo.albumSongs (AlbumID, SongID) VALUES (@AlbumID, @SongID)";
+
+        //                using (SqlCommand albumCommand = new SqlCommand(albumSongQuery, myCon))
+        //                {
+        //                    albumCommand.Parameters.AddWithValue("@AlbumID", albumID);
+        //                    albumCommand.Parameters.AddWithValue("@SongID", songID);
+        //                    albumCommand.ExecuteNonQuery();
+        //                }
+        //            }
+
+        //            myCon.Close();
+        //        }
+
+        //        string message = "Upload Successful. Song added to album. URL: " + blobUrl + " | Cover: " + songUrl;
+        //        return new JsonResult(message);
+        //    }
+
+        //    catch (Exception ex)
+        //    {
+        //        return new JsonResult($"Upload Failed: {ex.Message}");
+        //    }
+        //}
         [HttpPost]
         [Route("UploadSong")]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> UploadSong(string songName, IFormFile SongMP3, IFormFile SongPicture, int authorID, int albumID, int genreCode)
+        public async Task<IActionResult> UploadSong(
+    string songName,
+    IFormFile SongMP3,
+    IFormFile SongPicture,
+    int userID,  // ✅ Changed from authorID
+    int albumID,
+    int genreCode)
         {
             try
             {
-
+                // 1. Set up blob storage
                 BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient("songfilecontainer");
 
                 string uniqueID = Guid.NewGuid().ToString();
-                string uniqueSongName = $"uploads/" + uniqueID + ".mp3";
-                string uniquePictureName = $"uploads/" + uniqueID + ".png";
+                string uniqueSongName = $"uploads/{uniqueID}.mp3";
+                string uniquePictureName = $"uploads/{uniqueID}.png";
                 BlobClient blobClient = containerClient.GetBlobClient(uniqueSongName);
                 BlobClient songClient = containerClient.GetBlobClient(uniquePictureName);
 
-
-                // Upload the file
+                // 2. Upload the MP3 and image files
                 using (var stream = SongMP3.OpenReadStream())
                 {
                     await blobClient.UploadAsync(stream, true);
                 }
+
                 using (var pic = SongPicture.OpenReadStream())
                 {
                     await songClient.UploadAsync(pic, true);
                 }
 
-                string blobUrl = "https://blobcontainer2005.blob.core.windows.net/songfilecontainer/uploads/" + uniqueID + ".mp3";
-                string songUrl = "https://blobcontainer2005.blob.core.windows.net/songfilecontainer/uploads/" + uniqueID + ".png";
+                // 3. Get blob URLs
+                string blobUrl = $"https://blobcontainer2005.blob.core.windows.net/songfilecontainer/{uniqueSongName}";
+                string songUrl = $"https://blobcontainer2005.blob.core.windows.net/songfilecontainer/{uniquePictureName}";
 
+                // 4. Get duration using FFProbe
                 var ffProbe = new NReco.VideoInfo.FFProbe();
                 var videoInfo = ffProbe.GetMediaInfo(blobUrl);
-                Console.WriteLine(videoInfo.FormatName);
-                Console.WriteLine(videoInfo.Duration);
                 int duration = (int)videoInfo.Duration.TotalSeconds;
 
                 int songID;
+                int artistID;
+
                 DataTable table = new DataTable();
                 string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
 
                 using (SqlConnection myCon = new SqlConnection(sqlDatasource))
                 {
-                    myCon.Open();
+                    await myCon.OpenAsync();
 
-                    // returns the song id idk got it from chat
-                    string query = "INSERT INTO dbo.songs (SongName, SongFileName, coverArtFileName, authorID, Duration,GenreCode,ReleaseDate) " +
-                                   "OUTPUT INSERTED.SongID " +
-                                   "VALUES (@SongName, @BlobUrl, @SongPicture, @authorID, @Duration,@GenreCode,@ReleaseDate)";
-
-                    using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                    // 5. Lookup ArtistID from UserID
+                    string getArtistQuery = "SELECT ArtistID FROM artists WHERE UserID = @UserID";
+                    using (SqlCommand getArtistCommand = new SqlCommand(getArtistQuery, myCon))
                     {
-                        myCommand.Parameters.AddWithValue("@SongName", songName);
-                        myCommand.Parameters.AddWithValue("@BlobUrl", blobUrl);
-                        myCommand.Parameters.AddWithValue("@SongPicture", songUrl);
-                        myCommand.Parameters.AddWithValue("@authorID", authorID);
-                        myCommand.Parameters.AddWithValue("@Duration", duration);
-                        myCommand.Parameters.AddWithValue("@GenreCode", genreCode);
-                        myCommand.Parameters.AddWithValue("@ReleaseDate", DateTime.Now);
+                        getArtistCommand.Parameters.AddWithValue("@UserID", userID);
+                        var result = await getArtistCommand.ExecuteScalarAsync();
 
-                        // gets id 
-                        songID = (int)myCommand.ExecuteScalar();
+                        if (result == null)
+                            return BadRequest("Artist not found for this user.");
+
+                        artistID = Convert.ToInt32(result);
                     }
 
+                    // 6. Insert the song
+                    string insertSongQuery = @"
+                INSERT INTO dbo.songs 
+                (SongName, SongFileName, coverArtFileName, authorID, Duration, GenreCode, ReleaseDate)
+                OUTPUT INSERTED.SongID
+                VALUES 
+                (@SongName, @BlobUrl, @SongPicture, @artistID, @Duration, @GenreCode, @ReleaseDate)";
 
+                    using (SqlCommand insertSongCmd = new SqlCommand(insertSongQuery, myCon))
+                    {
+                        insertSongCmd.Parameters.AddWithValue("@SongName", songName);
+                        insertSongCmd.Parameters.AddWithValue("@BlobUrl", blobUrl);
+                        insertSongCmd.Parameters.AddWithValue("@SongPicture", songUrl);
+                        insertSongCmd.Parameters.AddWithValue("@artistID", artistID);
+                        insertSongCmd.Parameters.AddWithValue("@Duration", duration);
+                        insertSongCmd.Parameters.AddWithValue("@GenreCode", genreCode);
+                        insertSongCmd.Parameters.AddWithValue("@ReleaseDate", DateTime.Now);
+
+                        songID = (int)await insertSongCmd.ExecuteScalarAsync();
+                    }
+
+                    // 7. Add song to album if albumID is provided
                     if (albumID > 0)
                     {
                         string albumSongQuery = "INSERT INTO dbo.albumSongs (AlbumID, SongID) VALUES (@AlbumID, @SongID)";
-
                         using (SqlCommand albumCommand = new SqlCommand(albumSongQuery, myCon))
                         {
                             albumCommand.Parameters.AddWithValue("@AlbumID", albumID);
                             albumCommand.Parameters.AddWithValue("@SongID", songID);
-                            albumCommand.ExecuteNonQuery();
+                            await albumCommand.ExecuteNonQueryAsync();
                         }
                     }
 
-                    myCon.Close();
+                    await myCon.CloseAsync();
                 }
 
-                string message = "Upload Successful. Song added to album. URL: " + blobUrl + " | Cover: " + songUrl;
+                string message = $"Upload Successful. Song added to album. URL: {blobUrl} | Cover: {songUrl}";
                 return new JsonResult(message);
             }
-
             catch (Exception ex)
             {
                 return new JsonResult($"Upload Failed: {ex.Message}");
             }
         }
+
 
 
 
@@ -228,7 +338,7 @@ namespace database.Controllers
         {
             var songs = new List<Song>();
 
-            string query = "select TOP 10 songs.SongName,songs.SongID, songs.SongFileName,songs.Duration,users.Username, songs.TotalRatings,songs.CoverArtFileName from dbo.songs,dbo.users,dbo.artists WHERE songs.AuthorID=artists.artistID AND users.UserID = artists.UserID AND songs.IsDeleted = 0 AND users.isDeactivated = 0 order by songs.TotalRatings desc ";
+            string query = "select TOP 20 songs.SongName,songs.SongID, songs.SongFileName,songs.Duration,users.Username, songs.TotalRatings,songs.CoverArtFileName from dbo.songs,dbo.users,dbo.artists WHERE songs.AuthorID=artists.artistID AND users.UserID = artists.UserID AND songs.IsDeleted = 0 AND users.isDeactivated = 0 order by songs.TotalRatings desc ";
             DataTable table = new DataTable();
             string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
             using (SqlConnection myCon = new SqlConnection(sqlDatasource))
@@ -249,39 +359,122 @@ namespace database.Controllers
             }
             return new JsonResult(table);
         }
-
-
-
 
 
         [HttpGet]
         [Route("GetSongsByGenre")]
         public JsonResult GetSongsByGenre(int GenreCode)
         {
-            var songs = new List<Song>();
+            string query = @"
+        SELECT 
+            SONGS.SongID,
+            SONGS.SongName,
+            SONGS.SongFileName,
+            SONGS.CoverArtFileName,
+            SONGS.Duration,
+            SONGS.ReleaseDate,
+            SONGS.GenreCode,
+            USERS.Username AS ArtistName,
+            ALBUM.Title AS AlbumTitle
+        FROM SONGS
+        JOIN ARTISTS ON SONGS.AuthorID = ARTISTS.ArtistID
+        JOIN USERS ON USERS.UserID = ARTISTS.UserID
+        LEFT JOIN ALBUMSONGS ON ALBUMSONGS.SongID = SONGS.SongID
+        LEFT JOIN ALBUM ON ALBUMSONGS.AlbumID = ALBUM.AlbumID
+        WHERE SONGS.GenreCode = @GenreCode AND SONGS.IsDeleted = 0";
 
-            string query = "SELECT * FROM SONGS,GENRECODING WHERE SONGS.GenreCode = GENRECODING.GenreCode AND SONGS.GenreCode=@GenreCode AND SONGS.IsDeleted = 0";
             DataTable table = new DataTable();
             string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
+
             using (SqlConnection myCon = new SqlConnection(sqlDatasource))
             {
-                myCon.Open();
-                // queries the database
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
-                //parse the data received from the query
                 {
                     myCommand.Parameters.AddWithValue("@GenreCode", GenreCode);
+                    myCon.Open();
                     using (SqlDataReader reader = myCommand.ExecuteReader())
                     {
                         table.Load(reader);
                         reader.Close();
-                        myCon.Close();
                     }
                 }
-
             }
+
             return new JsonResult(table);
         }
+
+
+
+        //[HttpGet]
+        //[Route("GetSongsByGenre")]
+        //public JsonResult GetSongsByGenre(int GenreCode)
+        //{
+        //    string query = @"
+        //SELECT 
+        //    SONGS.SongID,
+        //    SONGS.SongName,
+        //    SONGS.SongFileName,
+        //    SONGS.CoverArtFileName,
+        //    SONGS.Duration,
+        //    SONGS.ReleaseDate,
+        //    SONGS.GenreCode,
+        //    USERS.Username AS ArtistName,
+        //    ALBUM.Title AS AlbumTitle
+        //FROM SONGS
+        //JOIN ARTISTS ON SONGS.AuthorID = ARTISTS.ArtistID
+        //JOIN USERS ON USERS.UserID = ARTISTS.UserID
+        //LEFT JOIN ALBUMSONGS ON ALBUMSONGS.SongID = SONGS.SongID
+        //LEFT JOIN ALBUM ON ALBUMSONGS.AlbumID = ALBUM.AlbumID
+        //WHERE SONGS.GenreCode = @GenreCode AND SONGS.IsDeleted = 0";
+
+        //    DataTable table = new DataTable();
+        //    string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
+
+        //    using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+        //    {
+        //        using (SqlCommand myCommand = new SqlCommand(query, myCon))
+        //        {
+        //            myCommand.Parameters.AddWithValue("@GenreCode", GenreCode);
+        //            myCon.Open();
+        //            using (SqlDataReader reader = myCommand.ExecuteReader())
+        //            {
+        //                table.Load(reader);
+        //                reader.Close();
+        //            }
+        //        }
+        //    }
+
+        //    return new JsonResult(table);
+        //}
+
+        //[HttpGet]
+        //[Route("GetSongsByGenre")]
+        //public JsonResult GetSongsByGenre(int GenreCode)
+        //{
+        //    var songs = new List<Song>();
+
+        //    string query = "SELECT * FROM SONGS,GENRECODING WHERE SONGS.GenreCode = GENRECODING.GenreCode AND SONGS.GenreCode=@GenreCode AND SONGS.IsDeleted = 0";
+        //    DataTable table = new DataTable();
+        //    string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
+        //    using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+        //    {
+        //        myCon.Open();
+        //        // queries the database
+        //        using (SqlCommand myCommand = new SqlCommand(query, myCon))
+        //        //parse the data received from the query
+        //        {
+        //            myCommand.Parameters.AddWithValue("@GenreCode", GenreCode);
+        //            using (SqlDataReader reader = myCommand.ExecuteReader())
+        //            {
+        //                table.Load(reader);
+        //                reader.Close();
+        //                myCon.Close();
+        //            }
+        //        }
+
+        //    }
+        //    return new JsonResult(table);
+        //}
 
         [HttpGet]
         [Route("GetGenre")]
@@ -318,14 +511,36 @@ namespace database.Controllers
         [Route("SearchSongs")]
         public JsonResult SearchSongs(string SearchQuery)
         {
+            string query = @"
+        SELECT DISTINCT 
+            SONGS.SongID,
+            SONGS.GenreCode,
+            SONGS.SongFileName,
+            SONGS.SongName,
+            SONGS.ReleaseDate,
+            SONGS.CoverArtFileName,
+            SONGS.Duration,
+            SONGS.TotalRatings,
+            USERS.Username AS ArtistName,
+            ALBUM.AlbumID,
+            ALBUM.Title AS AlbumTitle
+        FROM SONGS
+        JOIN ARTISTS ON ARTISTS.ArtistID = SONGS.AuthorID
+        JOIN USERS ON USERS.UserID = ARTISTS.UserID
+        JOIN ALBUMSONGS ON ALBUMSONGS.SongID = SONGS.SongID
+        JOIN ALBUM ON ALBUM.AlbumID = ALBUMSONGS.AlbumID
+        WHERE SONGS.IsDeleted = 0
+          AND (
+                SONGS.SongName LIKE @SearchQuery 
+             OR USERS.Username LIKE @SearchQuery 
+             OR ALBUM.Title LIKE @SearchQuery
+          )";
 
-
-            string query = "SELECT DISTINCT SONGS.SongID,SONGS.GenreCode,SONGS.SongFileName,SONGS.SongName,SONGS.ReleaseDate,SONGS.CoverArtFileName,SONGS.Duration,SONGS.TotalRatings,USERS.Username,ALBUM.AlbumID,ALBUM.Title FROM SONGS JOIN  USERS ON USERS.UserID = SONGS.AuthorID JOIN  ALBUMSONGS ON ALBUMSONGS.SongID = SONGS.SongID JOIN ALBUM ON ALBUM.AlbumID = ALBUMSONGS.AlbumID WHERE  SONGS.IsDeleted = 0 AND (SONGS.SongName  LIKE @SearchQuery  OR USERS.Username LIKE @SearchQuery OR ALBUM.Title LIKE @SearchQuery)";
             DataTable table = new DataTable();
             string sqlDatasource = _configuration.GetConnectionString("DatabaseConnection");
+
             using (SqlConnection myCon = new SqlConnection(sqlDatasource))
             {
-
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
                     myCon.Open();
@@ -336,14 +551,12 @@ namespace database.Controllers
                         reader.Close();
                         myCon.Close();
                     }
-
                 }
-
-
-
             }
+
             return new JsonResult(table);
         }
+
         [HttpGet]
         [Route("GetAlbumSongs")]
         public JsonResult GetAlbumSongs(int AlbumID)
@@ -395,7 +608,11 @@ namespace database.Controllers
                 string bloburl = "https://blobcontainer2005.blob.core.windows.net/albumimagecontainer/uploads/" + uniqueID + ".png";
 
 
-                string query = "INSERT INTO dbo.album(Title, ArtistID, AlbumDescription, AlbumCoverArtFileName) VALUES (@albumName, @artistID, @albumDescription, @bloburl)";
+                //string query = "INSERT INTO dbo.album(Title, ArtistID, AlbumDescription, AlbumCoverArtFileName, Duration) VALUES (@albumName, @artistID, @albumDescription, @bloburl, 0)";
+                    string query = @"INSERT INTO dbo.album
+        (Title, ArtistID, AlbumDescription, AlbumCoverArtFileName, Duration) 
+        VALUES (@albumName, @artistID, @albumDescription, @bloburl, @duration)";
+
                 string getArtistQuery = "SELECT ArtistID FROM artists WHERE UserID = @userID";
 
                 DataTable table = new DataTable();
@@ -423,6 +640,8 @@ namespace database.Controllers
                         myCommand.Parameters.AddWithValue("@bloburl", bloburl);
                         myCommand.Parameters.AddWithValue("@artistID", artistID);
                         myCommand.Parameters.AddWithValue("@albumDescription", AlbumDescription);
+                        myCommand.Parameters.AddWithValue("@duration", 0);
+
 
                         SqlDataReader myReader = myCommand.ExecuteReader();
                         table.Load(myReader);

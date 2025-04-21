@@ -65,7 +65,7 @@ public class AuthController : ControllerBase
 
                 //Check if user is banned
                 var checkIsBanned = new SqlCommand(
-                    "SELECT COUNT(1) FROM BANNEDUSERS WHERE Username = @Username",
+                    "SELECT COUNT(1) FROM USERS WHERE Username = @Username AND isDeactivated = 1",
                     connection);
                 checkIsBanned.Parameters.AddWithValue("@Username", request.Username);
                 var isBanned = (int)await checkIsBanned.ExecuteScalarAsync() > 0;
