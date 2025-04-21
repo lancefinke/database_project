@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './PlaylistSongList.css';
 
-const PlaylistSongList = ({ songs, playlistName, playlistImage, onSongSelect, onDeleteSong, onAddToPlaylist }) => {
+const PlaylistSongList = ({ songs, playlistName, playlistImage, onSongSelect, onDeleteSong, onAddToPlaylist, playlistId }) => {
   // Function to format seconds to mm:ss
   const formatDuration = (seconds) => {
     const minutes = Math.floor(seconds / 60);
@@ -13,6 +13,7 @@ const PlaylistSongList = ({ songs, playlistName, playlistImage, onSongSelect, on
     console.log(song);
     if (onSongSelect) {
       onSongSelect({
+        songId: song.id,
         songSrc: song.songFile,
         songImage: song.image,     
         duration: song.duration,
@@ -26,16 +27,38 @@ const PlaylistSongList = ({ songs, playlistName, playlistImage, onSongSelect, on
   const [activeMenu, setActiveMenu] = useState(null);
 
   // Toggle menu for a specific song
-  const toggleMenu = (e, songId) => {
-    e.stopPropagation(); // Prevent row click event
-    setActiveMenu(activeMenu === songId ? null : songId);
+  const toggleMenu = (e, song) => {
+    e.stopPropagation();
+    
+    // Now 'song' is defined
+    console.log('Toggle menu clicked for:', song.id);
+    console.log('Current active menu:', activeMenu);
+    console.log('New menu ID will be:', `playlist-${playlistName}-song-${song.id}`);
+    
+    // Clear any other open menus in the entire application
+    document.querySelectorAll('.song-actions-menu').forEach(menu => {
+      menu.classList.add('closing');
+      setTimeout(() => menu.remove(), 10);
+    });
+    
+    // Close any other open menus first
+    setActiveMenu(null);
+    
+    // Use setTimeout to ensure closing happens first
+    setTimeout(() => {
+      const uniqueMenuId = `playlist-${playlistName}-song-${song.id}`;
+      if (activeMenu !== uniqueMenuId) {
+        setActiveMenu(uniqueMenuId);
+      }
+    }, 20);
   };
 
   // Handle delete song
   const handleDeleteSong = (e, song) => {
     e.stopPropagation(); // Prevent row click event
     if (onDeleteSong) {
-      onDeleteSong(song, false);
+      // Pass both song and the current playlist ID
+      onDeleteSong(song, playlistId);
       setActiveMenu(null); // Close menu after action
     }
   };
@@ -43,9 +66,9 @@ const PlaylistSongList = ({ songs, playlistName, playlistImage, onSongSelect, on
   // Handle add to playlist
   const handleAddToPlaylist = (e, song) => {
     e.stopPropagation(); // Prevent row click event
+    setActiveMenu(null); // Close menu BEFORE calling the parent handler
     if (onAddToPlaylist) {
       onAddToPlaylist(song);
-      setActiveMenu(null); // Close menu after action
     }
   };
 
@@ -64,6 +87,15 @@ const PlaylistSongList = ({ songs, playlistName, playlistImage, onSongSelect, on
       };
     }
   }, [activeMenu]);
+
+  useEffect(() => {
+    console.log("All songs in playlist:", songs);
+    songs.forEach((song, index) => {
+      if (song.id === undefined) {
+        console.error(`Song at index ${index} has no ID:`, song);
+      }
+    });
+  }, [songs]);
 
   return (
     <div className="playlist-song-list-container">
@@ -125,7 +157,7 @@ const PlaylistSongList = ({ songs, playlistName, playlistImage, onSongSelect, on
               <div className="song-actions" onClick={(e) => e.stopPropagation()}>
                 <button 
                   className="song-actions-button" 
-                  onClick={(e) => toggleMenu(e, song.id)}
+                  onClick={(e) => toggleMenu(e, song)}
                   aria-label="Song actions"
                 >
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
@@ -133,7 +165,7 @@ const PlaylistSongList = ({ songs, playlistName, playlistImage, onSongSelect, on
                   </svg>
                 </button>
                 
-                {activeMenu === song.id && (
+                {activeMenu === `playlist-${playlistName}-song-${song.id}` && (
                   <div className="song-actions-menu">
                     <div 
                       className="song-actions-menu-item"
@@ -142,7 +174,7 @@ const PlaylistSongList = ({ songs, playlistName, playlistImage, onSongSelect, on
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M14 10H3v2h11v-2zm0-4H3v2h11V6zm4 8v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM3 16h7v-2H3v2z"></path>
                       </svg>
-                      Add to playlist
+                      Add to playlistYourmom
                     </div>
                     
                     <div 

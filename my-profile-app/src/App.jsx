@@ -201,6 +201,7 @@ const AppLayout = () => {
       
       {showMusicPlayer && selectedSong && (
         <MusicPlayer
+          songId = {selectedSong.songId}
           duration = {selectedSong.duration}
           songSrc = {selectedSong.songSrc}
           songImage = {selectedSong.songImage}

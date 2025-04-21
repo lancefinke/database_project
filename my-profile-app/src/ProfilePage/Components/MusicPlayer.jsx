@@ -4,6 +4,9 @@ import Editable from "./Editable";
 import PlaylistSelectionPopup from "./PlaylistSelectionPopup";
 import ReactHowler from 'react-howler';
 import "./MusicPlayer.css";
+import { useUserContext } from "../../LoginContext/UserContext"; 
+
+
 
 // Report form component with cleaner design
 const FlagReport = ({ onClose }) => {
@@ -33,7 +36,10 @@ const FlagReport = ({ onClose }) => {
   );
 };
 
-const MusicPlayer = ({ songSrc, songImage, song, artist, pageName, playlist, duration }) => {
+const MusicPlayer = ({ 
+  songId, songSrc, songImage, song, artist, 
+  pageName, playlist, duration, refreshPlaylists // Add this prop
+}) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isShuffling, setIsShuffling] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -46,6 +52,9 @@ const MusicPlayer = ({ songSrc, songImage, song, artist, pageName, playlist, dur
   const [showPlaylistSelection, setShowPlaylistSelection] = useState(false);
   const playerRef = useRef(null);
 
+  const { user } = useUserContext(); // get user info
+  //console.log("ALL USER RETRIEVED DATA:" , user);
+
   // Mock data for available playlists
   const [availablePlaylists, setAvailablePlaylists] = useState([
     { id: 1, name: "Chill Vibes", image: "https://via.placeholder.com/100" },
@@ -57,11 +66,12 @@ const MusicPlayer = ({ songSrc, songImage, song, artist, pageName, playlist, dur
 
   // Current song information
   const currentSong = {
-    id: 101,
-    title: song || "Song Title",
+    id:  songId|| id || song.songId || 101,
+    title: song || "Song Title",  
     artist: artist || "Artist Name",
     image: songImage || "https://via.placeholder.com/150"
   };
+  console.log("This si the current sob object" , currentSong);
 
   // Apply page-specific class if provided
   const playerClassName = `music-player-container ${pageName ? `music-player-${pageName}` : ""}`;
@@ -90,7 +100,7 @@ const MusicPlayer = ({ songSrc, songImage, song, artist, pageName, playlist, dur
     // Only fetch if user exists and has a UserID
     if (user && user.UserID) {
       // Fixed URL syntax - removed extra quote
-      fetch(`http://localhost:5142/api/database/GetUserPlaylists?UserID=${user.UserID}`)
+      fetch(`https://localhost:7152/api/database/GetUserPlaylists?UserID=${user.UserID}`)
         .then(response => {
           if (!response.ok) throw new Error("Failed to fetch playlists");
           return response.json();
@@ -113,16 +123,15 @@ const MusicPlayer = ({ songSrc, songImage, song, artist, pageName, playlist, dur
           // Keep mock data as fallback if API fails
         });
     }
-  }, [user]); // Add user as dependency
- 
+  }, [user]); // Add proper dependency array here to prevent infinite loops
+
   const handleAddToPlaylist = (playlistId) => {
     console.log("Adding song to playlist:", { 
       songId: currentSong.id, 
       playlistId: playlistId 
     });
     
-    // Change to this URL parameter approach
-    fetch(`http://localhost:5142/api/database/AddSongPlaylist?SongID=${currentSong.id}&PlaylistID=${playlistId}`, {
+    fetch(`https://localhost:7152/api/database/AddSongPlaylist?SongID=${currentSong.id}&PlaylistID=${playlistId}`, {
       method: "POST"
     })
     .then(response => {
@@ -133,6 +142,12 @@ const MusicPlayer = ({ songSrc, songImage, song, artist, pageName, playlist, dur
       console.log("API response:", data);
       setSongAdded(true);
       setShowPlaylistSelection(false);
+      
+      // Call the function passed from UserPage
+      if (refreshPlaylists) {
+        refreshPlaylists();
+      }
+
       console.log("Song", currentSong.id, "was added to playlist", playlistId);
       setTimeout(() => {
         setSongAdded(false);

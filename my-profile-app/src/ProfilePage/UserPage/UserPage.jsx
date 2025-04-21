@@ -112,6 +112,7 @@ const UserPage = ({ onSongSelect }) => {
     totalListens: 0
   });
   const [isEditingProfilePic, setIsEditingProfilePic] = useState(false);
+  const [selectedSong, setSelectedSong] = useState(null);
   
   // Create a default album ID for "My Songs"
   const defaultAlbumId = 0;
@@ -124,7 +125,7 @@ const UserPage = ({ onSongSelect }) => {
   });
 
   // API constants and user data
-  const API_URL = "http://localhost:5142";
+  const API_URL = "https://localhost:7152";
   const [currentUsername, setCurrentUsername] = useState("");
   const [currentUserId, setCurrentUserId] = useState("");
 
@@ -734,14 +735,17 @@ const UserPage = ({ onSongSelect }) => {
   // Add Song function
   const handleAddSong = (songData) => {
     console.log('Adding new song:', songData);
-    // Here you would typically make an API call to save the song
-    // and then update your albums state with the new song
     
     if (currentUserId) {
-      // Short delay to ensure the API has processed the upload
+      // After API call succeeds:
       setTimeout(() => {
-        console.log("Refreshing songs from API after adding new song");
+        // Refresh main songs
         GetSongs(currentUserId);
+        
+        // Also refresh the specific album if it's not the default one
+        if (songData.albumId && songData.albumId !== defaultAlbumId) {
+          GetAlbumSongs(songData.albumId);
+        }
       }, 1000);
     }
   };
@@ -957,6 +961,116 @@ const UserPage = ({ onSongSelect }) => {
     setConfirmModal({ isOpen: false, message: '', onConfirm: null });
   };
 
+  const handleSongSelect = (songData) => {
+    setSelectedSong(songData);
+  };
+
+  const deleteSongFromPlaylist = (songId, playlistId) => {
+    console.log(`Removing song ${songId} from playlist ${playlistId}`);
+    
+    fetch(`https://localhost:7152/api/database/DeleteSongFromPlaylist?SongID=${songId}&PlaylistID=${playlistId}`, {
+      method: "DELETE"
+    })
+    .then(response => {
+      if (!response.ok) throw new Error("Failed to remove song from playlist");
+      return response.json();
+    })
+    .then(data => {
+      console.log("API response:", data);
+      
+      // Update the playlists state by removing the song from the specified playlist
+      setPlaylists(prevPlaylists => {
+        const updatedPlaylists = prevPlaylists.map(playlist => {
+          if (playlist.id === playlistId) {
+            return {
+              ...playlist,
+              songs: playlist.songs.filter(song => song.id !== songId)
+            };
+          }
+          return playlist;
+        });
+        
+        // If we're viewing this playlist currently, update the selectedPlaylist as well
+        if (selectedPlaylist && selectedPlaylist.id === playlistId) {
+          setSelectedPlaylist(updatedPlaylists.find(p => p.id === playlistId));
+        }
+        
+        return updatedPlaylists;
+      });
+    })
+    .catch(error => {
+      console.error("Error removing song from playlist:", error);
+      alert("Failed to remove song from playlist. Please try again.");
+    });
+  };
+
+  const deleteSongFromAlbum = (songId, albumId) => {
+    console.log(`Removing song ${songId} from album ${albumId}`);
+    
+    fetch(`https://localhost:7152/api/database/DeleteSongFromAlbum?SongID=${songId}&AlbumID=${albumId}`, {
+      method: "DELETE"
+    })
+    .then(response => {
+      if (!response.ok) throw new Error("Failed to remove song from album");
+      return response.json();
+    })
+    .then(data => {
+      console.log("API response:", data);
+      
+      // Update the albums state by removing the song from the specified album
+      setAlbums(prevAlbums => {
+        const updatedAlbums = prevAlbums.map(album => {
+          if (album.id === albumId) {
+            return {
+              ...album,
+              songs: album.songs.filter(song => song.id !== songId)
+            };
+          }
+          return album;
+        });
+        
+        // If we're viewing this album currently, update the selectedAlbum as well
+        if (selectedAlbum && selectedAlbum.id === albumId) {
+          setSelectedAlbum(updatedAlbums.find(a => a.id === albumId));
+        }
+        
+        return updatedAlbums;
+      });
+    })
+    .catch(error => {
+      console.error("Error removing song from album:", error);
+      alert("Failed to remove song from album. Please try again.");
+    });
+  };
+
+  const handleRemoveSongFromPlaylist = (song, playlistId) => {
+    setConfirmModal({
+      isOpen: true,
+      message: `Are you sure you want to remove "${song.title}" from this playlist?`,
+      onConfirm: () => {
+        deleteSongFromPlaylist(song.id, playlistId);
+        setConfirmModal({ isOpen: false, message: '', onConfirm: null });
+      }
+    });
+  };
+
+  const handleRemoveSongFromAlbum = (song, albumId) => {
+    // Don't allow removal from "My Songs" default album
+    if (albumId === defaultAlbumId) {
+      alert("Songs cannot be removed from the 'My Songs' collection directly.");
+      return;
+    }
+
+    setConfirmModal({
+      isOpen: true,
+      message: `Are you sure you want to remove "${song.title}" from this album?`,
+      onConfirm: () => {
+        deleteSongFromAlbum(song.id, albumId);
+        setConfirmModal({ isOpen: false, message: '', onConfirm: null });
+      }
+    });
+  };
+
   return (
     <div className="profile-container">
       <div className="profile-card">
@@ -1162,27 +1276,15 @@ const UserPage = ({ onSongSelect }) => {
       
       {/* Playlist Songs Display */}
       {selectedPlaylist && (
-        <>
-          {/* Place the back button inside the PlaylistSongList or right before it */}
-          <div className="playlist-content-area">
-            <div className="styled-back-button" onClick={handleBackFromPlaylist}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
-              </svg>
-              <span>Back to My Songs</span>
-            </div>
-            
-            <PlaylistSongList 
-  songs={selectedPlaylist.songs} 
-  playlistName={selectedPlaylist.name}
-  playlistImage={selectedPlaylist.image}
-  onSongSelect={onSongSelect}
-  onDeleteSong={handleDeleteSong}
-  onAddToPlaylist={handleAddToPlaylist}
-  // No onAddToAlbum prop for playlists
-/>
-          </div>
-        </>
+        <PlaylistSongList 
+          songs={selectedPlaylist.songs} 
+          playlistName={selectedPlaylist.name}
+          playlistImage={selectedPlaylist.image}
+          onSongSelect={handleSongSelect}
+          onDeleteSong={(song) => handleRemoveSongFromPlaylist(song, selectedPlaylist.id)}
+          onAddToPlaylist={handleAddToPlaylist}
+          playlistId={selectedPlaylist.id} // Pass the playlist ID
+        />
       )}
 
       {selectedAlbum && (
@@ -1201,15 +1303,16 @@ const UserPage = ({ onSongSelect }) => {
           )}
           
           <AlbumSongList 
-  songs={selectedAlbum.songs} 
-  playlistName={selectedAlbum.name}
-  playlistImage={selectedAlbum.image}
-  onSongSelect={onSongSelect}
-  onDeleteSong={handleDeleteSong}
-  isMyAlbum={selectedAlbum.id === defaultAlbumId}
-  onAddToPlaylist={handleAddToPlaylist}
-  onAddToAlbum={handleAddToAlbum}
-/>
+            songs={selectedAlbum.songs} 
+            playlistName={selectedAlbum.name}
+            playlistImage={selectedAlbum.image}
+            onSongSelect={handleSongSelect}
+            onDeleteSong={(song) => handleRemoveSongFromAlbum(song, selectedAlbum.id)}
+            isMyAlbum={selectedAlbum.id === defaultAlbumId}
+            onAddToPlaylist={handleAddToPlaylist}
+            onAddToAlbum={handleAddToAlbum}
+            albumId={selectedAlbum.id} // Pass album ID
+          />
         </>
       )}
         
@@ -1228,7 +1331,7 @@ const UserPage = ({ onSongSelect }) => {
             songs={selectedGenre.songs} 
             playlistName={selectedGenre.name}
             playlistImage={selectedGenre.image}
-            onSongSelect={onSongSelect}
+            onSongSelect={handleSongSelect}
           />
         </div>
         </>
@@ -1239,6 +1342,8 @@ const UserPage = ({ onSongSelect }) => {
         isOpen={isAddSongModalOpen}
         onClose={() => setIsAddSongModalOpen(false)}
         onSubmit={handleAddSong}
+        albums={albums}
+        defaultAlbumId={defaultAlbumId} // Add this line to pass the defaultAlbumId
       />
       
       {/* Confirmation Modal */}
@@ -1248,12 +1353,19 @@ const UserPage = ({ onSongSelect }) => {
         onCancel={closeConfirmModal}
         onConfirm={confirmModal.onConfirm}
       />
-      {showPlaylistSelection && (
+      {showPlaylistSelection && currentSongForAction && (
         <PlaylistSelectionPopup 
-          onClose={() => setShowPlaylistSelection(false)}
+          onClose={() => {
+            setShowPlaylistSelection(false);
+            setCurrentSongForAction(null); // IMPORTANT: Reset song after closing
+          }}
           playlists={playlists}
-          onAddToPlaylist={handleAddSongToPlaylist}
+          onAddToPlaylist={(playlistId) => {
+            handleAddSongToPlaylist(playlistId);
+            setCurrentSongForAction(null); // IMPORTANT: Reset song after action
+          }}
           currentSong={currentSongForAction}
+          key={currentSongForAction.id} // IMPORTANT: Add key to force re-render with new song
         />
       )}
 
@@ -1263,6 +1375,20 @@ const UserPage = ({ onSongSelect }) => {
           albums={albums.filter(album => album.id !== defaultAlbumId)}
           onAddToAlbum={handleAddSongToAlbum}
           currentSong={currentSongForAction}
+        />
+      )}
+      
+      {/* Wherever you render MusicPlayer */}
+      {selectedSong && (
+        <MusicPlayer
+          songId={selectedSong.songId}
+          songSrc={selectedSong.songSrc}
+          songImage={selectedSong.songImage}
+          song={selectedSong.name}
+          artist={selectedSong.creator}
+          duration={selectedSong.duration}
+          pageName="user-page"
+          refreshPlaylists={() => GetUserPlaylists(currentUserId)} // Pass the refresh function
         />
       )}
     </div>

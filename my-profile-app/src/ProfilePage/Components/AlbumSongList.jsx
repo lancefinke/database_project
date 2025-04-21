@@ -10,9 +10,10 @@ const AlbumSongList = ({ songs, playlistName, playlistImage, onSongSelect, onDel
   };
 
   const handleSongClick = (song) => {
-    console.log(song)
+    console.log("album song object",song);
     if (onSongSelect) {
       onSongSelect({
+        songId: song.id,
         songImage: song.image,
         songSrc: song.songFile,
         name: song.title,
@@ -21,17 +22,50 @@ const AlbumSongList = ({ songs, playlistName, playlistImage, onSongSelect, onDel
       });
     }
   };
-
-
-
   
   // State to track which song's action menu is open (by song ID)
   const [activeMenuId, setActiveMenuId] = useState(null);
 
-  // Toggle menu for a specific song
-  const toggleMenu = (e, songId) => {
-    e.stopPropagation(); // Prevent row click event
-    setActiveMenuId(activeMenuId === songId ? null : songId);
+  // Add this useEffect to debug missing IDs in songs
+  useEffect(() => {
+    console.log("All songs in album:", songs);
+    songs.forEach((song, index) => {
+      if (song.id === undefined) {
+        console.error(`Song at index ${index} has no ID:`, song);
+      }
+    });
+  }, [songs]);
+
+  // Toggle menu for a specific song ID
+  const toggleMenu = (e, song) => {
+    e.stopPropagation();
+    
+    // Add these debug logs
+    console.log('Album Toggle menu clicked for song:', song);
+    console.log('Current active menu ID:', activeMenuId);
+    
+    // Fix the parameter mismatch - song is expected to be an object, not an ID
+    // So we need to adjust how we create the uniqueMenuId
+    const songId = typeof song === 'object' ? song.id : song;
+    const uniqueMenuId = `album-${playlistName}-song-${songId}`;
+    
+    console.log('New menu ID will be:', uniqueMenuId);
+    
+    // Clear any other open menus in the entire application
+    document.querySelectorAll('.song-actions-menu').forEach(menu => {
+      menu.classList.add('closing');
+      setTimeout(() => menu.remove(), 10);
+    });
+    
+    // Close any other open menus first
+    setActiveMenuId(null);
+    
+    // Use setTimeout to ensure closing happens first
+    setTimeout(() => {
+      if (activeMenuId !== uniqueMenuId) {
+        setActiveMenuId(uniqueMenuId);
+      }
+    }, 20);
   };
 
   // Handle delete song
@@ -137,7 +171,7 @@ const AlbumSongList = ({ songs, playlistName, playlistImage, onSongSelect, onDel
               <div className="song-actions" onClick={(e) => e.stopPropagation()}>
                 <button 
                   className="song-actions-button" 
-                  onClick={(e) => toggleMenu(e, song.id)}
+                  onClick={(e) => toggleMenu(e, song)} // Pass the entire song object
                   aria-label="Song actions"
                 >
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
@@ -145,8 +179,7 @@ const AlbumSongList = ({ songs, playlistName, playlistImage, onSongSelect, onDel
                   </svg>
                 </button>
                 
-                {/* THIS LINE HAD THE ERROR - Changed activeMenu to activeMenuId */}
-                {activeMenuId === song.id && (
+                {activeMenuId === `album-${playlistName}-song-${song.id}` && (
                   <div className="song-actions-menu">
                     <div 
                       className="song-actions-menu-item"

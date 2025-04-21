@@ -59,7 +59,7 @@ const FlagIcon = ({ onClose, SongID }) => {
     "Other (please specify)"
   ];
 
-  const API_URL = "http://localhost:5142";
+  const API_URL = "https://localhost:7152";
 
   // Lock body scroll when modal is open
   useEffect(() => {

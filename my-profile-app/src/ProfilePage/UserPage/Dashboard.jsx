@@ -14,7 +14,7 @@ const Dashboard = () => {
   });
    const { user } = useUserContext(); // get user info
     const artistID = user?.ArtistID;
-    const API_URL = "http://localhost:5142";
+    const API_URL = "https://localhost:7152";
     useEffect(() => {
       const fetchDashboardData = async () => {
         console.log("Starting fetch for dashboard data...");

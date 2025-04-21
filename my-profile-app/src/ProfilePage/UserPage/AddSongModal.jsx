@@ -1,17 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { ImageUp, ListPlus, X } from 'lucide-react';
 import './AddSongModal.css';
+import { useUserContext } from "../../LoginContext/UserContext"; 
 
-const AddSongModal = ({ isOpen, onClose, onSubmit }) => {
+// Update the function signature to include defaultAlbumId
+const AddSongModal = ({ isOpen, onClose, onSubmit, albums, defaultAlbumId }) => {
   if (!isOpen) return null;
 
+
+  const { user } = useUserContext(); 
+  const currentUserId = user?.UserID;
+  
+  console.log("ALL USER RETRIEVED DATA:", user);
+
   const [songName, setSongName] = useState('');
-  const [selectedAlbum, setSelectedAlbum] = useState('');
+  const [selectedAlbumId, setSelectedAlbumId] = useState('0');
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [audioFile, setAudioFile] = useState(null);
   const [audioFileName, setAudioFileName] = useState('');
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState('https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=');
+  const [isUploading, setIsUploading] = useState(false);
 
   const genres = [
     'pop', 'rock', 'hip-hop', 'rnb', 'electronic',
@@ -48,8 +57,11 @@ const AddSongModal = ({ isOpen, onClose, onSubmit }) => {
     setSelectedGenres(selectedGenres.filter(genre => genre !== genreToRemove));
   };
 
+  // Update handleSubmit function to use URL parameters where possible
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    // Form validation
     if (selectedGenres.length === 0) {
       alert('Please select at least one genre');
       return;
@@ -62,24 +74,75 @@ const AddSongModal = ({ isOpen, onClose, onSubmit }) => {
       alert('Please select an image for the song');
       return;
     }
+    if (!currentUserId) {
+      alert('User ID not found. Please log in again.');
+      return;
+    }
 
-    onSubmit({
-      name: songName,
-      albumId: selectedAlbum || '0', // Default to "My Songs" if no album selected
-      genres: selectedGenres,
-      audioFile,
-      image: imageFile
+    // Encode parameters for URL
+    const songNameEncoded = encodeURIComponent(songName);
+    const albumID = selectedAlbumId || 0;
+    const genreToCodeMap = {
+      'pop': 1, 'rock': 2, 'hiphop': 3, 'hip-hop': 3,
+      'r&b': 4, 'rnb': 4, 'electronic': 5, 'country': 6, 
+      'jazz': 7, 'blues': 8, 'metal': 9, 'classical': 10,
+      'alternative': 11, 'indie': 12
+    };
+    
+    // Get genre code
+    const genreCode = selectedGenres.length > 0 ? 
+      genreToCodeMap[selectedGenres[0].toLowerCase()] || 1 : 1;
+      
+    // Create URL with query parameters for text data
+    const url = `https://localhost:7152/api/database/UploadSong?songName=${songNameEncoded}&authorID=${currentUserId}&albumID=${albumID}&genreCode=${genreCode}`;
+    
+    // Files still need FormData
+    const formData = new FormData();
+    formData.append('SongMP3', audioFile);
+    formData.append('SongPicture', imageFile);
+    
+    // Show loading indicator
+    setIsUploading(true);
+    
+    // Make API request with URL parameters + form data for files
+    fetch(url, {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Upload failed with status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('Upload successful:', data);
+      alert('Song uploaded successfully!');
+      
+      // Reset form and notify parent component
+      setSongName('');
+      setSelectedAlbumId('');
+      setSelectedGenres([]);
+      setAudioFile(null);
+      setAudioFileName('');
+      setImageFile(null);
+      setImagePreview('https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=');
+      
+      onSubmit({
+        name: songName,
+        albumId: selectedAlbumId || null,
+        genres: selectedGenres
+      });
+      
+      onClose();
+    })
+    .catch(error => {
+      console.error('Error uploading song:', error);
+      alert('Failed to upload song: ' + error.message);
+    })
+    .finally(() => {
+      setIsUploading(false);
     });
-
-    // Reset form and close modal
-    setSongName('');
-    setSelectedAlbum('');
-    setSelectedGenres([]);
-    setAudioFile(null);
-    setAudioFileName('');
-    setImageFile(null);
-    setImagePreview('https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=');
-    onClose();
   };
 
   return (
@@ -105,18 +168,20 @@ const AddSongModal = ({ isOpen, onClose, onSubmit }) => {
           </div>
           
           <div className="form-group">
-            <label htmlFor="album">Album</label>
+            <label>Album</label>
             <select 
-              id="album"
-              value={selectedAlbum}
-              onChange={(e) => setSelectedAlbum(e.target.value)}
+              value={selectedAlbumId || ''}
+              onChange={(e) => setSelectedAlbumId(e.target.value)}
+              className="form-control"
             >
-              <option value="0">My Songs</option>
-              <option value="1">First Album</option>
-              <option value="2">Auston 2020 Tour</option>
-              <option value="3">Break Up</option>
-              <option value="4">Graduation</option>
-              <option value="5">Ballin'</option>
+              <option value="">No album - add to My Songs collection</option>
+              {/* Filter out the My Songs album */}
+              {albums
+                .filter(album => album.id !== defaultAlbumId) // Remove My Songs from options
+                .map(album => (
+                  <option key={album.id} value={album.id}>{album.name}</option>
+                ))
+              }
             </select>
           </div>
           
@@ -190,8 +255,12 @@ const AddSongModal = ({ isOpen, onClose, onSubmit }) => {
           </div>
           
           <div className="form-actions">
-            <button type="button" className="cancel-btn" onClick={onClose}>Cancel</button>
-            <button type="submit" className="submit-btn">Upload Song</button>
+            <button type="button" className="cancel-btn" onClick={onClose} disabled={isUploading}>
+              Cancel
+            </button>
+            <button type="submit" className="submit-btn" disabled={isUploading}>
+              {isUploading ? 'Uploading...' : 'Upload Song'}
+            </button>
           </div>
         </form>
       </div>

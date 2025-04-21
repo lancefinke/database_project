@@ -1,7 +1,7 @@
 // SongListenerTracker.js
 // This module tracks how many times each song is played
 
-const API_URL = "http://localhost:5142";
+const API_URL = "https://localhost:7152";
 
 class SongListenerTracker {
   constructor() {
