@@ -94,7 +94,7 @@ const AddSongModal = ({ isOpen, onClose, onSubmit, albums, defaultAlbumId }) => 
       genreToCodeMap[selectedGenres[0].toLowerCase()] || 1 : 1;
       
     // Create URL with query parameters for text data
-    const url = `https://localhost:7152/api/database/UploadSong?songName=${songNameEncoded}&authorID=${currentUserId}&albumID=${albumID}&genreCode=${genreCode}`;
+    const url = `https://localhost:7152/api/database/UploadSong?songName=${songNameEncoded}&UserID=${currentUserId}&albumID=${albumID}&genreCode=${genreCode}`;
     
     // Files still need FormData
     const formData = new FormData();

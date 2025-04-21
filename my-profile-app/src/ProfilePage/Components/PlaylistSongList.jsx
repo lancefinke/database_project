@@ -66,8 +66,17 @@ const PlaylistSongList = ({ songs, playlistName, playlistImage, onSongSelect, on
   // Handle add to playlist
   const handleAddToPlaylist = (e, song) => {
     e.stopPropagation(); // Prevent row click event
-    setActiveMenu(null); // Close menu BEFORE calling the parent handler
+    
+    // Close the context menu
+    setActiveMenu(null);
+    
+    // Instead of just calling the parent function
+    // We'll implement a two-step process:
+    // 1. First show the playlist selection popup
+    // 2. Then make API call when a specific playlist is selected
+    
     if (onAddToPlaylist) {
+      // This should open your playlist selection popup
       onAddToPlaylist(song);
     }
   };
@@ -174,7 +183,7 @@ const PlaylistSongList = ({ songs, playlistName, playlistImage, onSongSelect, on
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M14 10H3v2h11v-2zm0-4H3v2h11V6zm4 8v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM3 16h7v-2H3v2z"></path>
                       </svg>
-                      Add to playlistYourmom
+                      Add to playlist
                     </div>
                     
                     <div 

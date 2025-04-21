@@ -66,7 +66,7 @@ const MusicPlayer = ({
 
   // Current song information
   const currentSong = {
-    id:  songId|| id || song.songId || 101,
+    id: songId || (typeof song === 'object' ? song.songId : null) || 101,
     title: song || "Song Title",  
     artist: artist || "Artist Name",
     image: songImage || "https://via.placeholder.com/150"

@@ -207,7 +207,7 @@ const AppLayout = () => {
           songImage = {selectedSong.songImage}
           playlist={playlist}
           song={selectedSong.name}
-          artist={selectedSong.creator}
+          artist={selectedSong.artist}
           pageName={getMusicPlayerPageName()}
           onClose={handleClosePlayer}
         />

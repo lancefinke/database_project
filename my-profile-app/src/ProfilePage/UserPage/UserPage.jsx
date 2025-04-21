@@ -183,29 +183,35 @@ const UserPage = ({ onSongSelect }) => {
   };
   
   const handleAddSongToPlaylist = (playlistId) => {
-    console.log(`Adding song "${currentSongForAction.title}" to playlist ID: ${playlistId}`);
+    if (!currentSongForAction) return;
     
-    // Here you would make an API call to add the song to the playlist
-    
-    // For now, just update the state locally
-    setPlaylists(prevPlaylists => {
-      return prevPlaylists.map(playlist => {
-        if (playlist.id === playlistId) {
-          // Check if the song already exists in the playlist
-          const songExists = playlist.songs.some(song => song.id === currentSongForAction.id);
-          if (!songExists) {
-            return {
-              ...playlist,
-              songs: [...playlist.songs, currentSongForAction]
-            };
-          }
-        }
-        return playlist;
-      });
+    console.log("Adding song to playlist:", { 
+      songId: currentSongForAction.id, 
+      playlistId: playlistId 
     });
     
-    setShowPlaylistSelection(false);
-    setCurrentSongForAction(null);
+    fetch(`${API_URL}/api/database/AddSongPlaylist?SongID=${currentSongForAction.id}&PlaylistID=${playlistId}`, {
+      method: "POST"
+    })
+    .then(response => {
+      if (!response.ok) throw new Error("Failed to add song");
+      return response.json();
+    })
+    .then(data => {
+      console.log("API response:", data);
+      
+      // Refresh the playlists to show updated content
+      GetUserPlaylists(currentUserId);
+      
+      // Close the playlist selection popup
+      setShowPlaylistSelection(false);
+      
+      console.log(`Song ${currentSongForAction.title} added to playlist ID ${playlistId}`);
+    })
+    .catch(error => {
+      console.error("Error adding song to playlist:", error);
+      alert("Failed to add song to playlist. Please try again.");
+    });
   };
 
   const handleAddSongToAlbum = (albumId) => {
@@ -853,20 +859,46 @@ const UserPage = ({ onSongSelect }) => {
       isOpen: true,
       message: `Are you sure you want to delete "${playlistToDelete.name}" playlist? This action cannot be undone.`,
       onConfirm: () => {
-        // Here you would add API call to delete the playlist
+        // Make API call to delete the playlist
+        const apiUrl = `${API_URL}/api/Delete/DeleteWithID?Table=playlist&Column=PlaylistID&ID=${playlistId}`;
+        console.log("Sending DELETE request to:", apiUrl);
         
-        // Remove the playlist from the playlists array
-        const updatedPlaylists = playlists.filter(playlist => playlist.id !== playlistId);
-        setPlaylists(updatedPlaylists);
-        
-        // If the deleted playlist was selected, set selected to null
-        if (selectedPlaylist && selectedPlaylist.id === playlistId) {
-          setSelectedPlaylist(null);
-          setSelectedAlbum(albums[0]); // Go back to "My Songs" album
-        }
-        
-        console.log(`Playlist "${playlistToDelete.name}" deleted`);
-        setConfirmModal({ isOpen: false, message: '', onConfirm: null });
+        fetch(apiUrl, {
+          method: "DELETE",
+        })
+        .then(response => {
+          console.log("Status:", response.status, response.statusText);
+          
+          if (!response.ok) {
+            return response.text().then(errorText => {
+              console.error("Error response:", errorText);
+              throw new Error(`Failed to delete playlist: ${response.status}`);
+            });
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log("Playlist deletion response:", data);
+          
+          // Remove the playlist from the playlists array
+          const updatedPlaylists = playlists.filter(playlist => playlist.id !== playlistId);
+          setPlaylists(updatedPlaylists);
+          
+          // If the deleted playlist was selected, set selected to null
+          if (selectedPlaylist && selectedPlaylist.id === playlistId) {
+            setSelectedPlaylist(null);
+            setSelectedAlbum(albums[0]); // Go back to "My Songs" album
+          }
+          
+          console.log(`Playlist "${playlistToDelete.name}" deleted`);
+        })
+        .catch(error => {
+          console.error("Error deleting playlist:", error);
+          alert("Failed to delete playlist. Please try again.");
+        })
+        .finally(() => {
+          setConfirmModal({ isOpen: false, message: '', onConfirm: null });
+        });
       }
     });
   };
@@ -888,23 +920,48 @@ const UserPage = ({ onSongSelect }) => {
       isOpen: true,
       message: `Are you sure you want to delete "${albumToDelete.name}" album? This action cannot be undone.`,
       onConfirm: () => {
-        // Here you would add API call to delete the album
-        
-        // Remove the album from the albums array
-        const updatedAlbums = albums.filter(album => album.id !== albumId);
-        setAlbums(updatedAlbums);
-        
-        // If the deleted album was selected, set selected to My Songs
-        if (selectedAlbum && selectedAlbum.id === albumId) {
-          setSelectedAlbum(albums[0]); // Go back to "My Songs" album
-        }
-        
-        console.log(`Album "${albumToDelete.name}" deleted`);
-        setConfirmModal({ isOpen: false, message: '', onConfirm: null });
+        // Make API call to delete the album
+        fetch(`${API_URL}/api/Delete/DeleteWithID?Table=album&Column=AlbumID&ID=${albumId}`, {
+          method: "DELETE"
+        })
+        .then(response => {
+          if (!response.ok) {
+            console.error("Error response:", text);
+
+            throw new Error(`Failed to delete album: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log("Album deletion response:", data);
+          
+          // Remove the album from the albums array
+          const updatedAlbums = albums.filter(album => album.id !== albumId);
+          setAlbums(updatedAlbums);
+          
+          // If the deleted album was selected, set selected to My Songs
+          if (selectedAlbum && selectedAlbum.id === albumId) {
+            setSelectedAlbum(albums[0]); // Go back to "My Songs" album
+          }
+          
+          console.log(`Album "${albumToDelete.name}" deleted`);
+        })
+        .catch(error => {
+          console.error("Error deleting album:", error);
+          alert("Failed to delete album. Please try again.");
+        })
+        .finally(() => {
+          setConfirmModal({ isOpen: false, message: '', onConfirm: null });
+        });
       }
     });
   };
 
+  // Handle playlist deletion
+
+
+
+  
   // Add playlist function  
   const AddPlaylistComponent = (playlistData) => {
     console.log("Making a new playlist: ", playlistData);
@@ -1082,15 +1139,18 @@ const UserPage = ({ onSongSelect }) => {
         <h1 className="profile-name">{userProfile.name}</h1>{/* Profile Name  */}
         {/*  Optional Pronouns */}
         <h3 style={{textAlign:"left",margin:"30px 0px -10px 0px"}}>Profile Description</h3>
-        <Editable
-            title="Edit Bio"
-            value={userProfile.bio}
-            div_width="100%"
-            div_height="200px"
-            backgroundColor="none"
-            textColor="white"
-            placeholder="Add a Description for your profile..."/>
-        
+        <p style={{
+            width: "100%",
+            minHeight: "100px", 
+            color: "white",
+            backgroundColor: "transparent",
+            padding: "10px",
+            margin: "15px 0",
+            lineHeight: "1.5",
+            overflowWrap: "break-word"
+        }}>
+            {userProfile.bio || "No bio available"}
+        </p>
         <div className="stats-container">
           <p className="follower-count">Followers: {userProfile.followers}</p>
           <p className="total-listens">Total Listens: {userProfile.totalListens}</p>
@@ -1355,15 +1415,9 @@ const UserPage = ({ onSongSelect }) => {
       />
       {showPlaylistSelection && currentSongForAction && (
         <PlaylistSelectionPopup 
-          onClose={() => {
-            setShowPlaylistSelection(false);
-            setCurrentSongForAction(null); // IMPORTANT: Reset song after closing
-          }}
+          onClose={() => setShowPlaylistSelection(false)}
           playlists={playlists}
-          onAddToPlaylist={(playlistId) => {
-            handleAddSongToPlaylist(playlistId);
-            setCurrentSongForAction(null); // IMPORTANT: Reset song after action
-          }}
+          onAddToPlaylist={handleAddSongToPlaylist} // Use our new function that makes the API call
           currentSong={currentSongForAction}
           key={currentSongForAction.id} // IMPORTANT: Add key to force re-render with new song
         />
