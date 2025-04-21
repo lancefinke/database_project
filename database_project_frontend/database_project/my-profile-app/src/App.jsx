@@ -4,7 +4,6 @@ import MusicPlayer from "./ProfilePage/Components/MusicPlayer";
 import HomePage from "./HomePage/HomePage";
 import LoginPage from "./LoginPage/LoginPage";
 import SearchPage from "./SearchPage/SearchPage";
-import AddSong from "./ProfilePage/Components/AddSong";
 import AdminPage from "./Admin/Admin"; 
 import UserPage from "./ProfilePage/UserPage/UserPage";
 import SignupPage from "./SignupPage/Signuppage";
@@ -16,7 +15,7 @@ import Dashboard from "./ProfilePage/UserPage/Dashboard";
 import PlaylistPage from "./ProfilePage/Components/PlaylistPage";
 import { PlayerProvider, usePlayerContext } from './contexts/PlayerContext';
 
-import { BrowserRouter as Router, Routes, Route, useLocation, Link, Navigate, useNavigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate, useNavigate } from "react-router-dom";
 import "./ProfilePage/ProfilePage.css";
 import { useLoginContext } from "./LoginContext/LoginContext";
 import { useUserContext } from "./LoginContext/UserContext";
@@ -102,6 +101,17 @@ const AppLayout = () => {
     }
   }, [location.pathname, setIsPlaying]);
 
+  // Check if user is viewing their own profile by username parameter
+  useEffect(() => {
+    if (user && location.pathname.startsWith('/profile/')) {
+      const usernameFromUrl = location.pathname.split('/profile/')[1];
+      if (usernameFromUrl && user.Username === usernameFromUrl) {
+        // Redirect to editable profile if viewing their own profile
+        navigate('/profile', { replace: true });
+      }
+    }
+  }, [location.pathname, user, navigate]);
+
   const handleClosePlayer = () => {
     setIsPlaying(false);
   };
@@ -115,6 +125,7 @@ const AppLayout = () => {
   
   const getMusicPlayerPageName = () => {
     if (location.pathname === '/profile') return 'profile';
+    if (location.pathname.startsWith('/profile/')) return 'artist-profile';
     if (location.pathname === '/search') return 'search';
     if (location.pathname === '/following') return 'following';
     if (location.pathname === '/dashboard') return 'dashboard';
@@ -150,17 +161,20 @@ const AppLayout = () => {
               ? (isAdmin ? <Navigate to="/admin" replace /> : <SearchPage />)
               : <Navigate to="/login" replace />
           } />
+          {/* Editable user profile */}
           <Route path="/profile" element={
             isLoggedIn 
               ? (isAdmin ? <Navigate to="/admin" replace /> : <UserPage />)
               : <Navigate to="/login" replace />
           } />
+          {/* Legacy path - redirect to editable profile */}
           <Route path="/user" element={
             isLoggedIn 
-              ? (isAdmin ? <Navigate to="/admin" replace /> : <ProfilePage />)
+              ? <Navigate to="/profile" replace />
               : <Navigate to="/login" replace />
           } />
-          <Route path="/profile/:userId" element={
+          {/* View-only artist profile by username */}
+          <Route path="/profile/:username" element={
             isLoggedIn 
               ? (isAdmin ? <Navigate to="/admin" replace /> : <ProfilePage />)
               : <Navigate to="/login" replace />

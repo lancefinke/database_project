@@ -55,9 +55,10 @@ const UserPage = ({ onSongSelect }) => {
   const [userProfile, setUserProfile] = useState({
     name: "User",
     bio: "No bio available",
-    profileImage: "https://via.placeholder.com/150",
+    profileImage: "https://placehold.co/150x150",
     followers: 0,
-    totalListens: 0
+    totalListens: 0,
+    artistId: null  // Add this explicitly
   });
   const [isEditingProfilePic, setIsEditingProfilePic] = useState(false);
   
@@ -296,7 +297,106 @@ const UserPage = ({ onSongSelect }) => {
       setDraggedAlbum(null);
     }
   };
+// Add this function to your UserPage component
+// Replace your GetUserProfile function with this more resilient version
+const GetUserProfile = (userId) => {
+  console.log("Fetching profile data for user ID:", userId);
+  
+  // First try to load user songs - we know this endpoint works
+  fetch(`${API_URL}/api/database/GetSongs?UserID=${userId}`)
+    .then(res => res.json())
+    .then(songs => {
+      if (songs && songs.length > 0) {
+        // Use the first song to get the artist name/info if possible
+        const firstSong = songs[0];
+        const artistName = firstSong.Username || "User";
+        const artistId = firstSong.ArtistID;
+        
+        console.log("Using song data to determine artist:", artistName, "ArtistID:", artistId);
+        
+        // Now try to get follower count if we have an artist ID
+        if (artistId) {
+          fetch(`${API_URL}/api/Follow/GetArtistFollowStats?artistId=${artistId}`)
+            .then(res => res.json())
+            .then(followStats => {
+              // Set user profile with available data
+              setUserProfile({
+                name: artistName,
+                bio: "Artist on Music App",
+                profileImage: "https://placehold.co/150x150",
+                followers: followStats?.FollowerCount || 0,
+                totalListens: 0,
+                artistId: artistId
+              });
+              console.log("Set profile with follower count:", followStats?.FollowerCount);
+            })
+            .catch(err => {
+              // Set profile without follower count
+              setUserProfile({
+                name: artistName,
+                bio: "Artist on Music App",
+                profileImage: "https://placehold.co/150x150",
+                followers: 0,
+                totalListens: 0,
+                artistId: artistId
+              });
+              console.log("Failed to get follower count, using default values");
+            });
+        } else {
+          // Set basic profile without follower count
+          setUserProfile({
+            name: artistName,
+            bio: "Artist on Music App",
+            profileImage: "https://placehold.co/150x150",
+            followers: 0,
+            totalListens: 0,
+            artistId: userId // Temporarily use userId as artistId
+          });
+          console.log("No ArtistID found, using default values");
+        }
+      }
+    })
+    .catch(error => {
+      console.error("Failed to get any user data:", error);
+      // Set minimal profile
+      setUserProfile({
+        name: "User",
+        bio: "Artist on Music App",
+        profileImage: "https://placehold.co/150x150",
+        followers: 0,
+        totalListens: 0,
+        artistId: userId // Temporarily use userId as artistId
+      });
+    });
+};
 
+useEffect(() => {
+  const handleFollowEvent = (event) => {
+    // Log all received follow events for debugging
+    console.log("Follow event received:", event.detail);
+    
+    // Since we may not have a reliable artistId, match by both artistId and userId
+    const isForCurrentUser = 
+      (event.detail.artistId && event.detail.artistId === userProfile.artistId) || 
+      (event.detail.userId && event.detail.userId === currentUserId);
+    
+    if (isForCurrentUser) {
+      console.log("Follow event is for current user, updating count");
+      setUserProfile(prev => ({
+        ...prev,
+        followers: event.detail.isNowFollowing 
+          ? prev.followers + 1 
+          : Math.max(0, prev.followers - 1)
+      }));
+    }
+  };
+
+  window.addEventListener('followStatusChanged', handleFollowEvent);
+  
+  return () => {
+    window.removeEventListener('followStatusChanged', handleFollowEvent);
+  };
+}, [userProfile.artistId, currentUserId]);
   // API Integration - Get User Data
   useEffect(() => {
     // Get token from localStorage
@@ -337,36 +437,113 @@ const UserPage = ({ onSongSelect }) => {
     }
   }, []);
 
+
+  // Add this helper function to your component
+const logEndpoint = async (url, method = "GET") => {
+  try {
+    console.log(`Testing endpoint: ${url}`);
+    const res = await fetch(url, { method });
+    console.log(`Status: ${res.status} ${res.statusText}`);
+    
+    if (res.ok) {
+      try {
+        const data = await res.json();
+        console.log("Response data:", data);
+        return { ok: true, data };
+      } catch (err) {
+        console.log("Invalid JSON response");
+        const text = await res.text();
+        console.log("Response text:", text);
+        return { ok: false, error: "Invalid JSON" };
+      }
+    } else {
+      return { ok: false, error: `${res.status} ${res.statusText}` };
+    }
+  } catch (err) {
+    console.error("Request failed:", err);
+    return { ok: false, error: err.message };
+  }
+};
+
+// Add this to your initialization code to test API endpoints
+useEffect(() => {
+  // Test critical endpoints
+  logEndpoint(`${API_URL}/api/database/GetUserProfile?UserID=${currentUserId}`);
+  logEndpoint(`${API_URL}/api/Users/GetUser?UserID=${currentUserId}`);
+  logEndpoint(`${API_URL}/api/Users/GetUserById?id=${currentUserId}`);
+}, [currentUserId]);
   useEffect(() => {
     // If songs are loaded and "My Songs" is selected, refresh the view
     if (albums[0]?.songs?.length > 0 && selectedAlbum?.id === defaultAlbumId) {
       setSelectedAlbum(albums[0]);
     }
   }, [albums]);
-
-  // API Functions
-  const GetUserProfile = (userId) => {
-    console.log("Fetching profile data for user ID:", userId);
+  const handleFollowersUpdate = (event) => {
+    console.log("Follow event received:", event.detail);
+    console.log("Current user artistId:", userProfile.artistId);
     
-    fetch(`${API_URL}/api/database/GetUserProfile?UserID=${userId}`, {
-      method: "GET",
-    })
-    .then(res => res.json())
-    .then(result => {
-      console.log("API returned profile data:", result);
-      if (result && result.length > 0) {
-        const userData = result[0];
-        setUserProfile({
-          name: userData.Username || "User",
-          bio: userData.Bio || "No bio available",
-          profileImage: userData.ProfilePicture || "https://via.placeholder.com/150",
-          followers: result.FollowerCount || 0,
-          totalListens: result.TotalListens || 0
-        });
-      }
-    })
-    .catch(error => console.error("Error fetching user profile:", error));
+    // Check if this event is for the current profile
+    if (event.detail && event.detail.artistId && 
+        userProfile.artistId && 
+        event.detail.artistId === userProfile.artistId) {
+      
+      console.log("📊 Followers update received for current user!");
+      
+      // Update follower count based on the follow action
+      setUserProfile(prev => {
+        const newCount = event.detail.isNowFollowing 
+          ? prev.followers + 1 
+          : Math.max(0, prev.followers - 1);
+        
+        console.log(`Updating follower count: ${prev.followers} → ${newCount}`);
+        
+        return {
+          ...prev,
+          followers: newCount
+        };
+      });
+    } else {
+      console.log("This follow event is not for the current user profile");
+    }
   };
+  useEffect(() => {
+    const debugListener = (event) => {
+      console.log("DEBUG: Follow event received:", event.detail);
+      console.log("DEBUG: Current user profile:", userProfile);
+    };
+  
+    window.addEventListener('followStatusChanged', debugListener);
+    
+    return () => {
+      window.removeEventListener('followStatusChanged', debugListener);
+    };
+  }, []);
+  // Add event listener for follow status changes
+  useEffect(() => {
+    if (userProfile.artistId) {
+      console.log(`Setting up follow listener for artistId: ${userProfile.artistId}`);
+      
+      const followListener = (event) => {
+        if (event.detail && event.detail.artistId === userProfile.artistId) {
+          console.log(`Follow status changed for artistId: ${userProfile.artistId}`);
+          setUserProfile(prev => ({
+            ...prev,
+            followers: event.detail.isNowFollowing 
+              ? prev.followers + 1 
+              : Math.max(0, prev.followers - 1)
+          }));
+        }
+      };
+  
+      window.addEventListener('followStatusChanged', followListener);
+      
+      return () => {
+        window.removeEventListener('followStatusChanged', followListener);
+      };
+    }
+  }, [userProfile.artistId]); // Depend on artistId so it refreshes if profile changes
+  // API Functions
+  <p className="follower-count">Followers: {userProfile.followers}</p>
 
   const GetSongs = (userId) => {
     console.log("Getting songs for user ID:", userId);

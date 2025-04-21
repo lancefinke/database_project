@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './PlaylistSongList.css';
 import { usePlayerContext } from '../../contexts/PlayerContext'; // Import the player context
+import UserLink from '../../UserLink/UserLink'; // Import UserLink component
 
 const PlaylistSongList = ({ songs, playlistName, playlistImage, onDeleteSong, onAddToPlaylist }) => {
   // Use the global player context instead of local navigation hook
@@ -119,7 +120,9 @@ const PlaylistSongList = ({ songs, playlistName, playlistImage, onDeleteSong, on
               <div className="song-info">
                 <div className="song-text">
                   <span className="song-title">{song.title}</span>
-                  <span className="song-artist">{song.artist}</span>
+                  <span className="song-artist">
+                    <UserLink text={song.artist} userName={song.artist} />
+                  </span>
                 </div>
               </div>
               <div className="song-genre">{song.genre}</div>

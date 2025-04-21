@@ -2,6 +2,7 @@ import React from 'react';
 import './SearchGenreSongList.css'; // Import the dedicated CSS file
 import { ArrowLeft } from 'lucide-react';
 import { usePlayerContext } from '../contexts/PlayerContext'; // Import the player context
+import UserLink from '../UserLink/UserLink'; // Import UserLink component
 
 // SearchGenreSongList component that displays songs in a genre with a back button
 const SearchGenreSongList = ({ songs, playlistName, onBackClick }) => {
@@ -84,7 +85,9 @@ const SearchGenreSongList = ({ songs, playlistName, onBackClick }) => {
                     />
                     <div className="song-text">
                       <div className="song-title" style={{ paddingRight: 0 }}>{song.title}</div>
-                      <div className="song-artist">{song.artist}</div>
+                      <div className="song-artist">
+                        <UserLink text={song.artist} userName={song.artist} />
+                      </div>
                     </div>
                   </div>
                 </div>
