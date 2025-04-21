@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { X } from "lucide-react";
 import "./AddPlaylist.css";
@@ -10,6 +10,7 @@ const AddPlaylist = ({ isOpen, onClose, onSubmit }) => {
     const [playlistName, setPlaylistName] = useState('');
     const [playlistImage, setPlaylistImage] = useState(null);
     const [imagePreview, setImagePreview] = useState("https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=");
+    const [currentUserId, setCurrentUserId] = useState("");
 
     const changeStatus = (e) => {
         setPrivacyStatus(e.target.value);
@@ -26,20 +27,58 @@ const AddPlaylist = ({ isOpen, onClose, onSubmit }) => {
             setImagePreview(URL.createObjectURL(file));
         }
     }
-    
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    useEffect(() => {
+        const token = localStorage.getItem('userToken');
+        if (token) {
+          try {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            const userId = payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
+            if (userId) {
+              setCurrentUserId(userId);
+              console.log("User ID extracted:", userId);
+            } else {
+              console.error("Could not find userID in token");
+            }
+          } catch (error) {
+            console.error("Error parsing JWT token:", error);
+          }
+        } else {
+          console.log("No token found in localStorage");
+        }
+      }, []);
+    const addPlaylist = async()=>{
+        const formData = new FormData();
+
+        formData.append("PlaylistPicture", playlistImage);
+
+        // URL-encoded values
+
+        const titleEncoded = encodeURIComponent(playlistName);
+
+
+        const url = `http://localhost:5142/api/database/AddPlaylist?UserID=${currentUserId}&Title=${titleEncoded}&Description=${"null"}`;
+
+        try {
+          const response = await fetch(url, {
+            method: "POST",
+            body: formData,
+          });
+
+          if(response.ok){
+            console.log('Playlist added successfully');
+          }
+
+        } catch (err) {
+          console.error("Error registering user:", err);
+        }
+    }
+    const handleSubmit = () => {
         if (!playlistName || !playlistImage) {
             alert("Please provide both a playlist name and image.");
             return;
         }
-        
-        onSubmit && onSubmit({
-            name: playlistName,
-            image: playlistImage,
-            privacy: privacyStatus
-        });
-        
+        // Add your submission logic here
+        addPlaylist();
         // Reset form
         setPlaylistName('');
         setPlaylistImage(null);
@@ -47,7 +86,7 @@ const AddPlaylist = ({ isOpen, onClose, onSubmit }) => {
         setPrivacyStatus('public');
         onClose && onClose();
     }
-
+    
     // Create the modal markup to be rendered with portal
     const modalContent = (
         <div className="modal-overlay">
@@ -131,5 +170,4 @@ const AddPlaylist = ({ isOpen, onClose, onSubmit }) => {
     // Use React Portal to render outside the normal DOM hierarchy
     return ReactDOM.createPortal(modalContent, document.body);
 }
-
 export default AddPlaylist;

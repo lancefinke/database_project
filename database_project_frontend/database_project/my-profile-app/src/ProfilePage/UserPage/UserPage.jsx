@@ -485,6 +485,10 @@ const logEndpoint = async (url, method = "GET") => {
   }
 };
 
+const closeConfirmModal = () => {
+  setConfirmModal({ isOpen: false, message: '', onConfirm: null });
+};
+
 // Add this to your initialization code to test API endpoints
 useEffect(() => {
   // Test critical endpoints
@@ -1057,37 +1061,52 @@ useEffect(() => {
   const AddPlaylistComponent = (playlistData) => {
     console.log("Making a new playlist: ", playlistData);
     const formData = new FormData();
-    formData.append('PlaylistName', playlistData.name);
-    formData.append('UserID', currentUserId);
-    
-    if (playlistData.image) {
-      formData.append('PlaylistPicture', playlistData.image);
-    } else {
-      alert("Please select a picture for the playlist");
+
+    const userId = parseInt(currentUserId);
+    if (isNaN(userId)) {
+      console.error("Invalid UserID:", currentUserId);
+      alert("Invalid user ID. Please try again.");
       return;
     }
-    
-    fetch(`${API_URL}/api/database/AddPlaylist`, {
+
+    if (!playlistData.image || !(playlistData.image instanceof File)) {
+      alert("Please select a valid image file");
+      return;
+    }
+
+    // IMPORTANT: Only add the image to FormData
+    formData.append('PlaylistPicture', playlistData.image);
+
+    // Add other parameters to URL
+    const url = `${API_URL}/api/database/AddPlaylist?UserID=${userId}&Title=${encodeURIComponent(playlistData.name)}`;
+
+    console.log("Sending request to:", url);
+    fetch(url, {
       method: 'POST',
       body: formData,
     })
     .then(response => {
+      console.log("Response status:", response.status);
       if (!response.ok) {
-        throw new Error(`Upload failed with status ${response.status}`);
+        return response.text().then(text => {
+          console.error("Error details:", text);
+          throw new Error(`Upload failed with status ${response.status}: ${text}`);
+        });
       }
       return response.json();
     })
     .then(data => {
-      console.log("Playlist created successfully:", data);
-      // Refresh playlists
-      GetUserPlaylists(currentUserId);
+      console.log('Upload successful, image URL:', data);
+      setShowAPwindow(false);
+
+      // IMPORTANT: Only refresh from server - don't add locally
+      // This prevents the duplicate issue
+      GetUserPlaylists(userId);
     })
     .catch(error => {
       console.error("Error creating playlist:", error);
+      alert("Failed to create playlist: " + error.message);
     });
-  };
-  const closeConfirmModal = () => {
-    setConfirmModal({ isOpen: false, message: '', onConfirm: null });
   };
 
   return (
@@ -1164,28 +1183,10 @@ useEffect(() => {
             </button>
           
 
-          {/* Playlist Modal */}
-          <AddPlaylist
+            <AddPlaylist
             isOpen={showAPwindow}
             onClose={() => setShowAPwindow(false)}
-            onSubmit={(playlistData) => {
-              // Handle new playlist creation
-              console.log("Creating new playlist:", playlistData);
-              
-              // Create a new playlist object
-              const newPlaylist = {
-                id: Date.now(), // Generate a unique ID
-                name: playlistData.name,
-                image: playlistData.image ? URL.createObjectURL(playlistData.image) : "https://via.placeholder.com/100",
-                songs: []
-              };
-              
-              // Add the new playlist to the playlists array
-              setPlaylists([...playlists, newPlaylist]);
-              
-              // Close the modal
-              setShowAPwindow(false);
-            }}
+            onSubmit={AddPlaylistComponent}  // Use this function directly
           />
           
           {playlists.map(playlist => {
